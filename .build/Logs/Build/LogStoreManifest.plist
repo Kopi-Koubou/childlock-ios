@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>logFormatVersion</key>
+	<integer>12</integer>
+	<key>logs</key>
+	<dict>
+		<key>163D025D-A591-48EA-A191-2C1EFC980186</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>163D025D-A591-48EA-A191-2C1EFC980186.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+				<key>totalNumberOfAnalyzerIssues</key>
+				<integer>0</integer>
+				<key>totalNumberOfErrors</key>
+				<integer>0</integer>
+				<key>totalNumberOfTestFailures</key>
+				<integer>0</integer>
+				<key>totalNumberOfWarnings</key>
+				<integer>0</integer>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>Childlock project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>Childlock</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Cleaning project Childlock with scheme Childlock</string>
+			<key>timeStartedRecording</key>
+			<real>796568795.800138</real>
+			<key>timeStoppedRecording</key>
+			<real>796568795.95041203</real>
+			<key>title</key>
+			<string>Cleaning project Childlock with scheme Childlock</string>
+			<key>uniqueIdentifier</key>
+			<string>163D025D-A591-48EA-A191-2C1EFC980186</string>
+		</dict>
+		<key>B74765DB-8B18-4973-A81E-E89EF2087E53</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>B74765DB-8B18-4973-A81E-E89EF2087E53.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+				<key>totalNumberOfAnalyzerIssues</key>
+				<integer>0</integer>
+				<key>totalNumberOfErrors</key>
+				<integer>0</integer>
+				<key>totalNumberOfTestFailures</key>
+				<integer>0</integer>
+				<key>totalNumberOfWarnings</key>
+				<integer>0</integer>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>Childlock project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>Childlock</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Cleaning project Childlock with scheme Childlock</string>
+			<key>timeStartedRecording</key>
+			<real>796569049.97490799</real>
+			<key>timeStoppedRecording</key>
+			<real>796569050.11892796</real>
+			<key>title</key>
+			<string>Cleaning project Childlock with scheme Childlock</string>
+			<key>uniqueIdentifier</key>
+			<string>B74765DB-8B18-4973-A81E-E89EF2087E53</string>
+		</dict>
+		<key>CF105648-7AC7-476B-9B6F-6A78D29D5EC1</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>CF105648-7AC7-476B-9B6F-6A78D29D5EC1.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+				<key>totalNumberOfAnalyzerIssues</key>
+				<integer>0</integer>
+				<key>totalNumberOfErrors</key>
+				<integer>0</integer>
+				<key>totalNumberOfTestFailures</key>
+				<integer>0</integer>
+				<key>totalNumberOfWarnings</key>
+				<integer>0</integer>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>Childlock project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>Childlock</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Cleaning project Childlock with scheme Childlock</string>
+			<key>timeStartedRecording</key>
+			<real>796568997.80341399</real>
+			<key>timeStoppedRecording</key>
+			<real>796568997.95966804</real>
+			<key>title</key>
+			<string>Cleaning project Childlock with scheme Childlock</string>
+			<key>uniqueIdentifier</key>
+			<string>CF105648-7AC7-476B-9B6F-6A78D29D5EC1</string>
+		</dict>
+		<key>E0D84714-3C40-4665-AE86-6AF963E91F74</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>E0D84714-3C40-4665-AE86-6AF963E91F74.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+				<key>totalNumberOfAnalyzerIssues</key>
+				<integer>0</integer>
+				<key>totalNumberOfErrors</key>
+				<integer>0</integer>
+				<key>totalNumberOfTestFailures</key>
+				<integer>0</integer>
+				<key>totalNumberOfWarnings</key>
+				<integer>0</integer>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>Childlock project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>Childlock</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Cleaning project Childlock with scheme Childlock</string>
+			<key>timeStartedRecording</key>
+			<real>796569062.313465</real>
+			<key>timeStoppedRecording</key>
+			<real>796569062.454597</real>
+			<key>title</key>
+			<string>Cleaning project Childlock with scheme Childlock</string>
+			<key>uniqueIdentifier</key>
+			<string>E0D84714-3C40-4665-AE86-6AF963E91F74</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

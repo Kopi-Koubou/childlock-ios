@@ -1,0 +1,240 @@
+{
+  "source": "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Back",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 34
+        }
+      },
+      {
+        "comment": "",
+        "key": "Childlock adds quick brain breaks while kids use selected apps.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 69
+        }
+      },
+      {
+        "comment": "",
+        "key": "Effort unlocks reward. Kids keep screen time by solving friendly challenges.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 73
+        }
+      },
+      {
+        "comment": "",
+        "key": "Childlock uses Apple’s Family Sharing controls to monitor selected apps and trigger brain breaks.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 80
+        }
+      },
+      {
+        "comment": "",
+        "key": "Authorize Family Sharing",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 92
+        }
+      },
+      {
+        "comment": "",
+        "key": "• We only monitor app usage intervals",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 85
+        }
+      },
+      {
+        "comment": "",
+        "key": "• Child names stay local to your device",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 86
+        }
+      },
+      {
+        "comment": "",
+        "key": "• You can change this anytime in Settings",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 87
+        }
+      },
+      {
+        "comment": "",
+        "key": "Child name",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 108
+        }
+      },
+      {
+        "comment": "",
+        "key": "Mia",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 112
+        }
+      },
+      {
+        "comment": "",
+        "key": "Age: %lld",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 124
+        }
+      },
+      {
+        "comment": "",
+        "key": "Choose avatar",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 130
+        }
+      },
+      {
+        "comment": "",
+        "key": "avatar_%@",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 140
+        }
+      },
+      {
+        "comment": "",
+        "key": "Choose apps where brain breaks should appear.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 148
+        }
+      },
+      {
+        "comment": "",
+        "key": "Tip: Skip educational apps that already encourage active learning.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 222
+        }
+      },
+      {
+        "comment": "",
+        "key": "Selected Scope",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 162
+        }
+      },
+      {
+        "comment": "",
+        "key": "No apps selected yet.",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 167
+        }
+      },
+      {
+        "comment": "",
+        "key": "Use Apple App Picker to select at least one app or category.",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 181
+        }
+      },
+      {
+        "comment": "",
+        "key": "Open Apple App Picker",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 153
+        }
+      },
+      {
+        "comment": "",
+        "key": "• %@",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 173
+        }
+      },
+      {
+        "comment": "",
+        "key": "Recommended: 15 minutes",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 229
+        }
+      },
+      {
+        "comment": "",
+        "key": "A challenge appears every %lld minutes while monitored apps are active.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 242
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lldm",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 235
+        }
+      },
+      {
+        "comment": "",
+        "key": "Set a 4-digit PIN",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 249
+        }
+      },
+      {
+        "comment": "",
+        "key": "This protects settings from children.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 275
+        }
+      },
+      {
+        "comment": "",
+        "key": "PIN",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 253
+        }
+      },
+      {
+        "comment": "",
+        "key": "Confirm PIN",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 264
+        }
+      },
+      {
+        "comment": "",
+        "key": "Childlock is now active.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 282
+        }
+      },
+      {
+        "comment": "",
+        "key": "Your child will see their first brain break in %lld minutes while using monitored apps.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 286
+        }
+      }
+    ]
+  },
+  "version": 1
+}

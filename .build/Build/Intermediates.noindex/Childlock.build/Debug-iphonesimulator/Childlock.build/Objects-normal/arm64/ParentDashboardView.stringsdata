@@ -1,0 +1,544 @@
+{
+  "source": "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Dashboard/ParentDashboardView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Home",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 43
+        }
+      },
+      {
+        "comment": "",
+        "key": "Children",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 49
+        }
+      },
+      {
+        "comment": "",
+        "key": "Apps",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 55
+        }
+      },
+      {
+        "comment": "",
+        "key": "Settings",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 61
+        }
+      },
+      {
+        "comment": "",
+        "key": "Home",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 101
+        }
+      },
+      {
+        "comment": "",
+        "key": "Practice Brain Break",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 83
+        }
+      },
+      {
+        "comment": "",
+        "key": "practice_brain_break",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 85
+        }
+      },
+      {
+        "comment": "",
+        "key": "Children",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 131
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add Child",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 120
+        }
+      },
+      {
+        "comment": "",
+        "key": "add_child_profile",
+        "location": {
+          "startingColumn": 41,
+          "startingLine": 126
+        }
+      },
+      {
+        "comment": "",
+        "key": "Apps",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 156
+        }
+      },
+      {
+        "comment": "",
+        "key": "Settings",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 231
+        }
+      },
+      {
+        "comment": "",
+        "key": "Parent PIN",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 164
+        }
+      },
+      {
+        "comment": "",
+        "key": "Preferences",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 186
+        }
+      },
+      {
+        "comment": "",
+        "key": "Screen Time Enforcement",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 192
+        }
+      },
+      {
+        "comment": "",
+        "key": "Enter PIN",
+        "location": {
+          "startingColumn": 37,
+          "startingLine": 165
+        }
+      },
+      {
+        "comment": "",
+        "key": "Unlock Settings",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 169
+        }
+      },
+      {
+        "comment": "",
+        "key": "Voice prompts (ages 3-5)",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 187
+        }
+      },
+      {
+        "comment": "",
+        "key": "Daily summary notification",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 188
+        }
+      },
+      {
+        "comment": "",
+        "key": "Challenge alert notification",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 189
+        }
+      },
+      {
+        "comment": "",
+        "key": "Status: %@",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 193
+        }
+      },
+      {
+        "comment": "",
+        "key": "Start Lock Enforcement",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 203
+        }
+      },
+      {
+        "comment": "",
+        "key": "Stop Lock Enforcement",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 212
+        }
+      },
+      {
+        "comment": "",
+        "key": "Lock Settings",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 221
+        }
+      },
+      {
+        "comment": "",
+        "key": "TODAY",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 239
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld challenges completed",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 243
+        }
+      },
+      {
+        "comment": "",
+        "key": "Accuracy %lld%% · Screen time %@",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 247
+        }
+      },
+      {
+        "comment": "",
+        "key": "Challenge effort %@ · Avg solve %@",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 251
+        }
+      },
+      {
+        "comment": "",
+        "key": "Children",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 260
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@ · Age %lld",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 266
+        }
+      },
+      {
+        "comment": "",
+        "key": "Break every %lldm",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 269
+        }
+      },
+      {
+        "comment": "",
+        "key": "Child Selector",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 281
+        }
+      },
+      {
+        "comment": "",
+        "key": "select_child_%@",
+        "location": {
+          "startingColumn": 45,
+          "startingLine": 314
+        }
+      },
+      {
+        "comment": "",
+        "key": "Age %lld · %lldm",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 297
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@ · %@",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 341
+        }
+      },
+      {
+        "comment": "",
+        "key": "Challenge effort %@ · Avg solve %@",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 352
+        }
+      },
+      {
+        "comment": "",
+        "key": "Per-Child Stats",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 328
+        }
+      },
+      {
+        "comment": "",
+        "key": "Window",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 332
+        }
+      },
+      {
+        "comment": "",
+        "key": "Challenge History",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 369
+        }
+      },
+      {
+        "comment": "",
+        "key": "No completed challenges yet in this window.",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 374
+        }
+      },
+      {
+        "comment": "",
+        "key": "Attempts %lld · Solve %@",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 394
+        }
+      },
+      {
+        "comment": "",
+        "key": "Solved",
+        "location": {
+          "startingColumn": 62,
+          "startingLine": 389
+        }
+      },
+      {
+        "comment": "",
+        "key": "Incomplete",
+        "location": {
+          "startingColumn": 73,
+          "startingLine": 389
+        }
+      },
+      {
+        "comment": "",
+        "key": "Active Child",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 410
+        }
+      },
+      {
+        "comment": "",
+        "key": "select_apps_child_%@",
+        "location": {
+          "startingColumn": 45,
+          "startingLine": 443
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld assignments",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 426
+        }
+      },
+      {
+        "comment": "",
+        "key": "Monitored Scope",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 457
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@ · %lld assigned",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 461
+        }
+      },
+      {
+        "comment": "",
+        "key": "No monitored apps selected yet.",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 466
+        }
+      },
+      {
+        "comment": "",
+        "key": "• %@",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 472
+        }
+      },
+      {
+        "comment": "",
+        "key": "Assign Monitored Apps",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 487
+        }
+      },
+      {
+        "comment": "",
+        "key": "Changes save to the selected child profile.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 491
+        }
+      },
+      {
+        "comment": "",
+        "key": "Open Apple App Picker",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 496
+        }
+      },
+      {
+        "comment": "",
+        "key": "Apply Active Child Selection To All Children",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 551
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add Child",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 631
+        }
+      },
+      {
+        "comment": "",
+        "key": "Save Child Profile",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 621
+        }
+      },
+      {
+        "comment": "",
+        "key": "Child name",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 567
+        }
+      },
+      {
+        "comment": "",
+        "key": "E.g. Mia",
+        "location": {
+          "startingColumn": 35,
+          "startingLine": 571
+        }
+      },
+      {
+        "comment": "",
+        "key": "Age %lld",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 584
+        }
+      },
+      {
+        "comment": "",
+        "key": "Challenge every %lld minutes",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 590
+        }
+      },
+      {
+        "comment": "",
+        "key": "Avatar",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 597
+        }
+      },
+      {
+        "comment": "",
+        "key": "add_child_avatar_%@",
+        "location": {
+          "startingColumn": 53,
+          "startingLine": 610
+        }
+      },
+      {
+        "comment": "",
+        "key": "Cancel",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 634
+        }
+      },
+      {
+        "comment": "",
+        "key": "Recent Activity",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 667
+        }
+      },
+      {
+        "comment": "",
+        "key": "Challenges will appear here once your child starts using monitored apps.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 672
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@ solved a %@ challenge",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 686
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@ · Attempts %lld",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 692
+        }
+      }
+    ]
+  },
+  "version": 1
+}

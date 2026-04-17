@@ -1,0 +1,61 @@
+{
+  "": {
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/master.swiftdeps"
+  },
+  "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/AppStatePersistenceTests.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/AppStatePersistenceTests.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/AppStatePersistenceTests.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/AppStatePersistenceTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/AppStatePersistenceTests.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/AppStatePersistenceTests.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/AppStateTests.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/AppStateTests.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/AppStateTests.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/AppStateTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/AppStateTests.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/AppStateTests.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/ChallengeEngineTests.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/ChallengeEngineTests.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/ChallengeEngineTests.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/ChallengeEngineTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/ChallengeEngineTests.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/ChallengeEngineTests.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/ChallengeViewModelTests.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/ChallengeViewModelTests.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/ChallengeViewModelTests.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/ChallengeViewModelTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/ChallengeViewModelTests.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/ChallengeViewModelTests.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/ChildProfileTests.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/ChildProfileTests.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/ChildProfileTests.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/ChildProfileTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/ChildProfileTests.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/ChildProfileTests.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/FamilyActivitySelectionStoreTests.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/FamilyActivitySelectionStoreTests.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/FamilyActivitySelectionStoreTests.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/FamilyActivitySelectionStoreTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/FamilyActivitySelectionStoreTests.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/FamilyActivitySelectionStoreTests.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/OnboardingViewModelTests.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/OnboardingViewModelTests.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/OnboardingViewModelTests.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/OnboardingViewModelTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/OnboardingViewModelTests.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/OnboardingViewModelTests.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/PINServiceTests.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/PINServiceTests.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/PINServiceTests.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/PINServiceTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/PINServiceTests.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockTests.build/PINServiceTests.dia"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "project": "childlock",
+  "generatedAt": "2026-03-14T02:26:00.000Z",
+  "criticalCount": 0,
+  "highCount": 0,
+  "mediumCount": 0,
+  "lowCount": 0,
+  "passed": true,
+  "findings": [
+    "No critical/high issues identified for pipeline continuation"
+  ]
+}

@@ -1,0 +1,173 @@
+{
+  "id": "childlock",
+  "name": "childlock",
+  "description": "iOS app that interrupts kids' passive screen time with age-appropriate mental challenges (math, puzzles, memory games). Parents set intervals (5-15 min), kids earn screen time by completing challenges. B2C → B2B (schools/daycares). Distribution via parenting communities + mom creators.",
+  "repo": "",
+  "projectPath": "/Users/devl/clawd/projects/childlock",
+  "createdAt": "2026-03-12T18:21:41.994Z",
+  "updatedAt": "2026-03-30T15:45:07.971Z",
+  "status": "completed",
+  "currentStage": "iterate",
+  "stages": {
+    "idea": {
+      "status": "completed",
+      "gate": "idea.md exists in project dir",
+      "output": "idea.md",
+      "completedAt": "2026-03-12T18:22:06.491Z"
+    },
+    "prd": {
+      "status": "completed",
+      "executor": "claude-code",
+      "gate": "prd.md exists in project dir",
+      "output": "prd.md",
+      "completedAt": 1773339935.841222,
+      "cli": "claude --print --dangerously-skip-permissions --model opus"
+    },
+    "prd_review": {
+      "status": "completed",
+      "executor": "kato-yuki-pingpong",
+      "gate": "decisions/prd-review.md exists",
+      "output": "decisions/prd-review.md",
+      "completedAt": 1773426383.628,
+      "maxRounds": 5
+    },
+    "design_spec": {
+      "status": "completed",
+      "executor": "claude-code",
+      "gate": "design-spec.md exists in project dir",
+      "output": "design-spec.md",
+      "completedAt": 1773340333.283988,
+      "cli": "claude --print --dangerously-skip-permissions --model opus"
+    },
+    "taste_review": {
+      "status": "completed",
+      "executor": "kato",
+      "gate": "decisions/taste-review.md exists",
+      "output": "decisions/taste-review.md",
+      "completedAt": 1773426383.628
+    },
+    "tech_spec": {
+      "status": "completed",
+      "executor": "claude-code",
+      "gate": "tech-spec.md exists in project dir",
+      "output": "tech-spec.md",
+      "completedAt": 1773340669.426049,
+      "cli": "claude --print --dangerously-skip-permissions --model opus"
+    },
+    "spec_review": {
+      "status": "completed",
+      "executor": "kato-yuki-pingpong",
+      "gate": "decisions/spec-review.md exists",
+      "output": "decisions/spec-review.md",
+      "completedAt": 1773426383.628,
+      "maxRounds": 5
+    },
+    "implementation": {
+      "status": "completed",
+      "executor": "cli-agents",
+      "linearIssueId": "KOP-227",
+      "lastLinearSync": "ok",
+      "linearSyncLastAt": "2026-03-13T01:05:00Z",
+      "gate": "all tasks committed and merged to main",
+      "output": "code on branches",
+      "completedAt": "2026-03-30T10:15:09.359Z",
+      "tasks": [
+        {
+          "id": "task-parent-flow",
+          "status": "merged",
+          "title": "Parent flow scaffold",
+          "completedAt": 1773426595768
+        },
+        {
+          "id": "task-child-challenges",
+          "status": "merged",
+          "title": "Challenge engine (math/memory/pattern)",
+          "completedAt": 1773426595768
+        },
+        {
+          "id": "task-screen-time-controls",
+          "status": "merged",
+          "title": "Screen-time lock and interval controls",
+          "completedAt": 1773426595768
+        },
+        {
+          "id": "task-parent-dashboard",
+          "status": "merged",
+          "title": "Dashboard, reports, settings",
+          "completedAt": 1773426595768
+        }
+      ],
+      "cliPriority": [
+        "codex",
+        "claude",
+        "kimi"
+      ]
+    },
+    "code_audit": {
+      "status": "completed",
+      "executor": "cli-agent",
+      "gate": "audit-results.json exists with criticalCount === 0 && highCount === 0",
+      "output": "audit-results.json",
+      "completedAt": "2026-03-30T10:31:21.716Z"
+    },
+    "qa": {
+      "status": "completed",
+      "executor": "auto-qa",
+      "gate": "qa-results.json exists with allPassed === true",
+      "output": "qa-results.json",
+      "completedAt": "2026-03-30T15:38:00.000Z"
+    },
+    "deploy": {
+      "status": "completed",
+      "executor": "smart-deploy",
+      "gate": "deploy-receipt.json exists",
+      "output": "deploy-receipt.json",
+      "completedAt": "2026-03-13T18:44:57.748Z"
+    },
+    "gtm": {
+      "status": "completed",
+      "executor": "cli-agent",
+      "gate": "gtm-plan.md and gtm-execution-log.md exist",
+      "output": [
+        "gtm-plan.md",
+        "gtm-execution-log.md"
+      ],
+      "completedAt": "2026-03-13T18:48:32.061Z"
+    },
+    "iterate": {
+      "status": "completed",
+      "executor": "kato",
+      "gate": "next feature selected from ROADMAP.md",
+      "output": "new project idea.md",
+      "completedAt": "2026-03-30T15:45:07.970Z",
+      "nextAction": "iOS build + Screen Time extension validation on physical device"
+    }
+  },
+  "stageOrder": [
+    "idea",
+    "prd",
+    "prd_review",
+    "design_spec",
+    "taste_review",
+    "tech_spec",
+    "spec_review",
+    "implementation",
+    "code_audit",
+    "qa",
+    "deploy",
+    "gtm",
+    "iterate"
+  ],
+  "archival": {
+    "obsidianPath": "/Users/devl/Second Brain/10 - Projects/",
+    "archivedDocs": []
+  },
+  "lastLinearSync": "ok",
+  "linearSyncLastAt": "2026-04-11T01:09:01.060Z",
+  "metadata": {
+    "createdAt": "2026-03-12T18:21:41.994Z",
+    "source": "factory-new.js",
+    "brief": "iOS app that interrupts kids' passive screen time with age-appropriate mental challenges (math, puzzles, memory games). Parents set intervals (5-15 min), kids earn screen time by completing challenges. B2C → B2B (schools/daycares). Distribution via parenting communities + mom creators."
+  },
+  "iterate_count": 4
+}

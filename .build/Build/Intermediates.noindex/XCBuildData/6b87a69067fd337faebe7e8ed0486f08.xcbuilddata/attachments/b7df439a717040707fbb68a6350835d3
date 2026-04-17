@@ -1,0 +1,229 @@
+{
+  "" : {
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/Childlock-primary.dia",
+    "emit-module-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/Childlock-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/Childlock-primary-emit-module.dia",
+    "pch" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/Childlock-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/Childlock-primary.swiftdeps"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/App/ChildlockApp.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildlockApp.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildlockApp.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildlockApp.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildlockApp.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildlockApp.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildlockApp.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildlockApp.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildlockApp~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/App/ChildlockRootView.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildlockRootView.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildlockRootView.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildlockRootView.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildlockRootView.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildlockRootView.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildlockRootView.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildlockRootView.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildlockRootView~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ScreenTimeExtensionEntrypoints.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ScreenTimeExtensionEntrypoints.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ScreenTimeExtensionEntrypoints.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ScreenTimeExtensionEntrypoints.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ScreenTimeExtensionEntrypoints.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ScreenTimeExtensionEntrypoints.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ScreenTimeExtensionEntrypoints.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ScreenTimeExtensionEntrypoints~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Models/AppSettings.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppSettings.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppSettings.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppSettings.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppSettings.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppSettings.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppSettings.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppSettings.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppSettings~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Models/ChallengeSession.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeSession.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeSession.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeSession.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeSession.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeSession.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeSession.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeSession.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeSession~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Models/ChildProfile.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildProfile.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildProfile.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildProfile.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildProfile.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildProfile.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildProfile.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildProfile.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChildProfile~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/AppStateStore.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppStateStore.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppStateStore.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppStateStore.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppStateStore.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppStateStore.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppStateStore.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppStateStore.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppStateStore~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/ChallengeEngine.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeEngine.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeEngine.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeEngine.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeEngine.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeEngine.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeEngine.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeEngine.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeEngine~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/FamilyActivitySelectionStore.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/FamilyActivitySelectionStore.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/FamilyActivitySelectionStore.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/FamilyActivitySelectionStore.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/FamilyActivitySelectionStore.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/FamilyActivitySelectionStore.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/FamilyActivitySelectionStore.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/FamilyActivitySelectionStore.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/FamilyActivitySelectionStore~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/PINService.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/PINService.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/PINService.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/PINService.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/PINService.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/PINService.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/PINService.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/PINService.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/PINService~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/ScreenTimeManager.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ScreenTimeManager.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ScreenTimeManager.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ScreenTimeManager.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ScreenTimeManager.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ScreenTimeManager.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ScreenTimeManager.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ScreenTimeManager.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ScreenTimeManager~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/SecureStore.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/SecureStore.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/SecureStore.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/SecureStore.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/SecureStore.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/SecureStore.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/SecureStore.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/SecureStore.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/SecureStore~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/SharedDefaults.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/SharedDefaults.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/SharedDefaults.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/SharedDefaults.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/SharedDefaults.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/SharedDefaults.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/SharedDefaults.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/SharedDefaults.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/SharedDefaults~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/ViewModels/AppState.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppState.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppState.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppState.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppState.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppState.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppState.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppState.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/AppState~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/ViewModels/ChallengeViewModel.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeViewModel.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeViewModel.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeViewModel.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeViewModel.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeViewModel.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeViewModel.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeViewModel.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeViewModel~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/ViewModels/OnboardingViewModel.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/OnboardingViewModel.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/OnboardingViewModel.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/OnboardingViewModel.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/OnboardingViewModel.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/OnboardingViewModel.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/OnboardingViewModel.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/OnboardingViewModel.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/OnboardingViewModel~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/CelebrationView.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/CelebrationView.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/CelebrationView.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/CelebrationView.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/CelebrationView.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/CelebrationView.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/CelebrationView.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/CelebrationView.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/CelebrationView~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/ChallengeContainerView.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeContainerView.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeContainerView.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeContainerView.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeContainerView.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeContainerView.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeContainerView.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeContainerView.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ChallengeContainerView~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/MathChallengeView.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/MathChallengeView.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/MathChallengeView.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/MathChallengeView.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/MathChallengeView.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/MathChallengeView.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/MathChallengeView.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/MathChallengeView.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/MathChallengeView~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Dashboard/ParentDashboardView.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ParentDashboardView.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ParentDashboardView.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ParentDashboardView.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ParentDashboardView.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ParentDashboardView.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ParentDashboardView.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ParentDashboardView.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/ParentDashboardView~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/OnboardingFlowView.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/OnboardingFlowView.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/OnboardingFlowView.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/OnboardingFlowView.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/OnboardingFlowView.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/OnboardingFlowView.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/OnboardingFlowView.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/OnboardingFlowView~partial.swiftmodule"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Shared/DesignTokens.swift" : {
+    "const-values" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/DesignTokens.swiftconstvalues",
+    "dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/DesignTokens.d",
+    "diagnostics" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/DesignTokens.dia",
+    "index-unit-output-path" : "/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/DesignTokens.o",
+    "llvm-bc" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/DesignTokens.bc",
+    "object" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/DesignTokens.o",
+    "swift-dependencies" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/DesignTokens.swiftdeps",
+    "swiftmodule" : "/Users/devl/clawd/projects/childlock/.build/Build/Intermediates.noindex/Childlock.build/Debug-iphonesimulator/Childlock.build/Objects-normal/arm64/DesignTokens~partial.swiftmodule"
+  }
+}

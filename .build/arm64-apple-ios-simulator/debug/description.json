@@ -1,0 +1,1170 @@
+{
+  "builtTestProducts" : [
+    {
+      "binaryPath" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.xctest/Contents/MacOS/ChildlockPackageTests",
+      "packagePath" : "/Users/devl/clawd/projects/childlock",
+      "productName" : "ChildlockPackageTests"
+    }
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.Childlock-arm64-apple-ios17.0-simulator-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/sources",
+      "importPath" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/App/ChildlockApp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/App/ChildlockRootView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Models/AppSettings.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Models/ChallengeSession.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Models/ChildProfile.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/AppStateStore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/ChallengeEngine.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/FamilyActivitySelectionStore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/PINService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/ScreenTimeManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/SecureStore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/SharedDefaults.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/ViewModels/AppState.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/ViewModels/ChallengeViewModel.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/ViewModels/OnboardingViewModel.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/CelebrationView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/ChallengeContainerView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/MathChallengeView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Dashboard/ParentDashboardView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Shared/DesignTokens.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "Childlock",
+      "moduleOutputPath" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Modules/Childlock.swiftmodule",
+      "objects" : [
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildlockApp.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildlockRootView.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ScreenTimeExtensionEntrypoints.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppSettings.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeSession.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildProfile.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppStateStore.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeEngine.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/FamilyActivitySelectionStore.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/PINService.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ScreenTimeManager.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/SecureStore.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/SharedDefaults.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppState.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeViewModel.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/OnboardingViewModel.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/CelebrationView.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeContainerView.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/MathChallengeView.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ParentDashboardView.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/OnboardingFlowView.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/DesignTokens.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-ios17.0-simulator",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j12",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/include/Childlock-Swift.h",
+        "-swift-version",
+        "6",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "childlock"
+      ],
+      "outputFileMapPath" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildlockApp.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildlockRootView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ScreenTimeExtensionEntrypoints.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppSettings.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeSession.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildProfile.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppStateStore.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeEngine.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/FamilyActivitySelectionStore.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/PINService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ScreenTimeManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/SecureStore.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/SharedDefaults.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppState.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeViewModel.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/OnboardingViewModel.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/CelebrationView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeContainerView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/MathChallengeView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ParentDashboardView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/OnboardingFlowView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/DesignTokens.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Modules/Childlock.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/App/ChildlockApp.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/App/ChildlockRootView.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/Models/AppSettings.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/Models/ChallengeSession.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/Models/ChildProfile.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/AppStateStore.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/ChallengeEngine.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/FamilyActivitySelectionStore.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/PINService.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/ScreenTimeManager.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/SecureStore.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/SharedDefaults.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/ViewModels/AppState.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/ViewModels/ChallengeViewModel.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/ViewModels/OnboardingViewModel.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/CelebrationView.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/ChallengeContainerView.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/MathChallengeView.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Dashboard/ParentDashboardView.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift",
+        "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Shared/DesignTokens.swift"
+      ],
+      "tempsPath" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.ChildlockPackageTests-arm64-apple-ios17.0-simulator-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.build/sources",
+      "importPath" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.derived/runner.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Modules/ChildlockTests.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "ChildlockPackageTests",
+      "moduleOutputPath" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Modules/ChildlockPackageTests.swiftmodule",
+      "objects" : [
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.build/runner.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-ios17.0-simulator",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j12",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.build/include/ChildlockPackageTests-Swift.h",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "childlock"
+      ],
+      "outputFileMapPath" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.build/runner.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Modules/ChildlockPackageTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.derived/runner.swift"
+      ],
+      "tempsPath" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.ChildlockTests-arm64-apple-ios17.0-simulator-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/sources",
+      "importPath" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/AppStatePersistenceTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/AppStateTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/ChallengeEngineTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/ChallengeViewModelTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/ChildProfileTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/FamilyActivitySelectionStoreTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/OnboardingViewModelTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/PINServiceTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Modules/Childlock.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "ChildlockTests",
+      "moduleOutputPath" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Modules/ChildlockTests.swiftmodule",
+      "objects" : [
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/AppStatePersistenceTests.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/AppStateTests.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/ChallengeEngineTests.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/ChallengeViewModelTests.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/ChildProfileTests.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/FamilyActivitySelectionStoreTests.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/OnboardingViewModelTests.swift.o",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/PINServiceTests.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-ios17.0-simulator",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j12",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-swift-version",
+        "6",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "childlock"
+      ],
+      "outputFileMapPath" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/AppStatePersistenceTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/AppStateTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/ChallengeEngineTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/ChallengeViewModelTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/ChildProfileTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/FamilyActivitySelectionStoreTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/OnboardingViewModelTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/PINServiceTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Modules/ChildlockTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/AppStatePersistenceTests.swift",
+        "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/AppStateTests.swift",
+        "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/ChallengeEngineTests.swift",
+        "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/ChallengeViewModelTests.swift",
+        "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/ChildProfileTests.swift",
+        "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/FamilyActivitySelectionStoreTests.swift",
+        "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/OnboardingViewModelTests.swift",
+        "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/PINServiceTests.swift"
+      ],
+      "tempsPath" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build",
+      "wholeModuleOptimization" : false
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "Childlock" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "Childlock",
+      "-package-name",
+      "childlock",
+      "-c",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/App/ChildlockApp.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/App/ChildlockRootView.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/Models/AppSettings.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/Models/ChallengeSession.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/Models/ChildProfile.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/AppStateStore.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/ChallengeEngine.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/FamilyActivitySelectionStore.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/PINService.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/ScreenTimeManager.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/SecureStore.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/SharedDefaults.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/ViewModels/AppState.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/ViewModels/ChallengeViewModel.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/ViewModels/OnboardingViewModel.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/CelebrationView.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/ChallengeContainerView.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/MathChallengeView.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Dashboard/ParentDashboardView.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift",
+      "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Shared/DesignTokens.swift",
+      "-I",
+      "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Modules",
+      "-target",
+      "arm64-apple-ios17.0-simulator",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j12",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/include/Childlock-Swift.h",
+      "-swift-version",
+      "6",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "childlock",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "ChildlockPackageTests" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "ChildlockPackageTests",
+      "-package-name",
+      "childlock",
+      "-c",
+      "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.derived/runner.swift",
+      "-I",
+      "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Modules",
+      "-target",
+      "arm64-apple-ios17.0-simulator",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j12",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.build/include/ChildlockPackageTests-Swift.h",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "childlock",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "ChildlockTests" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "ChildlockTests",
+      "-package-name",
+      "childlock",
+      "-c",
+      "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/AppStatePersistenceTests.swift",
+      "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/AppStateTests.swift",
+      "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/ChallengeEngineTests.swift",
+      "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/ChallengeViewModelTests.swift",
+      "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/ChildProfileTests.swift",
+      "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/FamilyActivitySelectionStoreTests.swift",
+      "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/OnboardingViewModelTests.swift",
+      "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/PINServiceTests.swift",
+      "-I",
+      "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Modules",
+      "-target",
+      "arm64-apple-ios17.0-simulator",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j12",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-swift-version",
+      "6",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "childlock",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "Childlock" : [
+
+    ],
+    "ChildlockPackageTests" : [
+      "ChildlockTests",
+      "Childlock"
+    ],
+    "ChildlockTests" : [
+      "Childlock"
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+    "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.derived/runner.swift" : {
+      "inputs" : [
+
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.derived/runner.swift"
+        }
+      ]
+    }
+  },
+  "traitConfiguration" : {
+    "default" : {
+
+    }
+  },
+  "writeCommands" : {
+    "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/App/ChildlockApp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/App/ChildlockRootView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Models/AppSettings.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Models/ChallengeSession.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Models/ChildProfile.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/AppStateStore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/ChallengeEngine.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/FamilyActivitySelectionStore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/PINService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/ScreenTimeManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/SecureStore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/SharedDefaults.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/ViewModels/AppState.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/ViewModels/ChallengeViewModel.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/ViewModels/OnboardingViewModel.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/CelebrationView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/ChallengeContainerView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/MathChallengeView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Dashboard/ParentDashboardView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Shared/DesignTokens.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/sources"
+    },
+    "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.derived/runner.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.build/sources"
+    },
+    "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppSettings.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppState.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppStateStore.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/CelebrationView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeContainerView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeEngine.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeSession.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeViewModel.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildProfile.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildlockApp.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildlockRootView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/DesignTokens.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/FamilyActivitySelectionStore.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/MathChallengeView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/OnboardingFlowView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/OnboardingViewModel.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/PINService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ParentDashboardView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ScreenTimeExtensionEntrypoints.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ScreenTimeManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/SecureStore.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/SharedDefaults.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.build/runner.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/AppStatePersistenceTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/AppStateTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/ChallengeEngineTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/ChallengeViewModelTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/ChildProfileTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/FamilyActivitySelectionStoreTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/OnboardingViewModelTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/PINServiceTests.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockPackageTests.product/Objects.LinkFileList"
+    },
+    "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/AppStatePersistenceTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/AppStateTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/ChallengeEngineTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/ChallengeViewModelTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/ChildProfileTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/FamilyActivitySelectionStoreTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/OnboardingViewModelTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/devl/clawd/projects/childlock/Tests/ChildlockTests/PINServiceTests.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/ChildlockTests.build/sources"
+    },
+    "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/swift-version--58304C5D6DBC2206.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/swift-version--58304C5D6DBC2206.txt"
+    }
+  }
+}

@@ -1,0 +1,756 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		APP_ENTRY /* ChildlockApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = APP_ENTRY_FILE; };
+		APP_SETTINGS_SOURCE /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = APP_SETTINGS_FILE; };
+		APP_STATE_STORE_SOURCE /* AppStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = APP_STATE_STORE_FILE; };
+		APP_STATE_VM_SOURCE /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = APP_STATE_VM_FILE; };
+		CELEBRATION_VIEW_SOURCE /* CelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CELEBRATION_VIEW_FILE; };
+		CHALLENGE_CONTAINER_VIEW_SOURCE /* ChallengeContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CHALLENGE_CONTAINER_VIEW_FILE; };
+		CHALLENGE_ENGINE_SOURCE /* ChallengeEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = CHALLENGE_ENGINE_FILE; };
+		CHALLENGE_SESSION_SOURCE /* ChallengeSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CHALLENGE_SESSION_FILE; };
+		CHALLENGE_VM_SOURCE /* ChallengeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CHALLENGE_VM_FILE; };
+		CHILD_PROFILE_SOURCE /* ChildProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CHILD_PROFILE_FILE; };
+		DESIGN_TOKENS_SOURCE /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = DESIGN_TOKENS_FILE; };
+		EXT_ENTRYPOINTS_SOURCE /* ScreenTimeExtensionEntrypoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = EXT_ENTRYPOINTS_FILE; };
+		FAMILY_ACTIVITY_STORE_SOURCE /* FamilyActivitySelectionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAMILY_ACTIVITY_STORE_FILE; };
+		MATH_CHALLENGE_VIEW_SOURCE /* MathChallengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = MATH_CHALLENGE_VIEW_FILE; };
+		MONITOR_EXT /* ChildlockMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = MONITOR_EXT_FILE; };
+		ONBOARDING_FLOW_VIEW_SOURCE /* OnboardingFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ONBOARDING_FLOW_VIEW_FILE; };
+		ONBOARDING_VM_SOURCE /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ONBOARDING_VM_FILE; };
+		PARENT_DASHBOARD_VIEW_SOURCE /* ParentDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PARENT_DASHBOARD_VIEW_FILE; };
+		PIN_SERVICE_SOURCE /* PINService.swift in Sources */ = {isa = PBXBuildFile; fileRef = PIN_SERVICE_FILE; };
+		ROOT_VIEW_SOURCE /* ChildlockRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ROOT_VIEW_FILE; };
+		SCREEN_TIME_MANAGER_SOURCE /* ScreenTimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = SCREEN_TIME_MANAGER_FILE; };
+		SECURE_STORE_SOURCE /* SecureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = SECURE_STORE_FILE; };
+		SHARED_DEFAULTS_SOURCE /* SharedDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = SHARED_DEFAULTS_FILE; };
+		SHIELD_ACTION_EXT /* ChildlockShieldAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = SHIELD_ACTION_EXT_FILE; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		APP_ENTRY_FILE /* ChildlockApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildlockApp.swift; sourceTree = "<group>"; };
+		APP_SETTINGS_FILE /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Models/AppSettings.swift; sourceTree = SOURCE_ROOT; };
+		APP_STATE_STORE_FILE /* AppStateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Services/AppStateStore.swift; sourceTree = SOURCE_ROOT; };
+		APP_STATE_VM_FILE /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/ViewModels/AppState.swift; sourceTree = SOURCE_ROOT; };
+		CELEBRATION_VIEW_FILE /* CelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Views/Challenges/CelebrationView.swift; sourceTree = SOURCE_ROOT; };
+		CHALLENGE_CONTAINER_VIEW_FILE /* ChallengeContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Views/Challenges/ChallengeContainerView.swift; sourceTree = SOURCE_ROOT; };
+		CHALLENGE_ENGINE_FILE /* ChallengeEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Services/ChallengeEngine.swift; sourceTree = SOURCE_ROOT; };
+		CHALLENGE_SESSION_FILE /* ChallengeSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Models/ChallengeSession.swift; sourceTree = SOURCE_ROOT; };
+		CHALLENGE_VM_FILE /* ChallengeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/ViewModels/ChallengeViewModel.swift; sourceTree = SOURCE_ROOT; };
+		CHILD_PROFILE_FILE /* ChildProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Models/ChildProfile.swift; sourceTree = SOURCE_ROOT; };
+		DESIGN_TOKENS_FILE /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Views/Shared/DesignTokens.swift; sourceTree = SOURCE_ROOT; };
+		EXT_ENTRYPOINTS_FILE /* ScreenTimeExtensionEntrypoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift; sourceTree = SOURCE_ROOT; };
+		FAMILY_ACTIVITY_STORE_FILE /* FamilyActivitySelectionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Services/FamilyActivitySelectionStore.swift; sourceTree = SOURCE_ROOT; };
+		MATH_CHALLENGE_VIEW_FILE /* MathChallengeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Views/Challenges/MathChallengeView.swift; sourceTree = SOURCE_ROOT; };
+		MONITOR_EXT_FILE /* ChildlockMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildlockMonitor.swift; sourceTree = "<group>"; };
+		SHIELD_ACTION_EXT_FILE /* ChildlockShieldAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildlockShieldAction.swift; sourceTree = "<group>"; };
+		SHIELD_CONFIG_EXT_FILE /* ChildlockShieldConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildlockShieldConfiguration.swift; sourceTree = "<group>"; };
+		SHIELD_ACTION_ENTITLEMENTS /* ShieldActionExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShieldActionExtension.entitlements; sourceTree = "<group>"; };
+		SHIELD_CONFIG_ENTITLEMENTS /* ShieldConfigurationExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShieldConfigurationExtension.entitlements; sourceTree = "<group>"; };
+		ONBOARDING_FLOW_VIEW_FILE /* OnboardingFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift; sourceTree = SOURCE_ROOT; };
+		ONBOARDING_VM_FILE /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/ViewModels/OnboardingViewModel.swift; sourceTree = SOURCE_ROOT; };
+		PARENT_DASHBOARD_VIEW_FILE /* ParentDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Views/Dashboard/ParentDashboardView.swift; sourceTree = SOURCE_ROOT; };
+		PIN_SERVICE_FILE /* PINService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Services/PINService.swift; sourceTree = SOURCE_ROOT; };
+		SHIELD_ACTION_EXT_FILE /* ChildlockShieldAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildlockShieldAction.swift; sourceTree = "<group>"; };
+		ROOT_VIEW_FILE /* ChildlockRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/App/ChildlockRootView.swift; sourceTree = SOURCE_ROOT; };
+		SCREEN_TIME_MANAGER_FILE /* ScreenTimeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Services/ScreenTimeManager.swift; sourceTree = SOURCE_ROOT; };
+		SECURE_STORE_FILE /* SecureStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Services/SecureStore.swift; sourceTree = SOURCE_ROOT; };
+		SHARED_DEFAULTS_FILE /* SharedDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Services/SharedDefaults.swift; sourceTree = SOURCE_ROOT; };
+		APP_ENTITLEMENTS /* childlock.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = childlock.entitlements; sourceTree = "<group>"; };
+		MONITOR_ENTITLEMENTS /* DeviceActivityMonitorExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DeviceActivityMonitorExtension.entitlements; sourceTree = "<group>"; };
+		PRODUCT_APP /* Childlock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Childlock.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		PRODUCT_MONITOR_EXT /* ChildlockMonitor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ChildlockMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		PRODUCT_SHIELD_ACTION_EXT /* ChildlockShieldAction.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ChildlockShieldAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		PRODUCT_SHIELD_CONFIG_EXT /* ChildlockShieldConfiguration.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ChildlockShieldConfiguration.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		APP_FRAMEWORKS /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		MONITOR_FRAMEWORKS /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		SHIELD_ACTION_FRAMEWORKS /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		SHIELD_CONFIG_FRAMEWORKS /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		ROOT_GROUP = {
+			isa = PBXGroup;
+			children = (
+				SOURCES_GROUP,
+				EXTENSIONS_GROUP,
+				PRODUCTS_GROUP,
+			);
+			sourceTree = "<group>";
+		};
+		PRODUCTS_GROUP = {
+			isa = PBXGroup;
+			children = (
+				PRODUCT_APP,
+				PRODUCT_MONITOR_EXT,
+				PRODUCT_SHIELD_ACTION_EXT,
+				PRODUCT_SHIELD_CONFIG_EXT,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		SOURCES_GROUP = {
+			isa = PBXGroup;
+			children = (
+				APP_ENTRY_FILE,
+				ROOT_VIEW_FILE,
+				EXT_ENTRYPOINTS_FILE,
+				APP_SETTINGS_FILE,
+				CHALLENGE_SESSION_FILE,
+				CHILD_PROFILE_FILE,
+				APP_STATE_STORE_FILE,
+				CHALLENGE_ENGINE_FILE,
+				FAMILY_ACTIVITY_STORE_FILE,
+				PIN_SERVICE_FILE,
+				SCREEN_TIME_MANAGER_FILE,
+				SECURE_STORE_FILE,
+				SHARED_DEFAULTS_FILE,
+				APP_STATE_VM_FILE,
+				CHALLENGE_VM_FILE,
+				ONBOARDING_VM_FILE,
+				CELEBRATION_VIEW_FILE,
+				CHALLENGE_CONTAINER_VIEW_FILE,
+				MATH_CHALLENGE_VIEW_FILE,
+				PARENT_DASHBOARD_VIEW_FILE,
+				ONBOARDING_FLOW_VIEW_FILE,
+				DESIGN_TOKENS_FILE,
+				APP_ENTITLEMENTS,
+			);
+			path = Sources/Childlock/App;
+			sourceTree = "<group>";
+		};
+		EXTENSIONS_GROUP = {
+			isa = PBXGroup;
+			children = (
+				MONITOR_GROUP,
+				SHIELD_ACTION_GROUP,
+				SHIELD_CONFIG_GROUP,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		MONITOR_GROUP = {
+			isa = PBXGroup;
+			children = (
+				MONITOR_EXT_FILE,
+				MONITOR_ENTITLEMENTS,
+			);
+			path = DeviceActivityMonitorExtension;
+			sourceTree = "<group>";
+		};
+		SHIELD_ACTION_GROUP = {
+			isa = PBXGroup;
+			children = (
+				SHIELD_ACTION_EXT_FILE,
+				SHIELD_ACTION_ENTITLEMENTS,
+			);
+			path = ShieldActionExtension;
+			sourceTree = "<group>";
+		};
+		SHIELD_CONFIG_GROUP = {
+			isa = PBXGroup;
+			children = (
+				SHIELD_CONFIG_EXT_FILE,
+				SHIELD_CONFIG_ENTITLEMENTS,
+			);
+			path = ShieldConfigurationExtension;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		TARGET_APP /* Childlock */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CONFIG_LIST_APP;
+			buildPhases = (
+				APP_SOURCES /* Sources */,
+				APP_FRAMEWORKS /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Childlock;
+			productName = Childlock;
+			productReference = PRODUCT_APP;
+			productType = "com.apple.product-type.application";
+		};
+		TARGET_MONITOR /* ChildlockMonitor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CONFIG_LIST_MONITOR;
+			buildPhases = (
+				MONITOR_SOURCES /* Sources */,
+				MONITOR_FRAMEWORKS /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ChildlockMonitor;
+			productName = ChildlockMonitor;
+			productReference = PRODUCT_MONITOR_EXT;
+			productType = "com.apple.product-type.app-extension";
+		};
+		TARGET_SHIELD_ACTION /* ChildlockShieldAction */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CONFIG_LIST_SHIELD_ACTION;
+			buildPhases = (
+				SHIELD_ACTION_SOURCES /* Sources */,
+				SHIELD_ACTION_FRAMEWORKS /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ChildlockShieldAction;
+			productName = ChildlockShieldAction;
+			productReference = PRODUCT_SHIELD_ACTION_EXT;
+			productType = "com.apple.product-type.app-extension";
+		};
+		TARGET_SHIELD_CONFIG /* ChildlockShieldConfiguration */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CONFIG_LIST_SHIELD_CONFIG;
+			buildPhases = (
+				SHIELD_CONFIG_SOURCES /* Sources */,
+				SHIELD_CONFIG_FRAMEWORKS /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ChildlockShieldConfiguration;
+			productName = ChildlockShieldConfiguration;
+			productReference = PRODUCT_SHIELD_CONFIG_EXT;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		PROJECT /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					TARGET_APP = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					TARGET_MONITOR = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					TARGET_SHIELD_ACTION = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					TARGET_SHIELD_CONFIG = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = CONFIG_LIST_PROJECT;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = ROOT_GROUP;
+			productRefGroup = PRODUCTS_GROUP;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				TARGET_APP,
+				TARGET_MONITOR,
+				TARGET_SHIELD_ACTION,
+				TARGET_SHIELD_CONFIG,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		APP_SOURCES /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				APP_ENTRY,
+				ROOT_VIEW_SOURCE,
+				EXT_ENTRYPOINTS_SOURCE,
+				APP_SETTINGS_SOURCE,
+				CHALLENGE_SESSION_SOURCE,
+				CHILD_PROFILE_SOURCE,
+				APP_STATE_STORE_SOURCE,
+				CHALLENGE_ENGINE_SOURCE,
+				FAMILY_ACTIVITY_STORE_SOURCE,
+				PIN_SERVICE_SOURCE,
+				SCREEN_TIME_MANAGER_SOURCE,
+				SECURE_STORE_SOURCE,
+				SHARED_DEFAULTS_SOURCE,
+				APP_STATE_VM_SOURCE,
+				CHALLENGE_VM_SOURCE,
+				ONBOARDING_VM_SOURCE,
+				CELEBRATION_VIEW_SOURCE,
+				CHALLENGE_CONTAINER_VIEW_SOURCE,
+				MATH_CHALLENGE_VIEW_SOURCE,
+				PARENT_DASHBOARD_VIEW_SOURCE,
+				ONBOARDING_FLOW_VIEW_SOURCE,
+				DESIGN_TOKENS_SOURCE,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		MONITOR_SOURCES /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				MONITOR_EXT,
+				SHIELD_ACTION_EXT,
+				SHIELD_CONFIG_EXT,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		SHIELD_ACTION_SOURCES /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				SHIELD_ACTION_EXT,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		SHIELD_CONFIG_SOURCES /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				SHIELD_CONFIG_EXT,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		CONFIG_DEBUG_APP /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_ENTITLEMENTS = childlock.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeRight UIInterfaceOrientationLandscapeLeft";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kopikoubou.childlock;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CONFIG_RELEASE_APP /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_ENTITLEMENTS = childlock.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeRight UIInterfaceOrientationLandscapeLeft";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kopikoubou.childlock;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CONFIG_DEBUG_MONITOR /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = DeviceActivityMonitorExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Childlock Monitor";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kopikoubou.childlock.monitor;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CONFIG_RELEASE_MONITOR /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = DeviceActivityMonitorExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Childlock Monitor";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kopikoubou.childlock.monitor;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CONFIG_PROJECT_DEBUG /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CONFIG_PROJECT_RELEASE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		CONFIG_DEBUG_SHIELD_ACTION /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = ShieldActionExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Childlock Shield";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kopikoubou.childlock.shield-action;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CONFIG_RELEASE_SHIELD_ACTION /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = ShieldActionExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Childlock Shield";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kopikoubou.childlock.shield-action;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CONFIG_DEBUG_SHIELD_CONFIG /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = ShieldConfigurationExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Childlock Config";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kopikoubou.childlock.shield-config;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CONFIG_RELEASE_SHIELD_CONFIG /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = ShieldConfigurationExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Childlock Config";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kopikoubou.childlock.shield-config;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+
+/* Begin XCConfigurationList section */
+		CONFIG_LIST_APP /* Build configuration list for PBXNativeTarget "Childlock" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CONFIG_DEBUG_APP,
+				CONFIG_RELEASE_APP,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CONFIG_LIST_MONITOR /* Build configuration list for PBXNativeTarget "ChildlockMonitor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CONFIG_DEBUG_MONITOR,
+				CONFIG_RELEASE_MONITOR,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CONFIG_LIST_SHIELD_ACTION /* Build configuration list for PBXNativeTarget "ChildlockShieldAction" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CONFIG_DEBUG_SHIELD_ACTION,
+				CONFIG_RELEASE_SHIELD_ACTION,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CONFIG_LIST_SHIELD_CONFIG /* Build configuration list for PBXNativeTarget "ChildlockShieldConfiguration" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CONFIG_DEBUG_SHIELD_CONFIG,
+				CONFIG_RELEASE_SHIELD_CONFIG,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CONFIG_LIST_PROJECT /* Build configuration list for PBXProject */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CONFIG_PROJECT_DEBUG,
+				CONFIG_PROJECT_RELEASE,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = PROJECT /* Project object */;
+}

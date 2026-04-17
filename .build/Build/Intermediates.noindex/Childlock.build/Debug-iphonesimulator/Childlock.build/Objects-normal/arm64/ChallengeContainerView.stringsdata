@@ -1,0 +1,72 @@
+{
+  "source": "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/ChallengeContainerView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Brain Break!",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 15
+        }
+      },
+      {
+        "comment": "",
+        "key": "Challenge loading",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 50
+        }
+      },
+      {
+        "comment": "",
+        "key": "Please wait a moment.",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 53
+        }
+      },
+      {
+        "comment": "",
+        "key": "Hint: %@",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 101
+        }
+      },
+      {
+        "comment": "",
+        "key": "answer_%@",
+        "location": {
+          "startingColumn": 41,
+          "startingLine": 96
+        }
+      },
+      {
+        "comment": "",
+        "key": "Match %lld pairs",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 120
+        }
+      },
+      {
+        "comment": "",
+        "key": "I Matched All Pairs",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 128
+        }
+      },
+      {
+        "comment": "",
+        "key": "memory_complete",
+        "location": {
+          "startingColumn": 37,
+          "startingLine": 130
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -1,0 +1,3 @@
+module Childlock {
+    header "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/include/Childlock-Swift.h"
+}

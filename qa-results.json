@@ -1,0 +1,42 @@
+{
+  "allPassed": true,
+  "buildStatus": "pass",
+  "testResults": {
+    "commands": [
+      {
+        "name": "swift build",
+        "status": "pass"
+      },
+      {
+        "name": "SDK_PATH=$(xcrun --sdk iphonesimulator --show-sdk-path) && swift build --triple arm64-apple-ios17.0-simulator --sdk \"$SDK_PATH\"",
+        "status": "pass"
+      },
+      {
+        "name": "xcodebuild -project Childlock.xcodeproj -scheme Childlock -destination 'platform=iOS Simulator,name=iPhone 17 Pro' -derivedDataPath .build clean build",
+        "status": "pass"
+      },
+      {
+        "name": "swift test",
+        "status": "pass"
+      }
+    ],
+    "total": 29,
+    "passed": 29,
+    "failed": 0,
+    "skipped": 0,
+    "failures": []
+  },
+  "designQuality": {
+    "tokensConsistent": true,
+    "designSpecAligned": true,
+    "antiPatterns": {
+      "gradientBackgrounds": 0,
+      "heavyShadows": 0,
+      "rainbowColors": 0,
+      "pureWhiteBlackUsage": 0,
+      "spacingGridViolations": 0
+    },
+    "issues": []
+  },
+  "timestamp": "2026-03-30T13:13:46Z"
+}

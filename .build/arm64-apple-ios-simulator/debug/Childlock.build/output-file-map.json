@@ -1,0 +1,159 @@
+{
+  "": {
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/master.swiftdeps"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/App/ChildlockApp.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildlockApp.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildlockApp.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildlockApp~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildlockApp.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildlockApp.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/App/ChildlockRootView.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildlockRootView.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildlockRootView.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildlockRootView~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildlockRootView.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildlockRootView.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ScreenTimeExtensionEntrypoints.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ScreenTimeExtensionEntrypoints.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ScreenTimeExtensionEntrypoints~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ScreenTimeExtensionEntrypoints.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ScreenTimeExtensionEntrypoints.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Models/AppSettings.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppSettings.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppSettings.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppSettings~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppSettings.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppSettings.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Models/ChallengeSession.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeSession.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeSession.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeSession~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeSession.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeSession.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Models/ChildProfile.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildProfile.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildProfile.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildProfile~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildProfile.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChildProfile.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/AppStateStore.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppStateStore.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppStateStore.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppStateStore~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppStateStore.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppStateStore.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/ChallengeEngine.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeEngine.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeEngine.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeEngine~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeEngine.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeEngine.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/FamilyActivitySelectionStore.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/FamilyActivitySelectionStore.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/FamilyActivitySelectionStore.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/FamilyActivitySelectionStore~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/FamilyActivitySelectionStore.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/FamilyActivitySelectionStore.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/PINService.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/PINService.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/PINService.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/PINService~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/PINService.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/PINService.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/ScreenTimeManager.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ScreenTimeManager.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ScreenTimeManager.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ScreenTimeManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ScreenTimeManager.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ScreenTimeManager.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/SecureStore.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/SecureStore.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/SecureStore.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/SecureStore~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/SecureStore.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/SecureStore.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Services/SharedDefaults.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/SharedDefaults.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/SharedDefaults.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/SharedDefaults~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/SharedDefaults.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/SharedDefaults.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/ViewModels/AppState.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppState.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppState.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppState~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppState.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/AppState.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/ViewModels/ChallengeViewModel.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeViewModel.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeViewModel.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeViewModel~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeViewModel.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeViewModel.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/ViewModels/OnboardingViewModel.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/OnboardingViewModel.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/OnboardingViewModel.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/OnboardingViewModel~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/OnboardingViewModel.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/OnboardingViewModel.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/CelebrationView.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/CelebrationView.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/CelebrationView.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/CelebrationView~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/CelebrationView.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/CelebrationView.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/ChallengeContainerView.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeContainerView.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeContainerView.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeContainerView~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeContainerView.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ChallengeContainerView.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Challenges/MathChallengeView.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/MathChallengeView.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/MathChallengeView.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/MathChallengeView~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/MathChallengeView.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/MathChallengeView.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Dashboard/ParentDashboardView.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ParentDashboardView.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ParentDashboardView.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ParentDashboardView~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ParentDashboardView.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/ParentDashboardView.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/OnboardingFlowView.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/OnboardingFlowView.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/OnboardingFlowView~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/OnboardingFlowView.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/OnboardingFlowView.dia"
+  },
+  "/Users/devl/clawd/projects/childlock/Sources/Childlock/Views/Shared/DesignTokens.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/DesignTokens.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/DesignTokens.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/DesignTokens~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/DesignTokens.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-ios-simulator/debug/Childlock.build/DesignTokens.dia"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "": {
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockPackageTests.build/master.swiftdeps"
+  },
+  "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockPackageTests.derived/runner.swift": {
+    "dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockPackageTests.build/runner.d",
+    "object": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockPackageTests.build/runner.swift.o",
+    "swiftmodule": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockPackageTests.build/runner~partial.swiftmodule",
+    "swift-dependencies": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockPackageTests.build/runner.swiftdeps",
+    "diagnostics": "/Users/devl/clawd/projects/childlock/.build/arm64-apple-macosx/debug/ChildlockPackageTests.build/runner.dia"
+  }
+}
