@@ -8,7 +8,7 @@ final class OnboardingViewModelTests: XCTestCase {
             screenTime: TestScreenTimeManager(shouldAuthorize: true),
             selectionStore: InMemorySelectionStore()
         )
-        viewModel.step = .familyAuthorization
+        viewModel.step = .familySharing
 
         XCTAssertFalse(viewModel.canContinue)
 
@@ -29,7 +29,8 @@ final class OnboardingViewModelTests: XCTestCase {
         viewModel.pinConfirmation = "1234"
         viewModel.familyAuthorizationState = .authorized
         viewModel.selectedMonitoredApps = ["YouTube", "Games"]
-        viewModel.step = .complete
+        viewModel.step = .pinAndDone
+        viewModel.goNext() // triggers isFinished
 
         guard let output = viewModel.buildOutput() else {
             XCTFail("Expected onboarding output")

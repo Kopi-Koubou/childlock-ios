@@ -17,13 +17,10 @@ public struct MathChallengeView: View {
 
     public var body: some View {
         VStack(spacing: ChildlockSpacing.lg) {
-            Text(challenge.instruction)
-                .font(ChildlockTypography.subtitle)
-                .foregroundStyle(ChildlockColor.textPrimary)
-
             Text(challenge.expression)
-                .font(.system(size: 44, weight: .heavy, design: .rounded))
+                .font(ChildlockTypography.childDisplay)
                 .foregroundStyle(ChildlockColor.textPrimary)
+                .frame(maxWidth: .infinity)
 
             LazyVGrid(columns: gridColumns, spacing: ChildlockSpacing.sm) {
                 ForEach(challenge.allAnswers, id: \.self) { answer in
@@ -31,9 +28,9 @@ public struct MathChallengeView: View {
                         onAnswer(answer)
                     } label: {
                         Text("\(answer)")
-                            .font(ChildlockTypography.subtitle)
+                            .font(.system(size: 36, weight: .semibold, design: .rounded))
                             .frame(maxWidth: .infinity)
-                            .frame(minHeight: 60)
+                            .frame(minHeight: answerButtonHeight)
                     }
                     .buttonStyle(AnswerButtonStyle())
                     .accessibilityLabel("answer_\(answer)")
@@ -41,13 +38,31 @@ public struct MathChallengeView: View {
             }
 
             if hintVisible {
-                Text("Hint: \(challenge.hintText)")
-                    .font(ChildlockTypography.body)
-                    .foregroundStyle(ChildlockColor.textSecondary)
-                    .padding(ChildlockSpacing.sm)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(ChildlockColor.accentSoft)
-                    .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.control))
+                HStack(alignment: .top, spacing: ChildlockSpacing.sm) {
+                    Image(systemName: "lightbulb.fill")
+                        .foregroundStyle(Color(hex: "7A5A1A"))
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Try counting up")
+                            .font(ChildlockTypography.bodyBold)
+                            .foregroundStyle(Color(hex: "7A5A1A"))
+                        Text(challenge.hintText)
+                            .font(ChildlockTypography.body)
+                            .foregroundStyle(Color(hex: "7A5A1A"))
+                    }
+                }
+                .padding(ChildlockSpacing.md)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(ChildlockColor.warnSoft)
+                .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.card))
+            }
+
+            // Progress dots
+            HStack(spacing: 6) {
+                ForEach(0..<10, id: \.self) { index in
+                    Circle()
+                        .fill(index < 1 ? ChildlockColor.primary : ChildlockColor.textFaint.opacity(0.5))
+                        .frame(width: 8, height: 8)
+                }
             }
         }
     }
@@ -56,6 +71,10 @@ public struct MathChallengeView: View {
         let count = challenge.allAnswers.count >= 4 ? 2 : 3
         return Array(repeating: GridItem(.flexible(), spacing: ChildlockSpacing.sm), count: count)
     }
+
+    private var answerButtonHeight: CGFloat {
+        challenge.allAnswers.count >= 4 ? 70 : 90
+    }
 }
 
 private struct AnswerButtonStyle: ButtonStyle {
@@ -63,14 +82,11 @@ private struct AnswerButtonStyle: ButtonStyle {
         configuration.label
             .foregroundStyle(ChildlockColor.textPrimary)
             .background(
-                RoundedRectangle(cornerRadius: ChildlockRadius.control)
+                RoundedRectangle(cornerRadius: ChildlockRadius.card)
                     .fill(ChildlockColor.surface)
+                    .childlockShadow(ChildlockShadow.sm)
             )
-            .overlay(
-                RoundedRectangle(cornerRadius: ChildlockRadius.control)
-                    .stroke(ChildlockColor.border, lineWidth: 1)
-            )
-            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
-            .animation(.easeOut(duration: 0.15), value: configuration.isPressed)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: configuration.isPressed)
     }
 }

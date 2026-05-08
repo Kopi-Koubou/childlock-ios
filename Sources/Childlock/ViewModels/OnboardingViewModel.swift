@@ -31,22 +31,18 @@ public struct OnboardingOutput: Equatable {
 public final class OnboardingViewModel {
     public enum Step: Int, CaseIterable {
         case welcome
-        case familyAuthorization
-        case childProfile
-        case appSelection
-        case interval
-        case pin
-        case complete
+        case familySharing
+        case devices
+        case setup
+        case pinAndDone
 
         var title: String {
             switch self {
-            case .welcome: return "Turn Screen Time Into Brain Time"
-            case .familyAuthorization: return "Enable Family Sharing Access"
-            case .childProfile: return "Create Child Profile"
-            case .appSelection: return "Select Apps To Monitor"
-            case .interval: return "Set Challenge Interval"
-            case .pin: return "Protect Parent Settings"
-            case .complete: return "Childlock Is Ready"
+            case .welcome: return "Turn screen time into brain time."
+            case .familySharing: return "Connect Family Sharing"
+            case .devices: return "One setup, every device."
+            case .setup: return "Tell us about your child"
+            case .pinAndDone: return "You're all set"
             }
         }
     }
@@ -81,6 +77,7 @@ public final class OnboardingViewModel {
     public var pin: String = ""
     public var pinConfirmation: String = ""
 
+    private var isFinished = false
     private let screenTime: ScreenTimeManaging
     private let selectionStore: FamilyActivitySelectionStoring
     private var isHydratingSelection = false
@@ -95,44 +92,50 @@ public final class OnboardingViewModel {
     }
 
     public var progressText: String {
-        "Step \(step.rawValue + 1) of \(Step.allCases.count)"
+        "Step \(step.rawValue + 1) of 5"
     }
 
     public var canGoBack: Bool {
-        step.rawValue > 0 && step != .complete
+        step.rawValue > 0 && !isFinished
     }
 
     public var canContinue: Bool {
         switch step {
         case .welcome:
             return true
-        case .familyAuthorization:
+        case .familySharing:
             switch familyAuthorizationState {
             case .authorized, .unavailable, .failed:
                 return true
             case .notRequested, .requesting:
                 return false
             }
-        case .childProfile:
-            return !childName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && (3...12).contains(childAge)
-        case .appSelection:
+        case .devices:
+            return true
+        case .setup:
+            let nameValid = !childName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            let ageValid = (3...12).contains(childAge)
+            let intervalValid = [5, 10, 15, 20, 30].contains(selectedInterval)
+
+            var appsValid: Bool
             #if os(iOS) && canImport(FamilyControls)
             if familyAuthorizationState == .authorized {
-                return selectedActivityTokenData != nil
+                appsValid = selectedActivityTokenData != nil
+            } else {
+                appsValid = !selectedMonitoredApps.isEmpty
             }
+            #else
+            appsValid = !selectedMonitoredApps.isEmpty
             #endif
-            return !selectedMonitoredApps.isEmpty
-        case .interval:
-            return [5, 10, 15, 20, 30].contains(selectedInterval)
-        case .pin:
+
+            return nameValid && ageValid && appsValid && intervalValid
+        case .pinAndDone:
             return pin.count == 4 && pinConfirmation == pin
-        case .complete:
-            return true
         }
     }
 
     public var isComplete: Bool {
-        step == .complete
+        isFinished
     }
 
     public var shouldShowAuthorizationHelp: Bool {
@@ -147,7 +150,7 @@ public final class OnboardingViewModel {
     public var authorizationStatusText: String {
         switch familyAuthorizationState {
         case .notRequested:
-            return "Authorizing lets Childlock trigger brain breaks on your child’s selected apps."
+            return "Authorizing lets Childlock trigger brain breaks on your child's selected apps."
         case .requesting:
             return "Requesting Family Sharing permission..."
         case .authorized:
@@ -161,8 +164,9 @@ public final class OnboardingViewModel {
 
     public func goNext() {
         guard canContinue else { return }
-        if step == .pin {
-            step = .complete
+
+        if step == .pinAndDone {
+            isFinished = true
             return
         }
 
@@ -204,7 +208,7 @@ public final class OnboardingViewModel {
     }
 
     public func buildOutput() -> OnboardingOutput? {
-        guard isComplete else { return nil }
+        guard isFinished else { return nil }
 
         var profile = ChildProfile(
             name: childName,

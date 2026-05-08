@@ -125,24 +125,24 @@ public final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
     private var childlockConfiguration: ShieldConfiguration {
         ShieldConfiguration(
             backgroundBlurStyle: .systemMaterial,
-            backgroundColor: UIColor(hex: ChildlockColorHex.cream),
+            backgroundColor: UIColor(hex: ChildlockColorHex.shieldBg),
             icon: UIImage(systemName: "brain.head.profile"),
             title: ShieldConfiguration.Label(
                 text: "Brain Break!",
-                color: UIColor(hex: ChildlockColorHex.sunriseOrange)
+                color: UIColor(hex: ChildlockColorHex.shieldInk)
             ),
             subtitle: ShieldConfiguration.Label(
-                text: "Solve one quick challenge to keep going.",
-                color: UIColor(hex: ChildlockColorHex.charcoal)
+                text: "One quick puzzle, then back to your show.",
+                color: UIColor(hex: ChildlockColorHex.shieldInk)
             ),
             primaryButtonLabel: ShieldConfiguration.Label(
                 text: "Start Challenge",
-                color: UIColor(hex: ChildlockColorHex.warmWhite)
+                color: UIColor(hex: ChildlockColorHex.white)
             ),
-            primaryButtonBackgroundColor: UIColor(hex: ChildlockColorHex.sunriseOrange),
+            primaryButtonBackgroundColor: UIColor(hex: ChildlockColorHex.forestSage),
             secondaryButtonLabel: ShieldConfiguration.Label(
-                text: "Close",
-                color: UIColor(hex: ChildlockColorHex.charcoal)
+                text: "Ask Parent",
+                color: UIColor(hex: ChildlockColorHex.shieldInk)
             )
         )
     }
