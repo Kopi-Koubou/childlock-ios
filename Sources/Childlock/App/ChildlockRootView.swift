@@ -39,6 +39,14 @@ public struct ChildlockRootView: View {
             }
         }
         .onAppear {
+            // Sync auth state from AuthService
+            switch AuthService.shared.state {
+            case .signedIn:
+                appState.isAuthenticated = true
+            case .signedOut, .unknown:
+                appState.isAuthenticated = false
+            }
+
             challengeViewModel.onCompletedResult = { result in
                 guard let profileID = appState.activeProfileID ?? appState.activeProfile?.id else {
                     return
@@ -74,6 +82,14 @@ public struct ChildlockRootView: View {
         let pinConfigured = PINService.shared.setPIN(output.parentPIN)
         appState.completeOnboarding(with: output.profile, pinConfigured: pinConfigured)
         onboardingViewModel.clearPersistedSelection()
+
+        // Link RevenueCat user if signed in with Apple
+        if let appleUserID = AuthService.shared.userID {
+            appState.isAuthenticated = true
+            Task {
+                await SubscriptionService.shared.logIn(appUserID: appleUserID)
+            }
+        }
 
         if output.authorizationGranted {
             do {

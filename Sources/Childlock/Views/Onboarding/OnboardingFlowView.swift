@@ -1,4 +1,7 @@
 import SwiftUI
+#if canImport(AuthenticationServices)
+import AuthenticationServices
+#endif
 #if os(iOS) && canImport(FamilyControls)
 import FamilyControls
 #endif
@@ -142,7 +145,19 @@ public struct OnboardingFlowView: View {
             Spacer()
 
             VStack(spacing: ChildlockSpacing.sm) {
+                #if canImport(AuthenticationServices)
+                SignInWithAppleButtonView(
+                    onSuccess: { userID, email, fullName in
+                        AuthService.shared.handleSignIn(userID: userID, email: email, fullName: fullName)
+                        viewModel.goNext()
+                    },
+                    onError: { _ in
+                        // User cancelled or auth failed — stay on welcome
+                    }
+                )
+                #else
                 Button {
+                    AuthService.shared.handleSignIn(userID: "dev-user", email: nil, fullName: nil)
                     viewModel.goNext()
                 } label: {
                     HStack(spacing: ChildlockSpacing.xs) {
@@ -152,6 +167,7 @@ public struct OnboardingFlowView: View {
                     }
                 }
                 .buttonStyle(ChildlockPrimaryButtonStyle())
+                #endif
 
                 Button {
                     viewModel.goNext()
