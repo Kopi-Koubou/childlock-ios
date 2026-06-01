@@ -52,6 +52,9 @@ public struct ChildlockRootView: View {
                     return
                 }
                 appState.recordChallengeResult(result, for: profileID)
+                Task {
+                    try? await DataSyncService.shared.sync(appState: appState)
+                }
             }
 
             if SharedDefaults.shared.bool(forKey: SharedDefaults.Key.challengePending) {
@@ -84,10 +87,11 @@ public struct ChildlockRootView: View {
         onboardingViewModel.clearPersistedSelection()
 
         // Link RevenueCat user if signed in with Apple
-        if let appleUserID = AuthService.shared.userID {
+        if let authUserID = AuthService.shared.userID {
             appState.isAuthenticated = true
             Task {
-                await SubscriptionService.shared.logIn(appUserID: appleUserID)
+                await SubscriptionService.shared.logIn(appUserID: authUserID)
+                try? await DataSyncService.shared.sync(appState: appState)
             }
         }
 

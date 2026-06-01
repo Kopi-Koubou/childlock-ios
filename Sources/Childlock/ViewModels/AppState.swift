@@ -310,6 +310,26 @@ public final class AppState {
         }
     }
 
+    public func snapshot() -> AppStateSnapshot {
+        AppStateSnapshot(
+            hasCompletedOnboarding: hasCompletedOnboarding,
+            currentTab: currentTab,
+            isPINLocked: isPINLocked,
+            profiles: profiles,
+            sessions: sessions,
+            activeProfileID: activeProfileID,
+            settings: settings
+        )
+    }
+
+    public func markSessionsSynced(ids: Set<UUID>) {
+        guard !ids.isEmpty else { return }
+
+        for index in sessions.indices where ids.contains(sessions[index].id) {
+            sessions[index].synced = true
+        }
+    }
+
     public func unlockSettings(with pin: String, pinService: PINService = .shared) -> Bool {
         let isValid = pinService.verify(pin)
         if isValid {

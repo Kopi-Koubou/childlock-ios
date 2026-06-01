@@ -1,1 +1,5 @@
 .vercel
+.build/
+.DS_Store
+*.xcuserstate
+xcuserdata/

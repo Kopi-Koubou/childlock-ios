@@ -15,6 +15,8 @@ public enum SharedDefaults {
         public static let monitoringStatus = "monitoringStatus"
         public static let monitoringLastError = "monitoringLastError"
         public static let monitoringLastStartedAt = "monitoringLastStartedAt"
+        public static let moreTimeRequestCount = "moreTimeRequestCount"
+        public static let lastMoreTimeRequestDate = "lastMoreTimeRequestDate"
     }
 
     public static var shared: UserDefaults {

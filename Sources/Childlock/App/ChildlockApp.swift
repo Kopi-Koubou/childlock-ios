@@ -4,10 +4,17 @@ import SwiftUI
 @main
 struct ChildlockApp: App {
     init() {
-        SubscriptionService.shared.configure(apiKey: "test_NZImEiymFuHlDElZwpwoDGuipuU")
-        AnalyticsService.configure(
-            apiKey: "phc_zdyrzhuT46PWgpshfsfy4DibaTftEhdGTcpjmC6KDu5n"
-        )
+        let config = BackendConfig.current
+        if let revenueCatAPIKey = config.revenueCatAPIKey {
+            SubscriptionService.shared.configure(apiKey: revenueCatAPIKey)
+        }
+
+        if let postHogAPIKey = config.postHogAPIKey {
+            AnalyticsService.configure(
+                apiKey: postHogAPIKey,
+                host: config.postHogHost ?? "https://us.i.posthog.com"
+            )
+        }
     }
 
     var body: some Scene {

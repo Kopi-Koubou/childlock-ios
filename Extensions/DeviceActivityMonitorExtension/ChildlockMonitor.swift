@@ -1,4 +1,5 @@
 import DeviceActivity
+import Foundation
 import FamilyControls
 import ManagedSettings
 import os
@@ -35,7 +36,7 @@ final class ChildlockMonitor: DeviceActivityMonitor {
             let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data)
         else {
             defaults.set(
-                ScreenTimeError.invalidMonitoredSelection.localizedDescription,
+                "The monitored app selection payload is invalid.",
                 forKey: SharedDefaults.Key.monitoringLastError
             )
             logger.error("Invalid monitored selection")

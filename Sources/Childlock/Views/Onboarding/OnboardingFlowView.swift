@@ -147,9 +147,17 @@ public struct OnboardingFlowView: View {
             VStack(spacing: ChildlockSpacing.sm) {
                 #if canImport(AuthenticationServices)
                 SignInWithAppleButtonView(
-                    onSuccess: { userID, email, fullName in
-                        AuthService.shared.handleSignIn(userID: userID, email: email, fullName: fullName)
-                        viewModel.goNext()
+                    onSuccess: { userID, email, fullName, identityToken, rawNonce in
+                        Task {
+                            await AuthService.shared.handleSignIn(
+                                userID: userID,
+                                email: email,
+                                fullName: fullName,
+                                identityToken: identityToken,
+                                rawNonce: rawNonce
+                            )
+                            viewModel.goNext()
+                        }
                     },
                     onError: { _ in
                         // User cancelled or auth failed — stay on welcome
@@ -157,8 +165,10 @@ public struct OnboardingFlowView: View {
                 )
                 #else
                 Button {
-                    AuthService.shared.handleSignIn(userID: "dev-user", email: nil, fullName: nil)
-                    viewModel.goNext()
+                    Task {
+                        await AuthService.shared.handleSignIn(userID: "dev-user", email: nil, fullName: nil)
+                        viewModel.goNext()
+                    }
                 } label: {
                     HStack(spacing: ChildlockSpacing.xs) {
                         Image(systemName: "apple.logo")
