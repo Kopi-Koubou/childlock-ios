@@ -86,10 +86,24 @@ final class HandBackCopyTests: XCTestCase {
         let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
 
         XCTAssertTrue(dashboard.contains("value: monitoringStatusLabel"))
+        XCTAssertTrue(dashboard.contains("private var monitoringStatus: ChildlockMonitoringStatus?"))
         XCTAssertTrue(dashboard.contains("return \"Needs attention\""))
         XCTAssertTrue(dashboard.contains("return \"Permission needed\""))
         XCTAssertTrue(dashboard.contains("return \"Brain break pending\""))
         XCTAssertFalse(dashboard.contains("monitoringStatusText.capitalized"))
+    }
+
+    func testEnforcementSettingsShowOnlyRelevantStartOrStopAction() throws {
+        let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
+
+        XCTAssertTrue(dashboard.contains("if shouldShowStartLockEnforcementAction"))
+        XCTAssertTrue(dashboard.contains("if shouldShowStopLockEnforcementAction"))
+        XCTAssertTrue(dashboard.contains("private var shouldShowStartLockEnforcementAction: Bool"))
+        XCTAssertTrue(dashboard.contains("private var shouldShowStopLockEnforcementAction: Bool"))
+        XCTAssertTrue(dashboard.contains("case .running, .intervalStarted, .thresholdReached, .challengeRequested, .moreTimeRequested:\n            return false"))
+        XCTAssertTrue(dashboard.contains("case .notStarted, .intervalEnded, .stopped, .denied, .failed, .none:\n            return true"))
+        XCTAssertTrue(dashboard.contains("case .running, .intervalStarted, .thresholdReached, .challengeRequested, .moreTimeRequested:\n            return true"))
+        XCTAssertTrue(dashboard.contains("case .notStarted, .intervalEnded, .stopped, .denied, .failed, .none:\n            return false"))
     }
 
     func testParentChildDeviceModelIsClearInAppCopy() throws {

@@ -55,9 +55,21 @@ Latest simulator smoke pass, 2026-06-24:
 - iPhone 17 simulator: `--childlock-qa-seed-pending-math-challenge` rendered
   only the child challenge surface.
 - iPhone 17 simulator: `--childlock-qa-seed-pending-memory-challenge` rendered
-  the memory challenge grid without clipping.
+  the memory challenge grid without clipping, completed deterministic pairs,
+  recorded a new Memory activity, and returned to the PIN-gated parent hand-back
+  flow.
 - iPhone 17 simulator: `--childlock-qa-seed-more-time-request` rendered the
-  parent-visible request banner without opening a pending child challenge.
+  parent-visible request banner without opening a pending child challenge;
+  `Give one more block` cleared the request and kept the parent dashboard on
+  screen.
+- iPhone 17 simulator: Settings showed only the enforcement action that matched
+  current status, so failed or permission-needed states offer `Start Lock
+  Enforcement` without also showing `Stop Lock Enforcement`.
+- iPhone 17 simulator: Premium fallback showed unavailable annual/monthly
+  products while preserving the message that Screen Time enforcement stays
+  included. `Restore purchases` opened Apple's purchase auth sheet.
+- iPhone 17 simulator: Settings -> `Reset Childlock on this device` -> `Confirm
+  Reset` returned to fresh onboarding with Apple and Google sign-in.
 - iPad (A16) simulator: `--childlock-qa-seed-onboarding-devices` and
   `--childlock-qa-seed-dashboard` rendered with readable constrained content.
 

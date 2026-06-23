@@ -1232,25 +1232,29 @@ public struct ParentDashboardView: View {
                                         .padding(.bottom, ChildlockSpacing.sm)
                                 }
 
-                                Divider().background(ChildlockColor.surfaceMuted)
+                                if shouldShowStartLockEnforcementAction {
+                                    Divider().background(ChildlockColor.surfaceMuted)
 
-                                Button {
-                                    Task { await startScreenTimeEnforcement() }
-                                } label: {
-                                    settingsRowContent(title: "Start Lock Enforcement", value: "", showChevron: true)
+                                    Button {
+                                        Task { await startScreenTimeEnforcement() }
+                                    } label: {
+                                        settingsRowContent(title: "Start Lock Enforcement", value: "", showChevron: true)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .disabled(appState.activeProfile == nil)
                                 }
-                                .buttonStyle(.plain)
-                                .disabled(appState.activeProfile == nil)
 
-                                Divider().background(ChildlockColor.surfaceMuted)
+                                if shouldShowStopLockEnforcementAction {
+                                    Divider().background(ChildlockColor.surfaceMuted)
 
-                                Button {
-                                    stopScreenTimeEnforcement()
-                                } label: {
-                                    settingsRowContent(title: "Stop Lock Enforcement", value: "", showChevron: true)
+                                    Button {
+                                        stopScreenTimeEnforcement()
+                                    } label: {
+                                        settingsRowContent(title: "Stop Lock Enforcement", value: "", showChevron: true)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .disabled(appState.activeProfile == nil)
                                 }
-                                .buttonStyle(.plain)
-                                .disabled(appState.activeProfile == nil)
 
                                 Divider().background(ChildlockColor.surfaceMuted)
 
@@ -1865,7 +1869,7 @@ public struct ParentDashboardView: View {
     }
 
     private var monitoringStatusLabel: String {
-        switch ChildlockMonitoringStatus(storedValue: monitoringStatusText) {
+        switch monitoringStatus {
         case .notStarted:
             return "Not started"
         case .running:
@@ -1888,6 +1892,28 @@ public struct ParentDashboardView: View {
             return "Needs attention"
         case .none:
             return "Unknown"
+        }
+    }
+
+    private var monitoringStatus: ChildlockMonitoringStatus? {
+        ChildlockMonitoringStatus(storedValue: monitoringStatusText)
+    }
+
+    private var shouldShowStartLockEnforcementAction: Bool {
+        switch monitoringStatus {
+        case .running, .intervalStarted, .thresholdReached, .challengeRequested, .moreTimeRequested:
+            return false
+        case .notStarted, .intervalEnded, .stopped, .denied, .failed, .none:
+            return true
+        }
+    }
+
+    private var shouldShowStopLockEnforcementAction: Bool {
+        switch monitoringStatus {
+        case .running, .intervalStarted, .thresholdReached, .challengeRequested, .moreTimeRequested:
+            return true
+        case .notStarted, .intervalEnded, .stopped, .denied, .failed, .none:
+            return false
         }
     }
 
