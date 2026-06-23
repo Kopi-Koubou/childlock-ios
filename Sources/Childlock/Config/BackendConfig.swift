@@ -4,6 +4,7 @@ public struct BackendConfig: Equatable, Sendable {
     public let supabaseURL: URL?
     public let supabasePublishableKey: String?
     public let googleIOSClientID: String?
+    public let googleWebClientID: String?
     public let googleReversedClientID: String?
     public let revenueCatAPIKey: String?
     public let postHogAPIKey: String?
@@ -16,6 +17,8 @@ public struct BackendConfig: Equatable, Sendable {
         supabasePublishableKey = Self.stringValue(named: "SUPABASE_PUBLISHABLE_KEY", bundle: bundle, environment: environment)
         googleIOSClientID = Self.stringValue(named: "GIDClientID", bundle: bundle, environment: environment)
             ?? Self.stringValue(named: "GOOGLE_IOS_CLIENT_ID", bundle: bundle, environment: environment)
+        googleWebClientID = Self.stringValue(named: "GIDServerClientID", bundle: bundle, environment: environment)
+            ?? Self.stringValue(named: "GOOGLE_WEB_CLIENT_ID", bundle: bundle, environment: environment)
         googleReversedClientID = Self.stringValue(named: "GOOGLE_REVERSED_CLIENT_ID", bundle: bundle, environment: environment)
         revenueCatAPIKey = Self.stringValue(named: "REVENUECAT_API_KEY", bundle: bundle, environment: environment)
         postHogAPIKey = Self.stringValue(named: "POSTHOG_API_KEY", bundle: bundle, environment: environment)
@@ -27,7 +30,9 @@ public struct BackendConfig: Equatable, Sendable {
     }
 
     public var isGoogleSignInConfigured: Bool {
-        googleIOSClientID?.isEmpty == false && googleReversedClientID?.isEmpty == false
+        googleIOSClientID?.isEmpty == false
+            && googleWebClientID?.isEmpty == false
+            && googleReversedClientID?.isEmpty == false
     }
 
     private static func stringValue(

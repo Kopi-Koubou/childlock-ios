@@ -5,6 +5,7 @@ Paste app-facing keys into `Config/AppSecrets.local.xcconfig`:
 - `SUPABASE_URL` = `https://jkncpveupvozsmbbkvgq.supabase.co`
 - `SUPABASE_PUBLISHABLE_KEY`
 - `GOOGLE_IOS_CLIENT_ID`
+- `GOOGLE_WEB_CLIENT_ID`
 - `GOOGLE_REVERSED_CLIENT_ID`
 - `REVENUECAT_API_KEY`
 - `POSTHOG_API_KEY`
@@ -37,10 +38,11 @@ Do not paste Apple Developer signing credentials here. Configure those in Xcode.
 Do not paste service-role keys, Supabase access tokens, RevenueCat webhook
 secrets, or App Store Connect private keys into any app xcconfig.
 
-Google iOS client ID and reversed client ID are public app-facing values and
-belong in `Config/AppSecrets.local.xcconfig`.
+Google iOS client ID, Google Web client ID, and reversed client ID are public
+app-facing values and belong in `Config/AppSecrets.local.xcconfig`.
 
 The reversed client ID is derived from the iOS client ID. For example,
 `123.apps.googleusercontent.com` becomes `com.googleusercontent.apps.123`.
 
-Do not paste Google OAuth client secrets into any app xcconfig. Google Web client ID and client secret belong only in the Supabase Google auth provider settings.
+Do not paste Google OAuth client secrets into any app xcconfig. The Google Web
+client secret belongs only in the Supabase Google auth provider settings.

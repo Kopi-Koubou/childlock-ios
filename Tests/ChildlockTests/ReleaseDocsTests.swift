@@ -14,6 +14,7 @@ final class ReleaseDocsTests: XCTestCase {
 
         XCTAssertTrue(googleAuth.contains("native Google Sign-In SDK"))
         XCTAssertTrue(googleAuth.contains("GOOGLE_IOS_CLIENT_ID"))
+        XCTAssertTrue(googleAuth.contains("GOOGLE_WEB_CLIENT_ID"))
         XCTAssertTrue(googleAuth.contains("GOOGLE_REVERSED_CLIENT_ID"))
         XCTAssertTrue(googleAuth.contains("Secret location: Supabase dashboard only"))
         XCTAssertTrue(googleAuth.contains("Unsupported provider: missing OAuth secret"))

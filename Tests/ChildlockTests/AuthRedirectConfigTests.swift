@@ -12,6 +12,7 @@ final class AuthRedirectConfigTests: XCTestCase {
 
         let infoPlist = try readPropertyList("Sources/Childlock/Info.plist")
         XCTAssertEqual(infoPlist["GIDClientID"] as? String, "$(GOOGLE_IOS_CLIENT_ID)")
+        XCTAssertEqual(infoPlist["GIDServerClientID"] as? String, "$(GOOGLE_WEB_CLIENT_ID)")
         XCTAssertEqual(infoPlist["GOOGLE_REVERSED_CLIENT_ID"] as? String, "$(GOOGLE_REVERSED_CLIENT_ID)")
 
         let urlTypes = try XCTUnwrap(infoPlist["CFBundleURLTypes"] as? [[String: Any]])
@@ -23,6 +24,7 @@ final class AuthRedirectConfigTests: XCTestCase {
 
         let setupGuide = try readRepoFile("docs/SUPABASE_GOOGLE_AUTH.md")
         XCTAssertTrue(setupGuide.contains("GOOGLE_IOS_CLIENT_ID"))
+        XCTAssertTrue(setupGuide.contains("GOOGLE_WEB_CLIENT_ID"))
         XCTAssertTrue(setupGuide.contains("GOOGLE_REVERSED_CLIENT_ID"))
         XCTAssertTrue(setupGuide.contains("The reversed client ID must match the iOS client ID prefix exactly"))
     }
@@ -34,12 +36,16 @@ final class AuthRedirectConfigTests: XCTestCase {
         let rootView = try readRepoFile("Sources/Childlock/App/ChildlockRootView.swift")
 
         XCTAssertTrue(authService.contains("import GoogleSignIn"))
-        XCTAssertTrue(authService.contains("GIDSignIn.sharedInstance.signIn(withPresenting:"))
+        XCTAssertTrue(authService.contains("GIDConfiguration("))
+        XCTAssertTrue(authService.contains("serverClientID: webClientID"))
+        XCTAssertTrue(authService.contains("GIDSignIn.sharedInstance.signIn("))
         XCTAssertTrue(authService.contains("GIDSignIn.sharedInstance.handle(url)"))
         XCTAssertTrue(authService.contains("client.auth.signInWithIdToken("))
         XCTAssertTrue(authService.contains("provider: .google"))
         XCTAssertTrue(authService.contains("idToken: idToken"))
         XCTAssertTrue(authService.contains("accessToken: result.user.accessToken.tokenString"))
+        XCTAssertTrue(authService.contains("nonce: Self.sha256(rawNonce)"))
+        XCTAssertTrue(authService.contains("nonce: rawNonce"))
         XCTAssertTrue(rootView.contains("if authService.handleGoogleRedirectURL(url)"))
         XCTAssertTrue(onboarding.contains("Continue with Google"))
         XCTAssertTrue(onboarding.contains("Connecting to Google"))
@@ -57,11 +63,15 @@ final class AuthRedirectConfigTests: XCTestCase {
         XCTAssertTrue(package.contains("https://github.com/google/GoogleSignIn-iOS.git"))
         XCTAssertTrue(package.contains(".product(name: \"GoogleSignIn\", package: \"GoogleSignIn-iOS\")"))
         XCTAssertTrue(appSecretsExample.contains("GOOGLE_IOS_CLIENT_ID"))
+        XCTAssertTrue(appSecretsExample.contains("GOOGLE_WEB_CLIENT_ID"))
         XCTAssertTrue(appSecretsExample.contains("GOOGLE_REVERSED_CLIENT_ID"))
         XCTAssertFalse(appSecretsExample.contains("GOOGLE_CLIENT_SECRET"))
+        XCTAssertFalse(appSecretsExample.contains("GOOGLE_WEB_CLIENT_SECRET"))
         XCTAssertFalse(authService.contains("GOOGLE_CLIENT_SECRET"))
-        XCTAssertTrue(credentials.contains("Google iOS client ID and reversed client ID are public app-facing values"))
-        XCTAssertTrue(credentials.contains("Google Web client ID and client secret belong only in the Supabase Google auth"))
+        XCTAssertFalse(authService.contains("GOOGLE_WEB_CLIENT_SECRET"))
+        let normalizedCredentials = normalizeWhitespace(credentials)
+        XCTAssertTrue(normalizedCredentials.contains("Google iOS client ID, Google Web client ID, and reversed client ID are public"))
+        XCTAssertTrue(normalizedCredentials.contains("The Google Web client secret belongs only in the Supabase Google auth"))
     }
 
     @MainActor

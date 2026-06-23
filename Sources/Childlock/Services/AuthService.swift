@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import CryptoKit
 #if canImport(AuthenticationServices)
 import AuthenticationServices
 #endif
@@ -12,6 +13,7 @@ import Supabase
 #if canImport(UIKit)
 import UIKit
 #endif
+import Security
 
 @MainActor
 @Observable
@@ -162,13 +164,19 @@ public final class AuthService {
                 return false
             }
 
+            configureGoogleSignIn()
+
             guard let presentingViewController = Self.presentingViewController() else {
                 failSignIn("Google sign in could not find an active app window. Please try again.")
                 return false
             }
 
             do {
-                let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: presentingViewController)
+                let rawNonce = try Self.randomNonceString()
+                let result = try await Self.signInWithGoogle(
+                    presentingViewController: presentingViewController,
+                    nonce: Self.sha256(rawNonce)
+                )
                 guard let idToken = result.user.idToken?.tokenString else {
                     failSignIn("Google sign in could not be completed. Please try again.")
                     return false
@@ -178,7 +186,8 @@ public final class AuthService {
                     credentials: OpenIDConnectCredentials(
                         provider: .google,
                         idToken: idToken,
-                        accessToken: result.user.accessToken.tokenString
+                        accessToken: result.user.accessToken.tokenString,
+                        nonce: rawNonce
                     )
                 )
                 completeSupabaseSignIn(session: session, appleUserID: nil)
@@ -300,6 +309,48 @@ public final class AuthService {
     }
     #endif
 
+    #if canImport(GoogleSignIn)
+    private func configureGoogleSignIn() {
+        guard
+            let iosClientID = BackendConfig.current.googleIOSClientID,
+            let webClientID = BackendConfig.current.googleWebClientID
+        else {
+            return
+        }
+
+        GIDSignIn.sharedInstance.configuration = GIDConfiguration(
+            clientID: iosClientID,
+            serverClientID: webClientID
+        )
+    }
+
+    #if canImport(UIKit)
+    private enum GoogleSignInRuntimeError: Error {
+        case missingResult
+    }
+
+    private static func signInWithGoogle(
+        presentingViewController: UIViewController,
+        nonce: String
+    ) async throws -> GIDSignInResult {
+        try await withCheckedThrowingContinuation { continuation in
+            GIDSignIn.sharedInstance.signIn(
+                withPresenting: presentingViewController,
+                hint: nil,
+                additionalScopes: nil,
+                nonce: nonce
+            ) { result, error in
+                if let result {
+                    continuation.resume(returning: result)
+                } else {
+                    continuation.resume(throwing: error ?? GoogleSignInRuntimeError.missingResult)
+                }
+            }
+        }
+    }
+    #endif
+    #endif
+
     private static func joinedName(givenName: String?, familyName: String?) -> String? {
         let components = [givenName, familyName]
             .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
@@ -307,6 +358,38 @@ public final class AuthService {
 
         guard !components.isEmpty else { return nil }
         return components.joined(separator: " ")
+    }
+
+    private enum NonceGenerationError: Error {
+        case failed
+    }
+
+    private static func randomNonceString(length: Int = 32) throws -> String {
+        precondition(length > 0)
+        let charset = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+        var result = ""
+        var remainingLength = length
+
+        while remainingLength > 0 {
+            var random: UInt8 = 0
+            let status = SecRandomCopyBytes(kSecRandomDefault, 1, &random)
+            guard status == errSecSuccess else {
+                throw NonceGenerationError.failed
+            }
+
+            if Int(random) < charset.count {
+                result.append(charset[Int(random)])
+                remainingLength -= 1
+            }
+        }
+
+        return result
+    }
+
+    private static func sha256(_ input: String) -> String {
+        let inputData = Data(input.utf8)
+        let hashedData = SHA256.hash(data: inputData)
+        return hashedData.map { String(format: "%02x", $0) }.joined()
     }
 
     #if canImport(UIKit)

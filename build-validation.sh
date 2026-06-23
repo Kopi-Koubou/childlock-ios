@@ -89,6 +89,24 @@ require_google_reversed_client_id_matches() {
     echo "✅ GOOGLE_REVERSED_CLIENT_ID matches GOOGLE_IOS_CLIENT_ID"
 }
 
+require_google_client_id_format() {
+    local file="$1"
+    local key="$2"
+    local client_id
+    client_id="$(read_config_value "$file" "$key")"
+
+    if is_missing_value "$client_id"; then
+        return 1
+    fi
+
+    if [[ "$client_id" != *".apps.googleusercontent.com" ]]; then
+        echo "❌ $key must end with .apps.googleusercontent.com"
+        return 1
+    fi
+
+    echo "✅ $key has Google client ID format"
+}
+
 require_missing_or_blank() {
     local file="$1"
     local key="$2"
@@ -163,6 +181,8 @@ else
     require_config_value "Config/AppSecrets.local.xcconfig" "SUPABASE_URL" || config_failed=1
     require_config_value "Config/AppSecrets.local.xcconfig" "SUPABASE_PUBLISHABLE_KEY" || config_failed=1
     require_config_value "Config/AppSecrets.local.xcconfig" "GOOGLE_IOS_CLIENT_ID" || config_failed=1
+    require_config_value "Config/AppSecrets.local.xcconfig" "GOOGLE_WEB_CLIENT_ID" || config_failed=1
+    require_google_client_id_format "Config/AppSecrets.local.xcconfig" "GOOGLE_WEB_CLIENT_ID" || config_failed=1
     require_config_value "Config/AppSecrets.local.xcconfig" "GOOGLE_REVERSED_CLIENT_ID" || config_failed=1
     require_google_reversed_client_id_matches "Config/AppSecrets.local.xcconfig" || config_failed=1
     require_config_value "Config/AppSecrets.local.xcconfig" "REVENUECAT_API_KEY" || config_failed=1
@@ -171,6 +191,7 @@ else
     require_missing_or_blank "Config/AppSecrets.local.xcconfig" "SUPABASE_SERVICE_ROLE_KEY" || config_failed=1
     require_missing_or_blank "Config/AppSecrets.local.xcconfig" "REVENUECAT_WEBHOOK_SECRET" || config_failed=1
     require_missing_or_blank "Config/AppSecrets.local.xcconfig" "GOOGLE_CLIENT_SECRET" || config_failed=1
+    require_missing_or_blank "Config/AppSecrets.local.xcconfig" "GOOGLE_WEB_CLIENT_SECRET" || config_failed=1
 
     require_config_value "Config/production.env" "SUPABASE_PROJECT_REF" || config_failed=1
     require_config_value "Config/production.env" "SUPABASE_ACCESS_TOKEN" || config_failed=1

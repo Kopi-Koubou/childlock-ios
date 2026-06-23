@@ -29,6 +29,7 @@ Never put these in the app or repository:
 | Supabase service role key | Supabase API settings | Password manager and Supabase CLI/server only |
 | Supabase access token | Supabase account tokens | Password manager, local shell, or GitHub Actions secret |
 | Google iOS client ID | Google Cloud OAuth iOS client | `Config/AppSecrets.local.xcconfig` |
+| Google Web client ID | Google Cloud OAuth Web client | `Config/AppSecrets.local.xcconfig` and Supabase Google provider |
 | Google reversed client ID | Google Cloud OAuth iOS client / `GoogleService-Info.plist` | `Config/AppSecrets.local.xcconfig` |
 | Google Web client secret | Google Cloud OAuth Web client | Supabase Google provider only |
 | RevenueCat iOS SDK key | RevenueCat project API keys | `Config/AppSecrets.local.xcconfig` |
@@ -85,7 +86,8 @@ value into the iOS app.
 Apple auth setup is tracked in `docs/SUPABASE_APPLE_AUTH.md`. Google auth setup
 is tracked in `docs/SUPABASE_GOOGLE_AUTH.md`. Do not submit a production build
 until the Supabase Apple and Google providers are enabled and saved, and the app
-build has `GOOGLE_IOS_CLIENT_ID` plus `GOOGLE_REVERSED_CLIENT_ID`.
+build has `GOOGLE_IOS_CLIENT_ID`, `GOOGLE_WEB_CLIENT_ID`, and
+`GOOGLE_REVERSED_CLIENT_ID`.
 
 For Xcode Cloud, create `Config/AppSecrets.local.xcconfig` in a pre-build script
 from Xcode Cloud environment variables, or pass equivalent build settings on the

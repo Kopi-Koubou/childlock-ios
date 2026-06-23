@@ -45,6 +45,8 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>GIDClientID</key>
 	<string>$(GOOGLE_IOS_CLIENT_ID)</string>
+	<key>GIDServerClientID</key>
+	<string>$(GOOGLE_WEB_CLIENT_ID)</string>
 	<key>GOOGLE_REVERSED_CLIENT_ID</key>
 	<string>$(GOOGLE_REVERSED_CLIENT_ID)</string>
 	<key>POSTHOG_API_KEY</key>
