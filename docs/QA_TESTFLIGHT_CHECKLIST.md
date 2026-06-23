@@ -1,6 +1,6 @@
 # Childlock TestFlight QA Checklist
 
-Last checked: 2026-06-23
+Last checked: 2026-06-24
 
 This checklist separates simulator confidence from real Screen Time proof. The
 simulator can validate onboarding state, parent dashboard gating, challenge UI,
@@ -43,6 +43,27 @@ Simulator pass criteria:
 - Parent PIN unlock remounts the dashboard.
 - More-time seed shows the parent request banner with `Give one more block` and
   `Dismiss`.
+
+Latest simulator smoke pass, 2026-06-24:
+
+- iPhone 17 simulator: `--childlock-qa-seed-onboarding-devices` rendered the
+  local-first device setup copy without overlap.
+- iPhone 17 simulator: `--childlock-qa-seed-dashboard` rendered the parent
+  dashboard home state with child summary, recent activity, tabs, and settings.
+- iPhone 17 simulator: `--childlock-qa-seed-locked-dashboard` hid parent
+  content behind the PIN gate.
+- iPhone 17 simulator: `--childlock-qa-seed-pending-math-challenge` rendered
+  only the child challenge surface.
+- iPhone 17 simulator: `--childlock-qa-seed-pending-memory-challenge` rendered
+  the memory challenge grid without clipping.
+- iPhone 17 simulator: `--childlock-qa-seed-more-time-request` rendered the
+  parent-visible request banner without opening a pending child challenge.
+- iPad (A16) simulator: `--childlock-qa-seed-onboarding-devices` and
+  `--childlock-qa-seed-dashboard` rendered with readable constrained content.
+
+This simulator pass does not prove the real Screen Time shield loop. Keep the
+TestFlight hardware gates below as the launch blocker until they pass on
+physical devices.
 
 ## TestFlight Hardware Gates
 

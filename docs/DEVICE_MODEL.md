@@ -1,6 +1,6 @@
 # Childlock Device Model
 
-Last checked: 2026-06-23
+Last checked: 2026-06-24
 
 Childlock v1 is a local-first Screen Time app. It locks apps on the device where
 the parent completes onboarding, grants Screen Time access, chooses apps or
