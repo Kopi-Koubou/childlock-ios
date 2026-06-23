@@ -111,8 +111,9 @@ final class HandBackCopyTests: XCTestCase {
         let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
 
         XCTAssertTrue(onboarding.contains("Shared iPhone? Set it up here."))
-        XCTAssertTrue(onboarding.contains("Child iPad? Install and run this setup on the iPad"))
-        XCTAssertTrue(onboarding.contains("a parent-only iPhone install will not lock the iPad in v1"))
+        XCTAssertTrue(onboarding.contains("Child iPad? Install and run setup on the iPad too"))
+        XCTAssertTrue(onboarding.contains("a parent-only iPhone install will not lock the iPad at launch"))
+        XCTAssertTrue(onboarding.contains("A separate parent-phone remote dashboard is not included at launch."))
 
         XCTAssertTrue(dashboard.contains("Locks apps on this device only."))
         XCTAssertTrue(dashboard.contains("For a child iPad, install and configure Childlock on the iPad."))

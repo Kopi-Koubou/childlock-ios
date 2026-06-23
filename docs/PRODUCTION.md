@@ -63,7 +63,7 @@ Launch device support is intentionally local-first. Childlock locks apps on the
 device where setup is completed. For a child iPad, install and configure
 Childlock on the iPad. Same-phone parent/child use is supported because the
 parent dashboard remains PIN-protected. A separate parent-phone remote dashboard
-is not part of v1. See `docs/DEVICE_MODEL.md`.
+is not part of the launch build. See `docs/DEVICE_MODEL.md`.
 
 ## Backend Deployment
 

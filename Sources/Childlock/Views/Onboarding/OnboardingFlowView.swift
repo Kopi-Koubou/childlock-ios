@@ -321,7 +321,7 @@ public struct OnboardingFlowView: View {
                     .font(ChildlockTypography.title)
                     .foregroundStyle(ChildlockColor.textPrimary)
 
-                Text("Childlock protects the device your child actually uses. Shared iPhone? Set it up here. Child iPad? Install and run this setup on the iPad; a parent-only iPhone install will not lock the iPad in v1.")
+                Text("Childlock protects the device your child actually uses. Shared iPhone? Set it up here. Child iPad? Install and run setup on the iPad too; a parent-only iPhone install will not lock the iPad at launch.")
                     .font(ChildlockTypography.body)
                     .foregroundStyle(ChildlockColor.textSecondary)
             }
@@ -352,7 +352,7 @@ public struct OnboardingFlowView: View {
                 Image(systemName: "info.circle")
                     .font(.system(size: 16))
                     .foregroundStyle(ChildlockColor.primary)
-                Text("For launch, Childlock locks apps on the device where setup is completed. A separate parent-phone remote dashboard is a later feature.")
+                Text("For launch, Childlock locks apps on the device where setup is completed. A separate parent-phone remote dashboard is not included at launch.")
                     .font(ChildlockTypography.caption)
                     .foregroundStyle(ChildlockColor.textSecondary)
             }

@@ -2,9 +2,9 @@
 
 Last checked: 2026-06-24
 
-Childlock v1 is a local-first Screen Time app. It locks apps on the device where
-the parent completes onboarding, grants Screen Time access, chooses apps or
-categories, and starts monitoring.
+Childlock's launch build is a local-first Screen Time app. It locks apps on the
+device where the parent completes onboarding, grants Screen Time access, chooses
+apps or categories, and starts monitoring.
 
 ## Supported For Launch
 

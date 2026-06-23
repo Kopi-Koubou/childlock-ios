@@ -158,7 +158,7 @@ public final class AuthService {
             }
 
             guard BackendConfig.current.isGoogleSignInConfigured else {
-                failSignIn("Google sign in is not configured yet. Add the Google iOS client ID and URL scheme, then try again.")
+                failSignIn("Google sign in is not available in this build. Please use Sign in with Apple for now.")
                 return false
             }
 
@@ -170,7 +170,7 @@ public final class AuthService {
             do {
                 let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: presentingViewController)
                 guard let idToken = result.user.idToken?.tokenString else {
-                    failSignIn("Google did not return an identity token. Check the Google iOS client and Supabase provider settings.")
+                    failSignIn("Google sign in could not be completed. Please try again.")
                     return false
                 }
 

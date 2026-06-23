@@ -116,8 +116,8 @@ final class ReleaseDocsTests: XCTestCase {
         }
 
         XCTAssertTrue(normalizeWhitespace(deviceModel).contains("Do not claim that a parent phone can remotely lock a separate child iPad"))
-        XCTAssertTrue(normalizeWhitespace(checklist).contains("Do not claim that a parent-only iPhone install remotely controls a separate child iPad in v1."))
-        XCTAssertTrue(normalizeWhitespace(appReview).contains("not presented as a parent-phone remote controller for a separate child iPad in v1"))
+        XCTAssertTrue(normalizeWhitespace(checklist).contains("Do not claim that a parent-only iPhone install remotely controls a separate child iPad at launch."))
+        XCTAssertTrue(normalizeWhitespace(appReview).contains("not presented as a parent-phone remote controller for a separate child iPad in this launch build"))
 
         for contents in [metadata, appReview, production] {
             XCTAssertFalse(contents.localizedCaseInsensitiveContains("parent phone can remotely lock"))

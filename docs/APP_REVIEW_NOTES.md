@@ -31,7 +31,7 @@ Notes:
   install and configure Childlock on the iPad. Same-phone parent/child use is
   supported because the parent dashboard remains PIN-protected. Childlock is
   not presented as a parent-phone remote controller for a separate child iPad in
-  v1.
+  this launch build.
 - Childlock does not attempt to launch itself from the shield extension because
   iOS does not allow that. The shield closes the blocked app and Childlock also
   posts a local notification to guide the child back to the challenge when

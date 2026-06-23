@@ -164,6 +164,10 @@ final class AuthRedirectConfigTests: XCTestCase {
         let onboarding = try readRepoFile("Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift")
 
         XCTAssertTrue(authService.contains("failSignIn(\"Account setup is unavailable right now. Please try again later.\")"))
+        XCTAssertTrue(authService.contains("Google sign in is not available in this build. Please use Sign in with Apple for now."))
+        XCTAssertFalse(authService.contains("Add the Google iOS client ID"))
+        XCTAssertFalse(authService.contains("URL scheme, then try again"))
+        XCTAssertFalse(authService.contains("identity token. Check the Google iOS client"))
         XCTAssertFalse(onboarding.localizedCaseInsensitiveContains("dev-user"))
         XCTAssertFalse(onboarding.localizedCaseInsensitiveContains("try a demo"))
         XCTAssertFalse(onboarding.localizedCaseInsensitiveContains("skip for now"))

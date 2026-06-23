@@ -40,7 +40,7 @@ Simulator pass criteria:
 
 - Fresh onboarding shows `Sign in with Apple` and `Continue with Google`.
 - Device setup seed explains same-phone use, child iPad setup, and that a
-  parent-only iPhone install does not remotely lock a separate iPad in v1.
+  parent-only iPhone install does not remotely lock a separate iPad at launch.
 - Seeded dashboard shows a child, recent activity, app tabs, and settings entry.
 - Locked dashboard hides parent content until the PIN is entered.
 - Pending challenge exposes only the child challenge surface, not dashboard
@@ -208,7 +208,7 @@ Use this when the parent owns an iPhone and the child uses an iPad.
 
 Pass means Childlock can be marketed as supporting child iPad use when the app
 is installed and configured on the iPad. Do not claim that a parent-only iPhone
-install remotely controls a separate child iPad in v1.
+install remotely controls a separate child iPad at launch.
 
 ## Launch Decision
 
