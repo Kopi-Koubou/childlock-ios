@@ -57,9 +57,7 @@ should unlock non-enforcement value such as reports, insights, coaching content,
 or additional cloud features.
 
 Parents must sign in with Apple or Google before setup. Reviewers can use native
-Sign in with Apple or native Google Sign-In backed by Supabase Auth. There is no
-separate username/password account to provide.
-There is no separate username/password account for App Review.
+Sign in with Apple or native Google Sign-In backed by Supabase Auth. There is no separate username/password account for App Review to use.
 
 Launch device support is intentionally local-first. Childlock locks apps on the
 device where setup is completed. For a child iPad, install and configure

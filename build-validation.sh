@@ -95,21 +95,29 @@ else
         exit 1
     fi
 
-    require_config_value "Config/AppSecrets.local.xcconfig" "SUPABASE_URL"
-    require_config_value "Config/AppSecrets.local.xcconfig" "SUPABASE_PUBLISHABLE_KEY"
-    require_config_value "Config/AppSecrets.local.xcconfig" "GOOGLE_IOS_CLIENT_ID"
-    require_config_value "Config/AppSecrets.local.xcconfig" "GOOGLE_REVERSED_CLIENT_ID"
-    require_config_value "Config/AppSecrets.local.xcconfig" "REVENUECAT_API_KEY"
+    config_failed=0
 
-    require_missing_or_blank "Config/AppSecrets.local.xcconfig" "SUPABASE_ACCESS_TOKEN"
-    require_missing_or_blank "Config/AppSecrets.local.xcconfig" "SUPABASE_SERVICE_ROLE_KEY"
-    require_missing_or_blank "Config/AppSecrets.local.xcconfig" "REVENUECAT_WEBHOOK_SECRET"
-    require_missing_or_blank "Config/AppSecrets.local.xcconfig" "GOOGLE_CLIENT_SECRET"
+    require_config_value "Config/AppSecrets.local.xcconfig" "SUPABASE_URL" || config_failed=1
+    require_config_value "Config/AppSecrets.local.xcconfig" "SUPABASE_PUBLISHABLE_KEY" || config_failed=1
+    require_config_value "Config/AppSecrets.local.xcconfig" "GOOGLE_IOS_CLIENT_ID" || config_failed=1
+    require_config_value "Config/AppSecrets.local.xcconfig" "GOOGLE_REVERSED_CLIENT_ID" || config_failed=1
+    require_config_value "Config/AppSecrets.local.xcconfig" "REVENUECAT_API_KEY" || config_failed=1
 
-    require_config_value "Config/production.env" "SUPABASE_PROJECT_REF"
-    require_config_value "Config/production.env" "SUPABASE_ACCESS_TOKEN"
-    require_config_value "Config/production.env" "SUPABASE_SERVICE_ROLE_KEY"
-    require_config_value "Config/production.env" "REVENUECAT_WEBHOOK_SECRET"
+    require_missing_or_blank "Config/AppSecrets.local.xcconfig" "SUPABASE_ACCESS_TOKEN" || config_failed=1
+    require_missing_or_blank "Config/AppSecrets.local.xcconfig" "SUPABASE_SERVICE_ROLE_KEY" || config_failed=1
+    require_missing_or_blank "Config/AppSecrets.local.xcconfig" "REVENUECAT_WEBHOOK_SECRET" || config_failed=1
+    require_missing_or_blank "Config/AppSecrets.local.xcconfig" "GOOGLE_CLIENT_SECRET" || config_failed=1
+
+    require_config_value "Config/production.env" "SUPABASE_PROJECT_REF" || config_failed=1
+    require_config_value "Config/production.env" "SUPABASE_ACCESS_TOKEN" || config_failed=1
+    require_config_value "Config/production.env" "SUPABASE_SERVICE_ROLE_KEY" || config_failed=1
+    require_config_value "Config/production.env" "REVENUECAT_WEBHOOK_SECRET" || config_failed=1
+
+    if [[ "$config_failed" == "1" ]]; then
+        echo ""
+        echo "❌ Production configuration check failed. Fill every missing value above, then rerun ./build-validation.sh"
+        exit 1
+    fi
 
     echo "ℹ️  POSTHOG_API_KEY is optional for launch validation."
 fi

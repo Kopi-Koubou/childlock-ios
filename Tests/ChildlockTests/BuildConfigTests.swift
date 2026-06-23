@@ -44,6 +44,8 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(validationScript.contains("SUPABASE_SERVICE_ROLE_KEY"))
         XCTAssertTrue(validationScript.contains("REVENUECAT_WEBHOOK_SECRET"))
         XCTAssertTrue(validationScript.contains("Server-only value must not be in $file"))
+        XCTAssertTrue(validationScript.contains("config_failed=0"))
+        XCTAssertTrue(validationScript.contains("Fill every missing value above"))
         XCTAssertTrue(validationScript.contains("Use docs/QA_TESTFLIGHT_CHECKLIST.md"))
         XCTAssertTrue(production.contains("./build-validation.sh"))
     }
