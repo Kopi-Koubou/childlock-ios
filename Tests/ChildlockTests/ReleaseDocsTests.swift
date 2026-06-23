@@ -152,7 +152,10 @@ final class ReleaseDocsTests: XCTestCase {
 
         XCTAssertTrue(checklist.contains("## Hardware QA Record"))
         XCTAssertTrue(checklist.contains("| Build number |"))
+        XCTAssertTrue(checklist.contains("| Git commit |"))
         XCTAssertTrue(checklist.contains("| Scenario | Same phone / Child iPad / Child iPhone |"))
+        XCTAssertTrue(checklist.contains("| Latest simulator QA summary |"))
+        XCTAssertTrue(checklist.contains("It pre-fills the build number, date, scenario, git commit"))
         XCTAssertTrue(checklist.contains("| Shield appeared only after threshold | Pass / Fail |"))
         XCTAssertTrue(checklist.contains("| Parent dashboard stayed PIN-gated after hand-back | Pass / Fail |"))
         XCTAssertTrue(checklist.contains("One denied-notification pass proving Home -> Childlock still opens the"))
@@ -164,6 +167,8 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(normalizedProduction.contains("Do not treat a simulator pass or a successful archive upload as proof"))
 
         XCTAssertTrue(template.contains("## Required Shield Loop"))
+        XCTAssertTrue(template.contains("| Git commit |"))
+        XCTAssertTrue(template.contains("| Latest simulator QA summary |"))
         XCTAssertTrue(template.contains("Second full interval shields again"))
         XCTAssertTrue(template.contains("## Same Phone Scenario"))
         XCTAssertTrue(template.contains("## Child iPad Scenario"))
@@ -172,7 +177,12 @@ final class ReleaseDocsTests: XCTestCase {
 
         XCTAssertTrue(generator.contains(".build/hardware-qa-records"))
         XCTAssertTrue(generator.contains("docs/HARDWARE_QA_RECORD_TEMPLATE.md"))
-        XCTAssertTrue(generator.contains("Suggested scenario: $scenario"))
+        XCTAssertTrue(generator.contains("replace_row \"Build number\" \"$build_number\""))
+        XCTAssertTrue(generator.contains("replace_row \"Git commit\" \"$git_commit\""))
+        XCTAssertTrue(generator.contains("replace_row \"Scenario\" \"$scenario_label\""))
+        XCTAssertTrue(generator.contains("replace_row \"Latest simulator QA summary\" \"$latest_simulator_summary\""))
+        XCTAssertTrue(generator.contains("same-phone)"))
+        XCTAssertTrue(generator.contains("child-ipad)"))
     }
 
     func testScreenTimeSelectionTokensStayOutOfBackendSync() throws {

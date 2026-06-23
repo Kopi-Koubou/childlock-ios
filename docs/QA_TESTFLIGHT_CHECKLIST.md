@@ -118,15 +118,19 @@ scripts/new-hardware-qa-record.sh child-ipad <build-number>
 ```
 
 The generated record is based on `docs/HARDWARE_QA_RECORD_TEMPLATE.md`.
+It pre-fills the build number, date, scenario, git commit, tester name when
+available, and the latest simulator QA summary path.
 
 | Field | Value |
 | --- | --- |
 | Build number |  |
+| Git commit |  |
 | Tester |  |
 | Date |  |
 | Device model |  |
 | iOS version |  |
 | Scenario | Same phone / Child iPad / Child iPhone |
+| Latest simulator QA summary |  |
 | Parent sign-in tested | Apple / Google |
 | Notification state tested | Allowed / Denied |
 | Monitored selection | App / Category / Website |

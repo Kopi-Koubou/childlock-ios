@@ -10,11 +10,13 @@ shielding, extension actions, purchases, and real hand-back behavior.
 | Field | Value |
 | --- | --- |
 | Build number |  |
+| Git commit |  |
 | Tester |  |
 | Date |  |
 | Device model |  |
 | iOS version |  |
 | Scenario | Same phone / Child iPad / Child iPhone |
+| Latest simulator QA summary |  |
 | Parent sign-in tested | Apple / Google |
 | Notification state tested | Allowed / Denied |
 | Monitored selection | App / Category / Website |
