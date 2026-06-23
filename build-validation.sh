@@ -50,6 +50,44 @@ require_config_value() {
     echo "✅ $key present in $file"
 }
 
+expected_google_reversed_client_id() {
+    local ios_client_id="$1"
+    local suffix=".apps.googleusercontent.com"
+
+    if [[ "$ios_client_id" != *"$suffix" ]]; then
+        return 1
+    fi
+
+    local client_prefix="${ios_client_id%"$suffix"}"
+    printf "com.googleusercontent.apps.%s" "$client_prefix"
+}
+
+require_google_reversed_client_id_matches() {
+    local file="$1"
+    local ios_client_id
+    local reversed_client_id
+    local expected_reversed_client_id
+
+    ios_client_id="$(read_config_value "$file" "GOOGLE_IOS_CLIENT_ID")"
+    reversed_client_id="$(read_config_value "$file" "GOOGLE_REVERSED_CLIENT_ID")"
+
+    if is_missing_value "$ios_client_id" || is_missing_value "$reversed_client_id"; then
+        return 1
+    fi
+
+    if ! expected_reversed_client_id="$(expected_google_reversed_client_id "$ios_client_id")"; then
+        echo "❌ GOOGLE_IOS_CLIENT_ID must end with .apps.googleusercontent.com"
+        return 1
+    fi
+
+    if [[ "$reversed_client_id" != "$expected_reversed_client_id" ]]; then
+        echo "❌ GOOGLE_REVERSED_CLIENT_ID does not match GOOGLE_IOS_CLIENT_ID in $file"
+        return 1
+    fi
+
+    echo "✅ GOOGLE_REVERSED_CLIENT_ID matches GOOGLE_IOS_CLIENT_ID"
+}
+
 require_missing_or_blank() {
     local file="$1"
     local key="$2"
@@ -101,6 +139,7 @@ else
     require_config_value "Config/AppSecrets.local.xcconfig" "SUPABASE_PUBLISHABLE_KEY" || config_failed=1
     require_config_value "Config/AppSecrets.local.xcconfig" "GOOGLE_IOS_CLIENT_ID" || config_failed=1
     require_config_value "Config/AppSecrets.local.xcconfig" "GOOGLE_REVERSED_CLIENT_ID" || config_failed=1
+    require_google_reversed_client_id_matches "Config/AppSecrets.local.xcconfig" || config_failed=1
     require_config_value "Config/AppSecrets.local.xcconfig" "REVENUECAT_API_KEY" || config_failed=1
 
     require_missing_or_blank "Config/AppSecrets.local.xcconfig" "SUPABASE_ACCESS_TOKEN" || config_failed=1

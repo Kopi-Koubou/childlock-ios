@@ -39,6 +39,7 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(validationScript.contains("Config/AppSecrets.local.xcconfig"))
         XCTAssertTrue(validationScript.contains("GOOGLE_IOS_CLIENT_ID"))
         XCTAssertTrue(validationScript.contains("GOOGLE_REVERSED_CLIENT_ID"))
+        XCTAssertTrue(validationScript.contains("GOOGLE_REVERSED_CLIENT_ID matches GOOGLE_IOS_CLIENT_ID"))
         XCTAssertTrue(validationScript.contains("GOOGLE_CLIENT_SECRET"))
         XCTAssertTrue(validationScript.contains("Config/production.env"))
         XCTAssertTrue(validationScript.contains("SUPABASE_SERVICE_ROLE_KEY"))

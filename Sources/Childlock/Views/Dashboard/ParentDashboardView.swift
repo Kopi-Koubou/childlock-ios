@@ -291,7 +291,7 @@ public struct ParentDashboardView: View {
                 }
                 Button("Cancel", role: .cancel) {}
             } message: {
-                Text("Parent settings stay on this device, but you will need to sign in again before managing Childlock.")
+                Text("Local enforcement pauses, and parent settings stay on this device. Sign in again to restart or manage Childlock.")
             }
         }
     }
@@ -1135,7 +1135,7 @@ public struct ParentDashboardView: View {
                                     Divider().background(ChildlockColor.surfaceMuted)
 
                                     VStack(alignment: .leading, spacing: ChildlockSpacing.sm) {
-                                        Text("Parent settings stay on this device. Sign in again to manage Childlock.")
+                                        Text("Local enforcement pauses. Parent settings stay on this device, and you can sign in again to restart Childlock.")
                                             .font(ChildlockTypography.caption)
                                             .foregroundStyle(ChildlockColor.textSecondary)
                                             .fixedSize(horizontal: false, vertical: true)
@@ -1391,10 +1391,18 @@ public struct ParentDashboardView: View {
     }
 
     private func signOut() {
+        let profilesToStop = appState.profiles
+        profilesToStop.forEach { ScreenTimeManager.shared.stopMonitoring(profile: $0) }
+        ScreenTimeManager.shared.removeShields()
+        NotificationService.clearShieldFlowAlerts()
         AuthService.shared.signOut()
         appState.isAuthenticated = false
         appState.lockSettings(pinService: pinService)
         appState.currentTab = .home
+        monitoringStatusText = "stopped"
+        monitoringErrorText = nil
+        moreTimeRequestCount = 0
+        isSignOutConfirmationPresented = false
     }
 
     private func resetLocalSetup() {

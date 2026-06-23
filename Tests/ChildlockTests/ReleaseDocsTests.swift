@@ -132,7 +132,7 @@ final class ReleaseDocsTests: XCTestCase {
         for contents in [production, checklist] {
             let normalized = normalizeWhitespace(contents)
             XCTAssertTrue(normalized.contains("Reset Childlock on this device"))
-            XCTAssertTrue(normalized.contains("Sign Out preserves local parent settings"))
+            XCTAssertTrue(normalized.contains("Sign Out pauses local enforcement and preserves local parent settings"))
             XCTAssertTrue(normalized.contains("Reset stops local enforcement"))
             XCTAssertTrue(normalized.contains("clears child profiles, app selections, reports, and the parent PIN"))
         }

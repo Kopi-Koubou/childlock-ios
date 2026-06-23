@@ -46,6 +46,10 @@ GOOGLE_IOS_CLIENT_ID = <iOS client id>.apps.googleusercontent.com
 GOOGLE_REVERSED_CLIENT_ID = com.googleusercontent.apps.<iOS client id prefix>
 ```
 
+The reversed client ID must match the iOS client ID prefix exactly. The release
+validation script checks this so the Google flow cannot ship with a callback
+scheme that opens Google but fails to return to Childlock.
+
 ## Supabase
 
 1. Open `Authentication` -> `Sign In / Providers`.

@@ -188,9 +188,9 @@ SKIP_SECRET_CHECK=1 ./build-validation.sh
 ```
 
 For repeated TestFlight setup passes on the same device, use Settings ->
-`Reset Childlock on this device` -> `Confirm Reset`. Sign Out preserves local
-parent settings; Reset stops local enforcement, clears child profiles, app
-selections, reports, and the parent PIN on that device.
+`Reset Childlock on this device` -> `Confirm Reset`. Sign Out pauses local
+enforcement and preserves local parent settings; Reset stops local enforcement,
+clears child profiles, app selections, reports, and the parent PIN on that device.
 
 ```sh
 swift test

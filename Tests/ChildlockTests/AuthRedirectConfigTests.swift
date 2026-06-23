@@ -24,6 +24,7 @@ final class AuthRedirectConfigTests: XCTestCase {
         let setupGuide = try readRepoFile("docs/SUPABASE_GOOGLE_AUTH.md")
         XCTAssertTrue(setupGuide.contains("GOOGLE_IOS_CLIENT_ID"))
         XCTAssertTrue(setupGuide.contains("GOOGLE_REVERSED_CLIENT_ID"))
+        XCTAssertTrue(setupGuide.contains("The reversed client ID must match the iOS client ID prefix exactly"))
     }
 
     @MainActor
@@ -86,9 +87,13 @@ final class AuthRedirectConfigTests: XCTestCase {
 
         XCTAssertTrue(dashboard.contains("Sign Out"))
         XCTAssertTrue(dashboard.contains("Confirm Sign Out"))
-        XCTAssertTrue(dashboard.contains("Parent settings stay on this device. Sign in again to manage Childlock."))
+        XCTAssertTrue(dashboard.contains("Local enforcement pauses. Parent settings stay on this device"))
+        XCTAssertTrue(dashboard.contains("profilesToStop.forEach { ScreenTimeManager.shared.stopMonitoring(profile: $0) }"))
+        XCTAssertTrue(dashboard.contains("NotificationService.clearShieldFlowAlerts()"))
         XCTAssertTrue(dashboard.contains("AuthService.shared.signOut()"))
         XCTAssertTrue(dashboard.contains("appState.lockSettings(pinService: pinService)"))
+        XCTAssertFalse(dashboard.contains("private func signOut() {\n        SharedDefaults.clearLocalSetupState()"))
+        XCTAssertFalse(dashboard.contains("private func signOut() {\n        pinService.clearPIN()"))
         XCTAssertTrue(dashboard.contains("return ChildlockColor.accent"))
         XCTAssertTrue(rootView.contains("resetOnboardingForFreshSignIn()"))
         XCTAssertTrue(rootView.contains("case .signedOut, .unknown:"))
@@ -106,7 +111,7 @@ final class AuthRedirectConfigTests: XCTestCase {
         XCTAssertTrue(dashboard.contains("pinService.clearPIN()"))
         XCTAssertTrue(dashboard.contains("appState.resetForFreshSetup()"))
         XCTAssertTrue(dashboard.contains("private func signOut()"))
-        XCTAssertTrue(dashboard.contains("Parent settings stay on this device. Sign in again to manage Childlock."))
+        XCTAssertTrue(dashboard.contains("Local enforcement pauses. Parent settings stay on this device"))
     }
 
     func testRootResetsStaleOnboardingStateAfterDeviceReset() throws {

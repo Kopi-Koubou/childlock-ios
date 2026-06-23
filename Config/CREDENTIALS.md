@@ -40,4 +40,7 @@ secrets, or App Store Connect private keys into any app xcconfig.
 Google iOS client ID and reversed client ID are public app-facing values and
 belong in `Config/AppSecrets.local.xcconfig`.
 
+The reversed client ID is derived from the iOS client ID. For example,
+`123.apps.googleusercontent.com` becomes `com.googleusercontent.apps.123`.
+
 Do not paste Google OAuth client secrets into any app xcconfig. Google Web client ID and client secret belong only in the Supabase Google auth provider settings.
