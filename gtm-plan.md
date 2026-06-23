@@ -1,16 +1,16 @@
 # Childlock Go-To-Market Plan
 
-**Version:** 2.0  
-**Date:** 2026-03-14 (SGT)  
-**Project:** childlock  
-**Plan horizon:** 90 days (2026-03-14 to 2026-06-12)
+**Version:** 2.1
+**Date:** 2026-06-24 (SGT)
+**Project:** childlock
+**Plan horizon:** launch readiness through first public App Store wave (2026-06-24 to 2026-08-08)
 
 ## 1. Operating Context
 
-- PRD confirms the core wedge: transform passive screen time into active thinking moments (not hard cutoffs).
-- Deploy receipt confirms production web deployment succeeded on **2026-03-13T18:40:19Z** at **https://childlock.vercel.app**.
-- Pipeline history shows implementation/qa/deploy completed, GTM docs existed but were placeholder-level and not execution-ready.
-- GTM objective now: convert the concept into a repeatable parent acquisition + activation + paid conversion engine.
+- The core wedge is still clear: transform passive screen time into active thinking moments, not hard cutoffs.
+- The next launch gate is real-device TestFlight validation of Family Controls, DeviceActivity monitoring, shield display, and post-challenge unlock behavior.
+- Backend and monetization setup should be treated as launch infrastructure: Supabase, RevenueCat, App Store products, privacy metadata, and App Review notes must stay aligned.
+- GTM objective now: convert a verified TestFlight build into a repeatable parent acquisition + activation + paid conversion engine.
 
 ## 2. Positioning
 
@@ -66,33 +66,35 @@ Childlock turns passive screen time into active brain breaks. Kids solve short, 
 
 ## 4. 90-Day GTM Phases
 
-## Phase 0: Readiness (2026-03-14 to 2026-03-21)
-**Goal:** Ensure traffic can convert and onboarding friction is visible in analytics.
+## Phase 0: Launch Readiness (2026-06-24 to 2026-07-01)
+**Goal:** Prove the app can be tested, reviewed, purchased, and supported without founder hand-holding.
 
-- Finalize waitlist/landing experience with clear CTA: "Join iOS beta".
-- Confirm production URL routes used for campaign pages are accessible.
-- Implement event taxonomy (install -> onboarding -> first challenge -> day-7 retained -> upgrade).
-- Build messaging kit: landing copy, creator brief, community post templates.
+- Complete TestFlight build validation on parent iPhone + same-device child flow and parent iPhone + child iPad flow.
+- Verify RevenueCat offerings, entitlement mapping, restore purchases, and subscription state sync.
+- Verify Supabase Auth, production project keys, webhook delivery, and user/session persistence.
+- Finalize App Store metadata, screenshots, privacy labels, support URL, privacy URL, review notes, and demo credentials if required.
+- Implement or verify event taxonomy: install -> sign up -> onboarding -> monitoring enabled -> first challenge -> unlock -> subscription event.
 
 **Exit criteria:**
-- Tracking events firing end-to-end in test flow.
-- Beta application funnel live.
-- 10 parent discovery calls scheduled.
+- A written QA evidence record exists for every supported device model.
+- Tracking events fire end-to-end in the TestFlight flow.
+- App Review package is complete and internally testable.
 
-## Phase 1: Closed Beta (2026-03-22 to 2026-04-18)
-**Goal:** Prove retention and challenge acceptance before broad launch.
+## Phase 1: Closed TestFlight Beta (2026-07-02 to 2026-07-16)
+**Goal:** Prove retention and challenge acceptance before public review/launch.
 
-- Recruit 75-100 families (balanced across age bands 3-5, 6-8, 9-12).
+- Recruit 20-50 families first, expanding only after setup and shield reliability are proven.
 - Run weekly parent interviews (minimum 8 calls/week).
 - Capture friction reasons: setup drop-off, challenge difficulty mismatch, bypass attempts.
-- Publish weekly beta digest to waitlist + social proof snippets.
+- Publish weekly beta digest to waitlist + social proof snippets once claims are backed by real usage.
 
 **Exit criteria:**
 - D7 parent retention >= 30%.
 - Challenge completion >= 80%.
-- Family Sharing setup completion >= 65%.
+- Screen Time setup completion >= 65%.
+- No unresolved P0/P1 App Review, subscription, auth, or shield bugs.
 
-## Phase 2: Launch Wave (2026-04-19 to 2026-05-10)
+## Phase 2: App Store Launch Wave (2026-07-17 to 2026-07-31)
 **Goal:** Public launch with credible proof and premium conversion assets.
 
 - App Store metadata and screenshot sequence published.
@@ -105,7 +107,7 @@ Childlock turns passive screen time into active brain breaks. Kids solve short, 
 - 500+ launch-week installs.
 - Free -> trial conversion >= 12%.
 
-## Phase 3: Optimization + Scale (2026-05-11 to 2026-06-12)
+## Phase 3: Optimization + Scale (2026-08-01 to 2026-08-08)
 **Goal:** Reach Month-3 PRD targets and harden growth loops.
 
 - Referral loop live: "Give 1 month, get 1 month".
@@ -113,7 +115,7 @@ Childlock turns passive screen time into active brain breaks. Kids solve short, 
 - Paid experiments (small budget) on Meta and TikTok with strict CAC guardrails.
 - Add lifecycle messaging: day-1 coaching, day-3 setup nudge, day-7 progress summary.
 
-**Exit criteria (target by 2026-06-12):**
+**Exit criteria:**
 - WAF >= 500.
 - D7 >= 35%.
 - Free -> trial >= 15%.
@@ -198,7 +200,7 @@ Warm, trustworthy, professional. Calm confidence, not toy-like chaos and not cli
 |---|---|---|
 | Acquisition | CTR to waitlist/app page | >= 2.5% |
 | Activation | Install -> first challenge complete | >= 55% |
-| Setup quality | Family Sharing setup completion | >= 70% |
+| Setup quality | Screen Time setup completion | >= 70% |
 | Engagement | Challenges per child per day | >= 4 |
 | Learning loop quality | Challenge completion rate | >= 85% |
 | Monetization | Free -> trial | >= 15% |
@@ -240,25 +242,24 @@ Warm, trustworthy, professional. Calm confidence, not toy-like chaos and not cli
 
 | Risk | Impact | Mitigation |
 |---|---|---|
-| Family Sharing setup drop-off | High | Step-by-step onboarding visuals + setup concierge content |
+| Screen Time setup drop-off | High | Step-by-step onboarding visuals + setup concierge content |
 | iOS Screen Time edge-case instability | High | Explicit "known limits" messaging + fallback playbook |
 | Creative drift into generic "kids app" look | Medium | Enforce premium-ui-designer token constraints + screenshot QA checklist |
 | Community backlash ("too controlling") | Medium | Lead with reward framing and non-punitive language |
-| Web landing reliability gap | Medium-High | Verify production route health before paid or creator traffic |
+| Landing/support reliability gap | Medium-High | Verify privacy, support, and campaign routes before paid or creator traffic |
 
 ## 11. Decision Gates
 
-- **Gate A (2026-03-28):** If setup completion < 50%, pause top-of-funnel spend and fix onboarding.
-- **Gate B (2026-04-18):** If D7 < 25% in beta, delay launch and recalibrate challenge flow.
-- **Gate C (2026-05-10):** If free->trial < 10%, rework paywall trigger and value proof sequence.
-- **Gate D (2026-06-12):** If WAF < 300 and paid churn > 10%, narrow ICP and reset channel mix.
+- **Gate A (2026-07-01):** If real-device Screen Time validation is incomplete, keep distribution limited to internal TestFlight.
+- **Gate B (2026-07-16):** If D7 < 25% in beta, delay public launch and recalibrate challenge flow.
+- **Gate C (2026-07-31):** If free -> trial < 10%, rework paywall trigger and value proof sequence.
+- **Gate D (2026-08-08):** If WAF < 300 and paid churn > 10%, narrow ICP and reset channel mix.
 
 ## 12. Immediate 14-Day Execution Checklist
 
-1. Finalize landing + waitlist messaging and route checks.
-2. Produce App Store screenshot v1 using the storyboard above.
-3. Prepare creator briefing kit (hooks, claims, do/don't examples).
-4. Implement event schema and dashboard for activation/retention/conversion.
-5. Run first 20 parent interviews and publish learnings summary.
-6. Ship first referral flow copy and in-app trigger logic.
-
+1. Complete real-device TestFlight QA for same-device and parent-to-child-iPad flows.
+2. Verify RevenueCat entitlement, offerings, restore purchases, and App Store subscription sync.
+3. Verify Supabase Auth, webhook delivery, and production event persistence.
+4. Produce App Store screenshot v1 using the storyboard above.
+5. Prepare creator briefing kit with only claims proven in TestFlight.
+6. Implement event dashboard for activation, retention, conversion, and shield reliability.

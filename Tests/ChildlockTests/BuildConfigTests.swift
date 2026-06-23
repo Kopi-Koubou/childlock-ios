@@ -43,6 +43,33 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(production.contains("./build-validation.sh"))
     }
 
+    func testLaunchRepoDoesNotKeepStaleGeneratedStatusArtifacts() throws {
+        let retiredArtifacts = [
+            "audit-results.json",
+            "deploy-receipt.json",
+            "gtm-execution-log.md",
+            "implementation-report.md",
+            "implementation-report-update.md",
+            "iterate-report.md",
+            "pipeline.json",
+            "qa-results.json",
+            "review.json",
+        ]
+
+        for artifact in retiredArtifacts {
+            let artifactURL = repoRoot.appendingPathComponent(artifact)
+            XCTAssertFalse(
+                FileManager.default.fileExists(atPath: artifactURL.path),
+                "\(artifact) is a stale generated status artifact; use docs/PRODUCTION.md and docs/QA_TESTFLIGHT_CHECKLIST.md instead."
+            )
+        }
+
+        let gtmPlan = try readRepoFile("gtm-plan.md")
+        XCTAssertTrue(gtmPlan.contains("real-device TestFlight validation"))
+        XCTAssertFalse(gtmPlan.contains("childlock.vercel.app"))
+        XCTAssertFalse(gtmPlan.contains("Deploy receipt confirms"))
+    }
+
     func testPrivacyManifestIsBundledForAppAndScreenTimeExtensions() throws {
         let project = try readRepoFile("Childlock.xcodeproj/project.pbxproj")
         let production = try readRepoFile("docs/PRODUCTION.md")
