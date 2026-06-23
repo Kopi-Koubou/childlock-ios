@@ -266,6 +266,7 @@ public struct ChildlockRootView: View {
         static let pendingMathChallenge = "--childlock-qa-seed-pending-math-challenge"
         static let pendingMemoryChallenge = "--childlock-qa-seed-pending-memory-challenge"
         static let moreTimeRequest = "--childlock-qa-seed-more-time-request"
+        static let childrenTab = "--childlock-qa-seed-children-tab"
         static let appsTab = "--childlock-qa-seed-apps-tab"
         static let settingsTab = "--childlock-qa-seed-settings-tab"
     }
@@ -296,6 +297,7 @@ public struct ChildlockRootView: View {
             || arguments.contains(DebugLaunchArgument.pendingMathChallenge)
             || arguments.contains(DebugLaunchArgument.pendingMemoryChallenge)
             || arguments.contains(DebugLaunchArgument.moreTimeRequest)
+            || arguments.contains(DebugLaunchArgument.childrenTab)
             || arguments.contains(DebugLaunchArgument.appsTab)
             || arguments.contains(DebugLaunchArgument.settingsTab)
         else {
@@ -315,6 +317,7 @@ public struct ChildlockRootView: View {
             || arguments.contains(DebugLaunchArgument.pendingMathChallenge)
             || arguments.contains(DebugLaunchArgument.pendingMemoryChallenge)
             || arguments.contains(DebugLaunchArgument.moreTimeRequest)
+            || arguments.contains(DebugLaunchArgument.childrenTab)
             || arguments.contains(DebugLaunchArgument.appsTab)
             || arguments.contains(DebugLaunchArgument.settingsTab) {
             seedDebugDashboard(
@@ -323,7 +326,8 @@ public struct ChildlockRootView: View {
                     || arguments.contains(DebugLaunchArgument.pendingMathChallenge)
                     || arguments.contains(DebugLaunchArgument.pendingMemoryChallenge),
                 moreTimeRequest: arguments.contains(DebugLaunchArgument.moreTimeRequest),
-                tab: arguments.contains(DebugLaunchArgument.appsTab) ? .apps
+                tab: arguments.contains(DebugLaunchArgument.childrenTab) ? .children
+                    : arguments.contains(DebugLaunchArgument.appsTab) ? .apps
                     : arguments.contains(DebugLaunchArgument.settingsTab) ? .settings
                     : .home
             )
