@@ -18,6 +18,7 @@ runs can make Keychain-backed PIN seeds look broken.
 | Launch argument | Expected screen | PIN |
 | --- | --- | --- |
 | `--childlock-qa-reset` | Fresh onboarding with Apple and Google sign-in | none |
+| `--childlock-qa-seed-onboarding-devices` | Signed-in onboarding on the local-first device setup step | none |
 | `--childlock-qa-seed-dashboard` | Unlocked parent dashboard for child `Mia` | `1234` if locked later |
 | `--childlock-qa-seed-locked-dashboard` | Parent dashboard lock screen | `1234` |
 | `--childlock-qa-seed-pending-challenge` | Child brain-break challenge | `1234` after hand-back |
@@ -28,6 +29,8 @@ runs can make Keychain-backed PIN seeds look broken.
 Simulator pass criteria:
 
 - Fresh onboarding shows `Sign in with Apple` and `Continue with Google`.
+- Device setup seed explains same-phone use, child iPad setup, and that a
+  parent-only iPhone install does not remotely lock a separate iPad in v1.
 - Seeded dashboard shows a child, recent activity, app tabs, and settings entry.
 - Locked dashboard hides parent content until the PIN is entered.
 - Pending challenge exposes only the child challenge surface, not dashboard

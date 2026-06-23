@@ -117,8 +117,12 @@ final class AuthRedirectConfigTests: XCTestCase {
 
         XCTAssertTrue(authService.contains("#if DEBUG public func debugSignIn"))
         XCTAssertTrue(rootView.contains("#if DEBUG private enum DebugLaunchArgument"))
+        XCTAssertTrue(rootView.contains("--childlock-qa-seed-onboarding-devices"))
+        XCTAssertTrue(rootView.contains("seedDebugOnboardingDevicesStep()"))
+        XCTAssertTrue(rootView.contains("onboardingViewModel.step = .devices"))
         XCTAssertTrue(rootView.contains("#if DEBUG challengeViewModel.presentChallenge(for: profile, type: debugForcedChallengeType) #else challengeViewModel.presentChallenge(for: profile) #endif"))
         XCTAssertTrue(checklist.contains("Use Debug builds only. These launch arguments are not part of the Release"))
+        XCTAssertTrue(checklist.contains("`--childlock-qa-seed-onboarding-devices`"))
     }
 
     private func readPropertyList(_ relativePath: String) throws -> [String: Any] {

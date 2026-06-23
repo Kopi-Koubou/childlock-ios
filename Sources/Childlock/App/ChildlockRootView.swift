@@ -241,6 +241,7 @@ public struct ChildlockRootView: View {
     #if DEBUG
     private enum DebugLaunchArgument {
         static let reset = "--childlock-qa-reset"
+        static let onboardingDevices = "--childlock-qa-seed-onboarding-devices"
         static let dashboard = "--childlock-qa-seed-dashboard"
         static let lockedDashboard = "--childlock-qa-seed-locked-dashboard"
         static let pendingChallenge = "--childlock-qa-seed-pending-challenge"
@@ -268,6 +269,7 @@ public struct ChildlockRootView: View {
 
         let arguments = Set(ProcessInfo.processInfo.arguments)
         guard arguments.contains(DebugLaunchArgument.reset)
+            || arguments.contains(DebugLaunchArgument.onboardingDevices)
             || arguments.contains(DebugLaunchArgument.dashboard)
             || arguments.contains(DebugLaunchArgument.lockedDashboard)
             || arguments.contains(DebugLaunchArgument.pendingChallenge)
@@ -279,6 +281,11 @@ public struct ChildlockRootView: View {
         }
 
         resetDebugState()
+
+        if arguments.contains(DebugLaunchArgument.onboardingDevices) {
+            seedDebugOnboardingDevicesStep()
+            return
+        }
 
         if arguments.contains(DebugLaunchArgument.dashboard)
             || arguments.contains(DebugLaunchArgument.lockedDashboard)
@@ -315,6 +322,14 @@ public struct ChildlockRootView: View {
             SharedDefaults.Key.lastMoreTimeRequestDate,
             SharedDefaults.Key.dailyLimitReachedAt,
         ].forEach { defaults.removeObject(forKey: $0) }
+    }
+
+    private func seedDebugOnboardingDevicesStep() {
+        authService.debugSignIn()
+        appState.isAuthenticated = true
+        onboardingViewModel.markSignupComplete()
+        onboardingViewModel.familyAuthorizationState = .authorized
+        onboardingViewModel.step = .devices
     }
 
     private func seedDebugDashboard(locked: Bool, pendingChallenge: Bool, moreTimeRequest: Bool) {
