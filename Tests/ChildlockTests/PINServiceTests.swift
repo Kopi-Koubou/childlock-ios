@@ -54,4 +54,20 @@ final class PINServiceTests: XCTestCase {
         service.lockSession()
         XCTAssertFalse(service.isSessionUnlocked)
     }
+
+    func testClearPINRemovesStoredPINAndLocksSession() {
+        let store = InMemorySecureStore()
+        let service = PINService(secureStore: store)
+
+        XCTAssertTrue(service.setPIN("2468"))
+        XCTAssertTrue(service.verify("2468"))
+        XCTAssertTrue(service.hasPIN)
+        XCTAssertTrue(service.isSessionUnlocked)
+
+        service.clearPIN()
+
+        XCTAssertFalse(service.hasPIN)
+        XCTAssertFalse(service.verify("2468"))
+        XCTAssertFalse(service.isSessionUnlocked)
+    }
 }

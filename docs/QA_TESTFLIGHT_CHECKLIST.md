@@ -72,29 +72,40 @@ as sufficient for launch.
 
 1. Fresh install opens onboarding.
 2. Parent signs in with Apple.
-3. Parent signs out or resets, then signs in with Google.
-4. Parent grants Screen Time access on the child-used device.
-5. Parent selects at least one real app, category, or website.
-6. Parent chooses the shortest brain-break interval.
-7. Parent enables notifications when prompted. Also test a denied-notification
+3. Complete setup once with Apple.
+4. From Settings, use `Reset Childlock on this device` -> `Confirm Reset`.
+5. Confirm the app returns to fresh onboarding with no parent dashboard access.
+6. Sign in with Google and complete setup again.
+7. Parent grants Screen Time access on the child-used device.
+8. Parent selects at least one real app, category, or website.
+9. Parent chooses the shortest brain-break interval.
+10. Parent enables notifications when prompted. Also test a denied-notification
    pass: after tapping `Start Brain Break`, press Home and open Childlock.
-8. First interval starts without immediately shielding.
-9. Selected app shields only after the threshold is reached.
-10. Shield copy says `Brain Break`.
-11. Primary shield action says `Start Brain Break`, closes the blocked app, and
+11. First interval starts without immediately shielding.
+12. Selected app shields only after the threshold is reached.
+13. Shield copy says `Brain Break`.
+14. Primary shield action says `Start Brain Break`, closes the blocked app, and
     leaves a notification/home-screen path back to Childlock.
-12. Opening Childlock presents the pending challenge.
-13. Completing the challenge clears shields.
-14. Monitoring re-arms for another full interval.
-15. Child sees hand-back screen and cannot enter the dashboard without the
+15. Opening Childlock presents the pending challenge.
+16. Completing the challenge clears shields.
+17. Monitoring re-arms for another full interval.
+18. Child sees hand-back screen and cannot enter the dashboard without the
     parent PIN.
-16. `Ask Parent` creates a parent-visible more-time request and does not open
+19. `Ask Parent` creates a parent-visible more-time request and does not open
     a pending child challenge before the parent responds.
-17. `Give one more block` grants another block and then re-arms enforcement.
-18. Restarting enforcement clears stale child challenge and Ask Parent state.
-19. If multiple child profiles exist, the pending challenge uses the monitored
+20. `Give one more block` grants another block and then re-arms enforcement.
+21. Restarting enforcement clears stale child challenge and Ask Parent state.
+22. If multiple child profiles exist, the pending challenge uses the monitored
     child's age/profile.
-20. Support, Privacy, and Terms links open correctly from App Store metadata.
+23. Support, Privacy, and Terms links open correctly from App Store metadata.
+
+## Fresh Setup Reset
+
+Use Settings -> `Reset Childlock on this device` when you need a real fresh
+setup pass on the same TestFlight install. This is different from Sign Out:
+Sign Out preserves local parent settings, while Reset stops local enforcement,
+clears child profiles, app selections, reports, and the parent PIN on that
+device.
 
 ## Same Phone Scenario
 

@@ -70,6 +70,11 @@ public struct ChildlockRootView: View {
             syncAuthState()
             presentPendingChallengeIfNeeded()
         }
+        .onChange(of: appState.hasCompletedOnboarding) { _, hasCompletedOnboarding in
+            if !hasCompletedOnboarding {
+                resetOnboardingForFreshSignIn()
+            }
+        }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 // The shield can't open this app directly: the child taps the shield,
@@ -172,6 +177,7 @@ public struct ChildlockRootView: View {
             syncServicesForAuthenticatedUserIfNeeded(userID)
         case .signedOut, .unknown:
             appState.isAuthenticated = false
+            resetOnboardingForFreshSignIn()
             clearAuthenticatedServiceSessionIfNeeded()
         }
     }
@@ -207,6 +213,10 @@ public struct ChildlockRootView: View {
         if onboardingViewModel.step == .welcome {
             onboardingViewModel.goNext()
         }
+    }
+
+    private func resetOnboardingForFreshSignIn() {
+        onboardingViewModel = OnboardingViewModel()
     }
 
     private func triggerPendingChallenge() {
@@ -308,20 +318,7 @@ public struct ChildlockRootView: View {
         authService.signOut()
         PINService.shared.clearPINForDebug()
 
-        let defaults = SharedDefaults.shared
-        [
-            SharedDefaults.Key.challengePending,
-            SharedDefaults.Key.activeProfileID,
-            SharedDefaults.Key.familyActivitySelection,
-            SharedDefaults.Key.activeMonitoringProfileID,
-            SharedDefaults.Key.activeMonitoringSelectionData,
-            SharedDefaults.Key.monitoringStatus,
-            SharedDefaults.Key.monitoringLastError,
-            SharedDefaults.Key.monitoringLastStartedAt,
-            SharedDefaults.Key.moreTimeRequestCount,
-            SharedDefaults.Key.lastMoreTimeRequestDate,
-            SharedDefaults.Key.dailyLimitReachedAt,
-        ].forEach { defaults.removeObject(forKey: $0) }
+        SharedDefaults.clearLocalSetupState()
     }
 
     private func seedDebugOnboardingDevicesStep() {

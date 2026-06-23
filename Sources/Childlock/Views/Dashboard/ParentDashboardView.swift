@@ -29,6 +29,7 @@ public struct ParentDashboardView: View {
     @State private var appsStatusText: String?
     @State private var appsErrorText: String?
     @State private var isSignOutConfirmationPresented = false
+    @State private var isResetConfirmationPresented = false
     @State private var selectedTab: AppState.Tab = .home
     @State private var moreTimeRequestCount = SharedDefaults.shared.integer(forKey: SharedDefaults.Key.moreTimeRequestCount)
     @State private var notificationAuthorizationStatus: ChildlockNotificationAuthorizationStatus = .unavailable
@@ -1151,6 +1152,51 @@ public struct ParentDashboardView: View {
                             }
                         }
 
+                        // Reset section
+                        settingsSection(title: "RESET") {
+                            VStack(spacing: 0) {
+                                Button {
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        isResetConfirmationPresented = true
+                                    }
+                                } label: {
+                                    settingsRowContent(
+                                        title: "Reset Childlock on this device",
+                                        value: "",
+                                        showChevron: false,
+                                        isDestructive: true
+                                    )
+                                }
+                                .buttonStyle(.plain)
+
+                                if isResetConfirmationPresented {
+                                    Divider().background(ChildlockColor.surfaceMuted)
+
+                                    VStack(alignment: .leading, spacing: ChildlockSpacing.sm) {
+                                        Text("This stops local enforcement, clears child profiles, app selections, reports, and the parent PIN on this device. Use it before rerunning setup or switching this iPhone or iPad to another child.")
+                                            .font(ChildlockTypography.caption)
+                                            .foregroundStyle(ChildlockColor.textSecondary)
+                                            .fixedSize(horizontal: false, vertical: true)
+
+                                        HStack(spacing: ChildlockSpacing.sm) {
+                                            Button("Cancel") {
+                                                withAnimation(.easeInOut(duration: 0.2)) {
+                                                    isResetConfirmationPresented = false
+                                                }
+                                            }
+                                            .buttonStyle(ChildlockSecondaryButtonStyle())
+
+                                            Button("Confirm Reset") {
+                                                resetLocalSetup()
+                                            }
+                                            .buttonStyle(ChildlockPrimaryButtonStyle())
+                                        }
+                                    }
+                                    .padding(ChildlockSpacing.md)
+                                }
+                            }
+                        }
+
                         // Challenges section
                         settingsSection(title: "CHALLENGES") {
                             VStack(spacing: 0) {
@@ -1338,6 +1384,30 @@ public struct ParentDashboardView: View {
         appState.isAuthenticated = false
         appState.lockSettings(pinService: pinService)
         appState.currentTab = .home
+    }
+
+    private func resetLocalSetup() {
+        let profilesToStop = appState.profiles
+        profilesToStop.forEach { ScreenTimeManager.shared.stopMonitoring(profile: $0) }
+        ScreenTimeManager.shared.removeShields()
+        NotificationService.cancelAll()
+        SharedDefaults.clearLocalSetupState()
+        pinService.clearPIN()
+        AuthService.shared.signOut()
+
+        appState.resetForFreshSetup()
+        appState.currentTab = .home
+        appState.isAuthenticated = false
+        isResetConfirmationPresented = false
+        isSignOutConfirmationPresented = false
+        enteredPIN = ""
+        pinErrorText = nil
+        monitoringStatusText = "not_started"
+        monitoringErrorText = nil
+        moreTimeRequestCount = 0
+        appsStatusText = nil
+        appsErrorText = nil
+        fallbackAppSelection = []
     }
 
     private func settingsToggleRow(title: String, binding: Binding<Bool>) -> some View {

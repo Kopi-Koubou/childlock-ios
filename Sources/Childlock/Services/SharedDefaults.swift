@@ -27,8 +27,30 @@ public enum SharedDefaults {
         public static let dailySummary = "daily_summary"
     }
 
+    public static let localSetupStateKeys = [
+        Key.appStateSnapshot,
+        Key.challengePending,
+        Key.activeProfileID,
+        Key.lastSubscriptionCheck,
+        Key.subscriptionActive,
+        Key.familyActivitySelection,
+        Key.activeMonitoringProfileID,
+        Key.activeMonitoringSelectionData,
+        Key.monitoringStatus,
+        Key.monitoringLastError,
+        Key.monitoringLastStartedAt,
+        Key.moreTimeRequestCount,
+        Key.lastMoreTimeRequestDate,
+        Key.dailyLimitReachedAt,
+        Key.challengeAlertsEnabled,
+    ]
+
     public static var shared: UserDefaults {
         UserDefaults(suiteName: suiteName) ?? .standard
+    }
+
+    public static func clearLocalSetupState(defaults: UserDefaults = shared) {
+        localSetupStateKeys.forEach { defaults.removeObject(forKey: $0) }
     }
 
     public static func appGroupStateDirectory(fileManager: FileManager = .default) -> URL {

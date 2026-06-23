@@ -72,10 +72,14 @@ public final class PINService {
         lastUnlockTime = nil
     }
 
-    #if DEBUG
-    public func clearPINForDebug() {
+    public func clearPIN() {
         secureStore.delete(key: keychainKey)
         lockSession()
+    }
+
+    #if DEBUG
+    public func clearPINForDebug() {
+        clearPIN()
     }
     #endif
 

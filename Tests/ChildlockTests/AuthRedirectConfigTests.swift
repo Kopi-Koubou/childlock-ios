@@ -55,6 +55,7 @@ final class AuthRedirectConfigTests: XCTestCase {
 
     func testParentSettingsExposeConfirmedSignOut() throws {
         let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
+        let rootView = try readRepoFile("Sources/Childlock/App/ChildlockRootView.swift")
 
         XCTAssertTrue(dashboard.contains("Sign Out"))
         XCTAssertTrue(dashboard.contains("Confirm Sign Out"))
@@ -62,6 +63,37 @@ final class AuthRedirectConfigTests: XCTestCase {
         XCTAssertTrue(dashboard.contains("AuthService.shared.signOut()"))
         XCTAssertTrue(dashboard.contains("appState.lockSettings(pinService: pinService)"))
         XCTAssertTrue(dashboard.contains("return ChildlockColor.accent"))
+        XCTAssertTrue(rootView.contains("resetOnboardingForFreshSignIn()"))
+        XCTAssertTrue(rootView.contains("case .signedOut, .unknown:"))
+    }
+
+    func testParentSettingsExposeConfirmedDeviceResetWithoutMakingSignOutDestructive() throws {
+        let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
+
+        XCTAssertTrue(dashboard.contains("Reset Childlock on this device"))
+        XCTAssertTrue(dashboard.contains("Confirm Reset"))
+        XCTAssertTrue(dashboard.contains("This stops local enforcement, clears child profiles, app selections, reports, and the parent PIN on this device."))
+        XCTAssertTrue(dashboard.contains("private func resetLocalSetup()"))
+        XCTAssertTrue(dashboard.contains("profilesToStop.forEach { ScreenTimeManager.shared.stopMonitoring(profile: $0) }"))
+        XCTAssertTrue(dashboard.contains("SharedDefaults.clearLocalSetupState()"))
+        XCTAssertTrue(dashboard.contains("pinService.clearPIN()"))
+        XCTAssertTrue(dashboard.contains("appState.resetForFreshSetup()"))
+        XCTAssertTrue(dashboard.contains("private func signOut()"))
+        XCTAssertTrue(dashboard.contains("Parent settings stay on this device. Sign in again to manage Childlock."))
+    }
+
+    func testRootResetsStaleOnboardingStateAfterDeviceReset() throws {
+        let rootView = try readRepoFile("Sources/Childlock/App/ChildlockRootView.swift")
+        let normalizedRootView = normalizeWhitespace(rootView)
+
+        XCTAssertTrue(rootView.contains(".onChange(of: appState.hasCompletedOnboarding)"))
+        XCTAssertTrue(rootView.contains("private func resetOnboardingForFreshSignIn()"))
+        XCTAssertTrue(rootView.contains("onboardingViewModel = OnboardingViewModel()"))
+        XCTAssertTrue(
+            normalizedRootView.contains(
+                ".onChange(of: appState.hasCompletedOnboarding) { _, hasCompletedOnboarding in if !hasCompletedOnboarding { resetOnboardingForFreshSignIn() } }"
+            )
+        )
     }
 
     func testExistingSignedInSessionResumesOnboardingPastWelcome() throws {

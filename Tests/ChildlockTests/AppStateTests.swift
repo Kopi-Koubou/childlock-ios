@@ -207,4 +207,35 @@ final class AppStateTests: XCTestCase {
             Data([0x1, 0x2])
         )
     }
+
+    func testResetForFreshSetupClearsLocalFamilyState() {
+        let store = InMemoryAppStateStore()
+        let appState = AppState(store: store)
+        let profile = ChildProfile(name: "Mia", age: 7, avatarName: "fox", intervalMinutes: 10)
+        appState.completeOnboarding(with: profile, pinConfigured: true)
+        appState.currentTab = .settings
+        appState.isAuthenticated = true
+        appState.sessions = [
+            ChallengeSession(
+                childProfileID: profile.id,
+                date: Date(),
+                screenTimeSeconds: 600,
+                synced: false,
+                results: []
+            )
+        ]
+
+        appState.resetForFreshSetup()
+
+        XCTAssertFalse(appState.isAuthenticated)
+        XCTAssertFalse(appState.hasCompletedOnboarding)
+        XCTAssertEqual(appState.currentTab, .home)
+        XCTAssertTrue(appState.isPINLocked)
+        XCTAssertNil(appState.activeChallenge)
+        XCTAssertTrue(appState.profiles.isEmpty)
+        XCTAssertTrue(appState.sessions.isEmpty)
+        XCTAssertNil(appState.activeProfileID)
+        XCTAssertEqual(appState.settings, .default)
+        XCTAssertNil(store.snapshot)
+    }
 }

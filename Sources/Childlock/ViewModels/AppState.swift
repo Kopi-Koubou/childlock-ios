@@ -367,6 +367,10 @@ public final class AppState {
     }
 
     public func resetForTesting() {
+        resetForFreshSetup()
+    }
+
+    public func resetForFreshSetup() {
         isHydratingSnapshot = true
         isAuthenticated = false
         hasCompletedOnboarding = false

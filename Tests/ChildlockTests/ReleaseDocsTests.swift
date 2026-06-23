@@ -122,6 +122,23 @@ final class ReleaseDocsTests: XCTestCase {
         }
     }
 
+    func testTestFlightDocsExplainFreshSetupResetForAuthRetesting() throws {
+        let production = try readRepoFile("docs/PRODUCTION.md")
+        let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")
+
+        for contents in [production, checklist] {
+            let normalized = normalizeWhitespace(contents)
+            XCTAssertTrue(normalized.contains("Reset Childlock on this device"))
+            XCTAssertTrue(normalized.contains("Sign Out preserves local parent settings"))
+            XCTAssertTrue(normalized.contains("Reset stops local enforcement"))
+            XCTAssertTrue(normalized.contains("clears child profiles, app selections, reports, and the parent PIN"))
+        }
+
+        XCTAssertTrue(checklist.contains("Parent signs in with Apple"))
+        XCTAssertTrue(checklist.contains("Sign in with Google and complete setup again."))
+        XCTAssertTrue(checklist.contains("Confirm the app returns to fresh onboarding with no parent dashboard access."))
+    }
+
     func testScreenTimeSelectionTokensStayOutOfBackendSync() throws {
         let dataSync = try readRepoFile("Sources/Childlock/Services/DataSyncService.swift")
         let migration = try readRepoFile("supabase/migrations/20260521000000_initial_childlock_backend.sql")
