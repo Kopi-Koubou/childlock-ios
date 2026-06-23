@@ -126,7 +126,7 @@ public final class OnboardingViewModel {
 
         let nameValid = !childName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         guard nameValid else {
-            return "Enter your child's name above."
+            return "Type your child's name to continue."
         }
 
         guard (3...12).contains(childAge) else {
@@ -243,8 +243,9 @@ public final class OnboardingViewModel {
         guard isFinished else { return nil }
         guard familyAuthorizationState == .authorized else { return nil }
 
+        let normalizedName = childName.trimmingCharacters(in: .whitespacesAndNewlines)
         var profile = ChildProfile(
-            name: childName,
+            name: normalizedName,
             age: childAge,
             avatarName: selectedAvatar,
             intervalMinutes: selectedInterval,

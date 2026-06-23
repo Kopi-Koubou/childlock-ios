@@ -59,7 +59,7 @@ final class OnboardingViewModelTests: XCTestCase {
             screenTime: TestScreenTimeManager(shouldAuthorize: true),
             selectionStore: InMemorySelectionStore()
         )
-        viewModel.childName = "Mia"
+        viewModel.childName = " Mia "
         viewModel.childAge = 6
         viewModel.selectedAvatar = "owl"
         viewModel.selectedInterval = 20
@@ -141,7 +141,7 @@ final class OnboardingViewModelTests: XCTestCase {
         )
         viewModel.step = .setup
 
-        XCTAssertEqual(viewModel.setupBlockingReason, "Enter your child's name above.")
+        XCTAssertEqual(viewModel.setupBlockingReason, "Type your child's name to continue.")
 
         viewModel.childName = "Mia"
         XCTAssertEqual(viewModel.setupBlockingReason, "Allow Screen Time access before choosing monitored apps.")

@@ -45,6 +45,16 @@ final class HandBackCopyTests: XCTestCase {
         XCTAssertFalse(contents.localizedCaseInsensitiveContains("category token"))
     }
 
+    func testMonitoringStatusUsesParentFriendlyLabels() throws {
+        let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
+
+        XCTAssertTrue(dashboard.contains("value: monitoringStatusLabel"))
+        XCTAssertTrue(dashboard.contains("return \"Needs attention\""))
+        XCTAssertTrue(dashboard.contains("return \"Permission needed\""))
+        XCTAssertTrue(dashboard.contains("return \"Brain break pending\""))
+        XCTAssertFalse(dashboard.contains("monitoringStatusText.capitalized"))
+    }
+
     func testParentChildDeviceModelIsClearInAppCopy() throws {
         let onboarding = try readRepoFile("Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift")
         let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
@@ -62,6 +72,9 @@ final class HandBackCopyTests: XCTestCase {
         let onboarding = try readRepoFile("Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift")
         let viewModel = try readRepoFile("Sources/Childlock/ViewModels/OnboardingViewModel.swift")
 
+        XCTAssertTrue(onboarding.contains("TextField(\"Type your child's name\""))
+        XCTAssertTrue(viewModel.contains("Type your child's name to continue."))
+        XCTAssertFalse(onboarding.contains("TextField(\"Mia\""))
         XCTAssertTrue(onboarding.contains("Choose apps, categories, or websites"))
         XCTAssertTrue(onboarding.contains("Select at least one item in Apple's Screen Time picker, then tap Done."))
         XCTAssertTrue(onboarding.contains("Nothing selected yet."))

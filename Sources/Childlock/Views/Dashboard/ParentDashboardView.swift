@@ -1207,7 +1207,7 @@ public struct ParentDashboardView: View {
                         // Security section
                         settingsSection(title: "SECURITY") {
                             VStack(spacing: 0) {
-                                settingsRow(title: "Screen Time Enforcement", value: monitoringStatusText.capitalized, showChevron: false)
+                                settingsRow(title: "Screen Time Enforcement", value: monitoringStatusLabel, showChevron: false)
 
                                 Text("Locks apps on this device only. For a child iPad, install and configure Childlock on the iPad.")
                                     .font(ChildlockTypography.caption)
@@ -1846,6 +1846,33 @@ public struct ParentDashboardView: View {
         } catch {
             monitoringStatusText = "failed"
             monitoringErrorText = error.localizedDescription
+        }
+    }
+
+    private var monitoringStatusLabel: String {
+        switch ChildlockMonitoringStatus(storedValue: monitoringStatusText) {
+        case .notStarted:
+            return "Not started"
+        case .running:
+            return "Running"
+        case .intervalStarted:
+            return "Timing app use"
+        case .thresholdReached:
+            return "Brain break ready"
+        case .challengeRequested:
+            return "Brain break pending"
+        case .moreTimeRequested:
+            return "Parent request"
+        case .intervalEnded:
+            return "Waiting"
+        case .stopped:
+            return "Stopped"
+        case .denied:
+            return "Permission needed"
+        case .failed:
+            return "Needs attention"
+        case .none:
+            return "Unknown"
         }
     }
 

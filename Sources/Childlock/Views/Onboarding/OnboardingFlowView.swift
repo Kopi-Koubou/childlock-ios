@@ -394,7 +394,7 @@ public struct OnboardingFlowView: View {
                         .font(ChildlockTypography.caption)
                         .foregroundStyle(ChildlockColor.textSecondary)
 
-                    TextField("Mia", text: $viewModel.childName)
+                    TextField("Type your child's name", text: $viewModel.childName)
                         .font(ChildlockTypography.body)
                         .padding(.horizontal, ChildlockSpacing.sm)
                         .frame(height: 44)
