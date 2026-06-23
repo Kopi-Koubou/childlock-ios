@@ -67,6 +67,14 @@ final class ChildlockShieldAction: ShieldActionDelegate {
         let defaults = SharedDefaults.shared
         defaults.set(true, forKey: SharedDefaults.Key.challengePending)
         defaults.set("challenge_requested", forKey: SharedDefaults.Key.monitoringStatus)
+        clearBrainBreakNotification()
+    }
+
+    private func clearBrainBreakNotification() {
+        let center = UNUserNotificationCenter.current()
+        let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]
+        center.removePendingNotificationRequests(withIdentifiers: identifiers)
+        center.removeDeliveredNotifications(withIdentifiers: identifiers)
     }
 
     private func handleRequestMoreTime() {

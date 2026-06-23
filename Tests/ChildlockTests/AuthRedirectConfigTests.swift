@@ -33,7 +33,22 @@ final class AuthRedirectConfigTests: XCTestCase {
         XCTAssertTrue(authService.contains("redirectTo: Self.oauthRedirectURL"))
         XCTAssertTrue(authService.contains("scopes: Self.googleOAuthScopes"))
         XCTAssertTrue(onboarding.contains("Continue with Google"))
+        XCTAssertTrue(onboarding.contains("Connecting to Google"))
+        XCTAssertTrue(onboarding.contains("GoogleSignInButtonLabel(isInProgress: isGoogleSignInInProgress)"))
         XCTAssertTrue(onboarding.contains("AuthService.shared.handleGoogleSignIn()"))
+    }
+
+    func testGoogleOAuthSecretsStayOutOfAppConfig() throws {
+        let package = try readRepoFile("Package.swift")
+        let credentials = try readRepoFile("Config/CREDENTIALS.md")
+        let appSecretsExample = try readRepoFile("Config/AppSecrets.xcconfig.example")
+        let authService = try readRepoFile("Sources/Childlock/Services/AuthService.swift")
+
+        XCTAssertFalse(package.contains("GoogleSignIn"))
+        XCTAssertFalse(appSecretsExample.contains("GOOGLE_CLIENT_SECRET"))
+        XCTAssertFalse(appSecretsExample.contains("GOOGLE_CLIENT_ID"))
+        XCTAssertFalse(authService.contains("GOOGLE_CLIENT_SECRET"))
+        XCTAssertTrue(credentials.contains("Google OAuth client ID and client secret belong only in the Supabase Google auth"))
     }
 
     @MainActor

@@ -123,6 +123,7 @@ public final class ChildlockShieldAction: ShieldActionDelegate {
         case .primaryButtonPressed:
             defaults.set(true, forKey: SharedDefaults.Key.challengePending)
             defaults.set("challenge_requested", forKey: SharedDefaults.Key.monitoringStatus)
+            clearBrainBreakNotification()
             completionHandler(.close)
         case .secondaryButtonPressed:
             let requestCount = defaults.integer(forKey: SharedDefaults.Key.moreTimeRequestCount)
@@ -135,6 +136,13 @@ public final class ChildlockShieldAction: ShieldActionDelegate {
         @unknown default:
             completionHandler(.close)
         }
+    }
+
+    private func clearBrainBreakNotification() {
+        let center = UNUserNotificationCenter.current()
+        let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]
+        center.removePendingNotificationRequests(withIdentifiers: identifiers)
+        center.removeDeliveredNotifications(withIdentifiers: identifiers)
     }
 
     private func postMoreTimeNotification() {

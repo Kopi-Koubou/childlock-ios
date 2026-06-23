@@ -134,6 +134,28 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(checklist.contains("does not open\n    a pending child challenge before the parent responds"))
     }
 
+    func testStartBrainBreakClearsStaleBrainBreakNotification() throws {
+        let files = try [
+            "Extensions/ShieldActionExtension/ChildlockShieldAction.swift",
+            "Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift",
+        ].map(readRepoFile)
+
+        for contents in files {
+            let primaryRange = try XCTUnwrap(contents.range(of: "case .primaryButtonPressed:"))
+            let secondaryRange = try XCTUnwrap(contents.range(of: "case .secondaryButtonPressed:"))
+            let primaryBlock = contents[primaryRange.lowerBound..<secondaryRange.lowerBound]
+            let startsChallengeAndClearsAlert = primaryBlock.contains("clearBrainBreakNotification()")
+                || (primaryBlock.contains("handleStartChallenge()")
+                    && contents.contains("private func handleStartChallenge()")
+                    && contents.contains("clearBrainBreakNotification()"))
+
+            XCTAssertTrue(startsChallengeAndClearsAlert)
+            XCTAssertTrue(contents.contains("let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]"))
+            XCTAssertTrue(contents.contains("removePendingNotificationRequests(withIdentifiers: identifiers)"))
+            XCTAssertTrue(contents.contains("removeDeliveredNotifications(withIdentifiers: identifiers)"))
+        }
+    }
+
     func testDailySummaryToggleSchedulesAndCancelsRealNotifications() throws {
         let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
         let appState = try readRepoFile("Sources/Childlock/ViewModels/AppState.swift")

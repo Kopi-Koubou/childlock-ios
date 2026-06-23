@@ -214,13 +214,7 @@ public struct OnboardingFlowView: View {
                 Button {
                     signInWithGoogle()
                 } label: {
-                    HStack(spacing: ChildlockSpacing.xs) {
-                        Text("G")
-                            .font(.system(size: 18, weight: .bold))
-                            .foregroundStyle(ChildlockColor.primary)
-                            .frame(width: 22, height: 22)
-                        Text(isGoogleSignInInProgress ? "Connecting..." : "Continue with Google")
-                    }
+                    GoogleSignInButtonLabel(isInProgress: isGoogleSignInInProgress)
                 }
                 .buttonStyle(ChildlockSecondaryButtonStyle())
                 .disabled(isGoogleSignInInProgress)
@@ -892,6 +886,32 @@ public struct OnboardingFlowView: View {
         }
     }
 
+}
+
+private struct GoogleSignInButtonLabel: View {
+    let isInProgress: Bool
+
+    var body: some View {
+        HStack(spacing: ChildlockSpacing.sm) {
+            ZStack {
+                Circle()
+                    .fill(ChildlockColor.surface)
+                    .frame(width: 28, height: 28)
+                    .overlay(
+                        Circle()
+                            .stroke(ChildlockColor.border, lineWidth: 1)
+                    )
+
+                Text("G")
+                    .font(.system(size: 17, weight: .bold))
+                    .foregroundStyle(Color(hex: "4285F4"))
+            }
+            .accessibilityHidden(true)
+
+            Text(isInProgress ? "Connecting..." : "Continue with Google")
+        }
+        .accessibilityLabel(isInProgress ? "Connecting to Google" : "Continue with Google")
+    }
 }
 
 // MARK: - Number Pad Key
