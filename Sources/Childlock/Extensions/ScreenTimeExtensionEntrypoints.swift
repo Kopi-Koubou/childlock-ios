@@ -26,13 +26,12 @@ public final class ChildlockDeviceActivityMonitor: DeviceActivityMonitor {
             return
         }
 
-        defaults.set(true, forKey: SharedDefaults.Key.challengePending)
-        defaults.set("threshold_reached", forKey: SharedDefaults.Key.monitoringStatus)
-
         guard
             let data = defaults.data(forKey: SharedDefaults.Key.activeMonitoringSelectionData),
             let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data)
         else {
+            defaults.set(false, forKey: SharedDefaults.Key.challengePending)
+            defaults.set("failed", forKey: SharedDefaults.Key.monitoringStatus)
             defaults.set(
                 ScreenTimeError.invalidMonitoredSelection.localizedDescription,
                 forKey: SharedDefaults.Key.monitoringLastError
@@ -44,6 +43,8 @@ public final class ChildlockDeviceActivityMonitor: DeviceActivityMonitor {
         store.shield.applicationCategories = selection.categoryTokens.isEmpty ? nil : .specific(selection.categoryTokens)
         store.shield.webDomains = selection.webDomainTokens
         store.shield.webDomainCategories = selection.categoryTokens.isEmpty ? nil : .specific(selection.categoryTokens)
+        defaults.set(true, forKey: SharedDefaults.Key.challengePending)
+        defaults.set("threshold_reached", forKey: SharedDefaults.Key.monitoringStatus)
 
         postBrainBreakNotification()
     }

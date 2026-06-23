@@ -29,13 +29,13 @@ final class ChildlockMonitor: DeviceActivityMonitor {
         }
         
         let defaults = SharedDefaults.shared
-        defaults.set(true, forKey: SharedDefaults.Key.challengePending)
-        defaults.set("threshold_reached", forKey: SharedDefaults.Key.monitoringStatus)
-        
+
         guard
             let data = defaults.data(forKey: SharedDefaults.Key.activeMonitoringSelectionData),
             let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data)
         else {
+            defaults.set(false, forKey: SharedDefaults.Key.challengePending)
+            defaults.set("failed", forKey: SharedDefaults.Key.monitoringStatus)
             defaults.set(
                 "The monitored app selection payload is invalid.",
                 forKey: SharedDefaults.Key.monitoringLastError
@@ -48,6 +48,8 @@ final class ChildlockMonitor: DeviceActivityMonitor {
         store.shield.applicationCategories = selection.categoryTokens.isEmpty ? nil : .specific(selection.categoryTokens)
         store.shield.webDomains = selection.webDomainTokens
         store.shield.webDomainCategories = selection.categoryTokens.isEmpty ? nil : .specific(selection.categoryTokens)
+        defaults.set(true, forKey: SharedDefaults.Key.challengePending)
+        defaults.set("threshold_reached", forKey: SharedDefaults.Key.monitoringStatus)
         logger.info(
             "Shield activated for \(selection.applicationTokens.count) apps and \(selection.webDomainTokens.count) web domains"
         )

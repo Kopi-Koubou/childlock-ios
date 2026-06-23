@@ -86,6 +86,34 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(extensionEntrypoints.contains("?? true"))
     }
 
+    func testMonitorOnlyMarksChallengePendingAfterSelectionIsShielded() throws {
+        let files = try [
+            "Extensions/DeviceActivityMonitorExtension/ChildlockMonitor.swift",
+            "Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift",
+        ].map(readRepoFile)
+
+        for contents in files {
+            let decodeRange = try XCTUnwrap(
+                contents.range(of: "JSONDecoder().decode(FamilyActivitySelection.self, from: data)")
+            )
+            let shieldRange = try XCTUnwrap(
+                contents.range(of: "store.shield.applications = selection.applicationTokens")
+            )
+            let pendingRange = try XCTUnwrap(
+                contents.range(of: "defaults.set(true, forKey: SharedDefaults.Key.challengePending)")
+            )
+            let statusRange = try XCTUnwrap(
+                contents.range(of: "defaults.set(\"threshold_reached\", forKey: SharedDefaults.Key.monitoringStatus)")
+            )
+
+            XCTAssertLessThan(decodeRange.lowerBound, pendingRange.lowerBound)
+            XCTAssertLessThan(shieldRange.lowerBound, pendingRange.lowerBound)
+            XCTAssertLessThan(pendingRange.lowerBound, statusRange.lowerBound)
+            XCTAssertTrue(contents.contains("defaults.set(false, forKey: SharedDefaults.Key.challengePending)"))
+            XCTAssertTrue(contents.contains("defaults.set(\"failed\", forKey: SharedDefaults.Key.monitoringStatus)"))
+        }
+    }
+
     func testAskParentDoesNotOpenPendingChildChallenge() throws {
         let shieldAction = try readRepoFile("Extensions/ShieldActionExtension/ChildlockShieldAction.swift")
         let extensionEntrypoints = try readRepoFile("Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift")
