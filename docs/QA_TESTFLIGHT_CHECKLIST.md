@@ -35,6 +35,8 @@ and iPad (A16), and writes screenshots plus a summary under
 | `--childlock-qa-seed-pending-math-challenge` | Child math brain-break challenge | `1234` after hand-back |
 | `--childlock-qa-seed-pending-memory-challenge` | Child memory brain-break challenge with deterministic card pairs | `1234` after hand-back |
 | `--childlock-qa-seed-more-time-request` | Parent dashboard with `Ask Parent` request banner | `1234` if locked later |
+| `--childlock-qa-seed-apps-tab` | Parent Apps tab with Screen Time selection and planning labels | `1234` if locked later |
+| `--childlock-qa-seed-settings-tab` | Parent Settings tab with Premium, notifications, account, reset, and enforcement rows | `1234` if locked later |
 
 Simulator pass criteria:
 
@@ -42,6 +44,10 @@ Simulator pass criteria:
 - Device setup seed explains same-phone use, child iPad setup, and that a
   parent-only iPhone install does not remotely lock a separate iPad at launch.
 - Seeded dashboard shows a child, recent activity, app tabs, and settings entry.
+- Apps tab seed shows Screen Time selection copy plus fallback planning labels
+  without overlap on iPhone and iPad.
+- Settings tab seed shows Premium/restore, notifications, account, reset, and
+  enforcement controls without overlap on iPhone and iPad.
 - Locked dashboard hides parent content until the PIN is entered.
 - Pending challenge exposes only the child challenge surface, not dashboard
   controls underneath.
@@ -56,10 +62,18 @@ Simulator pass criteria:
 
 Latest simulator smoke pass, 2026-06-24:
 
+- Simulator seed harness captured 20 screenshots across iPhone 17 and iPad
+  (A16), including the parent Apps and Settings tabs.
 - iPhone 17 simulator: `--childlock-qa-seed-onboarding-devices` rendered the
   local-first device setup copy without overlap.
 - iPhone 17 simulator: `--childlock-qa-seed-dashboard` rendered the parent
   dashboard home state with child summary, recent activity, tabs, and settings.
+- iPhone 17 simulator: `--childlock-qa-seed-apps-tab` rendered Screen Time
+  selection, planning labels, fallback app choices, and the bottom tab bar
+  without overlap.
+- iPhone 17 simulator: `--childlock-qa-seed-settings-tab` rendered account,
+  reset, challenges, enforcement, notifications, and support/legal rows without
+  overlap.
 - iPhone 17 simulator: `--childlock-qa-seed-locked-dashboard` hid parent
   content behind the PIN gate.
 - iPhone 17 simulator: `--childlock-qa-seed-pending-math-challenge` rendered
@@ -78,6 +92,9 @@ Latest simulator smoke pass, 2026-06-24:
 - iPhone 17 simulator: Premium fallback showed unavailable annual/monthly
   products while preserving the message that Screen Time enforcement stays
   included. `Restore purchases` opened Apple's purchase auth sheet.
+- iPad (A16) simulator: `--childlock-qa-seed-apps-tab` and
+  `--childlock-qa-seed-settings-tab` stayed within the readable content width
+  and showed the local-device Childlock model clearly.
 - iPhone 17 simulator: Settings -> `Reset Childlock on this device` -> `Confirm
   Reset` returned to fresh onboarding with Apple and Google sign-in.
 - iPad (A16) simulator: `--childlock-qa-seed-onboarding-devices` and

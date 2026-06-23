@@ -266,6 +266,8 @@ public struct ChildlockRootView: View {
         static let pendingMathChallenge = "--childlock-qa-seed-pending-math-challenge"
         static let pendingMemoryChallenge = "--childlock-qa-seed-pending-memory-challenge"
         static let moreTimeRequest = "--childlock-qa-seed-more-time-request"
+        static let appsTab = "--childlock-qa-seed-apps-tab"
+        static let settingsTab = "--childlock-qa-seed-settings-tab"
     }
 
     private var debugForcedChallengeType: ChallengeType? {
@@ -294,6 +296,8 @@ public struct ChildlockRootView: View {
             || arguments.contains(DebugLaunchArgument.pendingMathChallenge)
             || arguments.contains(DebugLaunchArgument.pendingMemoryChallenge)
             || arguments.contains(DebugLaunchArgument.moreTimeRequest)
+            || arguments.contains(DebugLaunchArgument.appsTab)
+            || arguments.contains(DebugLaunchArgument.settingsTab)
         else {
             return
         }
@@ -310,13 +314,18 @@ public struct ChildlockRootView: View {
             || arguments.contains(DebugLaunchArgument.pendingChallenge)
             || arguments.contains(DebugLaunchArgument.pendingMathChallenge)
             || arguments.contains(DebugLaunchArgument.pendingMemoryChallenge)
-            || arguments.contains(DebugLaunchArgument.moreTimeRequest) {
+            || arguments.contains(DebugLaunchArgument.moreTimeRequest)
+            || arguments.contains(DebugLaunchArgument.appsTab)
+            || arguments.contains(DebugLaunchArgument.settingsTab) {
             seedDebugDashboard(
                 locked: arguments.contains(DebugLaunchArgument.lockedDashboard),
                 pendingChallenge: arguments.contains(DebugLaunchArgument.pendingChallenge)
                     || arguments.contains(DebugLaunchArgument.pendingMathChallenge)
                     || arguments.contains(DebugLaunchArgument.pendingMemoryChallenge),
-                moreTimeRequest: arguments.contains(DebugLaunchArgument.moreTimeRequest)
+                moreTimeRequest: arguments.contains(DebugLaunchArgument.moreTimeRequest),
+                tab: arguments.contains(DebugLaunchArgument.appsTab) ? .apps
+                    : arguments.contains(DebugLaunchArgument.settingsTab) ? .settings
+                    : .home
             )
         }
     }
@@ -344,7 +353,12 @@ public struct ChildlockRootView: View {
         seedDebugOnboardingDevicesStep()
     }
 
-    private func seedDebugDashboard(locked: Bool, pendingChallenge: Bool, moreTimeRequest: Bool) {
+    private func seedDebugDashboard(
+        locked: Bool,
+        pendingChallenge: Bool,
+        moreTimeRequest: Bool,
+        tab: AppState.Tab = .home
+    ) {
         let now = Date()
         var profile = ChildProfile(
             id: UUID(uuidString: "11111111-1111-1111-1111-111111111111") ?? UUID(),
@@ -359,6 +373,7 @@ public struct ChildlockRootView: View {
         authService.debugSignIn()
         appState.completeOnboarding(with: profile, pinConfigured: true)
         appState.isAuthenticated = true
+        appState.currentTab = tab
 
         let firstResult = ChallengeResult(
             type: .math,
