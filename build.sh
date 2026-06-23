@@ -6,8 +6,9 @@ set -euo pipefail
 
 CONFIGURATION="${1:-Debug}"
 DESTINATION="${2:-simulator}"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-cd /Users/devl/clawd/projects/childlock
+cd "$SCRIPT_DIR"
 
 echo "=== Childlock Build ==="
 echo "Configuration: $CONFIGURATION"
@@ -15,9 +16,9 @@ echo "Destination: $DESTINATION"
 echo ""
 
 if [[ "$DESTINATION" == "simulator" ]]; then
-    DEST="platform=iOS Simulator,name=iPhone 17 Pro"
+    DEST="generic/platform=iOS Simulator"
 else
-    DEST="platform=iOS,identity='Apple Development'"
+    DEST="generic/platform=iOS"
 fi
 
 echo "Building Childlock app + extensions..."
@@ -26,8 +27,9 @@ xcodebuild -project Childlock.xcodeproj \
     -configuration "$CONFIGURATION" \
     -destination "$DEST" \
     -derivedDataPath .build \
+    CODE_SIGNING_ALLOWED=NO \
     clean build
 
 echo ""
 echo "=== Build Complete ==="
-echo "Output: .build/Build/Products/$CONFIGURATION-iphoneos/"
+echo "Output: .build/Build/Products/"

@@ -21,6 +21,28 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(production.contains("For Xcode Cloud"))
     }
 
+    func testBuildScriptsAreRepoRelativeAndSafeForUnsignedPreflight() throws {
+        let buildScript = try readRepoFile("build.sh")
+        let validationScript = try readRepoFile("build-validation.sh")
+        let production = try readRepoFile("docs/PRODUCTION.md")
+
+        for contents in [buildScript, validationScript] {
+            XCTAssertTrue(contents.contains("$(dirname \"$0\")"))
+            XCTAssertFalse(contents.contains("/Users/devl/clawd/projects/childlock"))
+            XCTAssertFalse(contents.contains("/Users/xav/Projects/Kopi-Koubou/childlock-ios"))
+        }
+
+        XCTAssertTrue(buildScript.contains("CODE_SIGNING_ALLOWED=NO"))
+        XCTAssertTrue(validationScript.contains("SKIP_SECRET_CHECK=1"))
+        XCTAssertTrue(validationScript.contains("Config/AppSecrets.local.xcconfig"))
+        XCTAssertTrue(validationScript.contains("Config/production.env"))
+        XCTAssertTrue(validationScript.contains("SUPABASE_SERVICE_ROLE_KEY"))
+        XCTAssertTrue(validationScript.contains("REVENUECAT_WEBHOOK_SECRET"))
+        XCTAssertTrue(validationScript.contains("Server-only value must not be in $file"))
+        XCTAssertTrue(validationScript.contains("Use docs/QA_TESTFLIGHT_CHECKLIST.md"))
+        XCTAssertTrue(production.contains("./build-validation.sh"))
+    }
+
     func testPrivacyManifestIsBundledForAppAndScreenTimeExtensions() throws {
         let project = try readRepoFile("Childlock.xcodeproj/project.pbxproj")
         let production = try readRepoFile("docs/PRODUCTION.md")

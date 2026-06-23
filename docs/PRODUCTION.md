@@ -161,6 +161,23 @@ These checks catch compile, icon, privacy-manifest, and extension-shape
 regressions before a real archive upload. They do not replace TestFlight
 hardware QA.
 
+Use the checked-in validation script for the full local gate:
+
+```sh
+./build-validation.sh
+```
+
+The script checks required app-facing values in
+`Config/AppSecrets.local.xcconfig`, required server/deploy values in
+`Config/production.env`, and confirms server-only secrets were not pasted into
+the app config. It reports only present/missing status, not secret values.
+
+For compile-only CI jobs where real secrets are intentionally unavailable:
+
+```sh
+SKIP_SECRET_CHECK=1 ./build-validation.sh
+```
+
 ```sh
 swift test
 git diff --check -- ':!.build'
