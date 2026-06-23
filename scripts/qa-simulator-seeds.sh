@@ -22,6 +22,7 @@ SEEDS=(
     "--childlock-qa-seed-onboarding-devices"
     "--childlock-qa-seed-dashboard"
     "--childlock-qa-seed-locked-dashboard"
+    "--childlock-qa-seed-pending-challenge"
     "--childlock-qa-seed-pending-math-challenge"
     "--childlock-qa-seed-pending-memory-challenge"
     "--childlock-qa-seed-more-time-request"
@@ -100,6 +101,15 @@ for simulator_name in "${SIMULATORS[@]}"; do
     done
 done
 
+expected_screenshot_count=$(( ${#SIMULATORS[@]} * ${#SEEDS[@]} ))
+actual_screenshot_count="$(find "$OUTPUT_DIR" -maxdepth 1 -name '*.png' | wc -l | tr -d ' ')"
+
+if [[ "$actual_screenshot_count" != "$expected_screenshot_count" ]]; then
+    echo "Expected $expected_screenshot_count screenshots, found $actual_screenshot_count"
+    exit 1
+fi
+
 echo ""
+echo "Captured $actual_screenshot_count screenshots."
 echo "Done. Review screenshots and summary:"
 echo "$OUTPUT_DIR/summary.md"

@@ -195,10 +195,12 @@ final class AuthRedirectConfigTests: XCTestCase {
         XCTAssertTrue(simulatorQA.contains("--childlock-qa-seed-onboarding-devices"))
         XCTAssertTrue(simulatorQA.contains("--childlock-qa-seed-dashboard"))
         XCTAssertTrue(simulatorQA.contains("--childlock-qa-seed-locked-dashboard"))
+        XCTAssertTrue(simulatorQA.contains("--childlock-qa-seed-pending-challenge"))
         XCTAssertTrue(simulatorQA.contains("--childlock-qa-seed-pending-math-challenge"))
         XCTAssertTrue(simulatorQA.contains("--childlock-qa-seed-pending-memory-challenge"))
         XCTAssertTrue(simulatorQA.contains("--childlock-qa-seed-more-time-request"))
         XCTAssertTrue(simulatorQA.contains(".build/qa-simulator-seeds"))
+        XCTAssertTrue(simulatorQA.contains("expected_screenshot_count"))
     }
 
     private func readPropertyList(_ relativePath: String) throws -> [String: Any] {
