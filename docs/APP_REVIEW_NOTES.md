@@ -28,7 +28,9 @@ Notes:
   There is no separate username/password account for App Review to use.
 - Childlock locks apps on the device where setup is completed. For a child iPad,
   install and configure Childlock on the iPad. Same-phone parent/child use is
-  supported because the parent dashboard remains PIN-protected.
+  supported because the parent dashboard remains PIN-protected. Childlock is
+  not presented as a parent-phone remote controller for a separate child iPad in
+  v1.
 - Childlock does not attempt to launch itself from the shield extension because
   iOS does not allow that. The shield closes the blocked app and Childlock also
   posts a local notification to guide the child back to the challenge when

@@ -115,6 +115,7 @@ final class ReleaseDocsTests: XCTestCase {
 
         XCTAssertTrue(normalizeWhitespace(deviceModel).contains("Do not claim that a parent phone can remotely lock a separate child iPad"))
         XCTAssertTrue(normalizeWhitespace(checklist).contains("Do not claim that a parent-only iPhone install remotely controls a separate child iPad in v1."))
+        XCTAssertTrue(normalizeWhitespace(appReview).contains("not presented as a parent-phone remote controller for a separate child iPad in v1"))
 
         for contents in [metadata, appReview, production] {
             XCTAssertFalse(contents.localizedCaseInsensitiveContains("parent phone can remotely lock"))
@@ -137,6 +138,24 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(checklist.contains("Parent signs in with Apple"))
         XCTAssertTrue(checklist.contains("Sign in with Google and complete setup again."))
         XCTAssertTrue(checklist.contains("Confirm the app returns to fresh onboarding with no parent dashboard access."))
+    }
+
+    func testTestFlightChecklistCapturesLaunchGateEvidence() throws {
+        let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")
+        let production = try readRepoFile("docs/PRODUCTION.md")
+        let normalizedChecklist = normalizeWhitespace(checklist)
+        let normalizedProduction = normalizeWhitespace(production)
+
+        XCTAssertTrue(checklist.contains("## Hardware QA Record"))
+        XCTAssertTrue(checklist.contains("| Build number |"))
+        XCTAssertTrue(checklist.contains("| Scenario | Same phone / Child iPad / Child iPhone |"))
+        XCTAssertTrue(checklist.contains("| Shield appeared only after threshold | Pass / Fail |"))
+        XCTAssertTrue(checklist.contains("| Parent dashboard stayed PIN-gated after hand-back | Pass / Fail |"))
+        XCTAssertTrue(checklist.contains("One denied-notification pass proving Home -> Childlock still opens the"))
+        XCTAssertTrue(checklist.contains("One second full shield loop on the same device proving monitoring re-arms."))
+        XCTAssertTrue(normalizedChecklist.contains("Hardware QA records above are filled in with no unresolved launch blockers."))
+        XCTAssertTrue(normalizedProduction.contains("fill in the hardware QA records in `docs/QA_TESTFLIGHT_CHECKLIST.md`"))
+        XCTAssertTrue(normalizedProduction.contains("Do not treat a simulator pass or a successful archive upload as proof"))
     }
 
     func testScreenTimeSelectionTokensStayOutOfBackendSync() throws {

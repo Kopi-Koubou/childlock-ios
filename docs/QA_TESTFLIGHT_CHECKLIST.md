@@ -65,6 +65,42 @@ This simulator pass does not prove the real Screen Time shield loop. Keep the
 TestFlight hardware gates below as the launch blocker until they pass on
 physical devices.
 
+## Hardware QA Record
+
+Fill this out for each physical TestFlight device before public App Review. A
+Simulator pass is useful background evidence, but this record is the launch
+gate for the real Screen Time loop.
+
+| Field | Value |
+| --- | --- |
+| Build number |  |
+| Tester |  |
+| Date |  |
+| Device model |  |
+| iOS version |  |
+| Scenario | Same phone / Child iPad / Child iPhone |
+| Parent sign-in tested | Apple / Google |
+| Notification state tested | Allowed / Denied |
+| Monitored selection | App / Category / Website |
+| Brain-break interval |  |
+| Shield appeared only after threshold | Pass / Fail |
+| `Start Brain Break` closed selected app | Pass / Fail |
+| Childlock opened pending challenge from notification or Home | Pass / Fail |
+| Challenge completion cleared shield | Pass / Fail |
+| Monitoring re-armed for a new interval | Pass / Fail |
+| Parent dashboard stayed PIN-gated after hand-back | Pass / Fail |
+| RevenueCat paywall/offering behaved as expected | Pass / Fail / Not tested |
+| Notes/blockers |  |
+
+Minimum evidence before launch:
+
+- One completed same-phone record with Apple sign-in.
+- One completed same-phone or child-device record with Google sign-in.
+- One completed child-iPad record if iPad support remains in App Store copy.
+- One denied-notification pass proving Home -> Childlock still opens the
+  pending challenge.
+- One second full shield loop on the same device proving monitoring re-arms.
+
 ## TestFlight Hardware Gates
 
 Run these on a physical device with the TestFlight build. Do not treat Simulator
@@ -147,6 +183,7 @@ install remotely controls a separate child iPad in v1.
 
 Submit to public App Review only after:
 
+- Hardware QA records above are filled in with no unresolved launch blockers.
 - Apple sign-in works in TestFlight.
 - Google sign-in works in TestFlight.
 - Same-phone hardware QA passes.
