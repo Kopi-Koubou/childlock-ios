@@ -1,0 +1,82 @@
+# Childlock Hardware QA Record
+
+Use this record for each physical TestFlight device before public App Review.
+Simulator screenshots are useful background evidence, but this record is the
+launch gate for Family Controls, DeviceActivity thresholds, ManagedSettings
+shielding, extension actions, purchases, and real hand-back behavior.
+
+## Run Metadata
+
+| Field | Value |
+| --- | --- |
+| Build number |  |
+| Tester |  |
+| Date |  |
+| Device model |  |
+| iOS version |  |
+| Scenario | Same phone / Child iPad / Child iPhone |
+| Parent sign-in tested | Apple / Google |
+| Notification state tested | Allowed / Denied |
+| Monitored selection | App / Category / Website |
+| Brain-break interval |  |
+| RevenueCat paywall/offering behaved as expected | Pass / Fail / Not tested |
+| Notes/blockers |  |
+
+## Required Shield Loop
+
+| Gate | Result | Notes |
+| --- | --- | --- |
+| Fresh install or reset starts at onboarding | Pass / Fail |  |
+| Parent sign-in completes | Pass / Fail |  |
+| Screen Time authorization completes on the child-used device | Pass / Fail |  |
+| App/category/website selection is non-empty before setup can continue | Pass / Fail |  |
+| First interval starts without immediately shielding | Pass / Fail |  |
+| Selected app shields only after the threshold | Pass / Fail |  |
+| Shield copy says `Brain Break` | Pass / Fail |  |
+| `Start Brain Break` closes the selected app | Pass / Fail |  |
+| Childlock opens the pending challenge from notification or Home | Pass / Fail |  |
+| Challenge completion clears the shield | Pass / Fail |  |
+| Monitoring re-arms for another full interval | Pass / Fail |  |
+| Second full interval shields again | Pass / Fail |  |
+| Parent dashboard stays PIN-gated after hand-back | Pass / Fail |  |
+| `Ask Parent` creates a parent-visible request only | Pass / Fail |  |
+| `Give one more block` grants time and re-arms enforcement | Pass / Fail |  |
+| Restarting enforcement clears stale child challenge/request state | Pass / Fail |  |
+
+## Same Phone Scenario
+
+Use this when the parent and child share the same iPhone.
+
+| Step | Result | Notes |
+| --- | --- | --- |
+| Parent installs Childlock on the shared iPhone | Pass / Fail / N/A |  |
+| Parent completes setup on that same iPhone | Pass / Fail / N/A |  |
+| Parent selects apps/categories used by the child on that same iPhone | Pass / Fail / N/A |  |
+| Parent sets the PIN and hands the phone to the child | Pass / Fail / N/A |  |
+| Child uses selected content until threshold is reached | Pass / Fail / N/A |  |
+| Child solves the challenge and returns to the unlocked app | Pass / Fail / N/A |  |
+| Child cannot reach parent dashboard without the PIN | Pass / Fail / N/A |  |
+
+## Child iPad Scenario
+
+Use this when the parent owns an iPhone and the child uses an iPad.
+
+| Step | Result | Notes |
+| --- | --- | --- |
+| Parent installs Childlock from TestFlight on the child iPad | Pass / Fail / N/A |  |
+| Parent signs in with the same parent account on the child iPad | Pass / Fail / N/A |  |
+| Parent completes Screen Time authorization on the iPad | Pass / Fail / N/A |  |
+| Parent selects iPad apps/categories/websites on the iPad | Pass / Fail / N/A |  |
+| Child completes the shield -> Childlock -> challenge -> hand-back loop on the iPad | Pass / Fail / N/A |  |
+| Parent-only iPhone install is not treated as remote iPad control | Pass / Fail / N/A |  |
+
+## Launch Decision
+
+| Decision Gate | Result | Notes |
+| --- | --- | --- |
+| Apple sign-in works in TestFlight | Pass / Fail |  |
+| Google sign-in works in TestFlight | Pass / Fail |  |
+| Same-phone hardware QA passes | Pass / Fail / N/A |  |
+| Child-iPad hardware QA passes if iPad support remains in launch copy | Pass / Fail / N/A |  |
+| At least two full shield loops pass on real hardware | Pass / Fail |  |
+| No unresolved launch blockers remain | Pass / Fail |  |

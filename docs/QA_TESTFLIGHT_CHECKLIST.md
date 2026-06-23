@@ -93,6 +93,15 @@ Fill this out for each physical TestFlight device before public App Review. A
 Simulator pass is useful background evidence, but this record is the launch
 gate for the real Screen Time loop.
 
+To create a timestamped fillable record under ignored `.build` output, run:
+
+```sh
+scripts/new-hardware-qa-record.sh same-phone <build-number>
+scripts/new-hardware-qa-record.sh child-ipad <build-number>
+```
+
+The generated record is based on `docs/HARDWARE_QA_RECORD_TEMPLATE.md`.
+
 | Field | Value |
 | --- | --- |
 | Build number |  |

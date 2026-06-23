@@ -145,6 +145,8 @@ final class ReleaseDocsTests: XCTestCase {
     func testTestFlightChecklistCapturesLaunchGateEvidence() throws {
         let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")
         let production = try readRepoFile("docs/PRODUCTION.md")
+        let template = try readRepoFile("docs/HARDWARE_QA_RECORD_TEMPLATE.md")
+        let generator = try readRepoFile("scripts/new-hardware-qa-record.sh")
         let normalizedChecklist = normalizeWhitespace(checklist)
         let normalizedProduction = normalizeWhitespace(production)
 
@@ -155,9 +157,22 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(checklist.contains("| Parent dashboard stayed PIN-gated after hand-back | Pass / Fail |"))
         XCTAssertTrue(checklist.contains("One denied-notification pass proving Home -> Childlock still opens the"))
         XCTAssertTrue(checklist.contains("One second full shield loop on the same device proving monitoring re-arms."))
+        XCTAssertTrue(checklist.contains("scripts/new-hardware-qa-record.sh same-phone <build-number>"))
+        XCTAssertTrue(checklist.contains("docs/HARDWARE_QA_RECORD_TEMPLATE.md"))
         XCTAssertTrue(normalizedChecklist.contains("Hardware QA records above are filled in with no unresolved launch blockers."))
         XCTAssertTrue(normalizedProduction.contains("fill in the hardware QA records in `docs/QA_TESTFLIGHT_CHECKLIST.md`"))
         XCTAssertTrue(normalizedProduction.contains("Do not treat a simulator pass or a successful archive upload as proof"))
+
+        XCTAssertTrue(template.contains("## Required Shield Loop"))
+        XCTAssertTrue(template.contains("Second full interval shields again"))
+        XCTAssertTrue(template.contains("## Same Phone Scenario"))
+        XCTAssertTrue(template.contains("## Child iPad Scenario"))
+        XCTAssertTrue(template.contains("Parent-only iPhone install is not treated as remote iPad control"))
+        XCTAssertTrue(template.contains("Google sign-in works in TestFlight"))
+
+        XCTAssertTrue(generator.contains(".build/hardware-qa-records"))
+        XCTAssertTrue(generator.contains("docs/HARDWARE_QA_RECORD_TEMPLATE.md"))
+        XCTAssertTrue(generator.contains("Suggested scenario: $scenario"))
     }
 
     func testScreenTimeSelectionTokensStayOutOfBackendSync() throws {
