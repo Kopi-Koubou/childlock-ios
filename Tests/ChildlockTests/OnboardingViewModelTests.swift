@@ -29,6 +29,7 @@ final class OnboardingViewModelTests: XCTestCase {
         )
         viewModel.step = .pinAndDone
         viewModel.familyAuthorizationState = .authorized
+        applyValidMonitoringSelection(to: viewModel)
         viewModel.pin = "1234"
         viewModel.pinConfirmation = "1234"
 
@@ -66,7 +67,7 @@ final class OnboardingViewModelTests: XCTestCase {
         viewModel.pin = "1234"
         viewModel.pinConfirmation = "1234"
         viewModel.familyAuthorizationState = .authorized
-        viewModel.selectedMonitoredApps = ["YouTube", "Games"]
+        applyValidMonitoringSelection(to: viewModel, displayNames: ["Games", "YouTube"])
         viewModel.step = .pinAndDone
         viewModel.goNext() // triggers isFinished
 
@@ -194,6 +195,36 @@ final class OnboardingViewModelTests: XCTestCase {
         #endif
     }
 
+    func testFinalStepRequiresMonitoringSelectionBeforeCompletion() {
+        let viewModel = OnboardingViewModel(
+            screenTime: TestScreenTimeManager(shouldAuthorize: true),
+            selectionStore: InMemorySelectionStore()
+        )
+        viewModel.step = .pinAndDone
+        viewModel.familyAuthorizationState = .authorized
+        viewModel.pin = "1234"
+        viewModel.pinConfirmation = "1234"
+
+        XCTAssertFalse(viewModel.canContinue)
+
+        #if os(iOS) && canImport(FamilyControls)
+        viewModel.selectedMonitoredApps = ["Games"]
+
+        XCTAssertFalse(viewModel.canContinue)
+
+        viewModel.setTokenizedSelection(
+            tokenData: Data([0x1, 0x2]),
+            displayNames: ["1 category selected"]
+        )
+        #else
+        viewModel.selectedMonitoredApps = ["Games"]
+        #endif
+
+        XCTAssertTrue(viewModel.canContinue)
+        viewModel.goNext()
+        XCTAssertNotNil(viewModel.buildOutput())
+    }
+
     func testEmptyTokenizedSelectionDoesNotCountAsSelected() {
         let selectionStore = InMemorySelectionStore()
         let viewModel = OnboardingViewModel(
@@ -206,6 +237,20 @@ final class OnboardingViewModelTests: XCTestCase {
         XCTAssertNil(viewModel.selectedActivityTokenData)
         XCTAssertTrue(viewModel.selectedMonitoredApps.isEmpty)
         XCTAssertNil(selectionStore.snapshot)
+    }
+
+    private func applyValidMonitoringSelection(
+        to viewModel: OnboardingViewModel,
+        displayNames: [String] = ["Games"]
+    ) {
+        #if os(iOS) && canImport(FamilyControls)
+        viewModel.setTokenizedSelection(
+            tokenData: Data([0x1, 0x2]),
+            displayNames: displayNames
+        )
+        #else
+        viewModel.selectedMonitoredApps = Set(displayNames)
+        #endif
     }
 }
 

@@ -117,7 +117,7 @@ public final class OnboardingViewModel {
         case .setup:
             return setupBlockingReason == nil
         case .pinAndDone:
-            return familyAuthorizationState == .authorized && pin.count == 4 && pinConfirmation == pin
+            return familyAuthorizationState == .authorized && hasRequiredMonitoringSelection && pin.count == 4 && pinConfirmation == pin
         }
     }
 
@@ -137,15 +137,9 @@ public final class OnboardingViewModel {
             return "Allow Screen Time access before choosing monitored apps."
         }
 
-        #if os(iOS) && canImport(FamilyControls)
-        guard hasMonitoredSelection else {
-            return "Choose at least one app, category, or website in the Screen Time picker, then tap Done."
+        guard hasRequiredMonitoringSelection else {
+            return missingSelectionReason
         }
-        #else
-        guard !selectedMonitoredApps.isEmpty else {
-            return "Choose at least one monitored app."
-        }
-        #endif
 
         guard [5, 10, 15, 20, 30].contains(selectedInterval) else {
             return "Choose a brain-break interval."
@@ -242,6 +236,7 @@ public final class OnboardingViewModel {
     public func buildOutput() -> OnboardingOutput? {
         guard isFinished else { return nil }
         guard familyAuthorizationState == .authorized else { return nil }
+        guard hasRequiredMonitoringSelection else { return nil }
 
         let normalizedName = childName.trimmingCharacters(in: .whitespacesAndNewlines)
         var profile = ChildProfile(
@@ -347,7 +342,19 @@ public final class OnboardingViewModel {
         )
     }
 
-    private var hasMonitoredSelection: Bool {
+    private var hasRequiredMonitoringSelection: Bool {
+        #if os(iOS) && canImport(FamilyControls)
         selectedActivityTokenData != nil && !selectedMonitoredApps.isEmpty
+        #else
+        !selectedMonitoredApps.isEmpty
+        #endif
+    }
+
+    private var missingSelectionReason: String {
+        #if os(iOS) && canImport(FamilyControls)
+        return "Choose at least one app, category, or website in the Screen Time picker, then tap Done."
+        #else
+        return "Choose at least one monitored app."
+        #endif
     }
 }
