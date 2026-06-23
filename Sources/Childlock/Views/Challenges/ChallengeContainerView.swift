@@ -125,7 +125,8 @@ private struct MultipleChoiceTextChallengeView: View {
                         onSelect(answer)
                     }
                     .buttonStyle(ChildlockSecondaryButtonStyle())
-                    .accessibilityLabel("answer_\(answer)")
+                    .accessibilityIdentifier("answer_\(answer)")
+                    .accessibilityLabel("Answer \(answer)")
                 }
             }
 

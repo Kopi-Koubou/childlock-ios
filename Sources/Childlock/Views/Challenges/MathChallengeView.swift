@@ -33,7 +33,8 @@ public struct MathChallengeView: View {
                             .frame(minHeight: answerButtonHeight)
                     }
                     .buttonStyle(AnswerButtonStyle())
-                    .accessibilityLabel("answer_\(answer)")
+                    .accessibilityIdentifier("answer_\(answer)")
+                    .accessibilityLabel("Answer \(answer)")
                 }
             }
 

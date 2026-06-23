@@ -469,7 +469,8 @@ public struct OnboardingFlowView: View {
                                 .onTapGesture {
                                     viewModel.selectedAvatar = avatarName
                                 }
-                                .accessibilityLabel("avatar_\(avatarName)")
+                                .accessibilityIdentifier("avatar_\(avatarName)")
+                                .accessibilityLabel("\(avatarName.capitalized) avatar")
                         }
                     }
                 }
@@ -807,7 +808,12 @@ public struct OnboardingFlowView: View {
                     )
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("monitor_\(app)")
+                .accessibilityIdentifier("monitor_\(app)")
+                .accessibilityLabel(
+                    viewModel.selectedMonitoredApps.contains(app)
+                        ? "Remove \(app) from monitored apps"
+                        : "Add \(app) to monitored apps"
+                )
             }
         }
     }
@@ -910,6 +916,7 @@ private struct GoogleSignInButtonLabel: View {
 
             Text(isInProgress ? "Connecting..." : "Continue with Google")
         }
+        .accessibilityElement(children: .ignore)
         .accessibilityLabel(isInProgress ? "Connecting to Google" : "Continue with Google")
     }
 }

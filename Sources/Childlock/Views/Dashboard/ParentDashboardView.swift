@@ -262,7 +262,8 @@ public struct ParentDashboardView: View {
                     if let onTriggerChallenge {
                         Button("Practice Brain Break", action: onTriggerChallenge)
                             .buttonStyle(ChildlockPrimaryButtonStyle())
-                            .accessibilityLabel("practice_brain_break")
+                            .accessibilityIdentifier("practice_brain_break")
+                            .accessibilityLabel("Practice Brain Break")
                     }
 
                     if appState.profiles.isEmpty {
@@ -316,6 +317,7 @@ public struct ParentDashboardView: View {
                     .childlockShadow(ChildlockShadow.sm)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel("Settings")
         }
     }
 
@@ -1015,7 +1017,12 @@ public struct ParentDashboardView: View {
                     .childlockShadow(ChildlockShadow.sm)
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("assign_monitored_\(appName)")
+                .accessibilityIdentifier("assign_monitored_\(appName)")
+                .accessibilityLabel(
+                    fallbackAppSelection.contains(appName)
+                        ? "Remove \(appName) from monitored apps"
+                        : "Add \(appName) to monitored apps"
+                )
             }
         }
     }
@@ -1411,12 +1418,19 @@ public struct ParentDashboardView: View {
     }
 
     private func settingsToggleRow(title: String, binding: Binding<Bool>) -> some View {
-        Toggle(isOn: binding) {
+        HStack(spacing: ChildlockSpacing.md) {
             Text(title)
                 .font(.system(size: 15))
                 .foregroundStyle(ChildlockColor.textPrimary)
+
+            Spacer()
+
+            Toggle(title, isOn: binding)
+                .labelsHidden()
+                .tint(ChildlockColor.primary)
+                .accessibilityLabel(title)
+                .accessibilityValue(binding.wrappedValue ? "On" : "Off")
         }
-        .tint(ChildlockColor.primary)
         .padding(.horizontal, ChildlockSpacing.md)
         .padding(.vertical, ChildlockSpacing.sm)
     }
@@ -1515,7 +1529,8 @@ public struct ParentDashboardView: View {
                                         )
                                 }
                                 .buttonStyle(.plain)
-                                .accessibilityLabel("add_child_avatar_\(colorName)")
+                                .accessibilityIdentifier("add_child_avatar_\(colorName)")
+                                .accessibilityLabel("\(colorName.capitalized) avatar")
                             }
                         }
                     }

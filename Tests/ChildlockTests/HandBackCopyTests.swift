@@ -6,7 +6,8 @@ final class HandBackCopyTests: XCTestCase {
 
         XCTAssertTrue(contents.contains("Head back to your app. It's unlocked."))
         XCTAssertTrue(contents.contains("Label(\"I'm a parent\", systemImage: \"lock.fill\")"))
-        XCTAssertTrue(contents.contains("accessibilityLabel(\"parent_unlock_entry\")"))
+        XCTAssertTrue(contents.contains("accessibilityIdentifier(\"parent_unlock_entry\")"))
+        XCTAssertTrue(contents.contains("accessibilityLabel(\"I'm a parent\")"))
         XCTAssertTrue(contents.contains("SecureField(\"Parent PIN\""))
         XCTAssertTrue(contents.contains("Unlock Dashboard"))
         XCTAssertTrue(contents.contains("sanitizeEnteredPIN()"))
@@ -23,6 +24,42 @@ final class HandBackCopyTests: XCTestCase {
         XCTAssertTrue(contents.contains("pinErrorText = unlocked ? nil : \"Incorrect PIN. Try again.\""))
         XCTAssertTrue(contents.contains("} else {\n            enteredPIN = \"\"\n        }"))
         XCTAssertTrue(contents.contains("if !enteredPIN.isEmpty {\n                pinErrorText = nil\n            }"))
+    }
+
+    func testInteractiveControlsDoNotExposeInternalIDsAsSpokenLabels() throws {
+        let onboarding = try readRepoFile("Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift")
+        let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
+        let challenge = try readRepoFile("Sources/Childlock/Views/Challenges/ChallengeContainerView.swift")
+        let math = try readRepoFile("Sources/Childlock/Views/Challenges/MathChallengeView.swift")
+        let memory = try readRepoFile("Sources/Childlock/Views/Challenges/MemoryMatchView.swift")
+        let handBack = try readRepoFile("Sources/Childlock/Views/Challenges/HandBackView.swift")
+
+        XCTAssertTrue(onboarding.contains("accessibilityIdentifier(\"monitor_\\(app)\")"))
+        XCTAssertTrue(onboarding.contains("\"Add \\(app) to monitored apps\""))
+        XCTAssertTrue(onboarding.contains("\"Remove \\(app) from monitored apps\""))
+        XCTAssertTrue(onboarding.contains(".accessibilityElement(children: .ignore)"))
+
+        XCTAssertTrue(dashboard.contains("accessibilityIdentifier(\"practice_brain_break\")"))
+        XCTAssertTrue(dashboard.contains("accessibilityLabel(\"Practice Brain Break\")"))
+        XCTAssertTrue(dashboard.contains("accessibilityLabel(\"Settings\")"))
+        XCTAssertTrue(dashboard.contains("accessibilityIdentifier(\"assign_monitored_\\(appName)\")"))
+        XCTAssertTrue(dashboard.contains("\"Add \\(appName) to monitored apps\""))
+        XCTAssertTrue(dashboard.contains("\"Remove \\(appName) from monitored apps\""))
+        XCTAssertTrue(dashboard.contains("accessibilityValue(binding.wrappedValue ? \"On\" : \"Off\")"))
+
+        for contents in [challenge, math] {
+            XCTAssertTrue(contents.contains("accessibilityIdentifier(\"answer_\\(answer)\")"))
+            XCTAssertTrue(contents.contains("accessibilityLabel(\"Answer \\(answer)\")"))
+            XCTAssertFalse(contents.contains("accessibilityLabel(\"answer_"))
+        }
+
+        XCTAssertTrue(memory.contains("accessibilityIdentifier(\"memory_card_\\(index)\")"))
+        XCTAssertTrue(memory.contains("Memory card \\(position), hidden"))
+        XCTAssertFalse(memory.contains("accessibilityLabel(\"memory_card_"))
+
+        XCTAssertTrue(handBack.contains("accessibilityIdentifier(\"parent_unlock_entry\")"))
+        XCTAssertTrue(handBack.contains("accessibilityLabel(\"I'm a parent\")"))
+        XCTAssertFalse(handBack.contains("accessibilityLabel(\"parent_unlock_entry\")"))
     }
 
     func testWelcomeCopyAvoidsAbsoluteBehaviorClaims() throws {

@@ -93,7 +93,22 @@ public struct MemoryMatchView: View {
         }
         .buttonStyle(.plain)
         .disabled(isFaceUp || isResolvingMismatch)
-        .accessibilityLabel("memory_card_\(index)")
+        .accessibilityIdentifier("memory_card_\(index)")
+        .accessibilityLabel(memoryCardAccessibilityLabel(index: index, isFaceUp: isFaceUp, isMatched: isMatched))
+    }
+
+    private func memoryCardAccessibilityLabel(index: Int, isFaceUp: Bool, isMatched: Bool) -> String {
+        let position = index + 1
+
+        if isMatched {
+            return "Memory card \(position), matched"
+        }
+
+        if isFaceUp {
+            return "Memory card \(position), revealed"
+        }
+
+        return "Memory card \(position), hidden"
     }
 
     private func flipCard(at index: Int) {

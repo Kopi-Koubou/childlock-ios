@@ -90,7 +90,8 @@ public struct HandBackView: View {
                         .childlockShadow(ChildlockShadow.sm)
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("parent_unlock_entry")
+                .accessibilityIdentifier("parent_unlock_entry")
+                .accessibilityLabel("I'm a parent")
             }
         }
         .padding(ChildlockSpacing.lg)

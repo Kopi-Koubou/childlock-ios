@@ -36,6 +36,7 @@ final class AuthRedirectConfigTests: XCTestCase {
         XCTAssertTrue(onboarding.contains("Connecting to Google"))
         XCTAssertTrue(onboarding.contains("GoogleSignInButtonLabel(isInProgress: isGoogleSignInInProgress)"))
         XCTAssertTrue(onboarding.contains("AuthService.shared.handleGoogleSignIn()"))
+        XCTAssertTrue(onboarding.contains(".accessibilityElement(children: .ignore)"))
     }
 
     func testGoogleOAuthSecretsStayOutOfAppConfig() throws {
