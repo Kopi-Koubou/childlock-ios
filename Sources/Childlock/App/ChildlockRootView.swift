@@ -217,6 +217,10 @@ public struct ChildlockRootView: View {
 
     private func resetOnboardingForFreshSignIn() {
         onboardingViewModel = OnboardingViewModel()
+
+        #if DEBUG
+        restoreDebugOnboardingDevicesSeedIfNeeded()
+        #endif
     }
 
     private func triggerPendingChallenge() {
@@ -327,6 +331,13 @@ public struct ChildlockRootView: View {
         onboardingViewModel.markSignupComplete()
         onboardingViewModel.familyAuthorizationState = .authorized
         onboardingViewModel.step = .devices
+    }
+
+    private func restoreDebugOnboardingDevicesSeedIfNeeded() {
+        guard didApplyDebugLaunchSeed else { return }
+        guard ProcessInfo.processInfo.arguments.contains(DebugLaunchArgument.onboardingDevices) else { return }
+
+        seedDebugOnboardingDevicesStep()
     }
 
     private func seedDebugDashboard(locked: Bool, pendingChallenge: Bool, moreTimeRequest: Bool) {
