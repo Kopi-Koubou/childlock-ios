@@ -3,35 +3,43 @@ import XCTest
 
 final class AuthRedirectConfigTests: XCTestCase {
     @MainActor
-    func testGoogleOAuthRedirectMatchesRegisteredURLScheme() throws {
+    func testGoogleSignInConfigMatchesRegisteredURLSchemes() throws {
         let redirectURL = AuthService.oauthRedirectURL
 
         XCTAssertEqual(redirectURL.absoluteString, "childlock://login-callback")
         XCTAssertEqual(redirectURL.scheme, "childlock")
         XCTAssertEqual(redirectURL.host, "login-callback")
-        XCTAssertEqual(AuthService.googleOAuthScopes, "openid email profile")
 
         let infoPlist = try readPropertyList("Sources/Childlock/Info.plist")
+        XCTAssertEqual(infoPlist["GIDClientID"] as? String, "$(GOOGLE_IOS_CLIENT_ID)")
+        XCTAssertEqual(infoPlist["GOOGLE_REVERSED_CLIENT_ID"] as? String, "$(GOOGLE_REVERSED_CLIENT_ID)")
+
         let urlTypes = try XCTUnwrap(infoPlist["CFBundleURLTypes"] as? [[String: Any]])
         let schemes = urlTypes
             .flatMap { $0["CFBundleURLSchemes"] as? [String] ?? [] }
 
         XCTAssertTrue(schemes.contains("childlock"))
+        XCTAssertTrue(schemes.contains("$(GOOGLE_REVERSED_CLIENT_ID)"))
 
         let setupGuide = try readRepoFile("docs/SUPABASE_GOOGLE_AUTH.md")
-        XCTAssertTrue(setupGuide.contains("childlock://login-callback"))
-        XCTAssertTrue(setupGuide.contains("https://jkncpveupvozsmbbkvgq.supabase.co/auth/v1/callback"))
+        XCTAssertTrue(setupGuide.contains("GOOGLE_IOS_CLIENT_ID"))
+        XCTAssertTrue(setupGuide.contains("GOOGLE_REVERSED_CLIENT_ID"))
     }
 
     @MainActor
-    func testGoogleOAuthFlowUsesSupabaseWebAuthSession() throws {
+    func testGoogleSignInFlowUsesNativeGoogleSDKAndSupabaseIdToken() throws {
         let authService = try readRepoFile("Sources/Childlock/Services/AuthService.swift")
         let onboarding = try readRepoFile("Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift")
+        let rootView = try readRepoFile("Sources/Childlock/App/ChildlockRootView.swift")
 
-        XCTAssertTrue(authService.contains("client.auth.signInWithOAuth("))
+        XCTAssertTrue(authService.contains("import GoogleSignIn"))
+        XCTAssertTrue(authService.contains("GIDSignIn.sharedInstance.signIn(withPresenting:"))
+        XCTAssertTrue(authService.contains("GIDSignIn.sharedInstance.handle(url)"))
+        XCTAssertTrue(authService.contains("client.auth.signInWithIdToken("))
         XCTAssertTrue(authService.contains("provider: .google"))
-        XCTAssertTrue(authService.contains("redirectTo: Self.oauthRedirectURL"))
-        XCTAssertTrue(authService.contains("scopes: Self.googleOAuthScopes"))
+        XCTAssertTrue(authService.contains("idToken: idToken"))
+        XCTAssertTrue(authService.contains("accessToken: result.user.accessToken.tokenString"))
+        XCTAssertTrue(rootView.contains("if authService.handleGoogleRedirectURL(url)"))
         XCTAssertTrue(onboarding.contains("Continue with Google"))
         XCTAssertTrue(onboarding.contains("Connecting to Google"))
         XCTAssertTrue(onboarding.contains("GoogleSignInButtonLabel(isInProgress: isGoogleSignInInProgress)"))
@@ -45,11 +53,14 @@ final class AuthRedirectConfigTests: XCTestCase {
         let appSecretsExample = try readRepoFile("Config/AppSecrets.xcconfig.example")
         let authService = try readRepoFile("Sources/Childlock/Services/AuthService.swift")
 
-        XCTAssertFalse(package.contains("GoogleSignIn"))
+        XCTAssertTrue(package.contains("https://github.com/google/GoogleSignIn-iOS.git"))
+        XCTAssertTrue(package.contains(".product(name: \"GoogleSignIn\", package: \"GoogleSignIn-iOS\")"))
+        XCTAssertTrue(appSecretsExample.contains("GOOGLE_IOS_CLIENT_ID"))
+        XCTAssertTrue(appSecretsExample.contains("GOOGLE_REVERSED_CLIENT_ID"))
         XCTAssertFalse(appSecretsExample.contains("GOOGLE_CLIENT_SECRET"))
-        XCTAssertFalse(appSecretsExample.contains("GOOGLE_CLIENT_ID"))
         XCTAssertFalse(authService.contains("GOOGLE_CLIENT_SECRET"))
-        XCTAssertTrue(credentials.contains("Google OAuth client ID and client secret belong only in the Supabase Google auth"))
+        XCTAssertTrue(credentials.contains("Google iOS client ID and reversed client ID are public app-facing values"))
+        XCTAssertTrue(credentials.contains("Google Web client ID and client secret belong only in the Supabase Google auth"))
     }
 
     @MainActor

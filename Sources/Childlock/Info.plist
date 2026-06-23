@@ -30,9 +30,23 @@
 				<string>childlock</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>google-sign-in</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>$(GOOGLE_REVERSED_CLIENT_ID)</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>GIDClientID</key>
+	<string>$(GOOGLE_IOS_CLIENT_ID)</string>
+	<key>GOOGLE_REVERSED_CLIENT_ID</key>
+	<string>$(GOOGLE_REVERSED_CLIENT_ID)</string>
 	<key>POSTHOG_API_KEY</key>
 	<string>$(POSTHOG_API_KEY)</string>
 	<key>POSTHOG_HOST</key>

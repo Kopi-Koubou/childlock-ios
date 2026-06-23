@@ -24,8 +24,9 @@ Reviewer flow:
 Notes:
 
 - Screen Time enforcement is available without purchase.
-- Sign-in uses Apple's native Sign in with Apple flow or Supabase Google OAuth.
-  There is no separate username/password account for App Review to use.
+- Sign-in uses Apple's native Sign in with Apple flow or native Google Sign-In
+  backed by Supabase Auth. There is no separate username/password account for
+  App Review to use.
 - Childlock locks apps on the device where setup is completed. For a child iPad,
   install and configure Childlock on the iPad. Same-phone parent/child use is
   supported because the parent dashboard remains PIN-protected. Childlock is

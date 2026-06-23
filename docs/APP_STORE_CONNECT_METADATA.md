@@ -93,7 +93,7 @@ Reviewer flow:
 9. Completing the challenge removes the shield and re-arms monitoring.
 10. The child hand-back screen requires the parent PIN before entering the parent dashboard.
 
-Sign-in uses Apple's native Sign in with Apple flow or Supabase Google OAuth. There is no separate username/password account for App Review.
+Sign-in uses Apple's native Sign in with Apple flow or native Google Sign-In backed by Supabase Auth. There is no separate username/password account for App Review.
 
 Screen Time enforcement is available without purchase. Childlock Premium unlocks deeper reporting windows and extended activity history.
 

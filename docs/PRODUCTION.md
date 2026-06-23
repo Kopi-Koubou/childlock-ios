@@ -28,6 +28,9 @@ Never put these in the app or repository:
 | Supabase publishable key | Supabase API settings | `Config/AppSecrets.local.xcconfig` |
 | Supabase service role key | Supabase API settings | Password manager and Supabase CLI/server only |
 | Supabase access token | Supabase account tokens | Password manager, local shell, or GitHub Actions secret |
+| Google iOS client ID | Google Cloud OAuth iOS client | `Config/AppSecrets.local.xcconfig` |
+| Google reversed client ID | Google Cloud OAuth iOS client / `GoogleService-Info.plist` | `Config/AppSecrets.local.xcconfig` |
+| Google Web client secret | Google Cloud OAuth Web client | Supabase Google provider only |
 | RevenueCat iOS SDK key | RevenueCat project API keys | `Config/AppSecrets.local.xcconfig` |
 | RevenueCat webhook secret | Generate a long random value | Supabase secret and RevenueCat webhook auth header |
 | RevenueCat/App Store IAP key | App Store Connect | RevenueCat dashboard and password manager |
@@ -54,7 +57,9 @@ should unlock non-enforcement value such as reports, insights, coaching content,
 or additional cloud features.
 
 Parents must sign in with Apple or Google before setup. Reviewers can use native
-Sign in with Apple or Supabase Google OAuth. There is no separate username/password account to provide.
+Sign in with Apple or native Google Sign-In backed by Supabase Auth. There is no
+separate username/password account to provide.
+There is no separate username/password account for App Review.
 
 Launch device support is intentionally local-first. Childlock locks apps on the
 device where setup is completed. For a child iPad, install and configure
@@ -81,7 +86,8 @@ value into the iOS app.
 
 Apple auth setup is tracked in `docs/SUPABASE_APPLE_AUTH.md`. Google auth setup
 is tracked in `docs/SUPABASE_GOOGLE_AUTH.md`. Do not submit a production build
-until the Supabase Apple and Google providers are enabled and saved.
+until the Supabase Apple and Google providers are enabled and saved, and the app
+build has `GOOGLE_IOS_CLIENT_ID` plus `GOOGLE_REVERSED_CLIENT_ID`.
 
 For Xcode Cloud, create `Config/AppSecrets.local.xcconfig` in a pre-build script
 from Xcode Cloud environment variables, or pass equivalent build settings on the

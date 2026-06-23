@@ -3,6 +3,8 @@ import Foundation
 public struct BackendConfig: Equatable, Sendable {
     public let supabaseURL: URL?
     public let supabasePublishableKey: String?
+    public let googleIOSClientID: String?
+    public let googleReversedClientID: String?
     public let revenueCatAPIKey: String?
     public let postHogAPIKey: String?
     public let postHogHost: String?
@@ -12,6 +14,9 @@ public struct BackendConfig: Equatable, Sendable {
     public init(bundle: Bundle = .main, environment: [String: String] = ProcessInfo.processInfo.environment) {
         supabaseURL = Self.urlValue(named: "SUPABASE_URL", bundle: bundle, environment: environment)
         supabasePublishableKey = Self.stringValue(named: "SUPABASE_PUBLISHABLE_KEY", bundle: bundle, environment: environment)
+        googleIOSClientID = Self.stringValue(named: "GIDClientID", bundle: bundle, environment: environment)
+            ?? Self.stringValue(named: "GOOGLE_IOS_CLIENT_ID", bundle: bundle, environment: environment)
+        googleReversedClientID = Self.stringValue(named: "GOOGLE_REVERSED_CLIENT_ID", bundle: bundle, environment: environment)
         revenueCatAPIKey = Self.stringValue(named: "REVENUECAT_API_KEY", bundle: bundle, environment: environment)
         postHogAPIKey = Self.stringValue(named: "POSTHOG_API_KEY", bundle: bundle, environment: environment)
         postHogHost = Self.stringValue(named: "POSTHOG_HOST", bundle: bundle, environment: environment)
@@ -19,6 +24,10 @@ public struct BackendConfig: Equatable, Sendable {
 
     public var isSupabaseConfigured: Bool {
         supabaseURL != nil && supabasePublishableKey?.isEmpty == false
+    }
+
+    public var isGoogleSignInConfigured: Bool {
+        googleIOSClientID?.isEmpty == false && googleReversedClientID?.isEmpty == false
     }
 
     private static func stringValue(

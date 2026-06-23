@@ -40,12 +40,9 @@ mistaken for a real production signup.
 
 ## Google Sign In
 
-Google sign-in is documented separately in `docs/SUPABASE_GOOGLE_AUTH.md`.
-Google uses Supabase OAuth with this app redirect URL:
+Google uses the native Google Sign-In SDK plus Supabase ID-token exchange.
+Google setup is tracked separately in `docs/SUPABASE_GOOGLE_AUTH.md`.
 
-```text
-childlock://login-callback
-```
 
 ## OAuth/Web Fallback
 

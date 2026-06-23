@@ -4,6 +4,8 @@ Paste app-facing keys into `Config/AppSecrets.local.xcconfig`:
 
 - `SUPABASE_URL` = `https://jkncpveupvozsmbbkvgq.supabase.co`
 - `SUPABASE_PUBLISHABLE_KEY`
+- `GOOGLE_IOS_CLIENT_ID`
+- `GOOGLE_REVERSED_CLIENT_ID`
 - `REVENUECAT_API_KEY`
 - `POSTHOG_API_KEY`
 - `POSTHOG_HOST`
@@ -26,7 +28,7 @@ RevenueCat/App Store product IDs expected by the app:
 - `childlock_premium_annual`
 - entitlement: `Childlock Pro`
 
-OAuth redirect URL expected by the app:
+Fallback OAuth redirect URL still registered by the app:
 
 - `childlock://login-callback`
 
@@ -35,6 +37,7 @@ Do not paste Apple Developer signing credentials here. Configure those in Xcode.
 Do not paste service-role keys, Supabase access tokens, RevenueCat webhook
 secrets, or App Store Connect private keys into any app xcconfig.
 
-Do not paste Google OAuth client secrets into any app xcconfig.
-Google OAuth client ID and client secret belong only in the Supabase Google auth
-provider settings.
+Google iOS client ID and reversed client ID are public app-facing values and
+belong in `Config/AppSecrets.local.xcconfig`.
+
+Do not paste Google OAuth client secrets into any app xcconfig. Google Web client ID and client secret belong only in the Supabase Google auth provider settings.

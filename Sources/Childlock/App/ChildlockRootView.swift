@@ -86,6 +86,10 @@ public struct ChildlockRootView: View {
             }
         }
         .onOpenURL { url in
+            if authService.handleGoogleRedirectURL(url) {
+                return
+            }
+
             Task {
                 let didCompleteOAuth = await authService.handleOAuthCallback(url)
                 if didCompleteOAuth {

@@ -10,6 +10,8 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(appSecrets.contains("#include? \"AppSecrets.local.xcconfig\""))
         XCTAssertTrue(appSecrets.contains("SUPABASE_URL = https:/$()/jkncpveupvozsmbbkvgq.supabase.co"))
         XCTAssertTrue(appSecrets.contains("SUPABASE_PUBLISHABLE_KEY ="))
+        XCTAssertTrue(appSecrets.contains("GOOGLE_IOS_CLIENT_ID ="))
+        XCTAssertTrue(appSecrets.contains("GOOGLE_REVERSED_CLIENT_ID ="))
         XCTAssertTrue(appSecrets.contains("REVENUECAT_API_KEY ="))
         XCTAssertTrue(appSecrets.contains("POSTHOG_API_KEY ="))
 
@@ -35,6 +37,9 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(buildScript.contains("CODE_SIGNING_ALLOWED=NO"))
         XCTAssertTrue(validationScript.contains("SKIP_SECRET_CHECK=1"))
         XCTAssertTrue(validationScript.contains("Config/AppSecrets.local.xcconfig"))
+        XCTAssertTrue(validationScript.contains("GOOGLE_IOS_CLIENT_ID"))
+        XCTAssertTrue(validationScript.contains("GOOGLE_REVERSED_CLIENT_ID"))
+        XCTAssertTrue(validationScript.contains("GOOGLE_CLIENT_SECRET"))
         XCTAssertTrue(validationScript.contains("Config/production.env"))
         XCTAssertTrue(validationScript.contains("SUPABASE_SERVICE_ROLE_KEY"))
         XCTAssertTrue(validationScript.contains("REVENUECAT_WEBHOOK_SECRET"))

@@ -58,6 +58,7 @@
 		SIGN_IN_APPLE_VIEW_SOURCE /* Sources/Childlock/Views/Onboarding/SignInWithAppleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SIGN_IN_APPLE_VIEW_FILE /* Sources/Childlock/Views/Onboarding/SignInWithAppleView.swift */; };
 		SUBSCRIPTION_SERVICE_SOURCE /* Sources/Childlock/Services/SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = SUBSCRIPTION_SERVICE_FILE /* Sources/Childlock/Services/SubscriptionService.swift */; };
 		SUPABASE_CLIENT_PROVIDER_SOURCE /* Sources/Childlock/Services/SupabaseClientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = SUPABASE_CLIENT_PROVIDER_FILE /* Sources/Childlock/Services/SupabaseClientProvider.swift */; };
+		GOOGLE_SIGNIN_PACKAGE /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = GOOGLE_SIGNIN_PRODUCT /* GoogleSignIn */; };
 		SUPABASE_PACKAGE /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = SUPABASE_PRODUCT /* Supabase */; };
 /* End PBXBuildFile section */
 
@@ -160,6 +161,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				SUPABASE_PACKAGE /* Supabase in Frameworks */,
+				GOOGLE_SIGNIN_PACKAGE /* GoogleSignIn in Frameworks */,
 				REVENUECAT_PACKAGE /* RevenueCat in Frameworks */,
 				POSTHOG_PACKAGE /* PostHog in Frameworks */,
 			);
@@ -323,6 +325,7 @@
 			name = Childlock;
 			packageProductDependencies = (
 				SUPABASE_PRODUCT /* Supabase */,
+				GOOGLE_SIGNIN_PRODUCT /* GoogleSignIn */,
 				REVENUECAT_PRODUCT /* RevenueCat */,
 				POSTHOG_PRODUCT /* PostHog */,
 			);
@@ -416,6 +419,7 @@
 			mainGroup = ROOT_GROUP;
 			packageReferences = (
 				SUPABASE_PACKAGE_REF /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				GOOGLE_SIGNIN_PACKAGE_REF /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				REVENUECAT_PACKAGE_REF /* XCRemoteSwiftPackageReference "purchases-ios" */,
 				POSTHOG_PACKAGE_REF /* XCRemoteSwiftPackageReference "posthog-ios" */,
 			);
@@ -979,6 +983,14 @@
 				kind = upToNextMajorVersion;
 				minimumVersion = 3.0.0;
 			};
+			};
+		GOOGLE_SIGNIN_PACKAGE_REF /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
 		};
 		REVENUECAT_PACKAGE_REF /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1008,6 +1020,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = REVENUECAT_PACKAGE_REF /* XCRemoteSwiftPackageReference "purchases-ios" */;
 			productName = RevenueCat;
+		};
+		GOOGLE_SIGNIN_PRODUCT /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = GOOGLE_SIGNIN_PACKAGE_REF /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
 		};
 		SUPABASE_PRODUCT /* Supabase */ = {
 			isa = XCSwiftPackageProductDependency;

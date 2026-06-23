@@ -3,8 +3,14 @@ import Observation
 #if canImport(AuthenticationServices)
 import AuthenticationServices
 #endif
+#if canImport(GoogleSignIn)
+import GoogleSignIn
+#endif
 #if canImport(Supabase)
 import Supabase
+#endif
+#if canImport(UIKit)
+import UIKit
 #endif
 
 @MainActor
@@ -12,7 +18,6 @@ import Supabase
 public final class AuthService {
     public static let shared = AuthService()
     public static let oauthRedirectURL = URL(string: "childlock://login-callback")!
-    public static let googleOAuthScopes = "openid email profile"
 
     public enum AuthState: Equatable {
         case unknown
@@ -145,18 +150,36 @@ public final class AuthService {
     }
 
     public func handleGoogleSignIn() async -> Bool {
-        #if canImport(Supabase) && canImport(AuthenticationServices)
+        #if canImport(Supabase) && canImport(GoogleSignIn) && canImport(UIKit)
         if BackendConfig.current.isSupabaseConfigured {
             guard let client = SupabaseClientProvider.shared else {
                 failSignIn("Google sign in could not be started. Please try again.")
                 return false
             }
 
+            guard BackendConfig.current.isGoogleSignInConfigured else {
+                failSignIn("Google sign in is not configured yet. Add the Google iOS client ID and URL scheme, then try again.")
+                return false
+            }
+
+            guard let presentingViewController = Self.presentingViewController() else {
+                failSignIn("Google sign in could not find an active app window. Please try again.")
+                return false
+            }
+
             do {
-                let session = try await client.auth.signInWithOAuth(
-                    provider: .google,
-                    redirectTo: Self.oauthRedirectURL,
-                    scopes: Self.googleOAuthScopes
+                let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: presentingViewController)
+                guard let idToken = result.user.idToken?.tokenString else {
+                    failSignIn("Google did not return an identity token. Check the Google iOS client and Supabase provider settings.")
+                    return false
+                }
+
+                let session = try await client.auth.signInWithIdToken(
+                    credentials: OpenIDConnectCredentials(
+                        provider: .google,
+                        idToken: idToken,
+                        accessToken: result.user.accessToken.tokenString
+                    )
                 )
                 completeSupabaseSignIn(session: session, appleUserID: nil)
                 return true
@@ -169,6 +192,14 @@ public final class AuthService {
 
         failSignIn("Google sign in is unavailable right now. Please try again later.")
         return false
+    }
+
+    public func handleGoogleRedirectURL(_ url: URL) -> Bool {
+        #if canImport(GoogleSignIn)
+        return GIDSignIn.sharedInstance.handle(url)
+        #else
+        return false
+        #endif
     }
 
     @discardableResult
@@ -207,6 +238,10 @@ public final class AuthService {
                 try? await client.auth.signOut()
             }
         }
+        #endif
+
+        #if canImport(GoogleSignIn)
+        GIDSignIn.sharedInstance.signOut()
         #endif
     }
 
@@ -273,6 +308,22 @@ public final class AuthService {
         guard !components.isEmpty else { return nil }
         return components.joined(separator: " ")
     }
+
+    #if canImport(UIKit)
+    private static func presentingViewController() -> UIViewController? {
+        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        let keyWindow = scenes
+            .flatMap(\.windows)
+            .first { $0.isKeyWindow }
+
+        var presenter = keyWindow?.rootViewController
+        while let presented = presenter?.presentedViewController {
+            presenter = presented
+        }
+
+        return presenter
+    }
+    #endif
 }
 
 private extension SecureStore {

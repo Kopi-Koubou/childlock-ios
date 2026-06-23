@@ -97,11 +97,14 @@ else
 
     require_config_value "Config/AppSecrets.local.xcconfig" "SUPABASE_URL"
     require_config_value "Config/AppSecrets.local.xcconfig" "SUPABASE_PUBLISHABLE_KEY"
+    require_config_value "Config/AppSecrets.local.xcconfig" "GOOGLE_IOS_CLIENT_ID"
+    require_config_value "Config/AppSecrets.local.xcconfig" "GOOGLE_REVERSED_CLIENT_ID"
     require_config_value "Config/AppSecrets.local.xcconfig" "REVENUECAT_API_KEY"
 
     require_missing_or_blank "Config/AppSecrets.local.xcconfig" "SUPABASE_ACCESS_TOKEN"
     require_missing_or_blank "Config/AppSecrets.local.xcconfig" "SUPABASE_SERVICE_ROLE_KEY"
     require_missing_or_blank "Config/AppSecrets.local.xcconfig" "REVENUECAT_WEBHOOK_SECRET"
+    require_missing_or_blank "Config/AppSecrets.local.xcconfig" "GOOGLE_CLIENT_SECRET"
 
     require_config_value "Config/production.env" "SUPABASE_PROJECT_REF"
     require_config_value "Config/production.env" "SUPABASE_ACCESS_TOKEN"

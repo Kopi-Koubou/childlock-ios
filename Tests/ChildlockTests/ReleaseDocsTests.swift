@@ -12,7 +12,9 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertFalse(appleAuth.localizedCaseInsensitiveContains("still needs"))
         XCTAssertFalse(appleAuth.localizedCaseInsensitiveContains("not created yet"))
 
-        XCTAssertTrue(googleAuth.contains("Redirect URL scheme: `childlock://login-callback`"))
+        XCTAssertTrue(googleAuth.contains("native Google Sign-In SDK"))
+        XCTAssertTrue(googleAuth.contains("GOOGLE_IOS_CLIENT_ID"))
+        XCTAssertTrue(googleAuth.contains("GOOGLE_REVERSED_CLIENT_ID"))
         XCTAssertTrue(googleAuth.contains("Secret location: Supabase dashboard only"))
         XCTAssertTrue(googleAuth.contains("Unsupported provider: missing OAuth secret"))
         XCTAssertTrue(googleAuth.contains("Fix it in Supabase, not Xcode"))
