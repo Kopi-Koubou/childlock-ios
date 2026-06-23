@@ -178,6 +178,7 @@ final class AuthRedirectConfigTests: XCTestCase {
             try readRepoFile("Sources/Childlock/App/ChildlockRootView.swift")
         )
         let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")
+        let simulatorQA = try readRepoFile("scripts/qa-simulator-seeds.sh")
 
         XCTAssertTrue(authService.contains("#if DEBUG public func debugSignIn"))
         XCTAssertTrue(rootView.contains("#if DEBUG private enum DebugLaunchArgument"))
@@ -189,6 +190,15 @@ final class AuthRedirectConfigTests: XCTestCase {
         XCTAssertTrue(rootView.contains("#if DEBUG challengeViewModel.presentChallenge(for: profile, type: debugForcedChallengeType) #else challengeViewModel.presentChallenge(for: profile) #endif"))
         XCTAssertTrue(checklist.contains("Use Debug builds only. These launch arguments are not part of the Release"))
         XCTAssertTrue(checklist.contains("`--childlock-qa-seed-onboarding-devices`"))
+        XCTAssertTrue(checklist.contains("scripts/qa-simulator-seeds.sh"))
+        XCTAssertTrue(simulatorQA.contains("--childlock-qa-reset"))
+        XCTAssertTrue(simulatorQA.contains("--childlock-qa-seed-onboarding-devices"))
+        XCTAssertTrue(simulatorQA.contains("--childlock-qa-seed-dashboard"))
+        XCTAssertTrue(simulatorQA.contains("--childlock-qa-seed-locked-dashboard"))
+        XCTAssertTrue(simulatorQA.contains("--childlock-qa-seed-pending-math-challenge"))
+        XCTAssertTrue(simulatorQA.contains("--childlock-qa-seed-pending-memory-challenge"))
+        XCTAssertTrue(simulatorQA.contains("--childlock-qa-seed-more-time-request"))
+        XCTAssertTrue(simulatorQA.contains(".build/qa-simulator-seeds"))
     }
 
     private func readPropertyList(_ relativePath: String) throws -> [String: Any] {

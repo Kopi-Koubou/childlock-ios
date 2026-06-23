@@ -15,6 +15,16 @@ TestFlight build. For interactive PIN checks, use a normal signed simulator run;
 compile-only builds may pass `CODE_SIGNING_ALLOWED=NO`, but unsigned simulator
 runs can make Keychain-backed PIN seeds look broken.
 
+For repeatable visual QA, run:
+
+```sh
+scripts/qa-simulator-seeds.sh
+```
+
+The script builds a Debug simulator app, launches each seeded state on iPhone 17
+and iPad (A16), and writes screenshots plus a summary under
+`.build/qa-simulator-seeds/`.
+
 | Launch argument | Expected screen | PIN |
 | --- | --- | --- |
 | `--childlock-qa-reset` | Fresh onboarding with Apple and Google sign-in | none |
