@@ -490,16 +490,18 @@ public struct OnboardingFlowView: View {
 
                 if shouldUseFamilyActivityPicker {
                     #if os(iOS) && canImport(FamilyControls)
-                    VStack(spacing: ChildlockSpacing.xs) {
-                        appToggleRow(label: "Choose video apps", icon: "play.rectangle.fill") {
+                    VStack(alignment: .leading, spacing: ChildlockSpacing.xs) {
+                        Button {
                             isFamilyActivityPickerPresented = true
+                        } label: {
+                            Label("Choose apps, categories, or websites", systemImage: "checklist")
                         }
-                        appToggleRow(label: "Choose games", icon: "gamecontroller.fill") {
-                            isFamilyActivityPickerPresented = true
-                        }
-                        appToggleRow(label: "Choose social apps", icon: "person.2.fill") {
-                            isFamilyActivityPickerPresented = true
-                        }
+                        .buttonStyle(ChildlockSecondaryButtonStyle())
+
+                        Text("Select at least one item in Apple's Screen Time picker, then tap Done.")
+                            .font(ChildlockTypography.caption)
+                            .foregroundStyle(ChildlockColor.textSecondary)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                     .familyActivityPicker(
                         isPresented: $isFamilyActivityPickerPresented,
@@ -523,7 +525,7 @@ public struct OnboardingFlowView: View {
                             }
                         }
                     } else {
-                        Text("Tap a row and choose at least one app, category, or website.")
+                        Text("Nothing selected yet.")
                             .font(ChildlockTypography.caption)
                             .foregroundStyle(ChildlockColor.textSecondary)
                     }
@@ -890,34 +892,6 @@ public struct OnboardingFlowView: View {
         }
     }
 
-    private func appToggleRow(label: String, icon: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            HStack {
-                Image(systemName: icon)
-                    .font(.system(size: 18))
-                    .foregroundStyle(ChildlockColor.primary)
-                    .frame(width: 28)
-
-                Text(label)
-                    .font(ChildlockTypography.body)
-                    .foregroundStyle(ChildlockColor.textPrimary)
-
-                Spacer()
-
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(ChildlockColor.textMuted)
-            }
-            .padding(.horizontal, ChildlockSpacing.md)
-            .frame(height: 48)
-            .background(ChildlockColor.surface)
-            .overlay(
-                RoundedRectangle(cornerRadius: ChildlockRadius.control)
-                    .stroke(ChildlockColor.border, lineWidth: 1)
-            )
-        }
-        .buttonStyle(.plain)
-    }
 }
 
 // MARK: - Number Pad Key

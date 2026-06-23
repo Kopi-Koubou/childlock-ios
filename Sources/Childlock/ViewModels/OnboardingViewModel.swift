@@ -139,7 +139,7 @@ public final class OnboardingViewModel {
 
         #if os(iOS) && canImport(FamilyControls)
         guard hasMonitoredSelection else {
-            return "Tap Choose apps or categories, then select at least one app, category, or website in Screen Time."
+            return "Choose at least one app, category, or website in the Screen Time picker, then tap Done."
         }
         #else
         guard !selectedMonitoredApps.isEmpty else {

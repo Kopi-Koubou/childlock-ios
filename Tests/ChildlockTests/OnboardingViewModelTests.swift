@@ -166,14 +166,14 @@ final class OnboardingViewModelTests: XCTestCase {
         #if os(iOS) && canImport(FamilyControls)
         XCTAssertEqual(
             viewModel.setupBlockingReason,
-            "Tap Choose apps or categories, then select at least one app, category, or website in Screen Time."
+            "Choose at least one app, category, or website in the Screen Time picker, then tap Done."
         )
 
         viewModel.selectedMonitoredApps = ["Games"]
 
         XCTAssertEqual(
             viewModel.setupBlockingReason,
-            "Tap Choose apps or categories, then select at least one app, category, or website in Screen Time."
+            "Choose at least one app, category, or website in the Screen Time picker, then tap Done."
         )
         XCTAssertFalse(viewModel.canContinue)
 

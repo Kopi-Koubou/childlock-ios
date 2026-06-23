@@ -78,6 +78,10 @@ as sufficient for launch.
 6. Sign in with Google and complete setup again.
 7. Parent grants Screen Time access on the child-used device.
 8. Parent selects at least one real app, category, or website.
+   - In the Childlock setup screen, tap `Choose apps, categories, or websites`,
+     select at least one item in Apple's Screen Time picker, then tap `Done`.
+     The setup `Continue` button stays disabled until the picker returns a real
+     selection summary.
 9. Parent chooses the shortest brain-break interval.
 10. Parent enables notifications when prompted. Also test a denied-notification
    pass: after tapping `Start Brain Break`, press Home and open Childlock.

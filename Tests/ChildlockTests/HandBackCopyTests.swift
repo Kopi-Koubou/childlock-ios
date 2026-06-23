@@ -58,6 +58,19 @@ final class HandBackCopyTests: XCTestCase {
         XCTAssertFalse(onboarding.localizedCaseInsensitiveContains("remotely lock"))
     }
 
+    func testOnboardingScreenTimePickerCopyExplainsDoneStep() throws {
+        let onboarding = try readRepoFile("Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift")
+        let viewModel = try readRepoFile("Sources/Childlock/ViewModels/OnboardingViewModel.swift")
+
+        XCTAssertTrue(onboarding.contains("Choose apps, categories, or websites"))
+        XCTAssertTrue(onboarding.contains("Select at least one item in Apple's Screen Time picker, then tap Done."))
+        XCTAssertTrue(onboarding.contains("Nothing selected yet."))
+        XCTAssertFalse(onboarding.contains("Choose video apps"))
+        XCTAssertFalse(onboarding.contains("Choose games"))
+        XCTAssertFalse(onboarding.contains("Choose social apps"))
+        XCTAssertTrue(viewModel.contains("Choose at least one app, category, or website in the Screen Time picker, then tap Done."))
+    }
+
     func testParentDashboardUsesReadableContentWidthOnIPad() throws {
         let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
 
