@@ -67,6 +67,13 @@ final class HandBackCopyTests: XCTestCase {
         XCTAssertTrue(dashboard.contains(".frame(maxWidth: parentLockContentMaxWidth)"))
     }
 
+    func testOnboardingUsesReadableContentWidthOnIPad() throws {
+        let onboarding = try readRepoFile("Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift")
+
+        XCTAssertTrue(onboarding.contains("onboardingContentMaxWidth"))
+        XCTAssertTrue(onboarding.contains(".frame(maxWidth: onboardingContentMaxWidth, alignment: .leading)"))
+    }
+
     func testAddChildSheetCopyIsPolished() throws {
         let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
 

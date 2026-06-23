@@ -15,6 +15,8 @@ public struct OnboardingFlowView: View {
     @State private var familyActivitySelection = FamilyActivitySelection()
     #endif
 
+    private let onboardingContentMaxWidth: CGFloat = 620
+
     public init(viewModel: OnboardingViewModel) {
         self.viewModel = viewModel
     }
@@ -82,6 +84,8 @@ public struct OnboardingFlowView: View {
                 }
                 .padding(.horizontal, ChildlockSpacing.lg)
                 .padding(.bottom, ChildlockSpacing.section)
+                .frame(maxWidth: onboardingContentMaxWidth, alignment: .leading)
+                .frame(maxWidth: .infinity)
             }
         }
     }
