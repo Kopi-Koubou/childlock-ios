@@ -179,7 +179,9 @@ Use the checked-in validation script for the full local gate:
 The script checks required app-facing values in
 `Config/AppSecrets.local.xcconfig`, required server/deploy values in
 `Config/production.env`, and confirms server-only secrets were not pasted into
-the app config. It reports only present/missing status, not secret values.
+the app config. It reports only present/missing status, not secret values. Full
+Xcode output is written under `.build/validation-logs/`; on failure, the script
+prints the last 120 log lines plus the full log path.
 
 For compile-only CI jobs where real secrets are intentionally unavailable:
 

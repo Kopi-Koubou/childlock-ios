@@ -8,6 +8,7 @@ set -euo pipefail
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SCHEME="Childlock"
 DERIVED_DATA_PATH="$PROJECT_DIR/.build/xcode-preflight"
+VALIDATION_LOG_DIR="$PROJECT_DIR/.build/validation-logs"
 
 read_config_value() {
     local file="$1"
@@ -98,6 +99,30 @@ require_missing_or_blank() {
         echo "❌ Server-only value must not be in $file: $key"
         return 1
     fi
+}
+
+run_logged_command() {
+    local label="$1"
+    local log_name="$2"
+    shift 2
+
+    mkdir -p "$VALIDATION_LOG_DIR"
+    local log_file="$VALIDATION_LOG_DIR/$log_name"
+
+    echo "Full output: $log_file"
+
+    if "$@" > "$log_file" 2>&1; then
+        echo "✅ $label complete"
+        return 0
+    fi
+
+    local status=$?
+    echo "❌ $label failed. Last 120 log lines:"
+    echo ""
+    tail -n 120 "$log_file"
+    echo ""
+    echo "Full output: $log_file"
+    return "$status"
 }
 
 echo "=== childlock Build Validation ==="
@@ -195,7 +220,8 @@ echo ""
 echo "Step 4: Building Release for iOS Simulator..."
 echo ""
 
-xcodebuild \
+run_logged_command "Simulator Release build" "xcodebuild-simulator-release.log" \
+    xcodebuild \
     -project Childlock.xcodeproj \
     -scheme "$SCHEME" \
     -configuration Release \
@@ -205,7 +231,6 @@ xcodebuild \
     clean build
 
 echo ""
-echo "✅ Simulator Release build complete"
 echo ""
 
 # ============================================
@@ -214,7 +239,8 @@ echo ""
 echo "Step 5: Building Release for generic iOS device without signing..."
 echo ""
 
-xcodebuild \
+run_logged_command "Generic iOS Release build" "xcodebuild-generic-ios-release.log" \
+    xcodebuild \
     -project Childlock.xcodeproj \
     -scheme "$SCHEME" \
     -configuration Release \
@@ -224,7 +250,6 @@ xcodebuild \
     clean build
 
 echo ""
-echo "✅ Generic iOS Release build complete"
 echo ""
 
 # ============================================

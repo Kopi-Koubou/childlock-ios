@@ -47,7 +47,15 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(validationScript.contains("Server-only value must not be in $file"))
         XCTAssertTrue(validationScript.contains("config_failed=0"))
         XCTAssertTrue(validationScript.contains("Fill every missing value above"))
+        XCTAssertTrue(validationScript.contains("VALIDATION_LOG_DIR"))
+        XCTAssertTrue(validationScript.contains("run_logged_command \"Simulator Release build\""))
+        XCTAssertTrue(validationScript.contains("run_logged_command \"Generic iOS Release build\""))
+        XCTAssertTrue(validationScript.contains("Last 120 log lines"))
+        XCTAssertTrue(validationScript.contains("xcodebuild-simulator-release.log"))
+        XCTAssertTrue(validationScript.contains("xcodebuild-generic-ios-release.log"))
         XCTAssertTrue(validationScript.contains("Use docs/QA_TESTFLIGHT_CHECKLIST.md"))
+        XCTAssertTrue(production.contains(".build/validation-logs/"))
+        XCTAssertTrue(production.contains("last 120 log lines"))
         XCTAssertTrue(production.contains("./build-validation.sh"))
     }
 
