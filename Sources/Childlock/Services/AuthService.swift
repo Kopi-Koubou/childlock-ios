@@ -11,6 +11,8 @@ import Supabase
 @Observable
 public final class AuthService {
     public static let shared = AuthService()
+    public static let oauthRedirectURL = URL(string: "childlock://login-callback")!
+    public static let googleOAuthScopes = "openid email profile"
 
     public enum AuthState: Equatable {
         case unknown
@@ -19,6 +21,7 @@ public final class AuthService {
     }
 
     public private(set) var state: AuthState = .unknown
+    public private(set) var lastErrorMessage: String?
 
     private let secureStore: SecureStore
     private static let authUserIDKey = "auth_user_id"
@@ -37,6 +40,17 @@ public final class AuthService {
     public var userID: String? {
         if case .signedIn(let id) = state { return id }
         return nil
+    }
+
+    public static func isOAuthRedirectURL(_ url: URL) -> Bool {
+        guard
+            let expectedScheme = oauthRedirectURL.scheme,
+            url.scheme?.caseInsensitiveCompare(expectedScheme) == .orderedSame
+        else {
+            return false
+        }
+
+        return url.host == oauthRedirectURL.host && url.path == oauthRedirectURL.path
     }
 
     // MARK: - Credential Check
@@ -82,15 +96,18 @@ public final class AuthService {
         fullName: PersonNameComponents?,
         identityToken: String? = nil,
         rawNonce: String? = nil
-    ) async {
-        secureStore.saveString(appleUserID, key: Self.appleUserIDKey)
-
+    ) async -> Bool {
         #if canImport(Supabase)
-        if
-            let client = SupabaseClientProvider.shared,
-            let identityToken,
-            let rawNonce
-        {
+        if BackendConfig.current.isSupabaseConfigured {
+            guard
+                let client = SupabaseClientProvider.shared,
+                let identityToken,
+                let rawNonce
+            else {
+                failSignIn("Account setup could not be completed. Please try again.")
+                return false
+            }
+
             do {
                 let session = try await client.auth.signInWithIdToken(
                     credentials: OpenIDConnectCredentials(
@@ -99,29 +116,89 @@ public final class AuthService {
                         nonce: rawNonce
                     )
                 )
-                let authUserID = session.user.id.uuidString
-                secureStore.saveString(authUserID, key: Self.authUserIDKey)
-                state = .signedIn(userID: authUserID)
-
-                try? await DataSyncService.shared.syncParentProfile(
-                    appleUserID: appleUserID,
-                    email: email,
-                    fullName: fullName
-                )
-                return
+                completeSupabaseSignIn(session: session, appleUserID: appleUserID)
+                if email != nil || fullName != nil {
+                    try? await DataSyncService.shared.syncParentProfile(
+                        appleUserID: appleUserID,
+                        email: email,
+                        fullName: fullName
+                    )
+                }
+                return true
             } catch {
-                // Keep the app usable offline/local if the backend is temporarily unavailable.
+                failSignIn("Account setup could not be completed. Please try again.")
+                return false
             }
         }
         #endif
 
+        #if DEBUG
+        lastErrorMessage = nil
+        secureStore.saveString(appleUserID, key: Self.appleUserIDKey)
         secureStore.saveString(appleUserID, key: Self.authUserIDKey)
         state = .signedIn(userID: appleUserID)
+        return true
+        #else
+        failSignIn("Account setup is unavailable right now. Please try again later.")
+        return false
+        #endif
+    }
+
+    public func handleGoogleSignIn() async -> Bool {
+        #if canImport(Supabase) && canImport(AuthenticationServices)
+        if BackendConfig.current.isSupabaseConfigured {
+            guard let client = SupabaseClientProvider.shared else {
+                failSignIn("Google sign in could not be started. Please try again.")
+                return false
+            }
+
+            do {
+                let session = try await client.auth.signInWithOAuth(
+                    provider: .google,
+                    redirectTo: Self.oauthRedirectURL,
+                    scopes: Self.googleOAuthScopes
+                )
+                completeSupabaseSignIn(session: session, appleUserID: nil)
+                return true
+            } catch {
+                failSignIn("Google sign in could not be completed. Please try again.")
+                return false
+            }
+        }
+        #endif
+
+        failSignIn("Google sign in is unavailable right now. Please try again later.")
+        return false
+    }
+
+    @discardableResult
+    public func handleOAuthCallback(_ url: URL) async -> Bool {
+        guard Self.isOAuthRedirectURL(url) else { return false }
+
+        #if canImport(Supabase)
+        guard let client = SupabaseClientProvider.shared else {
+            failSignIn("Account setup could not be completed. Please try again.")
+            return false
+        }
+
+        do {
+            let session = try await client.auth.session(from: url)
+            completeSupabaseSignIn(session: session, appleUserID: nil)
+            return true
+        } catch {
+            failSignIn("Account setup could not be completed. Please try again.")
+            return false
+        }
+        #else
+        failSignIn("Account setup is unavailable right now. Please try again later.")
+        return false
+        #endif
     }
 
     public func signOut() {
         secureStore.delete(key: Self.authUserIDKey)
         secureStore.delete(key: Self.appleUserIDKey)
+        lastErrorMessage = nil
         state = .signedOut
 
         #if canImport(Supabase)
@@ -131,6 +208,70 @@ public final class AuthService {
             }
         }
         #endif
+    }
+
+    #if DEBUG
+    public func debugSignIn(userID: String = "childlock-qa-parent") {
+        lastErrorMessage = nil
+        secureStore.saveString(userID, key: Self.authUserIDKey)
+        secureStore.delete(key: Self.appleUserIDKey)
+        state = .signedIn(userID: userID)
+    }
+    #endif
+
+    private func failSignIn(_ message: String) {
+        secureStore.delete(key: Self.authUserIDKey)
+        secureStore.delete(key: Self.appleUserIDKey)
+        lastErrorMessage = message
+        state = .signedOut
+    }
+
+    #if canImport(Supabase)
+    private func completeSupabaseSignIn(session: Session, appleUserID: String?) {
+        let authUserID = session.user.id.uuidString
+        secureStore.saveString(authUserID, key: Self.authUserIDKey)
+
+        if let appleUserID {
+            secureStore.saveString(appleUserID, key: Self.appleUserIDKey)
+        } else {
+            secureStore.delete(key: Self.appleUserIDKey)
+        }
+
+        lastErrorMessage = nil
+        state = .signedIn(userID: authUserID)
+
+        Task {
+            try? await DataSyncService.shared.syncParentProfile(
+                appleUserID: appleUserID,
+                email: session.user.email,
+                fullName: Self.displayName(from: session.user.userMetadata)
+            )
+        }
+    }
+
+    private static func displayName(from metadata: [String: AnyJSON]) -> String? {
+        let candidates = [
+            metadata["full_name"]?.stringValue,
+            metadata["name"]?.stringValue,
+            joinedName(
+                givenName: metadata["given_name"]?.stringValue,
+                familyName: metadata["family_name"]?.stringValue
+            )
+        ]
+
+        return candidates
+            .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .first { !$0.isEmpty }
+    }
+    #endif
+
+    private static func joinedName(givenName: String?, familyName: String?) -> String? {
+        let components = [givenName, familyName]
+            .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+
+        guard !components.isEmpty else { return nil }
+        return components.joined(separator: " ")
     }
 }
 

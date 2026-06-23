@@ -47,8 +47,26 @@ public final class KeychainSecureStore: SecureStore {
             kSecValueData as String: data,
             kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock,
         ]
-        SecItemDelete(query as CFDictionary)
-        return SecItemAdd(query as CFDictionary, nil) == errSecSuccess
+        let status = SecItemAdd(query as CFDictionary, nil)
+        if status == errSecSuccess {
+            return true
+        }
+
+        guard status == errSecDuplicateItem else {
+            return false
+        }
+
+        let updateQuery: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: serviceName,
+            kSecAttrAccount as String: key,
+        ]
+        let attributes: [String: Any] = [
+            kSecValueData as String: data,
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock,
+        ]
+
+        return SecItemUpdate(updateQuery as CFDictionary, attributes as CFDictionary) == errSecSuccess
         #else
         return false
         #endif

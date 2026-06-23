@@ -52,6 +52,35 @@ final class ChallengeViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.results.count, 1)
     }
 
+    func testCorrectAnswerRearmsMonitoringAfterMoreTimeRequest() {
+        let screenTime = MockScreenTimeManager()
+        let viewModel = ChallengeViewModel(
+            screenTime: screenTime,
+            celebrationDuration: 0,
+            scheduler: { _, action in action() }
+        )
+
+        SharedDefaults.shared.set(
+            ChildlockMonitoringStatus.moreTimeRequested.rawValue,
+            forKey: SharedDefaults.Key.monitoringStatus
+        )
+        defer {
+            SharedDefaults.shared.removeObject(forKey: SharedDefaults.Key.monitoringStatus)
+        }
+
+        let profile = ChildProfile(name: "Mia", age: 7, avatarName: "fox", intervalMinutes: 10)
+        viewModel.presentChallenge(for: profile, type: .math)
+
+        guard let challenge = viewModel.challenge as? MathChallenge else {
+            XCTFail("Expected generated math challenge")
+            return
+        }
+
+        viewModel.submitMathAnswer(challenge.correctAnswer)
+
+        XCTAssertTrue(screenTime.monitoredProfileIDs.contains(profile.id))
+    }
+
     func testMemoryCompletionUnlocksAndEmitsResult() {
         let screenTime = MockScreenTimeManager()
         let viewModel = ChallengeViewModel(

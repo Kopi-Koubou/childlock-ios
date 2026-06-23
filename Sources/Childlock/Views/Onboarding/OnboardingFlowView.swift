@@ -8,6 +8,8 @@ import FamilyControls
 
 public struct OnboardingFlowView: View {
     @Bindable private var viewModel: OnboardingViewModel
+    @State private var signInErrorText: String?
+    @State private var isGoogleSignInInProgress = false
     #if os(iOS) && canImport(FamilyControls)
     @State private var isFamilyActivityPickerPresented = false
     @State private var familyActivitySelection = FamilyActivitySelection()
@@ -101,32 +103,49 @@ public struct OnboardingFlowView: View {
 
     private var welcomeStep: some View {
         VStack(spacing: ChildlockSpacing.lg) {
-            Spacer()
-
-            // Hero illustration
+            // Hero illustration: a friendly character, not abstract geometry
             ZStack {
                 RoundedRectangle(cornerRadius: ChildlockRadius.xl)
                     .fill(ChildlockColor.primarySoft)
                     .frame(height: 220)
 
-                // Layered geometric shapes
                 ZStack {
-                    // Arch shape
+                    // Body
                     UnevenRoundedRectangle(
                         topLeadingRadius: 60,
-                        bottomLeadingRadius: 0,
-                        bottomTrailingRadius: 0,
+                        bottomLeadingRadius: 16,
+                        bottomTrailingRadius: 16,
                         topTrailingRadius: 60
                     )
-                    .fill(ChildlockColor.accent.opacity(0.6))
-                    .frame(width: 100, height: 130)
-                    .offset(y: 20)
+                    .fill(ChildlockColor.accent.opacity(0.7))
+                    .frame(width: 110, height: 120)
+                    .offset(y: 36)
 
-                    // Circle
+                    // Head
                     Circle()
                         .fill(ChildlockColor.warnSoft)
-                        .frame(width: 70, height: 70)
-                        .offset(x: 50, y: -30)
+                        .frame(width: 84, height: 84)
+                        .offset(y: -36)
+
+                    // Eyes
+                    HStack(spacing: 18) {
+                        Circle().fill(ChildlockColor.primaryDeep).frame(width: 9, height: 9)
+                        Circle().fill(ChildlockColor.primaryDeep).frame(width: 9, height: 9)
+                    }
+                    .offset(y: -42)
+
+                    // Smile
+                    Circle()
+                        .trim(from: 0.08, to: 0.42)
+                        .stroke(ChildlockColor.primaryDeep, style: StrokeStyle(lineWidth: 3, lineCap: .round))
+                        .frame(width: 30, height: 30)
+                        .offset(y: -26)
+
+                    // Spark above the head
+                    Image(systemName: "sparkle")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(ChildlockColor.primary)
+                        .offset(x: 52, y: -74)
                 }
             }
             .padding(.horizontal, ChildlockSpacing.lg)
@@ -136,64 +155,107 @@ public struct OnboardingFlowView: View {
                     .font(ChildlockTypography.display)
                     .foregroundStyle(ChildlockColor.textPrimary)
 
-                Text("Quick brain breaks during your child's screen time. Calmer transitions, real learning, no tantrums.")
+                Text("Quick brain breaks during your child's screen time. Calmer transitions, quick learning, fewer battles.")
                     .font(ChildlockTypography.body)
                     .foregroundStyle(ChildlockColor.textSecondary)
+
+                HStack(spacing: ChildlockSpacing.xs) {
+                    Image(systemName: "iphone")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(ChildlockColor.primary)
+                    Text("Set up Childlock on the device your child uses.")
+                        .font(ChildlockTypography.caption)
+                        .foregroundStyle(ChildlockColor.textSecondary)
+                }
+                .padding(ChildlockSpacing.sm)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(ChildlockColor.primarySoft.opacity(0.6))
+                .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.sm))
             }
             .padding(.horizontal, ChildlockSpacing.lg)
-
-            Spacer()
 
             VStack(spacing: ChildlockSpacing.sm) {
                 #if canImport(AuthenticationServices)
                 SignInWithAppleButtonView(
                     onSuccess: { userID, email, fullName, identityToken, rawNonce in
                         Task {
-                            await AuthService.shared.handleSignIn(
+                            let didSignIn = await AuthService.shared.handleSignIn(
                                 userID: userID,
                                 email: email,
                                 fullName: fullName,
                                 identityToken: identityToken,
                                 rawNonce: rawNonce
                             )
-                            viewModel.goNext()
+                            if didSignIn {
+                                signInErrorText = nil
+                                viewModel.markSignupComplete()
+                                viewModel.goNext()
+                            } else {
+                                signInErrorText = AuthService.shared.lastErrorMessage
+                            }
                         }
                     },
-                    onError: { _ in
-                        // User cancelled or auth failed — stay on welcome
+                    onError: { error in
+                        signInErrorText = error.localizedDescription
                     }
                 )
                 #else
-                Button {
-                    Task {
-                        await AuthService.shared.handleSignIn(userID: "dev-user", email: nil, fullName: nil)
-                        viewModel.goNext()
-                    }
-                } label: {
-                    HStack(spacing: ChildlockSpacing.xs) {
-                        Image(systemName: "apple.logo")
-                            .font(.system(size: 18, weight: .medium))
-                        Text("Continue with Apple")
-                    }
-                }
-                .buttonStyle(ChildlockPrimaryButtonStyle())
+                Text("Apple sign in is unavailable on this device.")
+                    .font(ChildlockTypography.caption)
+                    .foregroundStyle(ChildlockColor.textSecondary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
                 #endif
 
                 Button {
-                    viewModel.goNext()
+                    signInWithGoogle()
                 } label: {
-                    Text("Sign in with email")
-                        .font(ChildlockTypography.body)
-                        .foregroundStyle(ChildlockColor.primary)
+                    HStack(spacing: ChildlockSpacing.xs) {
+                        Text("G")
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundStyle(ChildlockColor.primary)
+                            .frame(width: 22, height: 22)
+                        Text(isGoogleSignInInProgress ? "Connecting..." : "Continue with Google")
+                    }
+                }
+                .buttonStyle(ChildlockSecondaryButtonStyle())
+                .disabled(isGoogleSignInInProgress)
+                .opacity(isGoogleSignInInProgress ? 0.7 : 1.0)
+
+                if let signInErrorText {
+                    Text(signInErrorText)
+                        .font(ChildlockTypography.caption)
+                        .foregroundStyle(ChildlockColor.warning)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
 
-                Text("7-day free trial \u{00B7} then $39.99/year \u{00B7} cancel anytime")
+                Text("Free to start \u{00B7} no credit card needed")
                     .font(ChildlockTypography.caption)
                     .foregroundStyle(ChildlockColor.textMuted)
                     .multilineTextAlignment(.center)
             }
             .padding(.horizontal, ChildlockSpacing.lg)
             .padding(.bottom, ChildlockSpacing.lg)
+        }
+        .frame(maxWidth: 620)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+    }
+
+    private func signInWithGoogle() {
+        isGoogleSignInInProgress = true
+        signInErrorText = nil
+
+        Task {
+            let didSignIn = await AuthService.shared.handleGoogleSignIn()
+            isGoogleSignInInProgress = false
+
+            if didSignIn {
+                viewModel.markSignupComplete()
+                viewModel.goNext()
+            } else {
+                signInErrorText = AuthService.shared.lastErrorMessage
+            }
         }
     }
 
@@ -206,7 +268,7 @@ public struct OnboardingFlowView: View {
                     .font(ChildlockTypography.title)
                     .foregroundStyle(ChildlockColor.textPrimary)
 
-                Text("Apple's Family Sharing keeps your child's data private and gives you full control.")
+                Text("Apple's Screen Time controls let Childlock pause selected apps on this device — your child's device.")
                     .font(ChildlockTypography.body)
                     .foregroundStyle(ChildlockColor.textSecondary)
             }
@@ -225,29 +287,22 @@ public struct OnboardingFlowView: View {
             infoCard(
                 number: 3,
                 heading: "Where data lives",
-                body: "On-device. Only you see your dashboard."
+                body: "Challenge progress syncs to your private Childlock account. Apple never shares which apps your child uses with us."
             )
 
             Text(viewModel.authorizationStatusText)
                 .font(ChildlockTypography.caption)
                 .foregroundStyle(viewModel.shouldShowAuthorizationHelp ? ChildlockColor.warning : ChildlockColor.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
 
             VStack(spacing: ChildlockSpacing.sm) {
-                Button("Set up Family Sharing") {
+                Button(screenTimeAccessButtonTitle) {
                     Task {
                         await viewModel.requestFamilyAuthorization()
                     }
                 }
                 .buttonStyle(ChildlockPrimaryButtonStyle())
                 .disabled(viewModel.familyAuthorizationState == .requesting)
-
-                Button {
-                    viewModel.goNext()
-                } label: {
-                    Text("Try a demo first")
-                        .font(ChildlockTypography.body)
-                        .foregroundStyle(ChildlockColor.primary)
-                }
             }
 
             if viewModel.canContinue, viewModel.familyAuthorizationState != .notRequested {
@@ -268,70 +323,45 @@ public struct OnboardingFlowView: View {
                     .font(ChildlockTypography.title)
                     .foregroundStyle(ChildlockColor.textPrimary)
 
-                Text("Family Sharing syncs your settings across every device in your family group.")
+                Text("Childlock protects the device your child actually uses. Shared iPhone? Set it up here. Child iPad? Install and run this setup on the iPad; a parent-only iPhone install will not lock the iPad in v1.")
                     .font(ChildlockTypography.body)
                     .foregroundStyle(ChildlockColor.textSecondary)
             }
 
-            // Visual diagram: parent -> cloud -> children
-            VStack(spacing: ChildlockSpacing.md) {
-                // Parent device
-                HStack {
-                    Spacer()
-                    deviceRect(label: "Your device", icon: "iphone", highlighted: true)
-                    Spacer()
-                }
-
-                // Arrow down
-                Image(systemName: "arrow.down")
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundStyle(ChildlockColor.primary)
-
-                // Cloud
-                HStack {
-                    Spacer()
-                    VStack(spacing: ChildlockSpacing.xxs) {
-                        Image(systemName: "icloud.fill")
-                            .font(.system(size: 28))
-                            .foregroundStyle(ChildlockColor.primary)
-                        Text("Family Sharing")
-                            .font(ChildlockTypography.caption)
-                            .foregroundStyle(ChildlockColor.textSecondary)
-                    }
-                    Spacer()
-                }
-
-                // Arrow down
-                Image(systemName: "arrow.down")
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundStyle(ChildlockColor.primary)
-
-                // Child devices
-                HStack(spacing: ChildlockSpacing.md) {
-                    Spacer()
-                    deviceRect(label: "iPad", icon: "ipad", highlighted: false)
-                    deviceRect(label: "iPhone", icon: "iphone", highlighted: false)
-                    Spacer()
-                }
-            }
-            .childlockCard()
-
-            // Devices found placeholder
-            VStack(alignment: .leading, spacing: ChildlockSpacing.xs) {
-                Text("Devices found")
-                    .font(ChildlockTypography.bodyBold)
-                    .foregroundStyle(ChildlockColor.textPrimary)
-
-                HStack(spacing: ChildlockSpacing.xs) {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(ChildlockColor.primary)
-                    Text("This device")
-                        .font(ChildlockTypography.body)
-                        .foregroundStyle(ChildlockColor.textPrimary)
-                }
+            // How it works on this device
+            VStack(alignment: .leading, spacing: ChildlockSpacing.md) {
+                deviceStepRow(
+                    icon: "iphone",
+                    heading: "Shared phone is supported",
+                    body: "Set up this phone, keep the dashboard behind your PIN, and hand it back after each challenge."
+                )
+                deviceStepRow(
+                    icon: "ipad",
+                    heading: "Child iPad needs its own setup",
+                    body: "Run setup on the iPad so Apple's Screen Time controls can pause apps there."
+                )
+                deviceStepRow(
+                    icon: "lock.shield",
+                    heading: "Parent settings stay protected",
+                    body: "Your child can solve puzzles, but they cannot change monitoring without the PIN."
+                )
             }
             .childlockCard()
             .frame(maxWidth: .infinity, alignment: .leading)
+
+            // Multi-device honesty
+            HStack(alignment: .top, spacing: ChildlockSpacing.sm) {
+                Image(systemName: "info.circle")
+                    .font(.system(size: 16))
+                    .foregroundStyle(ChildlockColor.primary)
+                Text("For launch, Childlock locks apps on the device where setup is completed. A separate parent-phone remote dashboard is a later feature.")
+                    .font(ChildlockTypography.caption)
+                    .foregroundStyle(ChildlockColor.textSecondary)
+            }
+            .padding(ChildlockSpacing.md)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(ChildlockColor.primarySoft.opacity(0.6))
+            .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.md))
 
             Button("Continue") {
                 viewModel.goNext()
@@ -454,72 +484,49 @@ public struct OnboardingFlowView: View {
                     .font(ChildlockTypography.bodyBold)
                     .foregroundStyle(ChildlockColor.textPrimary)
 
-                #if os(iOS) && canImport(FamilyControls)
-                VStack(spacing: ChildlockSpacing.xs) {
-                    appToggleRow(label: "Video", icon: "play.rectangle.fill") {
-                        isFamilyActivityPickerPresented = true
-                    }
-                    appToggleRow(label: "Games", icon: "gamecontroller.fill") {
-                        isFamilyActivityPickerPresented = true
-                    }
-                    appToggleRow(label: "Social", icon: "person.2.fill") {
-                        isFamilyActivityPickerPresented = true
-                    }
-                }
-                .familyActivityPicker(
-                    isPresented: $isFamilyActivityPickerPresented,
-                    selection: $familyActivitySelection
-                )
-                .onChange(of: familyActivitySelection) { _, selection in
-                    viewModel.updateFamilyActivitySelection(selection)
-                }
-
-                if !viewModel.selectedMonitoredApps.isEmpty {
-                    VStack(alignment: .leading, spacing: ChildlockSpacing.xxs) {
-                        ForEach(viewModel.selectedMonitoredApps.sorted(), id: \.self) { summary in
-                            HStack(spacing: ChildlockSpacing.xs) {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .font(.system(size: 14))
-                                    .foregroundStyle(ChildlockColor.primary)
-                                Text(summary)
-                                    .font(ChildlockTypography.caption)
-                                    .foregroundStyle(ChildlockColor.textSecondary)
-                            }
+                if shouldUseFamilyActivityPicker {
+                    #if os(iOS) && canImport(FamilyControls)
+                    VStack(spacing: ChildlockSpacing.xs) {
+                        appToggleRow(label: "Choose video apps", icon: "play.rectangle.fill") {
+                            isFamilyActivityPickerPresented = true
+                        }
+                        appToggleRow(label: "Choose games", icon: "gamecontroller.fill") {
+                            isFamilyActivityPickerPresented = true
+                        }
+                        appToggleRow(label: "Choose social apps", icon: "person.2.fill") {
+                            isFamilyActivityPickerPresented = true
                         }
                     }
-                }
-                #else
-                VStack(spacing: ChildlockSpacing.xs) {
-                    ForEach(viewModel.appChoices, id: \.self) { app in
-                        Button {
-                            viewModel.toggleMonitoredApp(app)
-                        } label: {
-                            HStack {
-                                Text(app)
-                                    .font(ChildlockTypography.body)
-                                Spacer()
-                                if viewModel.selectedMonitoredApps.contains(app) {
+                    .familyActivityPicker(
+                        isPresented: $isFamilyActivityPickerPresented,
+                        selection: $familyActivitySelection
+                    )
+                    .onChange(of: familyActivitySelection) { _, selection in
+                        viewModel.updateFamilyActivitySelection(selection)
+                    }
+
+                    if !viewModel.selectedMonitoredApps.isEmpty {
+                        VStack(alignment: .leading, spacing: ChildlockSpacing.xxs) {
+                            ForEach(viewModel.selectedMonitoredApps.sorted(), id: \.self) { summary in
+                                HStack(spacing: ChildlockSpacing.xs) {
                                     Image(systemName: "checkmark.circle.fill")
+                                        .font(.system(size: 14))
                                         .foregroundStyle(ChildlockColor.primary)
-                                } else {
-                                    Image(systemName: "circle")
-                                        .foregroundStyle(ChildlockColor.border)
+                                    Text(summary)
+                                        .font(ChildlockTypography.caption)
+                                        .foregroundStyle(ChildlockColor.textSecondary)
                                 }
                             }
-                            .foregroundStyle(ChildlockColor.textPrimary)
-                            .padding(.horizontal, ChildlockSpacing.md)
-                            .frame(height: 48)
-                            .background(ChildlockColor.surface)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: ChildlockRadius.control)
-                                    .stroke(ChildlockColor.border, lineWidth: 1)
-                            )
                         }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel("monitor_\(app)")
+                    } else {
+                        Text("Tap a row and choose at least one app, category, or website.")
+                            .font(ChildlockTypography.caption)
+                            .foregroundStyle(ChildlockColor.textSecondary)
                     }
+                    #endif
+                } else {
+                    fallbackAppChoices
                 }
-                #endif
             }
             .childlockCard()
 
@@ -555,6 +562,24 @@ public struct OnboardingFlowView: View {
                     .foregroundStyle(ChildlockColor.textSecondary)
             }
             .childlockCard()
+
+            if let blockingReason = viewModel.setupBlockingReason {
+                HStack(alignment: .top, spacing: ChildlockSpacing.xs) {
+                    Image(systemName: "info.circle.fill")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(ChildlockColor.warning)
+
+                    Text(blockingReason)
+                        .font(ChildlockTypography.caption)
+                        .foregroundStyle(ChildlockColor.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(.horizontal, ChildlockSpacing.sm)
+                .padding(.vertical, ChildlockSpacing.xs)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(ChildlockColor.warning.opacity(0.12))
+                .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.control, style: .continuous))
+            }
 
             Button("Continue") {
                 viewModel.goNext()
@@ -612,6 +637,14 @@ public struct OnboardingFlowView: View {
                     Text("PINs don't match. Try again.")
                         .font(ChildlockTypography.caption)
                         .foregroundStyle(ChildlockColor.warning)
+                }
+
+                if let completionErrorText = viewModel.completionErrorText {
+                    Text(completionErrorText)
+                        .font(ChildlockTypography.caption)
+                        .foregroundStyle(ChildlockColor.warning)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
 
                 // Number pad
@@ -731,6 +764,65 @@ public struct OnboardingFlowView: View {
         return "\(count) app\(count == 1 ? "" : "s") monitored"
     }
 
+    private var shouldUseFamilyActivityPicker: Bool {
+        #if os(iOS) && canImport(FamilyControls)
+        return viewModel.familyAuthorizationState == .authorized
+        #else
+        return false
+        #endif
+    }
+
+    private var fallbackAppChoices: some View {
+        VStack(alignment: .leading, spacing: ChildlockSpacing.xs) {
+            if viewModel.familyAuthorizationState != .notRequested,
+               viewModel.familyAuthorizationState != .authorized {
+                Text("Screen Time access is required before these labels can lock real apps.")
+                    .font(ChildlockTypography.caption)
+                    .foregroundStyle(ChildlockColor.textSecondary)
+            }
+
+            ForEach(viewModel.appChoices, id: \.self) { app in
+                Button {
+                    viewModel.toggleMonitoredApp(app)
+                } label: {
+                    HStack {
+                        Text(app)
+                            .font(ChildlockTypography.body)
+                        Spacer()
+                        if viewModel.selectedMonitoredApps.contains(app) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundStyle(ChildlockColor.primary)
+                        } else {
+                            Image(systemName: "circle")
+                                .foregroundStyle(ChildlockColor.border)
+                        }
+                    }
+                    .foregroundStyle(ChildlockColor.textPrimary)
+                    .padding(.horizontal, ChildlockSpacing.md)
+                    .frame(height: 48)
+                    .background(ChildlockColor.surface)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: ChildlockRadius.control)
+                            .stroke(ChildlockColor.border, lineWidth: 1)
+                    )
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("monitor_\(app)")
+            }
+        }
+    }
+
+    private var screenTimeAccessButtonTitle: String {
+        switch viewModel.familyAuthorizationState {
+        case .failed, .unavailable:
+            return "Try Screen Time Access Again"
+        case .requesting:
+            return "Requesting Screen Time..."
+        case .notRequested, .authorized:
+            return "Allow Screen Time Access"
+        }
+    }
+
     private func avatarNameForIndex(_ index: Int) -> String {
         let names = ["fox", "owl", "bear", "bunny", "cat", "dog"]
         guard index < names.count else { return "fox" }
@@ -776,21 +868,22 @@ public struct OnboardingFlowView: View {
         }
     }
 
-    private func deviceRect(label: String, icon: String, highlighted: Bool) -> some View {
-        VStack(spacing: ChildlockSpacing.xxs) {
+    private func deviceStepRow(icon: String, heading: String, body: String) -> some View {
+        HStack(alignment: .top, spacing: ChildlockSpacing.sm) {
             Image(systemName: icon)
-                .font(.system(size: 28))
-                .foregroundStyle(highlighted ? ChildlockColor.primary : ChildlockColor.textMuted)
+                .font(.system(size: 20))
+                .foregroundStyle(ChildlockColor.primary)
+                .frame(width: 28)
 
-            Text(label)
-                .font(ChildlockTypography.caption)
-                .foregroundStyle(highlighted ? ChildlockColor.textPrimary : ChildlockColor.textSecondary)
+            VStack(alignment: .leading, spacing: ChildlockSpacing.xxs) {
+                Text(heading)
+                    .font(ChildlockTypography.bodyBold)
+                    .foregroundStyle(ChildlockColor.textPrimary)
+                Text(body)
+                    .font(ChildlockTypography.body)
+                    .foregroundStyle(ChildlockColor.textSecondary)
+            }
         }
-        .frame(width: 80, height: 80)
-        .background(
-            RoundedRectangle(cornerRadius: ChildlockRadius.sm)
-                .fill(highlighted ? ChildlockColor.primarySoft : ChildlockColor.surfaceMuted)
-        )
     }
 
     private func appToggleRow(label: String, icon: String, action: @escaping () -> Void) -> some View {
@@ -829,16 +922,4 @@ private enum NumberPadKey {
     case digit(Int)
     case backspace
     case blank
-}
-
-private extension View {
-    @ViewBuilder
-    func pinInputBehavior() -> some View {
-        #if os(iOS)
-        keyboardType(.numberPad)
-            .textContentType(.oneTimeCode)
-        #else
-        self
-        #endif
-    }
 }

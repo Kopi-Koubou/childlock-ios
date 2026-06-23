@@ -4,6 +4,7 @@ import FamilyControls
 import ManagedSettings
 import ManagedSettingsUI
 import UIKit
+import UserNotifications
 
 public final class ChildlockDeviceActivityMonitor: DeviceActivityMonitor {
     private let store = ManagedSettingsStore()
@@ -41,10 +42,44 @@ public final class ChildlockDeviceActivityMonitor: DeviceActivityMonitor {
 
         store.shield.applications = selection.applicationTokens
         store.shield.applicationCategories = selection.categoryTokens.isEmpty ? nil : .specific(selection.categoryTokens)
+        store.shield.webDomains = selection.webDomainTokens
+        store.shield.webDomainCategories = selection.categoryTokens.isEmpty ? nil : .specific(selection.categoryTokens)
+
+        postBrainBreakNotification()
+    }
+
+    private func postBrainBreakNotification() {
+        let alertsEnabled = defaults.object(forKey: SharedDefaults.Key.challengeAlertsEnabled) as? Bool ?? true
+        guard alertsEnabled else {
+            return
+        }
+
+        let content = UNMutableNotificationContent()
+        content.title = "Brain break time!"
+        content.body = "Open Childlock from Home to unlock it."
+        content.sound = .default
+        content.interruptionLevel = .timeSensitive
+
+        let center = UNUserNotificationCenter.current()
+        let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]
+        center.removePendingNotificationRequests(withIdentifiers: identifiers)
+        center.removeDeliveredNotifications(withIdentifiers: identifiers)
+
+        let request = UNNotificationRequest(
+            identifier: SharedDefaults.NotificationIdentifier.brainBreak,
+            content: content,
+            trigger: nil
+        )
+
+        center.add(request)
     }
 
     public override func intervalDidEnd(for activity: DeviceActivityName) {
         defaults.set("interval_ended", forKey: SharedDefaults.Key.monitoringStatus)
+        store.shield.applications = nil
+        store.shield.applicationCategories = nil
+        store.shield.webDomains = nil
+        store.shield.webDomainCategories = nil
     }
 }
 
@@ -86,12 +121,39 @@ public final class ChildlockShieldAction: ShieldActionDelegate {
         switch action {
         case .primaryButtonPressed:
             defaults.set(true, forKey: SharedDefaults.Key.challengePending)
-            completionHandler(.defer)
+            defaults.set("challenge_requested", forKey: SharedDefaults.Key.monitoringStatus)
+            completionHandler(.close)
         case .secondaryButtonPressed:
+            let requestCount = defaults.integer(forKey: SharedDefaults.Key.moreTimeRequestCount)
+            defaults.set(false, forKey: SharedDefaults.Key.challengePending)
+            defaults.set(requestCount + 1, forKey: SharedDefaults.Key.moreTimeRequestCount)
+            defaults.set(Date(), forKey: SharedDefaults.Key.lastMoreTimeRequestDate)
+            defaults.set("more_time_requested", forKey: SharedDefaults.Key.monitoringStatus)
+            postMoreTimeNotification()
             completionHandler(.close)
         @unknown default:
             completionHandler(.close)
         }
+    }
+
+    private func postMoreTimeNotification() {
+        let content = UNMutableNotificationContent()
+        content.title = "More time requested"
+        content.body = "Hand this device to your parent so they can respond in Childlock."
+        content.sound = .default
+        content.interruptionLevel = .timeSensitive
+
+        let center = UNUserNotificationCenter.current()
+        let identifiers = [SharedDefaults.NotificationIdentifier.moreTimeRequest]
+        center.removePendingNotificationRequests(withIdentifiers: identifiers)
+        center.removeDeliveredNotifications(withIdentifiers: identifiers)
+
+        let request = UNNotificationRequest(
+            identifier: SharedDefaults.NotificationIdentifier.moreTimeRequest,
+            content: content,
+            trigger: nil
+        )
+        center.add(request)
     }
 }
 
@@ -128,15 +190,15 @@ public final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
             backgroundColor: UIColor(hex: ChildlockColorHex.shieldBg),
             icon: UIImage(systemName: "brain.head.profile"),
             title: ShieldConfiguration.Label(
-                text: "Brain Break!",
+                text: "Brain Break",
                 color: UIColor(hex: ChildlockColorHex.shieldInk)
             ),
             subtitle: ShieldConfiguration.Label(
-                text: "One quick puzzle, then back to your show.",
+                text: "Tap Start, then open Childlock from Home.",
                 color: UIColor(hex: ChildlockColorHex.shieldInk)
             ),
             primaryButtonLabel: ShieldConfiguration.Label(
-                text: "Start Challenge",
+                text: "Start Brain Break",
                 color: UIColor(hex: ChildlockColorHex.white)
             ),
             primaryButtonBackgroundColor: UIColor(hex: ChildlockColorHex.forestSage),

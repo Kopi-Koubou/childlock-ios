@@ -48,15 +48,15 @@ final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
             backgroundColor: shieldBg,
             icon: UIImage(systemName: "brain.head.profile"),
             title: ShieldConfiguration.Label(
-                text: "Brain Break!",
+                text: "Brain Break",
                 color: shieldInk
             ),
             subtitle: ShieldConfiguration.Label(
-                text: "One quick puzzle, then back to your show.",
+                text: "Tap Start, then open Childlock from Home.",
                 color: shieldInk.withAlphaComponent(0.7)
             ),
             primaryButtonLabel: ShieldConfiguration.Label(
-                text: "Start Challenge",
+                text: "Start Brain Break",
                 color: .white
             ),
             primaryButtonBackgroundColor: forestSage,

@@ -29,7 +29,15 @@ public struct BackendConfig: Equatable, Sendable {
         let bundleValue = bundle.object(forInfoDictionaryKey: name) as? String
         let value = environment[name] ?? bundleValue
         let trimmed = value?.trimmingCharacters(in: .whitespacesAndNewlines)
-        return trimmed?.isEmpty == false ? trimmed : nil
+        guard let trimmed, !trimmed.isEmpty else {
+            return nil
+        }
+
+        guard !isPlaceholderValue(trimmed) else {
+            return nil
+        }
+
+        return trimmed
     }
 
     private static func urlValue(
@@ -42,5 +50,14 @@ public struct BackendConfig: Equatable, Sendable {
         }
 
         return URL(string: value)
+    }
+
+    private static func isPlaceholderValue(_ value: String) -> Bool {
+        if value.hasPrefix("$("), value.hasSuffix(")") {
+            return true
+        }
+
+        let uppercased = value.uppercased()
+        return uppercased.contains("YOUR_") || uppercased.contains("_YOUR_")
     }
 }

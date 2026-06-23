@@ -9,6 +9,20 @@ public struct SignInWithAppleButtonView: View {
     let onError: (Error) -> Void
     @State private var currentNonce: String?
 
+    private enum SignInWithAppleSetupError: LocalizedError {
+        case nonceGenerationFailed
+        case missingCredential
+
+        var errorDescription: String? {
+            switch self {
+            case .nonceGenerationFailed:
+                return "Secure sign-in could not be prepared. Please try again."
+            case .missingCredential:
+                return "Apple sign in could not be completed. Please try again."
+            }
+        }
+    }
+
     public init(
         onSuccess: @escaping (String, String?, PersonNameComponents?, String?, String?) -> Void,
         onError: @escaping (Error) -> Void
@@ -19,25 +33,33 @@ public struct SignInWithAppleButtonView: View {
 
     public var body: some View {
         SignInWithAppleButton(.signIn) { request in
-            let nonce = Self.randomNonceString()
-            currentNonce = nonce
+            do {
+                let nonce = try Self.randomNonceString()
+                currentNonce = nonce
+                request.nonce = Self.sha256(nonce)
+            } catch {
+                currentNonce = nil
+                onError(error)
+            }
             request.requestedScopes = [.email, .fullName]
-            request.nonce = Self.sha256(nonce)
         } onCompletion: { result in
             switch result {
             case .success(let auth):
-                if let credential = auth.credential as? ASAuthorizationAppleIDCredential {
-                    let identityToken = credential.identityToken.flatMap {
-                        String(data: $0, encoding: .utf8)
-                    }
-                    onSuccess(
-                        credential.user,
-                        credential.email,
-                        credential.fullName,
-                        identityToken,
-                        currentNonce
-                    )
+                guard let credential = auth.credential as? ASAuthorizationAppleIDCredential else {
+                    onError(SignInWithAppleSetupError.missingCredential)
+                    return
                 }
+
+                let identityToken = credential.identityToken.flatMap {
+                    String(data: $0, encoding: .utf8)
+                }
+                onSuccess(
+                    credential.user,
+                    credential.email,
+                    credential.fullName,
+                    identityToken,
+                    currentNonce
+                )
             case .failure(let error):
                 onError(error)
             }
@@ -47,7 +69,7 @@ public struct SignInWithAppleButtonView: View {
         .cornerRadius(ChildlockRadius.pill)
     }
 
-    private static func randomNonceString(length: Int = 32) -> String {
+    private static func randomNonceString(length: Int = 32) throws -> String {
         precondition(length > 0)
         let charset = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
         var result = ""
@@ -57,7 +79,7 @@ public struct SignInWithAppleButtonView: View {
             var random: UInt8 = 0
             let status = SecRandomCopyBytes(kSecRandomDefault, 1, &random)
             guard status == errSecSuccess else {
-                fatalError("Unable to generate nonce.")
+                throw SignInWithAppleSetupError.nonceGenerationFailed
             }
 
             if Int(random) < charset.count {

@@ -3,6 +3,28 @@ import XCTest
 
 @MainActor
 final class AppStateTests: XCTestCase {
+    func testCompleteOnboardingStartsParentDashboardUnlocked() {
+        let appState = AppState(store: InMemoryAppStateStore())
+        let profile = ChildProfile(name: "Mia", age: 7, avatarName: "fox", intervalMinutes: 10)
+
+        let completed = appState.completeOnboarding(with: profile, pinConfigured: true)
+
+        XCTAssertTrue(completed)
+        XCTAssertFalse(appState.isPINLocked)
+    }
+
+    func testCompleteOnboardingRequiresSavedPIN() {
+        let appState = AppState(store: InMemoryAppStateStore())
+        let profile = ChildProfile(name: "Mia", age: 7, avatarName: "fox", intervalMinutes: 10)
+
+        let completed = appState.completeOnboarding(with: profile, pinConfigured: false)
+
+        XCTAssertFalse(completed)
+        XCTAssertFalse(appState.hasCompletedOnboarding)
+        XCTAssertTrue(appState.profiles.isEmpty)
+        XCTAssertTrue(appState.isPINLocked)
+    }
+
     func testRecordChallengeResultUpdatesDailySummary() {
         let appState = AppState(store: InMemoryAppStateStore())
         let profile = ChildProfile(name: "Mia", age: 7, avatarName: "fox", intervalMinutes: 10)
@@ -152,12 +174,12 @@ final class AppStateTests: XCTestCase {
         let updated = appState.setMonitoredSelection(
             for: profile.id,
             tokenData: Data([0xA, 0xB]),
-            displayNames: ["2 app tokens selected"]
+            displayNames: ["2 apps selected"]
         )
 
         XCTAssertTrue(updated)
         XCTAssertEqual(appState.activeProfile?.monitoredSelectionTokenData, Data([0xA, 0xB]))
-        XCTAssertEqual(appState.activeProfile?.monitoredAppDisplayNames, ["2 app tokens selected"])
+        XCTAssertEqual(appState.activeProfile?.monitoredAppDisplayNames, ["2 apps selected"])
     }
 
     func testApplyActiveProfileMonitoredSelectionToAllChildrenCopiesSelection() {

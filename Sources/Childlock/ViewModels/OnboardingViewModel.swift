@@ -39,8 +39,8 @@ public final class OnboardingViewModel {
         var title: String {
             switch self {
             case .welcome: return "Turn screen time into brain time."
-            case .familySharing: return "Connect Family Sharing"
-            case .devices: return "One setup, every device."
+            case .familySharing: return "Allow Screen Time access"
+            case .devices: return "Set up on your child's device"
             case .setup: return "Tell us about your child"
             case .pinAndDone: return "You're all set"
             }
@@ -63,6 +63,7 @@ public final class OnboardingViewModel {
 
     public var step: Step = .welcome
     public var familyAuthorizationState: FamilyAuthorizationState = .notRequested
+    public var hasCompletedSignup = false
 
     public var childName: String = ""
     public var childAge: Int = 7
@@ -76,6 +77,7 @@ public final class OnboardingViewModel {
     public var selectedInterval: Int = 15
     public var pin: String = ""
     public var pinConfirmation: String = ""
+    public var completionErrorText: String?
 
     private var isFinished = false
     private let screenTime: ScreenTimeManaging
@@ -83,10 +85,10 @@ public final class OnboardingViewModel {
     private var isHydratingSelection = false
 
     public init(
-        screenTime: ScreenTimeManaging = ScreenTimeManager.shared,
+        screenTime: ScreenTimeManaging? = nil,
         selectionStore: FamilyActivitySelectionStoring = AppGroupFamilyActivitySelectionStore()
     ) {
-        self.screenTime = screenTime
+        self.screenTime = screenTime ?? ScreenTimeManager.shared
         self.selectionStore = selectionStore
         hydrateSelectionFromStore()
     }
@@ -102,36 +104,54 @@ public final class OnboardingViewModel {
     public var canContinue: Bool {
         switch step {
         case .welcome:
-            return true
+            return hasCompletedSignup
         case .familySharing:
             switch familyAuthorizationState {
-            case .authorized, .unavailable, .failed:
+            case .authorized:
                 return true
-            case .notRequested, .requesting:
+            case .notRequested, .requesting, .unavailable, .failed:
                 return false
             }
         case .devices:
             return true
         case .setup:
-            let nameValid = !childName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            let ageValid = (3...12).contains(childAge)
-            let intervalValid = [5, 10, 15, 20, 30].contains(selectedInterval)
-
-            var appsValid: Bool
-            #if os(iOS) && canImport(FamilyControls)
-            if familyAuthorizationState == .authorized {
-                appsValid = selectedActivityTokenData != nil
-            } else {
-                appsValid = !selectedMonitoredApps.isEmpty
-            }
-            #else
-            appsValid = !selectedMonitoredApps.isEmpty
-            #endif
-
-            return nameValid && ageValid && appsValid && intervalValid
+            return setupBlockingReason == nil
         case .pinAndDone:
-            return pin.count == 4 && pinConfirmation == pin
+            return familyAuthorizationState == .authorized && pin.count == 4 && pinConfirmation == pin
         }
+    }
+
+    public var setupBlockingReason: String? {
+        guard step == .setup else { return nil }
+
+        let nameValid = !childName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        guard nameValid else {
+            return "Enter your child's name above."
+        }
+
+        guard (3...12).contains(childAge) else {
+            return "Choose an age from 3 to 12."
+        }
+
+        guard familyAuthorizationState == .authorized else {
+            return "Allow Screen Time access before choosing monitored apps."
+        }
+
+        #if os(iOS) && canImport(FamilyControls)
+        guard hasMonitoredSelection else {
+            return "Tap Choose apps or categories, then select at least one app, category, or website in Screen Time."
+        }
+        #else
+        guard !selectedMonitoredApps.isEmpty else {
+            return "Choose at least one monitored app."
+        }
+        #endif
+
+        guard [5, 10, 15, 20, 30].contains(selectedInterval) else {
+            return "Choose a brain-break interval."
+        }
+
+        return nil
     }
 
     public var isComplete: Bool {
@@ -150,13 +170,13 @@ public final class OnboardingViewModel {
     public var authorizationStatusText: String {
         switch familyAuthorizationState {
         case .notRequested:
-            return "Authorizing lets Childlock trigger brain breaks on your child's selected apps."
+            return "Authorizing lets Childlock trigger brain breaks in the apps you select."
         case .requesting:
-            return "Requesting Family Sharing permission..."
+            return "Requesting Screen Time permission..."
         case .authorized:
-            return "Family Sharing permission granted."
+            return "Screen Time access granted."
         case .unavailable:
-            return "Family Controls is unavailable on this platform. Continue in scoped demo mode."
+            return "Screen Time controls are unavailable here. Install Childlock on the child-used iPhone or iPad and try again."
         case .failed(let message):
             return message
         }
@@ -164,6 +184,7 @@ public final class OnboardingViewModel {
 
     public func goNext() {
         guard canContinue else { return }
+        completionErrorText = nil
 
         if step == .pinAndDone {
             isFinished = true
@@ -176,12 +197,23 @@ public final class OnboardingViewModel {
         step = next
     }
 
+    public func markSignupComplete() {
+        completionErrorText = nil
+        hasCompletedSignup = true
+    }
+
     public func goBack() {
         guard canGoBack else { return }
+        completionErrorText = nil
         guard let previous = Step(rawValue: step.rawValue - 1) else {
             return
         }
         step = previous
+    }
+
+    public func failCompletion(_ message: String) {
+        completionErrorText = message
+        isFinished = false
     }
 
     public func toggleMonitoredApp(_ appName: String) {
@@ -203,12 +235,13 @@ public final class OnboardingViewModel {
         } catch ScreenTimeError.unavailableOnCurrentPlatform {
             familyAuthorizationState = .unavailable
         } catch {
-            familyAuthorizationState = .failed("Authorization failed. You can continue and retry in Settings later.")
+            familyAuthorizationState = .failed("Screen Time access is required before Childlock can pause apps. Please try again.")
         }
     }
 
     public func buildOutput() -> OnboardingOutput? {
         guard isFinished else { return nil }
+        guard familyAuthorizationState == .authorized else { return nil }
 
         var profile = ChildProfile(
             name: childName,
@@ -234,8 +267,12 @@ public final class OnboardingViewModel {
     }
 
     public func setTokenizedSelection(tokenData: Data?, displayNames: [String]) {
-        selectedActivityTokenData = tokenData
-        selectedMonitoredApps = Set(displayNames)
+        let normalizedDisplayNames = displayNames
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+
+        selectedActivityTokenData = normalizedDisplayNames.isEmpty ? nil : tokenData
+        selectedMonitoredApps = Set(normalizedDisplayNames)
     }
 
     #if os(iOS) && canImport(FamilyControls)
@@ -263,17 +300,17 @@ public final class OnboardingViewModel {
 
         let appCount = selection.applicationTokens.count
         if appCount > 0 {
-            labels.append("\(appCount) app token\(appCount == 1 ? "" : "s") selected")
+            labels.append("\(appCount) app\(appCount == 1 ? "" : "s") selected")
         }
 
         let categoryCount = selection.categoryTokens.count
         if categoryCount > 0 {
-            labels.append("\(categoryCount) category token\(categoryCount == 1 ? "" : "s") selected")
+            labels.append("\(categoryCount) categor\(categoryCount == 1 ? "y" : "ies") selected")
         }
 
         let domainCount = selection.webDomainTokens.count
         if domainCount > 0 {
-            labels.append("\(domainCount) web domain token\(domainCount == 1 ? "" : "s") selected")
+            labels.append("\(domainCount) website\(domainCount == 1 ? "" : "s") selected")
         }
 
         return labels
@@ -307,5 +344,9 @@ public final class OnboardingViewModel {
                 displayNames: selectedMonitoredApps.sorted()
             )
         )
+    }
+
+    private var hasMonitoredSelection: Bool {
+        selectedActivityTokenData != nil && !selectedMonitoredApps.isEmpty
     }
 }

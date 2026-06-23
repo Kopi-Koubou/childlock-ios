@@ -50,6 +50,18 @@ public final class DataSyncService {
         email: String?,
         fullName: PersonNameComponents?
     ) async throws {
+        try await syncParentProfile(
+            appleUserID: appleUserID,
+            email: email,
+            fullName: fullName.map(Self.displayName(from:))
+        )
+    }
+
+    public func syncParentProfile(
+        appleUserID: String?,
+        email: String?,
+        fullName: String?
+    ) async throws {
         #if canImport(Supabase)
         let client = try configuredClient()
         let user = try await currentUser(client: client)
@@ -61,7 +73,7 @@ public final class DataSyncService {
                     id: user.id,
                     appleUserID: appleUserID,
                     email: email,
-                    fullName: fullName.map(Self.displayName(from:)),
+                    fullName: fullName,
                     revenueCatAppUserID: user.id.uuidString
                 ),
                 onConflict: "id"

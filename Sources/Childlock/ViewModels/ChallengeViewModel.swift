@@ -9,6 +9,7 @@ public final class ChallengeViewModel {
         case correct
         case incorrect
         case completed
+        case handback
     }
 
     public private(set) var challenge: (any Challenge)?
@@ -17,8 +18,16 @@ public final class ChallengeViewModel {
     public private(set) var hintVisible = false
     public private(set) var feedbackText: String?
     public private(set) var results: [ChallengeResult] = []
+    public private(set) var activeProfile: ChildProfile?
 
     public var onCompletedResult: ((ChallengeResult) -> Void)?
+    /// Asked before re-arming monitoring after a completed challenge.
+    /// Return false to stop scheduling further brain breaks (e.g. free daily cap reached).
+    public var shouldRearmAfterCompletion: (() -> Bool)?
+
+    public var lastSolveTimeSeconds: Double? {
+        results.last?.solveTimeSeconds
+    }
 
     private let engine: ChallengeEngine
     private let screenTime: ScreenTimeManaging
@@ -29,8 +38,8 @@ public final class ChallengeViewModel {
     private var startTime: Date?
 
     public init(
-        engine: ChallengeEngine = .shared,
-        screenTime: ScreenTimeManaging = ScreenTimeManager.shared,
+        engine: ChallengeEngine? = nil,
+        screenTime: ScreenTimeManaging? = nil,
         celebrationDuration: TimeInterval = 2.0,
         scheduler: @escaping @MainActor (TimeInterval, @escaping @MainActor () -> Void) -> Void = {
             delay, action in
@@ -47,14 +56,15 @@ public final class ChallengeViewModel {
         },
         clock: @escaping () -> Date = Date.init
     ) {
-        self.engine = engine
-        self.screenTime = screenTime
+        self.engine = engine ?? .shared
+        self.screenTime = screenTime ?? ScreenTimeManager.shared
         self.celebrationDuration = celebrationDuration
         self.scheduler = scheduler
         self.clock = clock
     }
 
     public func presentChallenge(for profile: ChildProfile, type: ChallengeType? = nil) {
+        activeProfile = profile
         if let type {
             challenge = engine.generateChallenge(type: type, for: profile)
         } else {
@@ -98,6 +108,7 @@ public final class ChallengeViewModel {
 
     public func clearChallenge() {
         challenge = nil
+        activeProfile = nil
         state = .presenting
         attempts = 0
         hintVisible = false
@@ -135,10 +146,34 @@ public final class ChallengeViewModel {
         state = .completed
         screenTime.removeShields()
         SharedDefaults.shared.set(false, forKey: SharedDefaults.Key.challengePending)
+        NotificationService.clearBrainBreakAlerts()
+        rearmMonitoringIfNeeded()
 
         scheduler(0.35) { [weak self] in
-            self?.clearChallenge()
+            guard let self, self.challenge != nil else { return }
+            self.state = .handback
         }
+    }
+
+    /// Restarting monitoring resets the DeviceActivity usage threshold, so the
+    /// next brain break fires after another full interval. Without this the
+    /// threshold event fires only once per day.
+    private func rearmMonitoringIfNeeded() {
+        guard let profile = activeProfile else { return }
+
+        let status = SharedDefaults.shared.string(forKey: SharedDefaults.Key.monitoringStatus)
+        guard ChildlockMonitoringStatus(storedValue: status)?.canRearmMonitoring == true else { return }
+
+        guard shouldRearmAfterCompletion?() ?? true else {
+            screenTime.stopMonitoring(profile: profile)
+            SharedDefaults.shared.set(
+                Date().timeIntervalSince1970,
+                forKey: SharedDefaults.Key.dailyLimitReachedAt
+            )
+            return
+        }
+
+        try? screenTime.startMonitoring(profile: profile)
     }
 
     @discardableResult

@@ -95,6 +95,8 @@ public final class ScreenTimeManager: ScreenTimeManaging {
             let selection = try decodeSelection(for: profile)
             store.shield.applications = selection.applicationTokens
             store.shield.applicationCategories = selection.categoryTokens.isEmpty ? nil : .specific(selection.categoryTokens)
+            store.shield.webDomains = selection.webDomainTokens
+            store.shield.webDomainCategories = selection.categoryTokens.isEmpty ? nil : .specific(selection.categoryTokens)
         } catch {
             defaults.set(error.localizedDescription, forKey: SharedDefaults.Key.monitoringLastError)
             defaults.set("failed", forKey: SharedDefaults.Key.monitoringStatus)
@@ -105,6 +107,8 @@ public final class ScreenTimeManager: ScreenTimeManaging {
     public func removeShields() {
         store.shield.applications = nil
         store.shield.applicationCategories = nil
+        store.shield.webDomains = nil
+        store.shield.webDomainCategories = nil
     }
 
     public func startMonitoring(profile: ChildProfile) throws {
@@ -119,7 +123,11 @@ public final class ScreenTimeManager: ScreenTimeManaging {
         }
 
         let selection = try decodeSelection(for: profile)
-        guard !selection.applicationTokens.isEmpty || !selection.categoryTokens.isEmpty else {
+        guard
+            !selection.applicationTokens.isEmpty ||
+                !selection.categoryTokens.isEmpty ||
+                !selection.webDomainTokens.isEmpty
+        else {
             defaults.set(
                 ScreenTimeError.missingMonitoredSelection.localizedDescription,
                 forKey: SharedDefaults.Key.monitoringLastError
@@ -140,6 +148,7 @@ public final class ScreenTimeManager: ScreenTimeManaging {
         let event = DeviceActivityEvent(
             applications: selection.applicationTokens,
             categories: selection.categoryTokens,
+            webDomains: selection.webDomainTokens,
             threshold: DateComponents(minute: max(profile.intervalMinutes, 1))
         )
 
@@ -155,7 +164,10 @@ public final class ScreenTimeManager: ScreenTimeManaging {
             throw ScreenTimeError.monitoringFailed(error.localizedDescription)
         }
 
-        applyShields(for: profile)
+        // Shields are applied by the DeviceActivity monitor extension when the
+        // usage threshold fires — not here, so the child gets their first
+        // interval of normal use before the first brain break.
+        clearTransientShieldState()
         defaults.set(profile.id.uuidString, forKey: SharedDefaults.Key.activeMonitoringProfileID)
         defaults.set(profile.monitoredSelectionTokenData, forKey: SharedDefaults.Key.activeMonitoringSelectionData)
         defaults.set(Date().timeIntervalSince1970, forKey: SharedDefaults.Key.monitoringLastStartedAt)
@@ -167,10 +179,19 @@ public final class ScreenTimeManager: ScreenTimeManaging {
         let activityName = activityName(for: profile.id)
         center.stopMonitoring([activityName])
         removeShields()
+        clearTransientShieldState()
 
         defaults.removeObject(forKey: SharedDefaults.Key.activeMonitoringProfileID)
         defaults.removeObject(forKey: SharedDefaults.Key.activeMonitoringSelectionData)
         defaults.set("stopped", forKey: SharedDefaults.Key.monitoringStatus)
+    }
+
+    private func clearTransientShieldState() {
+        defaults.set(false, forKey: SharedDefaults.Key.challengePending)
+        defaults.set(0, forKey: SharedDefaults.Key.moreTimeRequestCount)
+        defaults.removeObject(forKey: SharedDefaults.Key.lastMoreTimeRequestDate)
+        defaults.removeObject(forKey: SharedDefaults.Key.dailyLimitReachedAt)
+        NotificationService.clearShieldFlowAlerts()
     }
 
     private func decodeSelection(for profile: ChildProfile) throws -> FamilyActivitySelection {
@@ -262,4 +283,3 @@ public final class MockScreenTimeManager: ScreenTimeManaging {
         monitoredProfileIDs.removeAll { $0 == profile.id }
     }
 }
-

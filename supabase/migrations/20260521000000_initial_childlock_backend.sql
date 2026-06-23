@@ -104,7 +104,10 @@ create table if not exists public.subscription_status (
 
 create index if not exists child_profiles_parent_id_idx on public.child_profiles(parent_id);
 create index if not exists challenge_sessions_parent_date_idx on public.challenge_sessions(parent_id, session_date desc);
+create index if not exists challenge_sessions_child_profile_id_idx on public.challenge_sessions(child_profile_id);
 create index if not exists challenge_results_parent_presented_idx on public.challenge_results(parent_id, presented_at desc);
+create index if not exists challenge_results_session_id_idx on public.challenge_results(session_id);
+create index if not exists challenge_results_child_profile_id_idx on public.challenge_results(child_profile_id);
 create index if not exists device_installs_parent_id_idx on public.device_installs(parent_id);
 
 drop trigger if exists set_parent_profiles_updated_at on public.parent_profiles;
@@ -205,7 +208,7 @@ on public.subscription_status for select
 to authenticated
 using ((select auth.uid()) = parent_id);
 
-grant usage on schema public to anon, authenticated;
+grant usage on schema public to anon, authenticated, service_role;
 grant select, insert, update, delete on
   public.parent_profiles,
   public.child_profiles,
@@ -215,3 +218,13 @@ grant select, insert, update, delete on
   public.device_installs,
   public.subscription_status
 to authenticated;
+
+grant select, insert, update, delete on
+  public.parent_profiles,
+  public.child_profiles,
+  public.app_settings,
+  public.challenge_sessions,
+  public.challenge_results,
+  public.device_installs,
+  public.subscription_status
+to service_role;

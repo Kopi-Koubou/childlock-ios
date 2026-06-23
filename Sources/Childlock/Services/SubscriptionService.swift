@@ -27,11 +27,14 @@ public final class SubscriptionService {
     // Product IDs matching App Store Connect
     public static let monthlyProductID = "childlock_premium_monthly"
     public static let annualProductID = "childlock_premium_annual"
+    public static let premiumEntitlementID = "Childlock Pro"
 
-    // Free tier limits
-    public static let freeChallengesPerDay = 3
-    public static let freeChildLimit = 1
-    public static let premiumChildLimit = 5
+    // Keep Screen Time enforcement available to every family. Apple review is
+    // sensitive to monetizing built-in Screen Time APIs, so subscriptions must
+    // unlock non-enforcement value only.
+    public static let includedChildLimit = 5
+    public static let freeChildLimit = includedChildLimit
+    public static let premiumChildLimit = includedChildLimit
 
     private var isConfigured = false
 
@@ -64,7 +67,8 @@ public final class SubscriptionService {
         }
     }
 
-    public func purchase(productID: String) async throws {
+    @discardableResult
+    public func purchase(productID: String) async throws -> Bool {
         guard isConfigured else { throw SubscriptionError.notConfigured }
         isLoading = true
         defer { isLoading = false }
@@ -77,18 +81,27 @@ public final class SubscriptionService {
         }
 
         let result = try await Purchases.shared.purchase(package: package)
-        if !result.userCancelled {
-            updateTier(from: result.customerInfo)
+        guard !result.userCancelled else {
+            return false
         }
+
+        updateTier(from: result.customerInfo)
+        guard Self.isPremiumActive(in: result.customerInfo) else {
+            throw SubscriptionError.purchaseFailed("Purchase finished, but Childlock Premium is not active yet. Check the RevenueCat entitlement mapping.")
+        }
+
+        return true
     }
 
-    public func restorePurchases() async throws {
+    @discardableResult
+    public func restorePurchases() async throws -> Bool {
         guard isConfigured else { throw SubscriptionError.notConfigured }
         isLoading = true
         defer { isLoading = false }
 
         let customerInfo = try await Purchases.shared.restorePurchases()
         updateTier(from: customerInfo)
+        return Self.isPremiumActive(in: customerInfo)
     }
 
     public func getOfferings() async throws -> (monthly: StoreProduct?, annual: StoreProduct?) {
@@ -106,11 +119,11 @@ public final class SubscriptionService {
     }
 
     public var childLimit: Int {
-        currentTier == .premium ? Self.premiumChildLimit : Self.freeChildLimit
+        Self.includedChildLimit
     }
 
     public var dailyChallengeLimit: Int? {
-        currentTier == .premium ? nil : Self.freeChallengesPerDay
+        nil
     }
 
     public func canAddChild(currentCount: Int) -> Bool {
@@ -118,34 +131,29 @@ public final class SubscriptionService {
     }
 
     public func hasReachedDailyLimit(completedToday: Int) -> Bool {
-        guard let limit = dailyChallengeLimit else { return false }
-        return completedToday >= limit
+        _ = completedToday
+        return false
     }
 
     private func updateTier(from customerInfo: CustomerInfo) {
-        let hasActive = !customerInfo.entitlements.active.isEmpty
+        let hasActive = Self.isPremiumActive(in: customerInfo)
         currentTier = hasActive ? .premium : .free
 
-        if let entitlement = customerInfo.entitlements.active.first?.value {
+        if let entitlement = customerInfo.entitlements.active[Self.premiumEntitlementID] {
             expirationDate = entitlement.expirationDate
-
-            if let originalPurchaseDate = entitlement.originalPurchaseDate,
-               let expirationDate = entitlement.expirationDate {
-                let trialLength: TimeInterval = 7 * 24 * 60 * 60
-                let timeSincePurchase = Date().timeIntervalSince(originalPurchaseDate)
-                if timeSincePurchase < trialLength {
-                    isTrialActive = true
-                    trialDaysRemaining = max(0, Int(ceil((trialLength - timeSincePurchase) / (24 * 60 * 60))))
-                } else {
-                    isTrialActive = false
-                    trialDaysRemaining = nil
-                }
-            }
+            // Do not infer trial status from purchase age. If we surface trials
+            // later, use verified StoreKit/RevenueCat period metadata instead.
+            isTrialActive = false
+            trialDaysRemaining = nil
         } else {
             expirationDate = nil
             isTrialActive = false
             trialDaysRemaining = nil
         }
+    }
+
+    private static func isPremiumActive(in customerInfo: CustomerInfo) -> Bool {
+        customerInfo.entitlements.active[premiumEntitlementID] != nil
     }
 
     public func logIn(appUserID: String) async {

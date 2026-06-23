@@ -17,13 +17,6 @@ public enum AnalyticsService {
         #endif
     }
 
-    public static func identify(userID: String) {
-        #if canImport(PostHog)
-        guard isConfigured else { return }
-        PostHogSDK.shared.identify(userID)
-        #endif
-    }
-
     public static func reset() {
         #if canImport(PostHog)
         guard isConfigured else { return }

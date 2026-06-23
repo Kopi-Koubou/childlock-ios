@@ -17,6 +17,14 @@ public enum SharedDefaults {
         public static let monitoringLastStartedAt = "monitoringLastStartedAt"
         public static let moreTimeRequestCount = "moreTimeRequestCount"
         public static let lastMoreTimeRequestDate = "lastMoreTimeRequestDate"
+        public static let dailyLimitReachedAt = "dailyLimitReachedAt"
+        public static let challengeAlertsEnabled = "challengeAlertsEnabled"
+    }
+
+    public enum NotificationIdentifier {
+        public static let brainBreak = "childlock_brain_break"
+        public static let moreTimeRequest = "childlock_more_time_request"
+        public static let dailySummary = "daily_summary"
     }
 
     public static var shared: UserDefaults {

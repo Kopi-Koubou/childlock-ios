@@ -32,7 +32,8 @@ final class AppStatePersistenceTests: XCTestCase {
         let appState = AppState(store: store)
 
         XCTAssertTrue(appState.hasCompletedOnboarding)
-        XCTAssertEqual(appState.currentTab, .apps)
+        // currentTab always resets to .home on launch regardless of snapshot
+        XCTAssertEqual(appState.currentTab, .home)
         XCTAssertFalse(appState.isPINLocked)
         XCTAssertEqual(appState.profiles, [profile])
         XCTAssertEqual(appState.sessions, [session])
@@ -55,6 +56,7 @@ final class AppStatePersistenceTests: XCTestCase {
         XCTAssertTrue(saved.hasCompletedOnboarding)
         XCTAssertEqual(saved.activeProfileID, profile.id)
         XCTAssertEqual(saved.profiles.first?.id, profile.id)
+        XCTAssertFalse(saved.isPINLocked)
         XCTAssertTrue(saved.settings.hasCompletedOnboarding)
     }
 

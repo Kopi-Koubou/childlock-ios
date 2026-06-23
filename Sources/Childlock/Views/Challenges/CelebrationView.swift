@@ -1,7 +1,11 @@
 import SwiftUI
 
 public struct CelebrationView: View {
-    public init() {}
+    private let solveTimeSeconds: Double?
+
+    public init(solveTimeSeconds: Double? = nil) {
+        self.solveTimeSeconds = solveTimeSeconds
+    }
 
     private let confettiItems: [(x: CGFloat, y: CGFloat, size: CGFloat, rotation: Double, isCircle: Bool, colorIndex: Int)] = {
         var items: [(CGFloat, CGFloat, CGFloat, Double, Bool, Int)] = []
@@ -53,31 +57,22 @@ public struct CelebrationView: View {
                         .font(.system(size: 36, weight: .bold, design: .rounded))
                         .foregroundStyle(ChildlockColor.textPrimary)
 
-                    Text("Solved in 12 seconds.")
+                    Text(solveTimeText)
                         .font(ChildlockTypography.body)
                         .foregroundStyle(ChildlockColor.textMuted)
 
                     Spacer()
-
-                    // Back in 3 pill
-                    HStack(spacing: 6) {
-                        Circle()
-                            .fill(ChildlockColor.primary)
-                            .frame(width: 6, height: 6)
-                        Text("Back in 3...")
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundStyle(ChildlockColor.textSecondary)
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 10)
-                    .background(ChildlockColor.surface)
-                    .clipShape(RoundedRectangle(cornerRadius: 999))
-                    .childlockShadow(ChildlockShadow.sm)
-                    .padding(.bottom, ChildlockSpacing.xl)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
+    }
+
+    private var solveTimeText: String {
+        guard let solveTimeSeconds, solveTimeSeconds >= 1 else {
+            return "Great thinking!"
+        }
+        return "Solved in \(Int(solveTimeSeconds.rounded())) second\(Int(solveTimeSeconds.rounded()) == 1 ? "" : "s")."
     }
 
     @ViewBuilder

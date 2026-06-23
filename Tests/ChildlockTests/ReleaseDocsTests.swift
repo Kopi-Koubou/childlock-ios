@@ -1,0 +1,196 @@
+import XCTest
+
+final class ReleaseDocsTests: XCTestCase {
+    func testAuthDocsMatchProductionSignInModel() throws {
+        let appleAuth = try readRepoFile("docs/SUPABASE_APPLE_AUTH.md")
+        let googleAuth = try readRepoFile("docs/SUPABASE_GOOGLE_AUTH.md")
+        let production = try readRepoFile("docs/PRODUCTION.md")
+        let appReview = try readRepoFile("docs/APP_REVIEW_NOTES.md")
+
+        XCTAssertTrue(appleAuth.contains("Supabase Apple provider: enabled for native iOS sign-in"))
+        XCTAssertTrue(appleAuth.contains("Apple Services ID: not needed for the current native iOS flow"))
+        XCTAssertFalse(appleAuth.localizedCaseInsensitiveContains("still needs"))
+        XCTAssertFalse(appleAuth.localizedCaseInsensitiveContains("not created yet"))
+
+        XCTAssertTrue(googleAuth.contains("Redirect URL scheme: `childlock://login-callback`"))
+        XCTAssertTrue(googleAuth.contains("Secret location: Supabase dashboard only"))
+        XCTAssertTrue(googleAuth.contains("Unsupported provider: missing OAuth secret"))
+        XCTAssertTrue(googleAuth.contains("Fix it in Supabase, not Xcode"))
+        XCTAssertTrue(googleAuth.contains("TestFlight Proof"))
+
+        for contents in [production, appReview] {
+            XCTAssertTrue(contents.contains("Apple or Google"))
+            XCTAssertTrue(contents.contains("There is no separate username/password account"))
+            XCTAssertFalse(contents.localizedCaseInsensitiveContains("no-login"))
+            XCTAssertFalse(contents.localizedCaseInsensitiveContains("free trial"))
+        }
+    }
+
+    func testProductionRunbookKeepsAppSecretsInIgnoredLocalConfig() throws {
+        let production = try readRepoFile("docs/PRODUCTION.md")
+        let normalized = normalizeWhitespace(production)
+
+        XCTAssertTrue(
+            normalized.contains("Fill app-facing production values in `Config/AppSecrets.local.xcconfig`.")
+        )
+        XCTAssertTrue(
+            normalized.contains("The checked-in `Config/AppSecrets.xcconfig` should stay as the safe base config")
+        )
+        XCTAssertFalse(
+            normalized.contains("Fill app-facing production values in `Config/AppSecrets.xcconfig`.")
+        )
+        XCTAssertTrue(
+            normalized.contains("-destination 'generic/platform=iOS' \\ CODE_SIGNING_ALLOWED=NO \\ build")
+        )
+    }
+
+    func testSupportAndLegalLinksMatchAppStoreMetadata() throws {
+        let metadata = try readRepoFile("docs/APP_STORE_CONNECT_METADATA.md")
+        let appReview = try readRepoFile("docs/APP_REVIEW_NOTES.md")
+        let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
+        let paywall = try readRepoFile("Sources/Childlock/Views/Paywall/PaywallView.swift")
+
+        let supportURL = "https://kouboulabs.com/childlock/support"
+        let privacyURL = "https://kouboulabs.com/childlock/privacy"
+        let termsURL = "https://kouboulabs.com/childlock/terms"
+
+        for contents in [metadata, appReview, dashboard] {
+            XCTAssertTrue(contents.contains(supportURL))
+            XCTAssertTrue(contents.contains(privacyURL))
+            XCTAssertTrue(contents.contains(termsURL))
+        }
+
+        XCTAssertTrue(dashboard.contains("Help Center"))
+        XCTAssertTrue(dashboard.contains("Privacy Policy"))
+        XCTAssertTrue(dashboard.contains("Terms of Service"))
+
+        XCTAssertTrue(paywall.contains(privacyURL))
+        XCTAssertTrue(paywall.contains(termsURL))
+        XCTAssertTrue(paywall.contains("Link(\"Terms\""))
+        XCTAssertTrue(paywall.contains("Link(\"Privacy\""))
+    }
+
+    func testAppPrivacyLabelsMatchFamilyAppPrivacyPosture() throws {
+        let privacyLabels = try readRepoFile("docs/APP_PRIVACY_LABELS.md")
+        let production = try readRepoFile("docs/PRODUCTION.md")
+        let metadata = try readRepoFile("docs/APP_STORE_CONNECT_METADATA.md")
+        let rootView = try readRepoFile("Sources/Childlock/App/ChildlockRootView.swift")
+        let analyticsService = try readRepoFile("Sources/Childlock/Services/AnalyticsService.swift")
+        let dataSync = try readRepoFile("Sources/Childlock/Services/DataSyncService.swift")
+
+        XCTAssertTrue(privacyLabels.contains("Data used to track users across apps and websites owned by other companies:"))
+        XCTAssertTrue(privacyLabels.contains("No"))
+        XCTAssertTrue(privacyLabels.contains("Contact Info"))
+        XCTAssertTrue(privacyLabels.contains("Identifiers"))
+        XCTAssertTrue(privacyLabels.contains("Purchases"))
+        XCTAssertTrue(privacyLabels.contains("Usage Data"))
+        XCTAssertTrue(privacyLabels.contains("Product Interaction"))
+        XCTAssertTrue(privacyLabels.contains("Crash Data"))
+        XCTAssertTrue(privacyLabels.contains("Raw Screen Time app selection token payloads"))
+        XCTAssertTrue(privacyLabels.contains("Child full names in backend sync"))
+
+        XCTAssertTrue(production.contains("docs/APP_PRIVACY_LABELS.md"))
+        XCTAssertTrue(metadata.contains("docs/APP_PRIVACY_LABELS.md"))
+
+        XCTAssertTrue(rootView.contains("Keep product analytics aggregate-only for a family app."))
+        XCTAssertFalse(rootView.contains("AnalyticsService.identify"))
+        XCTAssertFalse(analyticsService.contains("PostHogSDK.shared.identify"))
+        XCTAssertFalse(dataSync.contains("monitoredSelectionTokenData"))
+    }
+
+    func testLaunchDeviceModelIsConsistentAcrossReviewMaterials() throws {
+        let metadata = try readRepoFile("docs/APP_STORE_CONNECT_METADATA.md")
+        let appReview = try readRepoFile("docs/APP_REVIEW_NOTES.md")
+        let production = try readRepoFile("docs/PRODUCTION.md")
+        let deviceModel = try readRepoFile("docs/DEVICE_MODEL.md")
+        let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")
+
+        for contents in [metadata, appReview, production] {
+            let normalized = normalizeWhitespace(contents)
+            XCTAssertTrue(normalized.contains("Childlock locks apps on the device where setup is completed."))
+            XCTAssertTrue(normalized.contains("For a child iPad"))
+            XCTAssertTrue(normalized.contains("install and configure Childlock on the iPad"))
+            XCTAssertTrue(normalized.contains("Same-phone parent/child use"))
+        }
+
+        XCTAssertTrue(normalizeWhitespace(deviceModel).contains("Do not claim that a parent phone can remotely lock a separate child iPad"))
+        XCTAssertTrue(normalizeWhitespace(checklist).contains("Do not claim that a parent-only iPhone install remotely controls a separate child iPad in v1."))
+
+        for contents in [metadata, appReview, production] {
+            XCTAssertFalse(contents.localizedCaseInsensitiveContains("parent phone can remotely lock"))
+            XCTAssertFalse(contents.localizedCaseInsensitiveContains("parent-only iPhone install remotely controls a separate child iPad"))
+        }
+    }
+
+    func testScreenTimeSelectionTokensStayOutOfBackendSync() throws {
+        let dataSync = try readRepoFile("Sources/Childlock/Services/DataSyncService.swift")
+        let migration = try readRepoFile("supabase/migrations/20260521000000_initial_childlock_backend.sql")
+        let appReview = try readRepoFile("docs/APP_REVIEW_NOTES.md")
+        let deviceModel = try readRepoFile("docs/DEVICE_MODEL.md")
+
+        XCTAssertTrue(normalizeWhitespace(appReview).contains("Opaque app selection tokens remain local/on-device."))
+        XCTAssertTrue(deviceModel.contains("Do not store or sync raw Screen Time selection token payloads."))
+
+        for forbidden in [
+            "monitoredActivitiesData",
+            "monitoredSelectionTokenData",
+            "selectionTokenData",
+            "FamilyActivitySelection",
+            "monitored_activities",
+            "selection_token",
+        ] {
+            XCTAssertFalse(
+                dataSync.contains(forbidden),
+                "DataSyncService must not send raw FamilyControls selection payloads: \(forbidden)"
+            )
+        }
+
+        for forbidden in [
+            "monitored_activities",
+            "selection_token",
+            "family_activity",
+            "screen_time_selection",
+        ] {
+            XCTAssertFalse(
+                migration.localizedCaseInsensitiveContains(forbidden),
+                "Backend schema must not store raw Screen Time selection payloads: \(forbidden)"
+            )
+        }
+    }
+
+    func testSupabaseMigrationExplicitlyGrantsAuthenticatedAndServiceRoleAccess() throws {
+        let migration = normalizeWhitespace(
+            try readRepoFile("supabase/migrations/20260521000000_initial_childlock_backend.sql")
+        )
+        let tables = """
+        public.parent_profiles, public.child_profiles, public.app_settings, \
+        public.challenge_sessions, public.challenge_results, public.device_installs, \
+        public.subscription_status
+        """
+        let normalizedTables = normalizeWhitespace(tables)
+
+        XCTAssertTrue(migration.contains("grant usage on schema public to anon, authenticated, service_role;"))
+        XCTAssertTrue(migration.contains("grant select, insert, update, delete on \(normalizedTables) to authenticated;"))
+        XCTAssertTrue(migration.contains("grant select, insert, update, delete on \(normalizedTables) to service_role;"))
+
+        XCTAssertTrue(migration.contains("create index if not exists challenge_sessions_child_profile_id_idx"))
+        XCTAssertTrue(migration.contains("create index if not exists challenge_results_session_id_idx"))
+        XCTAssertTrue(migration.contains("create index if not exists challenge_results_child_profile_id_idx"))
+    }
+
+    private func readRepoFile(_ relativePath: String) throws -> String {
+        let testFileURL = URL(fileURLWithPath: #filePath)
+        let repoRoot = testFileURL
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let fileURL = repoRoot.appendingPathComponent(relativePath)
+        return try String(contentsOf: fileURL, encoding: .utf8)
+    }
+
+    private func normalizeWhitespace(_ contents: String) -> String {
+        contents
+            .split(whereSeparator: { $0.isWhitespace })
+            .joined(separator: " ")
+    }
+}

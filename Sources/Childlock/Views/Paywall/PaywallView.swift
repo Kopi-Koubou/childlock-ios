@@ -6,10 +6,16 @@ import RevenueCat
 
 public struct PaywallView: View {
     private let dismiss: () -> Void
+    private static let termsURL = URL(string: "https://kouboulabs.com/childlock/terms")!
+    private static let privacyURL = URL(string: "https://kouboulabs.com/childlock/privacy")!
+    private static let subscriptionUnavailableMessage =
+        "Subscriptions are not available right now. Screen Time enforcement remains included."
 
     @State private var selectedPlan: Plan = .annual
     @State private var isLoading = false
     @State private var errorMessage: String?
+    @State private var offeringsErrorMessage: String?
+    @State private var hasLoadedOfferings = false
     @State private var showError = false
 
     #if canImport(RevenueCat)
@@ -36,13 +42,14 @@ public struct PaywallView: View {
                     header
                     comparisonTable
                     planCards
-                    ctaButton
+                    availabilityNotice
                     restoreLink
+                    ctaButton
                     footerLinks
                 }
                 .padding(.horizontal, ChildlockSpacing.lg)
                 .padding(.top, ChildlockSpacing.xl)
-                .padding(.bottom, ChildlockSpacing.section)
+                .padding(.bottom, ChildlockSpacing.section + 120)
             }
 
             // Close button
@@ -85,7 +92,7 @@ public struct PaywallView: View {
 
     private var header: some View {
         VStack(spacing: ChildlockSpacing.xs) {
-            Text("Unlock unlimited\nbrain breaks")
+            Text("Unlock deeper\nreports")
                 .font(ChildlockTypography.title)
                 .foregroundStyle(ChildlockColor.textPrimary)
                 .multilineTextAlignment(.center)
@@ -117,10 +124,10 @@ public struct PaywallView: View {
 
             Divider().foregroundStyle(ChildlockColor.surfaceMuted)
 
-            comparisonRow(feature: "Challenges", free: "3/day", premium: "Unlimited")
-            comparisonRow(feature: "Children", free: "1 child", premium: "5 children")
-            comparisonRow(feature: "Statistics", free: "Basic stats", premium: "Full reports")
-            comparisonRow(feature: "Challenge types", free: "2 types", premium: "All types")
+            comparisonRow(feature: "Brain breaks", free: "Included", premium: "Included")
+            comparisonRow(feature: "Children", free: "5 children", premium: "5 children")
+            comparisonRow(feature: "Child reports", free: "Today", premium: "Week + all time")
+            comparisonRow(feature: "Activity history", free: "Recent", premium: "Extended")
         }
         .background(ChildlockColor.surface)
         .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.card))
@@ -164,13 +171,15 @@ public struct PaywallView: View {
                                 Text("Annual")
                                     .font(ChildlockTypography.bodyBold)
                                     .foregroundStyle(ChildlockColor.textPrimary)
-                                Text("Best Value")
-                                    .font(ChildlockTypography.label)
-                                    .foregroundStyle(.white)
-                                    .padding(.horizontal, ChildlockSpacing.xs)
-                                    .padding(.vertical, 3)
-                                    .background(ChildlockColor.primary)
-                                    .clipShape(Capsule())
+                                if annualSavingsText != nil {
+                                    Text("Best Value")
+                                        .font(ChildlockTypography.label)
+                                        .foregroundStyle(.white)
+                                        .padding(.horizontal, ChildlockSpacing.xs)
+                                        .padding(.vertical, 3)
+                                        .background(ChildlockColor.primary)
+                                        .clipShape(Capsule())
+                                }
                             }
                             Text(annualPriceText)
                                 .font(ChildlockTypography.caption)
@@ -191,6 +200,8 @@ public struct PaywallView: View {
                 )
             }
             .buttonStyle(.plain)
+            .disabled(!annualPlanAvailable)
+            .opacity(annualPlanAvailable ? 1 : 0.65)
 
             // Monthly plan
             Button { selectedPlan = .monthly } label: {
@@ -217,6 +228,8 @@ public struct PaywallView: View {
                 )
             }
             .buttonStyle(.plain)
+            .disabled(!monthlyPlanAvailable)
+            .opacity(monthlyPlanAvailable ? 1 : 0.65)
         }
     }
 
@@ -235,14 +248,58 @@ public struct PaywallView: View {
 
     // MARK: - CTA
 
-    private var ctaButton: some View {
-        Button {
-            Task { await handlePurchase() }
-        } label: {
-            Text("Start 7-day free trial")
+    private var availabilityNotice: some View {
+        Group {
+            if let offeringsErrorMessage {
+                HStack(alignment: .top, spacing: ChildlockSpacing.xs) {
+                    Image(systemName: "exclamationmark.circle")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(ChildlockColor.textSecondary)
+                    Text(offeringsErrorMessage)
+                        .font(ChildlockTypography.caption)
+                        .foregroundStyle(ChildlockColor.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Spacer(minLength: 0)
+                }
+                .padding(ChildlockSpacing.sm)
+                .background(ChildlockColor.surfaceMuted)
+                .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.card))
+            }
         }
-        .buttonStyle(ChildlockPrimaryButtonStyle())
-        .disabled(isLoading)
+    }
+
+    @ViewBuilder
+    private var ctaButton: some View {
+        if shouldShowCTA {
+            Button {
+                Task { await handlePurchase() }
+            } label: {
+                Text(ctaButtonTitle)
+            }
+            .buttonStyle(ChildlockPrimaryButtonStyle())
+            .disabled(isLoading || !selectedProductIsAvailable)
+            .opacity(isLoading || !selectedProductIsAvailable ? 0.55 : 1)
+        }
+    }
+
+    private var shouldShowCTA: Bool {
+        isLoading || !hasLoadedOfferings || selectedProductIsAvailable
+    }
+
+    private var ctaButtonTitle: String {
+        if isLoading {
+            return "Loading..."
+        }
+
+        if !hasLoadedOfferings {
+            return "Loading Premium..."
+        }
+
+        if !selectedProductIsAvailable {
+            return "Premium unavailable"
+        }
+
+        return "Continue with Premium"
     }
 
     // MARK: - Restore
@@ -261,16 +318,23 @@ public struct PaywallView: View {
     // MARK: - Footer
 
     private var footerLinks: some View {
-        HStack(spacing: ChildlockSpacing.xxs) {
-            Text("Terms")
+        VStack(spacing: ChildlockSpacing.xs) {
+            Text("Screen Time enforcement stays included without Premium.")
                 .font(ChildlockTypography.caption)
                 .foregroundStyle(ChildlockColor.textMuted)
-            Text("\u{00B7}")
-                .font(ChildlockTypography.caption)
-                .foregroundStyle(ChildlockColor.textMuted)
-            Text("Privacy")
-                .font(ChildlockTypography.caption)
-                .foregroundStyle(ChildlockColor.textMuted)
+                .multilineTextAlignment(.center)
+
+            HStack(spacing: ChildlockSpacing.xxs) {
+                Link("Terms", destination: Self.termsURL)
+                    .font(ChildlockTypography.caption)
+                    .foregroundStyle(ChildlockColor.textMuted)
+                Text("\u{00B7}")
+                    .font(ChildlockTypography.caption)
+                    .foregroundStyle(ChildlockColor.textMuted)
+                Link("Privacy", destination: Self.privacyURL)
+                    .font(ChildlockTypography.caption)
+                    .foregroundStyle(ChildlockColor.textMuted)
+            }
         }
     }
 
@@ -279,15 +343,19 @@ public struct PaywallView: View {
     private var annualPriceText: String {
         #if canImport(RevenueCat)
         if let product = annualProduct {
-            let monthlyEquiv = product.price as Decimal / 12
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .currency
-            formatter.locale = product.priceFormatter?.locale ?? .current
-            let monthlyStr = formatter.string(from: monthlyEquiv as NSDecimalNumber) ?? "$3.33"
-            return "\(product.localizedPriceString)/year (\(monthlyStr)/mo \u{2013} save 33%)"
+            let baseText = "\(product.localizedPriceString)/year"
+            guard let monthlyEquivalent = monthlyEquivalentText(for: product) else {
+                return baseText
+            }
+
+            if let annualSavingsText {
+                return "\(baseText) (\(monthlyEquivalent)/mo - \(annualSavingsText))"
+            }
+
+            return "\(baseText) (\(monthlyEquivalent)/mo)"
         }
         #endif
-        return "$39.99/year ($3.33/mo \u{2013} save 33%)"
+        return hasLoadedOfferings ? "Annual plan unavailable" : "Loading annual price..."
     }
 
     private var monthlyPriceText: String {
@@ -296,24 +364,119 @@ public struct PaywallView: View {
             return "\(product.localizedPriceString)/month"
         }
         #endif
-        return "$4.99/month"
+        return hasLoadedOfferings ? "Monthly plan unavailable" : "Loading monthly price..."
     }
+
+    private var selectedProductIsAvailable: Bool {
+        selectedPlan == .annual ? annualPlanAvailable : monthlyPlanAvailable
+    }
+
+    private var annualPlanAvailable: Bool {
+        #if canImport(RevenueCat)
+        annualProduct != nil
+        #else
+        false
+        #endif
+    }
+
+    private var monthlyPlanAvailable: Bool {
+        #if canImport(RevenueCat)
+        monthlyProduct != nil
+        #else
+        false
+        #endif
+    }
+
+    private var annualSavingsText: String? {
+        #if canImport(RevenueCat)
+        guard let annualProduct, let monthlyProduct else {
+            return nil
+        }
+
+        let annualMonthlyEquivalent = NSDecimalNumber(decimal: annualProduct.price)
+            .dividing(by: NSDecimalNumber(value: 12))
+        let monthlyPrice = NSDecimalNumber(decimal: monthlyProduct.price)
+
+        guard monthlyPrice.compare(NSDecimalNumber.zero) == .orderedDescending,
+              monthlyPrice.compare(annualMonthlyEquivalent) == .orderedDescending
+        else {
+            return nil
+        }
+
+        let savingsPercent = monthlyPrice
+            .subtracting(annualMonthlyEquivalent)
+            .dividing(by: monthlyPrice)
+            .multiplying(by: NSDecimalNumber(value: 100))
+            .rounding(accordingToBehavior: NSDecimalNumberHandler(
+                roundingMode: .plain,
+                scale: 0,
+                raiseOnExactness: false,
+                raiseOnOverflow: false,
+                raiseOnUnderflow: false,
+                raiseOnDivideByZero: false
+            ))
+
+        guard savingsPercent.intValue > 0 else {
+            return nil
+        }
+
+        return "save \(savingsPercent.intValue)%"
+        #else
+        return nil
+        #endif
+    }
+
+    #if canImport(RevenueCat)
+    private func monthlyEquivalentText(for product: StoreProduct) -> String? {
+        let monthlyEquivalent = NSDecimalNumber(decimal: product.price)
+            .dividing(by: NSDecimalNumber(value: 12))
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.locale = product.priceFormatter?.locale ?? .current
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        return formatter.string(from: monthlyEquivalent)
+    }
+    #endif
 
     // MARK: - Actions
 
     private func loadOfferings() async {
+        offeringsErrorMessage = nil
         #if canImport(RevenueCat)
         do {
             let products = try await SubscriptionService.shared.getOfferings()
             monthlyProduct = products.monthly
             annualProduct = products.annual
+            hasLoadedOfferings = true
+
+            if annualProduct == nil, monthlyProduct != nil {
+                selectedPlan = .monthly
+            } else if annualProduct != nil {
+                selectedPlan = .annual
+            }
+
+            if monthlyProduct == nil, annualProduct == nil {
+                offeringsErrorMessage = Self.subscriptionUnavailableMessage
+            }
         } catch {
-            // Use fallback prices
+            hasLoadedOfferings = true
+            offeringsErrorMessage = Self.subscriptionUnavailableMessage
         }
+        #else
+        hasLoadedOfferings = true
+        offeringsErrorMessage = Self.subscriptionUnavailableMessage
         #endif
     }
 
     private func handlePurchase() async {
+        guard selectedProductIsAvailable else {
+            offeringsErrorMessage = Self.subscriptionUnavailableMessage
+            errorMessage = Self.subscriptionUnavailableMessage
+            showError = true
+            return
+        }
+
         #if canImport(RevenueCat)
         let productID = selectedPlan == .annual
             ? SubscriptionService.annualProductID
@@ -323,8 +486,10 @@ public struct PaywallView: View {
         defer { isLoading = false }
 
         do {
-            try await SubscriptionService.shared.purchase(productID: productID)
-            dismiss()
+            let didActivatePremium = try await SubscriptionService.shared.purchase(productID: productID)
+            if didActivatePremium {
+                dismiss()
+            }
         } catch let error as SubscriptionService.SubscriptionError {
             switch error {
             case .purchaseFailed(let message):
@@ -340,6 +505,10 @@ public struct PaywallView: View {
         } catch {
             // User cancelled or other non-fatal error
         }
+        #else
+        offeringsErrorMessage = Self.subscriptionUnavailableMessage
+        errorMessage = Self.subscriptionUnavailableMessage
+        showError = true
         #endif
     }
 
@@ -349,9 +518,12 @@ public struct PaywallView: View {
         defer { isLoading = false }
 
         do {
-            try await SubscriptionService.shared.restorePurchases()
-            if SubscriptionService.shared.currentTier == .premium {
+            let didRestorePremium = try await SubscriptionService.shared.restorePurchases()
+            if didRestorePremium {
                 dismiss()
+            } else {
+                errorMessage = "No active Childlock Premium purchase was found for this Apple ID."
+                showError = true
             }
         } catch {
             errorMessage = "Could not restore purchases. Please try again."

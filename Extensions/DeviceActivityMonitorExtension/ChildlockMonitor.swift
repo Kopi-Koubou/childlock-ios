@@ -3,6 +3,7 @@ import Foundation
 import FamilyControls
 import ManagedSettings
 import os
+import UserNotifications
 
 @available(iOS 17.0, *)
 final class ChildlockMonitor: DeviceActivityMonitor {
@@ -45,7 +46,46 @@ final class ChildlockMonitor: DeviceActivityMonitor {
         
         store.shield.applications = selection.applicationTokens
         store.shield.applicationCategories = selection.categoryTokens.isEmpty ? nil : .specific(selection.categoryTokens)
-        logger.info("Shield activated for \(selection.applicationTokens.count) apps")
+        store.shield.webDomains = selection.webDomainTokens
+        store.shield.webDomainCategories = selection.categoryTokens.isEmpty ? nil : .specific(selection.categoryTokens)
+        logger.info(
+            "Shield activated for \(selection.applicationTokens.count) apps and \(selection.webDomainTokens.count) web domains"
+        )
+
+        postBrainBreakNotification()
+    }
+
+    /// The shield itself can't launch Childlock, so a notification is the
+    /// child's tappable path from the blocked app into the challenge.
+    private func postBrainBreakNotification() {
+        let alertsEnabled = SharedDefaults.shared.object(forKey: SharedDefaults.Key.challengeAlertsEnabled) as? Bool ?? true
+        guard alertsEnabled else {
+            logger.info("Skipping brain break notification because challenge alerts are disabled")
+            return
+        }
+
+        let content = UNMutableNotificationContent()
+        content.title = "Brain break time!"
+        content.body = "Open Childlock from Home to unlock it."
+        content.sound = .default
+        content.interruptionLevel = .timeSensitive
+
+        let center = UNUserNotificationCenter.current()
+        let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]
+        center.removePendingNotificationRequests(withIdentifiers: identifiers)
+        center.removeDeliveredNotifications(withIdentifiers: identifiers)
+
+        let request = UNNotificationRequest(
+            identifier: SharedDefaults.NotificationIdentifier.brainBreak,
+            content: content,
+            trigger: nil
+        )
+
+        center.add(request) { [logger] error in
+            if let error {
+                logger.error("Failed to post brain break notification: \(error.localizedDescription)")
+            }
+        }
     }
     
     override func intervalDidEnd(for activity: DeviceActivityName) {
@@ -53,5 +93,7 @@ final class ChildlockMonitor: DeviceActivityMonitor {
         SharedDefaults.shared.set("interval_ended", forKey: SharedDefaults.Key.monitoringStatus)
         store.shield.applications = nil
         store.shield.applicationCategories = nil
+        store.shield.webDomains = nil
+        store.shield.webDomainCategories = nil
     }
 }

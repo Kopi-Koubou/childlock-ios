@@ -55,6 +55,10 @@ public final class PINService {
         return matches
     }
 
+    public var hasPIN: Bool {
+        secureStore.load(key: keychainKey) != nil
+    }
+
     public var isSessionUnlocked: Bool {
         guard sessionUnlocked, let lastUnlockTime else {
             return false
@@ -67,6 +71,13 @@ public final class PINService {
         sessionUnlocked = false
         lastUnlockTime = nil
     }
+
+    #if DEBUG
+    public func clearPINForDebug() {
+        secureStore.delete(key: keychainKey)
+        lockSession()
+    }
+    #endif
 
     private static func hash(pin: String, salt: String) -> String {
         let digest = SHA256.hash(data: Data((pin + salt).utf8))

@@ -13,7 +13,7 @@ final class FamilyActivitySelectionStoreTests: XCTestCase {
         let store = AppGroupFamilyActivitySelectionStore(defaults: defaults, key: key)
         let snapshot = FamilyActivitySelectionSnapshot(
             tokenData: Data([0xA, 0xB]),
-            displayNames: ["2 app tokens selected", "1 category token selected"]
+            displayNames: ["2 apps selected", "1 category selected"]
         )
 
         store.save(snapshot)
@@ -26,4 +26,3 @@ final class FamilyActivitySelectionStoreTests: XCTestCase {
         defaults.removePersistentDomain(forName: suiteName)
     }
 }
-

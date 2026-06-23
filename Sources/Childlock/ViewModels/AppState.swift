@@ -91,7 +91,10 @@ public final class AppState {
         didSet { persistIfNeeded() }
     }
     public var settings: AppSettings = .default {
-        didSet { persistIfNeeded() }
+        didSet {
+            persistIfNeeded()
+            mirrorNotificationSettingsToSharedDefaults()
+        }
     }
 
     public enum Tab: Int, Codable {
@@ -128,6 +131,7 @@ public final class AppState {
     public init(store: AppStateStoring = AppGroupFileAppStateStore()) {
         self.store = store
         hydrateFromStore()
+        mirrorNotificationSettingsToSharedDefaults()
     }
 
     public var activeProfile: ChildProfile? {
@@ -189,7 +193,12 @@ public final class AppState {
             .map { $0 }
     }
 
-    public func completeOnboarding(with profile: ChildProfile, pinConfigured: Bool) {
+    @discardableResult
+    public func completeOnboarding(with profile: ChildProfile, pinConfigured: Bool) -> Bool {
+        guard pinConfigured else {
+            return false
+        }
+
         if profiles.contains(where: { $0.id == profile.id }) {
             updateProfile(profile)
         } else {
@@ -198,11 +207,16 @@ public final class AppState {
 
         activeProfileID = profile.id
         hasCompletedOnboarding = true
-        isPINLocked = pinConfigured
+        // The parent just set the PIN during onboarding, so keep this first
+        // parent session open. Backgrounding or tapping Lock Parent Dashboard
+        // re-locks the parent surface before child use.
+        isPINLocked = false
 
         var updatedSettings = settings
         updatedSettings.hasCompletedOnboarding = true
         settings = updatedSettings
+
+        return true
     }
 
     public func setActiveProfile(id: UUID) {
@@ -308,6 +322,8 @@ public final class AppState {
             )
             sessions.append(newSession)
         }
+
+        scheduleDailySummaryIfNeeded()
     }
 
     public func snapshot() -> AppStateSnapshot {
@@ -330,7 +346,8 @@ public final class AppState {
         }
     }
 
-    public func unlockSettings(with pin: String, pinService: PINService = .shared) -> Bool {
+    public func unlockSettings(with pin: String, pinService: PINService? = nil) -> Bool {
+        let pinService = pinService ?? PINService.shared
         let isValid = pinService.verify(pin)
         if isValid {
             isPINLocked = false
@@ -338,7 +355,13 @@ public final class AppState {
         return isValid
     }
 
-    public func lockSettings(pinService: PINService = .shared) {
+    public func lockSettings(pinService: PINService? = nil) {
+        let pinService = pinService ?? PINService.shared
+        guard pinService.hasPIN else {
+            isPINLocked = false
+            return
+        }
+
         isPINLocked = true
         pinService.lockSession()
     }
@@ -366,7 +389,9 @@ public final class AppState {
 
         isHydratingSnapshot = true
         hasCompletedOnboarding = snapshot.hasCompletedOnboarding
-        currentTab = snapshot.currentTab
+        // currentTab is intentionally not restored — the app should always
+        // open on Home, not whatever tab was active last session.
+        currentTab = .home
         isPINLocked = snapshot.isPINLocked
         profiles = snapshot.profiles
         sessions = snapshot.sessions
@@ -390,6 +415,26 @@ public final class AppState {
                 activeProfileID: activeProfileID,
                 settings: settings
             )
+        )
+    }
+
+    private func mirrorNotificationSettingsToSharedDefaults() {
+        SharedDefaults.shared.set(
+            settings.challengeAlertNotification,
+            forKey: SharedDefaults.Key.challengeAlertsEnabled
+        )
+    }
+
+    private func scheduleDailySummaryIfNeeded() {
+        guard settings.dailySummaryNotification else {
+            NotificationService.cancelDailySummary()
+            return
+        }
+
+        let summary = todaySummary
+        NotificationService.scheduleDailySummary(
+            challengesCompleted: summary.challengesCompleted,
+            accuracy: Int((summary.accuracy * 100).rounded())
         )
     }
 

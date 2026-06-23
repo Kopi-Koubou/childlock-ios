@@ -4,6 +4,7 @@ import FamilyControls
 import ManagedSettings
 import ManagedSettingsUI
 import os
+import UserNotifications
 
 @available(iOS 17.0, *)
 final class ChildlockShieldAction: ShieldActionDelegate {
@@ -47,7 +48,10 @@ final class ChildlockShieldAction: ShieldActionDelegate {
         switch action {
         case .primaryButtonPressed:
             handleStartChallenge()
-            completionHandler(.defer)
+            // .close exits the blocked app to the home screen — the shield
+            // can't launch Childlock, so the child opens it from there
+            // (helped along by the brain-break notification).
+            completionHandler(.close)
         case .secondaryButtonPressed:
             handleRequestMoreTime()
             completionHandler(.close)
@@ -70,10 +74,29 @@ final class ChildlockShieldAction: ShieldActionDelegate {
 
         let defaults = SharedDefaults.shared
         let requestCount = defaults.integer(forKey: SharedDefaults.Key.moreTimeRequestCount)
+        defaults.set(false, forKey: SharedDefaults.Key.challengePending)
         defaults.set(requestCount + 1, forKey: SharedDefaults.Key.moreTimeRequestCount)
         defaults.set(Date(), forKey: SharedDefaults.Key.lastMoreTimeRequestDate)
         defaults.set("more_time_requested", forKey: SharedDefaults.Key.monitoringStatus)
 
         logger.info("More time request recorded (count: \(requestCount + 1))")
+
+        let content = UNMutableNotificationContent()
+        content.title = "More time requested"
+        content.body = "Hand this device to your parent so they can respond in Childlock."
+        content.sound = .default
+        content.interruptionLevel = .timeSensitive
+
+        let center = UNUserNotificationCenter.current()
+        let identifiers = [SharedDefaults.NotificationIdentifier.moreTimeRequest]
+        center.removePendingNotificationRequests(withIdentifiers: identifiers)
+        center.removeDeliveredNotifications(withIdentifiers: identifiers)
+
+        let request = UNNotificationRequest(
+            identifier: SharedDefaults.NotificationIdentifier.moreTimeRequest,
+            content: content,
+            trigger: nil
+        )
+        center.add(request)
     }
 }

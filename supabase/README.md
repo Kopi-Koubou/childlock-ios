@@ -7,8 +7,17 @@ This directory contains the production Supabase backend for the iOS app:
 
 ## Project Setup
 
+Production project:
+
+```text
+jkncpveupvozsmbbkvgq
+https://jkncpveupvozsmbbkvgq.supabase.co
+```
+
 1. Create or pick the Supabase project for Childlock.
-2. In Supabase Auth, enable Apple as an external provider.
+2. In Supabase Auth, enable Apple and Google as external providers. Add the
+   Supabase callback URL to Google Cloud and add `childlock://login-callback` to
+   Supabase URL Configuration for the native app redirect.
 3. Run the SQL migration in the Supabase SQL editor, or with the Supabase CLI once installed:
 
    ```sh
@@ -23,10 +32,13 @@ This directory contains the production Supabase backend for the iOS app:
    supabase secrets set REVENUECAT_WEBHOOK_SECRET=<long-random-secret>
    ```
 
+   Supabase provides `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` to Edge
+   Functions at runtime. Do not put the service-role key in iOS build settings.
+
 5. In RevenueCat, add a webhook pointing to:
 
    ```text
-   https://<project-ref>.supabase.co/functions/v1/revenuecat-webhook
+   https://jkncpveupvozsmbbkvgq.supabase.co/functions/v1/revenuecat-webhook
    ```
 
    Use the same `REVENUECAT_WEBHOOK_SECRET` as the bearer token.

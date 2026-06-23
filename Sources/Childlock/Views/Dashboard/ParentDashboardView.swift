@@ -2,13 +2,20 @@ import SwiftUI
 #if os(iOS) && canImport(FamilyControls)
 import FamilyControls
 #endif
+#if os(iOS) && canImport(UIKit)
+import UIKit
+#endif
 
 public struct ParentDashboardView: View {
     @Bindable private var appState: AppState
+    @State private var subscriptionService = SubscriptionService.shared
+    @Environment(\.scenePhase) private var scenePhase
 
     private let onTriggerChallenge: (() -> Void)?
     private let pinService: PINService
     private let fallbackAppChoices = ["YouTube", "Netflix", "Games", "Social Video"]
+    private let dashboardContentMaxWidth: CGFloat = 620
+    private let parentLockContentMaxWidth: CGFloat = 420
 
     @State private var enteredPIN = ""
     @State private var pinErrorText: String?
@@ -21,23 +28,62 @@ public struct ParentDashboardView: View {
     @State private var fallbackAppSelection: Set<String> = []
     @State private var appsStatusText: String?
     @State private var appsErrorText: String?
+    @State private var isSignOutConfirmationPresented = false
     @State private var selectedTab: AppState.Tab = .home
+    @State private var moreTimeRequestCount = SharedDefaults.shared.integer(forKey: SharedDefaults.Key.moreTimeRequestCount)
+    @State private var notificationAuthorizationStatus: ChildlockNotificationAuthorizationStatus = .unavailable
+    @State private var isRequestingNotificationPermission = false
     #if os(iOS) && canImport(FamilyControls)
     @State private var isAppsFamilyActivityPickerPresented = false
+    @State private var isRequestingAppsScreenTimeAccess = false
+    @State private var isAppsScreenTimeSelectionAvailable = ScreenTimeManager.shared.isAuthorized
     @State private var appsFamilyActivitySelection = FamilyActivitySelection()
     #endif
 
     public init(
         appState: AppState,
         onTriggerChallenge: (() -> Void)? = nil,
-        pinService: PINService = .shared
+        pinService: PINService? = nil
     ) {
         self.appState = appState
         self.onTriggerChallenge = onTriggerChallenge
-        self.pinService = pinService
+        self.pinService = pinService ?? .shared
+    }
+
+    private var hasPremium: Bool {
+        subscriptionService.currentTier == .premium
     }
 
     public var body: some View {
+        Group {
+            if appState.isPINLocked {
+                parentLockScreen
+            } else {
+                dashboardTabs
+            }
+        }
+        .onAppear {
+            refreshSharedDashboardState()
+            refreshNotificationAuthorizationStatus()
+            syncAppsSelectionStateFromActiveProfile()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            guard phase == .active else { return }
+            refreshSharedDashboardState()
+            refreshNotificationAuthorizationStatus()
+        }
+        .onChange(of: appState.activeProfileID) { _, _ in
+            syncAppsSelectionStateFromActiveProfile()
+        }
+        .onChange(of: enteredPIN) { _, _ in
+            sanitizeEnteredPIN()
+            if !enteredPIN.isEmpty {
+                pinErrorText = nil
+            }
+        }
+    }
+
+    private var dashboardTabs: some View {
         VStack(spacing: 0) {
             // Content area
             Group {
@@ -57,14 +103,79 @@ public struct ParentDashboardView: View {
             // Custom tab bar
             customTabBar
         }
-        .onAppear {
-            monitoringStatusText = SharedDefaults.shared.string(forKey: SharedDefaults.Key.monitoringStatus) ?? "not_started"
-            monitoringErrorText = SharedDefaults.shared.string(forKey: SharedDefaults.Key.monitoringLastError)
-            syncAppsSelectionStateFromActiveProfile()
+    }
+
+    private var parentLockScreen: some View {
+        VStack(spacing: ChildlockSpacing.lg) {
+            Spacer()
+
+            VStack(spacing: ChildlockSpacing.md) {
+                ZStack {
+                    Circle()
+                        .fill(ChildlockColor.primarySoft)
+                        .frame(width: 96, height: 96)
+                    Image(systemName: "lock.shield.fill")
+                        .font(.system(size: 40, weight: .semibold))
+                        .foregroundStyle(ChildlockColor.primary)
+                }
+
+                VStack(spacing: ChildlockSpacing.xs) {
+                    Text("Parent dashboard locked")
+                        .font(ChildlockTypography.title)
+                        .foregroundStyle(ChildlockColor.textPrimary)
+                        .multilineTextAlignment(.center)
+
+                    Text(parentLockSubtitle)
+                        .font(ChildlockTypography.body)
+                        .foregroundStyle(ChildlockColor.textSecondary)
+                        .multilineTextAlignment(.center)
+                }
+            }
+
+            VStack(spacing: ChildlockSpacing.sm) {
+                SecureField("Parent PIN", text: $enteredPIN)
+                    .pinInputBehavior()
+                    .font(ChildlockTypography.body)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, ChildlockSpacing.sm)
+                    .frame(height: 48)
+                    .background(ChildlockColor.surface)
+                    .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.control))
+
+                if let pinErrorText {
+                    Text(pinErrorText)
+                        .font(ChildlockTypography.caption)
+                        .foregroundStyle(ChildlockColor.warning)
+                }
+
+                Button("Unlock Dashboard") {
+                    unlockParentDashboard()
+                }
+                .buttonStyle(ChildlockPrimaryButtonStyle())
+                .disabled(enteredPIN.count < 4)
+                .opacity(enteredPIN.count < 4 ? 0.5 : 1)
+            }
+            .childlockCard()
+
+            Text("Brain breaks still open automatically when a monitored app is paused.")
+                .font(ChildlockTypography.caption)
+                .foregroundStyle(ChildlockColor.textMuted)
+                .multilineTextAlignment(.center)
+
+            Spacer()
         }
-        .onChange(of: appState.activeProfileID) { _, _ in
-            syncAppsSelectionStateFromActiveProfile()
+        .padding(ChildlockSpacing.lg)
+        .frame(maxWidth: parentLockContentMaxWidth)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(ChildlockColor.background.ignoresSafeArea())
+    }
+
+    private var parentLockSubtitle: String {
+        if moreTimeRequestCount > 0 {
+            return "\(appState.activeProfile?.name ?? "Your child") asked for more time. Enter your PIN to respond."
         }
+
+        return "Enter your PIN to manage children, apps, reports, and settings."
     }
 
     // MARK: - Custom Tab Bar
@@ -104,6 +215,33 @@ public struct ParentDashboardView: View {
         .buttonStyle(.plain)
     }
 
+    private func unlockParentDashboard() {
+        let unlocked = appState.unlockSettings(with: enteredPIN, pinService: pinService)
+        pinErrorText = unlocked ? nil : "Incorrect PIN. Try again."
+        if unlocked {
+            enteredPIN = ""
+            refreshSharedDashboardState()
+        } else {
+            enteredPIN = ""
+        }
+    }
+
+    private func sanitizeEnteredPIN() {
+        let sanitized = String(enteredPIN.filter(\.isNumber).prefix(4))
+        if enteredPIN != sanitized {
+            enteredPIN = sanitized
+        }
+    }
+
+    private func refreshSharedDashboardState() {
+        monitoringStatusText = SharedDefaults.shared.string(forKey: SharedDefaults.Key.monitoringStatus) ?? "not_started"
+        monitoringErrorText = SharedDefaults.shared.string(forKey: SharedDefaults.Key.monitoringLastError)
+        moreTimeRequestCount = SharedDefaults.shared.integer(forKey: SharedDefaults.Key.moreTimeRequestCount)
+        #if os(iOS) && canImport(FamilyControls)
+        isAppsScreenTimeSelectionAvailable = ScreenTimeManager.shared.isAuthorized
+        #endif
+    }
+
     // MARK: - Home Tab
 
     private var homeTab: some View {
@@ -115,6 +253,10 @@ public struct ParentDashboardView: View {
 
                     // Greeting
                     homeGreeting
+
+                    if moreTimeRequestCount > 0 {
+                        moreTimeRequestBanner
+                    }
 
                     if let onTriggerChallenge {
                         Button("Practice Brain Break", action: onTriggerChallenge)
@@ -134,8 +276,21 @@ public struct ParentDashboardView: View {
                     }
                 }
                 .padding(ChildlockSpacing.lg)
+                .frame(maxWidth: dashboardContentMaxWidth, alignment: .leading)
+                .frame(maxWidth: .infinity)
             }
             .background(ChildlockColor.background.ignoresSafeArea())
+            .alert(
+                "Sign out of Childlock?",
+                isPresented: $isSignOutConfirmationPresented,
+            ) {
+                Button("Sign Out", role: .destructive) {
+                    signOut()
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("Parent settings stay on this device, but you will need to sign in again before managing Childlock.")
+            }
         }
     }
 
@@ -165,17 +320,101 @@ public struct ParentDashboardView: View {
 
     private var homeGreeting: some View {
         let summary = appState.todaySummary
-        let firstName = appState.profiles.first?.name ?? "there"
+        let firstName = appState.profiles.first?.name
 
         return VStack(alignment: .leading, spacing: ChildlockSpacing.xs) {
-            Text("Good afternoon, Xavier")
+            Text(timeBasedGreeting)
                 .font(.system(size: 32, weight: .bold))
                 .foregroundStyle(ChildlockColor.textPrimary)
 
-            Text("\(firstName)'s been engaged today -- \(summary.challengesCompleted) brain breaks solved.")
+            Text(greetingSubtitle(firstName: firstName, challengesCompleted: summary.challengesCompleted))
                 .font(.system(size: 14))
                 .foregroundStyle(ChildlockColor.textMuted)
         }
+    }
+
+    private var timeBasedGreeting: String {
+        switch Calendar.current.component(.hour, from: Date()) {
+        case 5..<12: return "Good morning"
+        case 12..<17: return "Good afternoon"
+        default: return "Good evening"
+        }
+    }
+
+    private func greetingSubtitle(firstName: String?, challengesCompleted: Int) -> String {
+        guard let firstName else {
+            return "Add a child to start the brain break loop."
+        }
+        if challengesCompleted == 0 {
+            return "No brain breaks yet today for \(firstName)."
+        }
+        return "\(firstName)'s been engaged today — \(challengesCompleted) brain break\(challengesCompleted == 1 ? "" : "s") solved."
+    }
+
+    private var moreTimeRequestBanner: some View {
+        let requestDate = SharedDefaults.shared.object(forKey: SharedDefaults.Key.lastMoreTimeRequestDate) as? Date
+
+        return VStack(alignment: .leading, spacing: ChildlockSpacing.sm) {
+            HStack(spacing: ChildlockSpacing.xs) {
+                Image(systemName: "hand.raised.fill")
+                    .font(.system(size: 16))
+                    .foregroundStyle(ChildlockColor.accent)
+                Text("\(appState.activeProfile?.name ?? "Your child") asked for more time")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(ChildlockColor.textPrimary)
+                Spacer()
+                if let requestDate {
+                    Text(relativeTimeText(from: requestDate))
+                        .font(.system(size: 12))
+                        .foregroundStyle(ChildlockColor.textMuted)
+                }
+            }
+
+            HStack(spacing: ChildlockSpacing.sm) {
+                Button("Give one more block") {
+                    grantMoreTime()
+                }
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(.white)
+                .padding(.horizontal, ChildlockSpacing.md)
+                .padding(.vertical, 8)
+                .background(Capsule().fill(ChildlockColor.primary))
+                .buttonStyle(.plain)
+
+                Button("Dismiss") {
+                    clearMoreTimeRequests()
+                }
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(ChildlockColor.textSecondary)
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(ChildlockSpacing.md)
+        .background(ChildlockColor.accentSoft)
+        .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.card))
+    }
+
+    private func grantMoreTime() {
+        clearMoreTimeRequests()
+        ScreenTimeManager.shared.removeShields()
+
+        // Restarting monitoring resets the usage threshold, so the child gets
+        // one full interval before the next brain break.
+        if
+            let profile = appState.activeProfile,
+            ChildlockMonitoringStatus(storedValue: monitoringStatusText)?.canRearmMonitoring == true
+        {
+            try? ScreenTimeManager.shared.startMonitoring(profile: profile)
+            monitoringStatusText = SharedDefaults.shared.string(forKey: SharedDefaults.Key.monitoringStatus) ?? monitoringStatusText
+        }
+    }
+
+    private func clearMoreTimeRequests() {
+        SharedDefaults.shared.set(false, forKey: SharedDefaults.Key.challengePending)
+        SharedDefaults.shared.set(0, forKey: SharedDefaults.Key.moreTimeRequestCount)
+        SharedDefaults.shared.removeObject(forKey: SharedDefaults.Key.lastMoreTimeRequestDate)
+        NotificationService.clearMoreTimeRequestAlerts()
+        moreTimeRequestCount = 0
     }
 
     private var yourChildrenSection: some View {
@@ -271,12 +510,20 @@ public struct ParentDashboardView: View {
     }
 
     private var recentActivityCard: some View {
-        let activity = appState.recentActivity(limit: 4)
+        let activity = appState.recentActivity(limit: hasPremium ? 12 : 4)
 
         return VStack(alignment: .leading, spacing: ChildlockSpacing.sm) {
-            Text("RECENT ACTIVITY")
-                .font(ChildlockTypography.label)
-                .foregroundStyle(ChildlockColor.textMuted)
+            HStack {
+                Text("RECENT ACTIVITY")
+                    .font(ChildlockTypography.label)
+                    .foregroundStyle(ChildlockColor.textMuted)
+                Spacer()
+                if hasPremium {
+                    Text("EXTENDED")
+                        .font(ChildlockTypography.label)
+                        .foregroundStyle(ChildlockColor.primary)
+                }
+            }
 
             VStack(spacing: 0) {
                 if activity.isEmpty {
@@ -365,7 +612,7 @@ public struct ParentDashboardView: View {
                         .buttonStyle(.plain)
                     }
 
-                    Text("Each child has their own age band, interval, and apps. Up to 5 on Premium.")
+                    Text("Each child has their own age band, interval, and apps.")
                         .font(.system(size: 14))
                         .foregroundStyle(ChildlockColor.textMuted)
 
@@ -375,21 +622,23 @@ public struct ParentDashboardView: View {
                             subtitle: "Add a child to start personalized challenge tracking."
                         )
                     } else {
+                        childrenReportControls
+
                         ForEach(appState.profiles) { profile in
                             childrenTabProfileCard(profile: profile)
                         }
                     }
 
-                    // Premium info card
+                    // Child profile info card
                     HStack(spacing: ChildlockSpacing.sm) {
-                        Image(systemName: "crown.fill")
+                        Image(systemName: "person.2.fill")
                             .font(.system(size: 16))
                             .foregroundStyle(ChildlockColor.primaryDeep)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Premium supports up to 5 children")
+                            Text("Supports up to 5 children")
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundStyle(ChildlockColor.primaryDeep)
-                            Text("Free plan includes 1 child profile.")
+                            Text("Brain breaks stay available for every child profile.")
                                 .font(.system(size: 12))
                                 .foregroundStyle(ChildlockColor.textMuted)
                         }
@@ -400,6 +649,8 @@ public struct ParentDashboardView: View {
                     .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.card))
                 }
                 .padding(ChildlockSpacing.lg)
+                .frame(maxWidth: dashboardContentMaxWidth, alignment: .leading)
+                .frame(maxWidth: .infinity)
             }
             .background(ChildlockColor.background.ignoresSafeArea())
             .sheet(isPresented: $isAddChildSheetPresented) {
@@ -409,7 +660,8 @@ public struct ParentDashboardView: View {
     }
 
     private func childrenTabProfileCard(profile: ChildProfile) -> some View {
-        let summary = appState.summary(window: .day, profileID: profile.id)
+        let reportWindow: AppState.ActivityWindow = hasPremium ? childrenWindow : .day
+        let summary = appState.summary(window: reportWindow, profileID: profile.id)
         let avatarColorIndex = appState.profiles.firstIndex(where: { $0.id == profile.id }) ?? 0
         let avatarColor = ChildlockAvatarColor.all[avatarColorIndex % ChildlockAvatarColor.all.count]
 
@@ -432,7 +684,7 @@ public struct ParentDashboardView: View {
                             .font(.system(size: 12))
                             .foregroundStyle(ChildlockColor.textMuted)
                     }
-                    Text("every \(profile.intervalMinutes)min · \(summary.challengesCompleted) solved · last active")
+                    Text("every \(profile.intervalMinutes)min · \(summary.challengesCompleted) solved \(reportWindow.summarySuffix)")
                         .font(.system(size: 12))
                         .foregroundStyle(ChildlockColor.textMuted)
                 }
@@ -444,10 +696,19 @@ public struct ParentDashboardView: View {
                     .foregroundStyle(ChildlockColor.textFaint)
             }
 
-            // Device pills
-            HStack(spacing: ChildlockSpacing.xs) {
-                devicePill(name: "iPad")
-                devicePill(name: "iPhone")
+            if !profile.monitoredAppDisplayNames.isEmpty {
+                HStack(spacing: 4) {
+                    Circle()
+                        .fill(ChildlockColor.primary)
+                        .frame(width: 6, height: 6)
+                    Text(monitoredSummaryText(for: profile))
+                        .font(.system(size: 12))
+                        .foregroundStyle(ChildlockColor.textSecondary)
+                }
+                .padding(.horizontal, ChildlockSpacing.sm)
+                .padding(.vertical, 6)
+                .background(ChildlockColor.surfaceMuted.opacity(0.5))
+                .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.pill))
             }
         }
         .padding(ChildlockSpacing.md)
@@ -456,19 +717,50 @@ public struct ParentDashboardView: View {
         .childlockShadow(ChildlockShadow.sm)
     }
 
-    private func devicePill(name: String) -> some View {
-        HStack(spacing: 4) {
-            Circle()
-                .fill(ChildlockColor.primary)
-                .frame(width: 6, height: 6)
-            Text(name)
-                .font(.system(size: 12))
-                .foregroundStyle(ChildlockColor.textSecondary)
+    @ViewBuilder
+    private var childrenReportControls: some View {
+        if hasPremium {
+            Picker("Report window", selection: $childrenWindow) {
+                ForEach(AppState.ActivityWindow.allCases) { window in
+                    Text(window.title).tag(window)
+                }
+            }
+            .pickerStyle(.segmented)
+        } else {
+            NavigationLink {
+                PaywallNavigationDestination()
+            } label: {
+                HStack(spacing: ChildlockSpacing.sm) {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(ChildlockColor.primaryDeep)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Today's report is included")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(ChildlockColor.primaryDeep)
+                        Text("Upgrade for week and all-time child reports.")
+                            .font(.system(size: 12))
+                            .foregroundStyle(ChildlockColor.textMuted)
+                    }
+
+                    Spacer()
+
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(ChildlockColor.primaryDeep)
+                }
+                .padding(ChildlockSpacing.md)
+                .background(ChildlockColor.primarySoft)
+                .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.card))
+            }
+            .buttonStyle(.plain)
         }
-        .padding(.horizontal, ChildlockSpacing.sm)
-        .padding(.vertical, 6)
-        .background(ChildlockColor.surfaceMuted.opacity(0.5))
-        .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.pill))
+    }
+
+    private func monitoredSummaryText(for profile: ChildProfile) -> String {
+        let count = profile.monitoredAppDisplayNames.count
+        return "\(count) monitored selection\(count == 1 ? "" : "s")"
     }
 
     // MARK: - Apps Tab
@@ -513,6 +805,8 @@ public struct ParentDashboardView: View {
                     }
                 }
                 .padding(ChildlockSpacing.lg)
+                .frame(maxWidth: dashboardContentMaxWidth, alignment: .leading)
+                .frame(maxWidth: .infinity)
             }
             .background(ChildlockColor.background.ignoresSafeArea())
         }
@@ -525,40 +819,45 @@ public struct ParentDashboardView: View {
 
             VStack(spacing: 0) {
                 if appNames.isEmpty {
-                    HStack {
-                        Text("No monitored apps selected yet.")
-                            .font(ChildlockTypography.body)
-                            .foregroundStyle(ChildlockColor.textSecondary)
-                        Spacer()
+                    HStack(alignment: .top, spacing: ChildlockSpacing.sm) {
+                        Image(systemName: "app.badge.checkmark")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundStyle(ChildlockColor.primary)
+                            .frame(width: 40, height: 40)
+                            .background(ChildlockColor.primarySoft)
+                            .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.sm))
+
+                        VStack(alignment: .leading, spacing: ChildlockSpacing.xxs) {
+                            Text("No monitored apps selected")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(ChildlockColor.textPrimary)
+                            Text("Choose real apps, categories, or websites on this device before starting lock enforcement.")
+                                .font(ChildlockTypography.caption)
+                                .foregroundStyle(ChildlockColor.textSecondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
                     }
                     .padding(ChildlockSpacing.md)
                 } else {
                     ForEach(Array(appNames.enumerated()), id: \.element) { index, appName in
                         HStack(spacing: ChildlockSpacing.sm) {
-                            // App icon placeholder
-                            RoundedRectangle(cornerRadius: ChildlockRadius.sm)
-                                .fill(appIconColor(for: index))
-                                .frame(width: 40, height: 40)
-                                .overlay(
-                                    Image(systemName: "app.fill")
-                                        .font(.system(size: 16))
-                                        .foregroundStyle(.white.opacity(0.8))
-                                )
+                            monitoredSelectionIcon(for: appName, index: index)
 
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(appName)
                                     .font(.system(size: 15, weight: .medium))
                                     .foregroundStyle(ChildlockColor.textPrimary)
-                                Text("every \(activeProfile.intervalMinutes)min")
+                                Text("Brain break every \(activeProfile.intervalMinutes)m on this device")
                                     .font(.system(size: 12))
                                     .foregroundStyle(ChildlockColor.textMuted)
                             }
+                            .fixedSize(horizontal: false, vertical: true)
 
                             Spacer()
 
-                            Image(systemName: "chevron.right")
+                            Image(systemName: activeProfile.monitoredSelectionTokenData == nil ? "pencil.and.list.clipboard" : "lock.shield.fill")
                                 .font(.system(size: 12, weight: .semibold))
-                                .foregroundStyle(ChildlockColor.textFaint)
+                                .foregroundStyle(activeProfile.monitoredSelectionTokenData == nil ? ChildlockColor.textFaint : ChildlockColor.primary)
                         }
                         .padding(.horizontal, ChildlockSpacing.md)
                         .padding(.vertical, ChildlockSpacing.sm)
@@ -577,6 +876,39 @@ public struct ParentDashboardView: View {
         }
     }
 
+    private func monitoredSelectionIcon(for label: String, index: Int) -> some View {
+        RoundedRectangle(cornerRadius: ChildlockRadius.sm)
+            .fill(appIconColor(for: index))
+            .frame(width: 40, height: 40)
+            .overlay(
+                Image(systemName: monitoredSelectionIconName(for: label))
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.9))
+            )
+    }
+
+    private func monitoredSelectionIconName(for label: String) -> String {
+        let lowercased = label.lowercased()
+
+        if lowercased.contains("categor") {
+            return "square.grid.2x2.fill"
+        }
+
+        if lowercased.contains("website") || lowercased.contains("domain") || lowercased.contains("safari") {
+            return "globe"
+        }
+
+        if lowercased.contains("game") {
+            return "gamecontroller.fill"
+        }
+
+        if lowercased.contains("video") || lowercased.contains("youtube") || lowercased.contains("netflix") {
+            return "play.rectangle.fill"
+        }
+
+        return "app.badge.fill"
+    }
+
     private func appIconColor(for index: Int) -> Color {
         let colors: [Color] = [ChildlockColor.primary, ChildlockColor.accent, ChildlockColor.memory]
         return colors[index % colors.count]
@@ -586,51 +918,48 @@ public struct ParentDashboardView: View {
     private var appsAssignmentCard: some View {
         if appState.activeProfile != nil {
             VStack(alignment: .leading, spacing: ChildlockSpacing.sm) {
+                Text("Screen Time selection protects real apps on this device. Planning labels help simulator setup, but they do not lock apps until Screen Time access is enabled.")
+                    .font(ChildlockTypography.caption)
+                    .foregroundStyle(ChildlockColor.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
                 #if os(iOS) && canImport(FamilyControls)
-                Button("+ Add apps to monitor") {
-                    isAppsFamilyActivityPickerPresented = true
-                }
-                .buttonStyle(ChildlockSecondaryButtonStyle())
-                .familyActivityPicker(
-                    isPresented: $isAppsFamilyActivityPickerPresented,
-                    selection: $appsFamilyActivitySelection
-                )
-                .onChange(of: appsFamilyActivitySelection) { _, selection in
-                    let tokenData = try? JSONEncoder().encode(selection)
-                    updateActiveProfileMonitoredSelection(
-                        tokenData: tokenData,
-                        displayNames: selectionSummaryLabels(for: selection)
+                if shouldUseAppsFamilyActivityPicker {
+                    Button {
+                        isAppsFamilyActivityPickerPresented = true
+                    } label: {
+                        Label("Choose apps, categories, or websites", systemImage: "checklist")
+                    }
+                    .buttonStyle(ChildlockSecondaryButtonStyle())
+                    .familyActivityPicker(
+                        isPresented: $isAppsFamilyActivityPickerPresented,
+                        selection: $appsFamilyActivitySelection
                     )
+                    .onChange(of: appsFamilyActivitySelection) { _, selection in
+                        let displayNames = selectionSummaryLabels(for: selection)
+                        let tokenData = displayNames.isEmpty ? nil : try? JSONEncoder().encode(selection)
+                        updateActiveProfileMonitoredSelection(
+                            tokenData: tokenData,
+                            displayNames: displayNames
+                        )
+                    }
+                } else {
+                    Button {
+                        Task { await requestAppsScreenTimeAccess() }
+                    } label: {
+                        Label(
+                            isRequestingAppsScreenTimeAccess ? "Requesting Screen Time..." : "Enable Screen Time selection",
+                            systemImage: "lock.shield"
+                        )
+                    }
+                    .buttonStyle(ChildlockSecondaryButtonStyle())
+                    .disabled(isRequestingAppsScreenTimeAccess)
+                    .opacity(isRequestingAppsScreenTimeAccess ? 0.65 : 1.0)
+
+                    fallbackAppsAssignmentChoices
                 }
                 #else
-                VStack(alignment: .leading, spacing: ChildlockSpacing.xs) {
-                    ForEach(fallbackAppChoices, id: \.self) { appName in
-                        Button {
-                            toggleFallbackSelection(appName)
-                        } label: {
-                            HStack {
-                                Text(appName)
-                                    .font(ChildlockTypography.body)
-                                    .foregroundStyle(ChildlockColor.textPrimary)
-                                Spacer()
-                                Image(systemName: fallbackAppSelection.contains(appName) ? "checkmark.circle.fill" : "circle")
-                                    .foregroundStyle(fallbackAppSelection.contains(appName) ? ChildlockColor.accent : ChildlockColor.textFaint)
-                            }
-                            .padding(.horizontal, ChildlockSpacing.md)
-                            .frame(height: 44)
-                            .background(ChildlockColor.surface)
-                            .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.md))
-                            .childlockShadow(ChildlockShadow.sm)
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel("assign_monitored_\(appName)")
-                    }
-                }
-
-                Button("+ Add apps to monitor") {
-                    // Fallback: just shows the list above
-                }
-                .buttonStyle(ChildlockSecondaryButtonStyle())
+                fallbackAppsAssignmentChoices
                 #endif
 
                 if let appsStatusText {
@@ -645,44 +974,74 @@ public struct ParentDashboardView: View {
                         .foregroundStyle(ChildlockColor.warning)
                 }
 
-                Button("Apply Active Child Selection To All Children") {
+                Button("Copy to all children") {
                     applyActiveSelectionToAllChildren()
                 }
                 .buttonStyle(ChildlockSecondaryButtonStyle())
                 .disabled(appState.profiles.count < 2 || appState.activeProfile?.monitoredAppDisplayNames.isEmpty == true)
                 .opacity((appState.profiles.count < 2 || appState.activeProfile?.monitoredAppDisplayNames.isEmpty == true) ? 0.5 : 1.0)
+
+                Text("Use this for siblings who share this device. For a separate child iPad, install and configure Childlock on that iPad too.")
+                    .font(ChildlockTypography.caption)
+                    .foregroundStyle(ChildlockColor.textMuted)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
+    }
+
+    private var fallbackAppsAssignmentChoices: some View {
+        VStack(alignment: .leading, spacing: ChildlockSpacing.xs) {
+            Text("Use labels for planning. Enable Screen Time selection here before locking real apps on this device.")
+                .font(ChildlockTypography.caption)
+                .foregroundStyle(ChildlockColor.textMuted)
+
+            ForEach(fallbackAppChoices, id: \.self) { appName in
+                Button {
+                    toggleFallbackSelection(appName)
+                } label: {
+                    HStack {
+                        Text(appName)
+                            .font(ChildlockTypography.body)
+                            .foregroundStyle(ChildlockColor.textPrimary)
+                        Spacer()
+                        Image(systemName: fallbackAppSelection.contains(appName) ? "checkmark.circle.fill" : "circle")
+                            .foregroundStyle(fallbackAppSelection.contains(appName) ? ChildlockColor.accent : ChildlockColor.textFaint)
+                    }
+                    .padding(.horizontal, ChildlockSpacing.md)
+                    .frame(height: 44)
+                    .background(ChildlockColor.surface)
+                    .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.md))
+                    .childlockShadow(ChildlockShadow.sm)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("assign_monitored_\(appName)")
+            }
+        }
+    }
+
+    private var shouldUseAppsFamilyActivityPicker: Bool {
+        #if os(iOS) && canImport(FamilyControls)
+        return isAppsScreenTimeSelectionAvailable || appState.activeProfile?.monitoredSelectionTokenData != nil
+        #else
+        return false
+        #endif
     }
 
     private var alwaysAllowedCard: some View {
-        VStack(alignment: .leading, spacing: ChildlockSpacing.sm) {
-            Text("These apps are never interrupted by brain breaks.")
+        HStack(alignment: .top, spacing: ChildlockSpacing.sm) {
+            Image(systemName: "checkmark.shield")
+                .font(.system(size: 18))
+                .foregroundStyle(ChildlockColor.primary)
+
+            Text("Only the apps, categories, or websites you choose are targeted. Keep calls, messages, and school apps out of the selection when they should stay available.")
                 .font(.system(size: 14))
                 .foregroundStyle(ChildlockColor.textSecondary)
-
-            // Pill tags
-            FlowLayout(spacing: ChildlockSpacing.xs) {
-                alwaysAllowedPill("Phone")
-                alwaysAllowedPill("Messages")
-                alwaysAllowedPill("Khan Academy Kids")
-                alwaysAllowedPill("Kindle")
-            }
         }
         .padding(ChildlockSpacing.md)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(ChildlockColor.surface)
         .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.card))
         .childlockShadow(ChildlockShadow.sm)
-    }
-
-    private func alwaysAllowedPill(_ name: String) -> some View {
-        Text(name)
-            .font(.system(size: 13))
-            .foregroundStyle(ChildlockColor.textSecondary)
-            .padding(.horizontal, ChildlockSpacing.sm)
-            .padding(.vertical, 6)
-            .background(ChildlockColor.surfaceMuted.opacity(0.5))
-            .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.pill))
     }
 
     // MARK: - Settings Tab
@@ -711,12 +1070,8 @@ public struct ParentDashboardView: View {
                                     .background(ChildlockColor.surfaceMuted.opacity(0.3))
                                     .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.sm))
 
-                                Button("Unlock Settings") {
-                                    let unlocked = appState.unlockSettings(with: enteredPIN, pinService: pinService)
-                                    pinErrorText = unlocked ? nil : "Incorrect PIN. Try again."
-                                    if unlocked {
-                                        enteredPIN = ""
-                                    }
+                                Button("Unlock Parent Dashboard") {
+                                    unlockParentDashboard()
                                 }
                                 .buttonStyle(ChildlockPrimaryButtonStyle())
 
@@ -731,7 +1086,69 @@ public struct ParentDashboardView: View {
                     } else {
                         // Account section
                         settingsSection(title: "ACCOUNT") {
-                            settingsRow(title: "Subscription", value: "Free", showChevron: true, isUpgrade: true)
+                            VStack(spacing: 0) {
+                                settingsRow(
+                                    title: "Account sync",
+                                    value: appState.isAuthenticated ? "On" : "Off",
+                                    showChevron: false
+                                )
+
+                                Divider().background(ChildlockColor.surfaceMuted)
+
+                                NavigationLink {
+                                    PaywallNavigationDestination()
+                                } label: {
+                                    settingsRowContent(
+                                        title: "Childlock Premium",
+                                        value: hasPremium ? "Active" : "Upgrade",
+                                        showChevron: true,
+                                        isUpgrade: !hasPremium
+                                    )
+                                }
+                                .buttonStyle(.plain)
+
+                                Divider().background(ChildlockColor.surfaceMuted)
+
+                                Button {
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        isSignOutConfirmationPresented = true
+                                    }
+                                } label: {
+                                    settingsRowContent(
+                                        title: "Sign Out",
+                                        value: "",
+                                        showChevron: false,
+                                        isDestructive: true
+                                    )
+                                }
+                                .buttonStyle(.plain)
+
+                                if isSignOutConfirmationPresented {
+                                    Divider().background(ChildlockColor.surfaceMuted)
+
+                                    VStack(alignment: .leading, spacing: ChildlockSpacing.sm) {
+                                        Text("Parent settings stay on this device. Sign in again to manage Childlock.")
+                                            .font(ChildlockTypography.caption)
+                                            .foregroundStyle(ChildlockColor.textSecondary)
+                                            .fixedSize(horizontal: false, vertical: true)
+
+                                        HStack(spacing: ChildlockSpacing.sm) {
+                                            Button("Cancel") {
+                                                withAnimation(.easeInOut(duration: 0.2)) {
+                                                    isSignOutConfirmationPresented = false
+                                                }
+                                            }
+                                            .buttonStyle(ChildlockSecondaryButtonStyle())
+
+                                            Button("Confirm Sign Out") {
+                                                signOut()
+                                            }
+                                            .buttonStyle(ChildlockPrimaryButtonStyle())
+                                        }
+                                    }
+                                    .padding(ChildlockSpacing.md)
+                                }
+                            }
                         }
 
                         // Challenges section
@@ -745,6 +1162,14 @@ public struct ParentDashboardView: View {
                         settingsSection(title: "SECURITY") {
                             VStack(spacing: 0) {
                                 settingsRow(title: "Screen Time Enforcement", value: monitoringStatusText.capitalized, showChevron: false)
+
+                                Text("Locks apps on this device only. For a child iPad, install and configure Childlock on the iPad.")
+                                    .font(ChildlockTypography.caption)
+                                    .foregroundStyle(ChildlockColor.textSecondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.horizontal, ChildlockSpacing.md)
+                                    .padding(.bottom, ChildlockSpacing.sm)
 
                                 if let monitoringErrorText {
                                     Text(monitoringErrorText)
@@ -779,7 +1204,7 @@ public struct ParentDashboardView: View {
                                 Button {
                                     appState.lockSettings(pinService: pinService)
                                 } label: {
-                                    settingsRowContent(title: "Lock Settings", value: "", showChevron: true)
+                                    settingsRowContent(title: "Lock Parent Dashboard", value: "", showChevron: true)
                                 }
                                 .buttonStyle(.plain)
                             }
@@ -791,22 +1216,48 @@ public struct ParentDashboardView: View {
                                 settingsToggleRow(title: "Daily summary", binding: dailySummaryBinding)
                                 Divider().background(ChildlockColor.surfaceMuted)
                                 settingsToggleRow(title: "Challenge alerts", binding: challengeAlertBinding)
+                                Divider().background(ChildlockColor.surfaceMuted)
+                                settingsRow(
+                                    title: "iOS notification permission",
+                                    value: notificationAuthorizationLabel,
+                                    showChevron: false
+                                )
+
+                                notificationSettingsFootnote
+
+                                if !notificationAuthorizationStatus.allowsDelivery {
+                                    Divider().background(ChildlockColor.surfaceMuted)
+
+                                    Button {
+                                        Task { await requestNotificationPermissionOrOpenSettings() }
+                                    } label: {
+                                        settingsRowContent(
+                                            title: notificationPermissionActionTitle,
+                                            value: isRequestingNotificationPermission ? "Waiting..." : "",
+                                            showChevron: notificationAuthorizationStatus == .denied
+                                        )
+                                    }
+                                    .buttonStyle(.plain)
+                                    .disabled(isRequestingNotificationPermission)
+                                }
                             }
                         }
 
                         // Support section
                         settingsSection(title: "SUPPORT") {
                             VStack(spacing: 0) {
-                                settingsRow(title: "Help Center", value: "", showChevron: true)
+                                settingsLinkRow(title: "Help Center", urlString: "https://kouboulabs.com/childlock/support")
                                 Divider().background(ChildlockColor.surfaceMuted)
-                                settingsRow(title: "Privacy Policy", value: "", showChevron: true)
+                                settingsLinkRow(title: "Privacy Policy", urlString: "https://kouboulabs.com/childlock/privacy")
                                 Divider().background(ChildlockColor.surfaceMuted)
-                                settingsRow(title: "Terms of Service", value: "", showChevron: true)
+                                settingsLinkRow(title: "Terms of Service", urlString: "https://kouboulabs.com/childlock/terms")
                             }
                         }
                     }
                 }
                 .padding(ChildlockSpacing.lg)
+                .frame(maxWidth: dashboardContentMaxWidth, alignment: .leading)
+                .frame(maxWidth: .infinity)
             }
             .background(ChildlockColor.background.ignoresSafeArea())
         }
@@ -829,11 +1280,29 @@ public struct ParentDashboardView: View {
         settingsRowContent(title: title, value: value, showChevron: showChevron, isUpgrade: isUpgrade)
     }
 
-    private func settingsRowContent(title: String, value: String, showChevron: Bool, isUpgrade: Bool = false) -> some View {
+    @ViewBuilder
+    private func settingsLinkRow(title: String, urlString: String) -> some View {
+        if let url = URL(string: urlString) {
+            Link(destination: url) {
+                settingsRowContent(title: title, value: "", showChevron: true)
+            }
+            .buttonStyle(.plain)
+        } else {
+            settingsRowContent(title: title, value: "", showChevron: true)
+        }
+    }
+
+    private func settingsRowContent(
+        title: String,
+        value: String,
+        showChevron: Bool,
+        isUpgrade: Bool = false,
+        isDestructive: Bool = false
+    ) -> some View {
         HStack {
             Text(title)
                 .font(.system(size: 15))
-                .foregroundStyle(isUpgrade ? ChildlockColor.primaryDeep : ChildlockColor.textPrimary)
+                .foregroundStyle(rowTextColor(isUpgrade: isUpgrade, isDestructive: isDestructive))
             Spacer()
             if !value.isEmpty {
                 Text(value)
@@ -846,8 +1315,29 @@ public struct ParentDashboardView: View {
                     .foregroundStyle(ChildlockColor.textFaint)
             }
         }
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, ChildlockSpacing.md)
         .padding(.vertical, ChildlockSpacing.sm)
+        .contentShape(Rectangle())
+    }
+
+    private func rowTextColor(isUpgrade: Bool, isDestructive: Bool) -> Color {
+        if isDestructive {
+            return ChildlockColor.accent
+        }
+
+        if isUpgrade {
+            return ChildlockColor.primaryDeep
+        }
+
+        return ChildlockColor.textPrimary
+    }
+
+    private func signOut() {
+        AuthService.shared.signOut()
+        appState.isAuthenticated = false
+        appState.lockSettings(pinService: pinService)
+        appState.currentTab = .home
     }
 
     private func settingsToggleRow(title: String, binding: Binding<Bool>) -> some View {
@@ -859,6 +1349,16 @@ public struct ParentDashboardView: View {
         .tint(ChildlockColor.primary)
         .padding(.horizontal, ChildlockSpacing.md)
         .padding(.vertical, ChildlockSpacing.sm)
+    }
+
+    private var notificationSettingsFootnote: some View {
+        Text(notificationGuidanceText)
+            .font(ChildlockTypography.caption)
+            .foregroundStyle(ChildlockColor.textSecondary)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, ChildlockSpacing.md)
+            .padding(.bottom, ChildlockSpacing.sm)
     }
 
     // MARK: - Add Child Sheet
@@ -874,7 +1374,7 @@ public struct ParentDashboardView: View {
                             .foregroundStyle(ChildlockColor.textPrimary)
 
                         let firstChildName = appState.profiles.first?.name ?? "your first child"
-                        Text("Each child gets their own age-tuned challenges. Settings copy from \(firstChildName) by default -- you can tweak per child.")
+                        Text("Each child gets their own age-tuned challenges. Settings copy from \(firstChildName) by default, and you can tweak them per child.")
                             .font(.system(size: 14))
                             .foregroundStyle(ChildlockColor.textMuted)
                     }
@@ -950,36 +1450,6 @@ public struct ParentDashboardView: View {
                         }
                     }
 
-                    // Apple ID section
-                    HStack(spacing: ChildlockSpacing.sm) {
-                        Image(systemName: "apple.logo")
-                            .font(.system(size: 20))
-                            .foregroundStyle(ChildlockColor.textPrimary)
-                            .frame(width: 40, height: 40)
-                            .background(ChildlockColor.surfaceMuted.opacity(0.5))
-                            .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.sm))
-
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Apple ID")
-                                .font(.system(size: 14, weight: .medium))
-                                .foregroundStyle(ChildlockColor.textPrimary)
-                            Text("child@icloud.com")
-                                .font(.system(size: 12))
-                                .foregroundStyle(ChildlockColor.textMuted)
-                        }
-
-                        Spacer()
-
-                        Button("Change") {}
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundStyle(ChildlockColor.primaryDeep)
-                            .buttonStyle(.plain)
-                    }
-                    .padding(ChildlockSpacing.md)
-                    .background(ChildlockColor.surface)
-                    .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.card))
-                    .childlockShadow(ChildlockShadow.sm)
-
                     if let addChildErrorText {
                         Text(addChildErrorText)
                             .font(ChildlockTypography.caption)
@@ -996,13 +1466,15 @@ public struct ParentDashboardView: View {
 
                     // Footer
                     if let firstChild = appState.profiles.first {
-                        Text("Apps & interval copied from \(firstChild.name) · edit on next screen")
+                        Text("Apps & interval copied from \(firstChild.name) · adjust anytime in the Apps tab")
                             .font(.system(size: 12))
                             .foregroundStyle(ChildlockColor.textMuted)
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
                 }
                 .padding(ChildlockSpacing.lg)
+                .frame(maxWidth: dashboardContentMaxWidth, alignment: .leading)
+                .frame(maxWidth: .infinity)
             }
             .background(ChildlockColor.background.ignoresSafeArea())
             .toolbar {
@@ -1063,6 +1535,22 @@ public struct ParentDashboardView: View {
                 var updated = appState.settings
                 updated.dailySummaryNotification = isEnabled
                 appState.settings = updated
+
+                if isEnabled {
+                    let summary = appState.todaySummary
+                    Task {
+                        _ = await NotificationService.requestPermission()
+                        await MainActor.run {
+                            NotificationService.scheduleDailySummary(
+                                challengesCompleted: summary.challengesCompleted,
+                                accuracy: Int((summary.accuracy * 100).rounded())
+                            )
+                            refreshNotificationAuthorizationStatus()
+                        }
+                    }
+                } else {
+                    NotificationService.cancelDailySummary()
+                }
             }
         )
     }
@@ -1074,8 +1562,81 @@ public struct ParentDashboardView: View {
                 var updated = appState.settings
                 updated.challengeAlertNotification = isEnabled
                 appState.settings = updated
+                SharedDefaults.shared.set(isEnabled, forKey: SharedDefaults.Key.challengeAlertsEnabled)
+
+                if isEnabled {
+                    Task {
+                        _ = await NotificationService.requestPermission()
+                        await MainActor.run {
+                            refreshNotificationAuthorizationStatus()
+                        }
+                    }
+                }
             }
         )
+    }
+
+    private var notificationAuthorizationLabel: String {
+        switch notificationAuthorizationStatus {
+        case .authorized, .provisional, .ephemeral:
+            return "On"
+        case .denied:
+            return "Off"
+        case .notDetermined:
+            return "Not asked"
+        case .unavailable:
+            return "Unavailable"
+        }
+    }
+
+    private var notificationPermissionActionTitle: String {
+        notificationAuthorizationStatus == .denied ? "Open Notification Settings" : "Enable Notifications"
+    }
+
+    private var notificationGuidanceText: String {
+        if notificationAuthorizationStatus == .denied {
+            return "Challenge alerts are off. The child can still tap Start Brain Break, press Home, and open Childlock to continue."
+        }
+
+        if notificationAuthorizationStatus.allowsDelivery {
+            return "Challenge alerts guide the child back from the shield. If an alert is missed, press Home and open Childlock."
+        }
+
+        return "Enable alerts so shielded children get a cue back to Childlock. Home to Childlock still works if alerts are skipped."
+    }
+
+    private func refreshNotificationAuthorizationStatus() {
+        Task {
+            let status = await NotificationService.authorizationStatus()
+            await MainActor.run {
+                notificationAuthorizationStatus = status
+            }
+        }
+    }
+
+    @MainActor
+    private func requestNotificationPermissionOrOpenSettings() async {
+        isRequestingNotificationPermission = true
+        defer { isRequestingNotificationPermission = false }
+
+        if notificationAuthorizationStatus == .denied {
+            openAppNotificationSettings()
+            return
+        }
+
+        _ = await NotificationService.requestPermission()
+        notificationAuthorizationStatus = await NotificationService.authorizationStatus()
+    }
+
+    private func openAppNotificationSettings() {
+        #if os(iOS) && canImport(UIKit)
+        let url = URL(string: UIApplication.openNotificationSettingsURLString)
+            ?? URL(string: UIApplication.openSettingsURLString)
+
+        if let url {
+            UIApplication.shared.open(url)
+        }
+        #endif
     }
 
     private func saveNewChildProfile() {
@@ -1164,6 +1725,27 @@ public struct ParentDashboardView: View {
         )
     }
 
+    #if os(iOS) && canImport(FamilyControls)
+    private func requestAppsScreenTimeAccess() async {
+        guard !isRequestingAppsScreenTimeAccess else { return }
+
+        isRequestingAppsScreenTimeAccess = true
+        defer { isRequestingAppsScreenTimeAccess = false }
+
+        do {
+            try await ScreenTimeManager.shared.requestAuthorization()
+            isAppsScreenTimeSelectionAvailable = ScreenTimeManager.shared.isAuthorized
+            appsStatusText = "Screen Time access granted. Choose real apps, categories, or websites to monitor."
+            appsErrorText = nil
+            isAppsFamilyActivityPickerPresented = isAppsScreenTimeSelectionAvailable
+        } catch {
+            isAppsScreenTimeSelectionAvailable = ScreenTimeManager.shared.isAuthorized
+            appsStatusText = nil
+            appsErrorText = error.localizedDescription
+        }
+    }
+    #endif
+
     private func applyActiveSelectionToAllChildren() {
         guard let activeProfile = appState.activeProfile else {
             appsErrorText = "Select a child profile first."
@@ -1203,17 +1785,17 @@ public struct ParentDashboardView: View {
 
         let appCount = selection.applicationTokens.count
         if appCount > 0 {
-            labels.append("\(appCount) app token\(appCount == 1 ? "" : "s") selected")
+            labels.append("\(appCount) app\(appCount == 1 ? "" : "s") selected")
         }
 
         let categoryCount = selection.categoryTokens.count
         if categoryCount > 0 {
-            labels.append("\(categoryCount) category token\(categoryCount == 1 ? "" : "s") selected")
+            labels.append("\(categoryCount) categor\(categoryCount == 1 ? "y" : "ies") selected")
         }
 
         let domainCount = selection.webDomainTokens.count
         if domainCount > 0 {
-            labels.append("\(domainCount) web domain token\(domainCount == 1 ? "" : "s") selected")
+            labels.append("\(domainCount) website\(domainCount == 1 ? "" : "s") selected")
         }
 
         return labels
@@ -1254,45 +1836,27 @@ public struct ParentDashboardView: View {
     }
 }
 
-// MARK: - Flow Layout (for pill tags)
+private struct PaywallNavigationDestination: View {
+    @Environment(\.dismiss) private var dismiss
 
-private struct FlowLayout: Layout {
-    var spacing: CGFloat
-
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-        let result = computeLayout(proposal: proposal, subviews: subviews)
-        return result.size
-    }
-
-    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-        let result = computeLayout(proposal: ProposedViewSize(width: bounds.width, height: bounds.height), subviews: subviews)
-        for (index, position) in result.positions.enumerated() {
-            subviews[index].place(at: CGPoint(x: bounds.minX + position.x, y: bounds.minY + position.y), proposal: .unspecified)
+    var body: some View {
+        PaywallView {
+            dismiss()
         }
+        .navigationBarBackButtonHidden(true)
     }
+}
 
-    private func computeLayout(proposal: ProposedViewSize, subviews: Subviews) -> (size: CGSize, positions: [CGPoint]) {
-        let maxWidth = proposal.width ?? .infinity
-        var positions: [CGPoint] = []
-        var x: CGFloat = 0
-        var y: CGFloat = 0
-        var rowHeight: CGFloat = 0
-        var totalHeight: CGFloat = 0
-
-        for subview in subviews {
-            let size = subview.sizeThatFits(.unspecified)
-            if x + size.width > maxWidth, x > 0 {
-                x = 0
-                y += rowHeight + spacing
-                rowHeight = 0
-            }
-            positions.append(CGPoint(x: x, y: y))
-            rowHeight = max(rowHeight, size.height)
-            x += size.width + spacing
-            totalHeight = y + rowHeight
+private extension AppState.ActivityWindow {
+    var summarySuffix: String {
+        switch self {
+        case .day:
+            return "today"
+        case .week:
+            return "this week"
+        case .allTime:
+            return "all time"
         }
-
-        return (CGSize(width: maxWidth, height: totalHeight), positions)
     }
 }
 
@@ -1322,17 +1886,5 @@ private struct AddChildDraft {
 
     var canSave: Bool {
         !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-    }
-}
-
-private extension View {
-    @ViewBuilder
-    func pinInputBehavior() -> some View {
-        #if os(iOS)
-        keyboardType(.numberPad)
-            .textContentType(.oneTimeCode)
-        #else
-        self
-        #endif
     }
 }

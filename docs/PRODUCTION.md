@@ -1,0 +1,264 @@
+# Childlock Production Runbook
+
+This runbook is the production path for the iOS app, Screen Time extensions,
+Supabase backend, RevenueCat integration, and public support/legal pages.
+
+## Secret Storage
+
+Use three storage locations:
+
+- App-facing build settings: paste public client keys into `Config/AppSecrets.local.xcconfig`. The checked-in `Config/AppSecrets.xcconfig` is wired into the app target and optionally includes the ignored local override.
+- Local deployment secrets: paste backend/deployment secrets into `Config/production.env`. This file is gitignored and should only be sourced locally when deploying.
+- Long-lived secrets: store the real values in 1Password/iCloud Keychain and in the provider dashboard that owns them.
+
+Never put these in the app or repository:
+
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `SUPABASE_ACCESS_TOKEN`
+- `REVENUECAT_WEBHOOK_SECRET`
+- App Store Connect `.p8` private keys
+
+## Required Credentials
+
+| Credential | Where to get it | Where to store it |
+| --- | --- | --- |
+| Apple Team ID | Apple Developer account | Configure in Xcode signing settings |
+| Supabase project ref | Supabase project URL | `Config/production.env` |
+| Supabase URL | Supabase API settings | `Config/AppSecrets.local.xcconfig` |
+| Supabase publishable key | Supabase API settings | `Config/AppSecrets.local.xcconfig` |
+| Supabase service role key | Supabase API settings | Password manager and Supabase CLI/server only |
+| Supabase access token | Supabase account tokens | Password manager, local shell, or GitHub Actions secret |
+| RevenueCat iOS SDK key | RevenueCat project API keys | `Config/AppSecrets.local.xcconfig` |
+| RevenueCat webhook secret | Generate a long random value | Supabase secret and RevenueCat webhook auth header |
+| RevenueCat/App Store IAP key | App Store Connect | RevenueCat dashboard and password manager |
+| PostHog project API key | PostHog project settings | `Config/AppSecrets.local.xcconfig` |
+| KouBou Labs site deploy access | `Kopi-Koubou/koubou-labs-site` repo and hosting provider | GitHub/Cloudflare credentials, outside this app repo |
+| Support/privacy email | Your support inbox provider | `koubou-labs-site` public pages and App Store Connect |
+
+Current production Supabase project:
+
+- Project ref: `jkncpveupvozsmbbkvgq`
+- Project URL: `https://jkncpveupvozsmbbkvgq.supabase.co`
+
+Required RevenueCat/App Store product identifiers:
+
+- Monthly subscription: `childlock_premium_monthly`
+- Annual subscription: `childlock_premium_annual`
+- RevenueCat entitlement identifier: `Childlock Pro`
+
+## App Review Position
+
+For v1, Screen Time enforcement is not quota-gated. Brain breaks, app shielding,
+and re-arming monitoring are available to every family. Any future subscription
+should unlock non-enforcement value such as reports, insights, coaching content,
+or additional cloud features.
+
+Parents must sign in with Apple or Google before setup. Reviewers can use native
+Sign in with Apple or Supabase Google OAuth. There is no separate username/password account to provide.
+
+Launch device support is intentionally local-first. Childlock locks apps on the
+device where setup is completed. For a child iPad, install and configure
+Childlock on the iPad. Same-phone parent/child use is supported because the
+parent dashboard remains PIN-protected. A separate parent-phone remote dashboard
+is not part of v1. See `docs/DEVICE_MODEL.md`.
+
+## Backend Deployment
+
+From the repo root:
+
+```sh
+source Config/production.env
+supabase login
+supabase link --project-ref "$SUPABASE_PROJECT_REF"
+supabase db push
+supabase functions deploy revenuecat-webhook
+supabase secrets set REVENUECAT_WEBHOOK_SECRET="$REVENUECAT_WEBHOOK_SECRET"
+```
+
+Supabase Edge Functions automatically expose `SUPABASE_URL` and
+`SUPABASE_SERVICE_ROLE_KEY` at runtime. Do not compile either service-role
+value into the iOS app.
+
+Apple auth setup is tracked in `docs/SUPABASE_APPLE_AUTH.md`. Google auth setup
+is tracked in `docs/SUPABASE_GOOGLE_AUTH.md`. Do not submit a production build
+until the Supabase Apple and Google providers are enabled and saved.
+
+For Xcode Cloud, create `Config/AppSecrets.local.xcconfig` in a pre-build script
+from Xcode Cloud environment variables, or pass equivalent build settings on the
+archive command line. A clean checkout still builds because the checked-in base
+config exists, but sign-in and purchases require real values.
+
+In RevenueCat, configure a webhook:
+
+```text
+https://<project-ref>.supabase.co/functions/v1/revenuecat-webhook
+```
+
+Set the webhook Authorization header to the same value as
+`REVENUECAT_WEBHOOK_SECRET`.
+
+## RevenueCat Product Gate
+
+Before TestFlight purchase QA, confirm RevenueCat can fetch the App Store
+products from the current offering. The iOS app expects:
+
+- Current offering has monthly and annual packages.
+- Monthly package product identifier is `childlock_premium_monthly`.
+- Annual package product identifier is `childlock_premium_annual`.
+- Both packages unlock entitlement `Childlock Pro`.
+
+If RevenueCat returns empty offerings, the paywall intentionally disables
+purchase with `Premium unavailable` while keeping Screen Time enforcement
+available. Fix App Store Connect product status, RevenueCat package mapping, or
+the app's `REVENUECAT_API_KEY` before treating subscription QA as passed.
+
+## Public Site Deployment
+
+The App Store support, privacy, and terms links live in the separate
+`Kopi-Koubou/koubou-labs-site` repo:
+
+- `https://kouboulabs.com/childlock/support`
+- `https://kouboulabs.com/childlock/privacy`
+- `https://kouboulabs.com/childlock/terms`
+
+Deploy that repo after changing the static pages under `public/childlock/`.
+
+## Xcode Release
+
+1. Install full Xcode and select it:
+
+   ```sh
+   sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+   ```
+
+2. In Xcode, set the development team on every target:
+   - Childlock
+   - DeviceActivityMonitorExtension
+   - ShieldActionExtension
+   - ShieldConfigurationExtension
+
+   Bundle identifiers:
+   - `com.kopikoubou.childlock`
+   - `com.kopikoubou.childlock.device-activity-monitor`
+   - `com.kopikoubou.childlock.shield-action`
+   - `com.kopikoubou.childlock.shield-configuration`
+
+3. Ensure the app and extensions all include:
+   - Family Controls entitlement
+   - App Group `group.com.childlock.shared`
+
+4. Fill app-facing production values in `Config/AppSecrets.local.xcconfig`.
+   The checked-in `Config/AppSecrets.xcconfig` should stay as the safe base
+   config and include the ignored local override.
+
+5. Run the local release preflight below.
+
+6. Product -> Archive -> Distribute App -> App Store Connect.
+
+## Local Release Preflight
+
+These checks catch compile, icon, privacy-manifest, and extension-shape
+regressions before a real archive upload. They do not replace TestFlight
+hardware QA.
+
+```sh
+swift test
+git diff --check -- ':!.build'
+xcodebuild -project Childlock.xcodeproj \
+  -scheme Childlock \
+  -configuration Release \
+  -destination 'platform=iOS Simulator,id=<simulator-udid>' \
+  CODE_SIGNING_ALLOWED=NO \
+  build
+xcodebuild -project Childlock.xcodeproj \
+  -scheme Childlock \
+  -configuration Release \
+  -destination 'generic/platform=iOS' \
+  CODE_SIGNING_ALLOWED=NO \
+  build
+```
+
+Verify the app icon sizes that App Store Connect requires:
+
+```sh
+sips -g pixelWidth -g pixelHeight \
+  Sources/Childlock/Assets.xcassets/AppIcon.appiconset/Icon-60@2x.png \
+  Sources/Childlock/Assets.xcassets/AppIcon.appiconset/Icon-76@2x.png \
+  Sources/Childlock/Assets.xcassets/AppIcon.appiconset/Icon-1024.png
+```
+
+Expected dimensions:
+
+- `Icon-60@2x.png`: `120x120`
+- `Icon-76@2x.png`: `152x152`
+- `Icon-1024.png`: `1024x1024`
+
+Verify extension point identifiers:
+
+```sh
+for f in Extensions/*/Info.plist; do
+  echo "$f"
+  /usr/libexec/PlistBuddy -c 'Print :NSExtension:NSExtensionPointIdentifier' "$f"
+done
+```
+
+Expected identifiers:
+
+- `com.apple.deviceactivity.monitor-extension`
+- `com.apple.family-controls.shield-action-extension`
+- `com.apple.family-controls.shield-configuration-extension`
+
+Verify the app and each extension bundle includes the privacy manifest:
+
+```sh
+BUILT_APP=$(find ~/Library/Developer/Xcode/DerivedData -path '*Release-iphonesimulator/Childlock.app' -type d | tail -1)
+find "$BUILT_APP" -name PrivacyInfo.xcprivacy -print
+```
+
+Expected first-party manifest locations:
+
+- `Childlock.app/PrivacyInfo.xcprivacy`
+- `Childlock.app/PlugIns/ChildlockMonitor.appex/PrivacyInfo.xcprivacy`
+- `Childlock.app/PlugIns/ChildlockShieldAction.appex/PrivacyInfo.xcprivacy`
+- `Childlock.app/PlugIns/ChildlockShieldConfiguration.appex/PrivacyInfo.xcprivacy`
+
+App Store Connect privacy labels must still match actual production behavior:
+Supabase account/profile data, RevenueCat purchase state, PostHog analytics,
+and any diagnostic data reported by bundled SDK manifests.
+Use `docs/APP_PRIVACY_LABELS.md` as the paste-ready baseline.
+
+For a command-line archive after signing is configured:
+
+```sh
+DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer \
+xcodebuild -project Childlock.xcodeproj \
+  -scheme Childlock \
+  -configuration Release \
+  -destination 'generic/platform=iOS' \
+  -archivePath build/Childlock.xcarchive \
+  archive
+```
+
+## Required Real-Device QA
+
+Use a physical child device. The simulator cannot validate the production loop.
+The full TestFlight checklist lives in `docs/QA_TESTFLIGHT_CHECKLIST.md`.
+
+- Fresh install opens onboarding.
+- Parent signs in with Apple or Google.
+- Parent grants Screen Time access on the child-used device.
+- Parent selects monitored apps/categories.
+- First interval does not shield immediately.
+- Threshold shields the selected app.
+- "Start Brain Break" shield path reaches a pending challenge after the child
+  opens Childlock from Home or the notification.
+- If notifications are denied or missed, Home -> Childlock still reaches the
+  pending challenge.
+- Challenge completion removes shields.
+- Monitoring re-arms for another full interval.
+- Parent PIN is required to leave the child hand-back screen for dashboard.
+- Ask Parent creates a parent-visible request, does not open a child challenge
+  before the parent responds, and can grant one more block.
+- Same shared phone flow keeps dashboard/settings PIN-protected after child use.
+- Child iPad flow is tested by installing and configuring Childlock on the iPad.
+- Support, Privacy, and Terms links open successfully.

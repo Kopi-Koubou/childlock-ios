@@ -2,17 +2,24 @@ import SwiftUI
 
 public struct ChallengeContainerView: View {
     @Bindable private var viewModel: ChallengeViewModel
+    private let onParentUnlock: () -> Void
 
-    public init(viewModel: ChallengeViewModel) {
+    public init(viewModel: ChallengeViewModel, onParentUnlock: @escaping () -> Void = {}) {
         self.viewModel = viewModel
+        self.onParentUnlock = onParentUnlock
     }
 
     public var body: some View {
         ZStack {
             ChildlockColor.background.ignoresSafeArea()
 
-            if viewModel.state == .completed {
-                CelebrationView()
+            if viewModel.state == .handback {
+                HandBackView(childName: viewModel.activeProfile?.name) {
+                    onParentUnlock()
+                    viewModel.clearChallenge()
+                }
+            } else if viewModel.state == .completed {
+                CelebrationView(solveTimeSeconds: viewModel.lastSolveTimeSeconds)
             } else {
                 VStack(spacing: ChildlockSpacing.md) {
                     // Brain Break pill
@@ -53,7 +60,7 @@ public struct ChallengeContainerView: View {
                             onSelect: viewModel.submitPuzzleAnswer
                         )
                     } else if let memoryChallenge = viewModel.challenge as? MemoryChallenge {
-                        MemoryChallengeSummaryView(
+                        MemoryMatchView(
                             challenge: memoryChallenge,
                             onComplete: viewModel.submitMemoryCompletion
                         )
@@ -80,6 +87,18 @@ public struct ChallengeContainerView: View {
                 .padding(ChildlockSpacing.lg)
             }
         }
+        .onAppear { speakPromptIfNeeded() }
+        .onChange(of: viewModel.state) { _, state in
+            if state == .completed || state == .handback {
+                ChallengeSpeaker.shared.stop()
+            }
+        }
+    }
+
+    private func speakPromptIfNeeded() {
+        guard AppState.shared.settings.voicePromptsEnabled else { return }
+        guard let prompt = viewModel.challenge?.voicePrompt else { return }
+        ChallengeSpeaker.shared.speak(prompt)
     }
 }
 
@@ -128,32 +147,6 @@ private struct MultipleChoiceTextChallengeView: View {
                 .background(ChildlockColor.warnSoft)
                 .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.card))
             }
-        }
-        .childlockCard()
-    }
-}
-
-private struct MemoryChallengeSummaryView: View {
-    let challenge: MemoryChallenge
-    let onComplete: () -> Void
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: ChildlockSpacing.md) {
-            Text(challenge.instruction)
-                .font(ChildlockTypography.subtitle)
-                .foregroundStyle(ChildlockColor.textPrimary)
-
-            Text("Match \(challenge.pairCount) pairs")
-                .font(ChildlockTypography.body)
-                .foregroundStyle(ChildlockColor.textSecondary)
-
-            Text(challenge.symbols.joined(separator: "  "))
-                .font(.system(size: 30, weight: .medium, design: .rounded))
-                .padding(.vertical, ChildlockSpacing.xs)
-
-            Button("I Matched All Pairs", action: onComplete)
-                .buttonStyle(ChildlockPrimaryButtonStyle())
-                .accessibilityLabel("memory_complete")
         }
         .childlockCard()
     }

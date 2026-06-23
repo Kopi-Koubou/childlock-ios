@@ -259,61 +259,135 @@ private enum MathOp {
 public final class PatternChallengeGenerator: ChallengeGenerator {
     public let challengeType: ChallengeType = .pattern
 
+    private static let youngSymbolBank = ["🔴", "🔵", "🟡", "🟢", "⭐", "🌙", "🍎", "🐟"]
+
     public init() {}
 
     public func generate(ageBand: AgeBand, difficulty: Int) -> any Challenge {
         switch ageBand {
         case .young:
-            let sequence = ["●", "■", "●", "■"]
-            let correct = "●"
-            let options = [correct, "■", "▲"].shuffled()
-            return PatternChallenge(
-                ageBand: ageBand,
-                difficulty: difficulty,
-                instruction: "What comes next?",
-                voicePrompt: "What shape comes next?",
-                hintText: "Look for the repeating shape pattern.",
-                sequence: sequence,
-                correctAnswer: correct,
-                allAnswers: options
-            )
+            return generateYoungShapePattern(difficulty: difficulty)
         case .middle:
-            let base = Int.random(in: 2...6)
-            let sequence = [base, base + 2, base + 4].map(String.init)
-            let correct = String(base + 6)
-            let options = [correct, String(base + 5), String(base + 8), String(base + 10)].shuffled()
-            return PatternChallenge(
-                ageBand: ageBand,
-                difficulty: difficulty,
-                instruction: "Pick the next number.",
-                voicePrompt: nil,
-                hintText: "Check how much each number increases.",
-                sequence: sequence,
-                correctAnswer: correct,
-                allAnswers: options
-            )
+            return generateNumberPattern(difficulty: difficulty, ageBand: .middle)
         case .older:
-            let sequence = ["↗", "↘", "↙", "↖"]
-            let correct = "↗"
-            let options = [correct, "↘", "↙", "↖"].shuffled()
+            return generateOlderPattern(difficulty: difficulty)
+        }
+    }
+
+    private func generateYoungShapePattern(difficulty: Int) -> PatternChallenge {
+        let symbols = Self.youngSymbolBank.shuffled()
+        let a = symbols[0]
+        let b = symbols[1]
+        let distractor = symbols[2]
+
+        // Alternate between ABAB and AABB style repeats so the answer
+        // can't be memorized across sessions.
+        let useDoublePattern = Bool.random()
+        let sequence: [String]
+        let correct: String
+        if useDoublePattern {
+            sequence = [a, a, b, b, a, a]
+            correct = b
+        } else {
+            sequence = [a, b, a, b, a]
+            correct = b
+        }
+
+        return PatternChallenge(
+            ageBand: .young,
+            difficulty: difficulty,
+            instruction: "What comes next?",
+            voicePrompt: "What comes next in the pattern?",
+            hintText: "Say the pattern out loud and listen for the repeat.",
+            sequence: sequence,
+            correctAnswer: correct,
+            allAnswers: [correct, a == correct ? b : a, distractor].shuffled()
+        )
+    }
+
+    private func generateNumberPattern(difficulty: Int, ageBand: AgeBand) -> PatternChallenge {
+        let step = [2, 3, 4, 5, 10].randomElement() ?? 2
+        let base = Int.random(in: 1...(difficulty * 3 + 2))
+        let sequence = [base, base + step, base + step * 2].map(String.init)
+        let correct = base + step * 3
+
+        var wrongAnswers = Set<Int>()
+        for candidate in [correct - 1, correct + 1, correct + step, correct - step, correct + 2] {
+            if candidate != correct, candidate > 0 {
+                wrongAnswers.insert(candidate)
+            }
+            if wrongAnswers.count == 3 { break }
+        }
+
+        return PatternChallenge(
+            ageBand: ageBand,
+            difficulty: difficulty,
+            instruction: "Pick the next number.",
+            voicePrompt: nil,
+            hintText: "Each number goes up by \(step).",
+            sequence: sequence,
+            correctAnswer: String(correct),
+            allAnswers: ([correct] + Array(wrongAnswers.prefix(3))).map(String.init).shuffled()
+        )
+    }
+
+    private func generateOlderPattern(difficulty: Int) -> PatternChallenge {
+        if Bool.random() {
+            // Rotating arrow with random start and direction.
+            let clockwise = ["↑", "↗", "→", "↘", "↓", "↙", "←", "↖"]
+            let direction = Bool.random() ? 1 : -1
+            let stepSize = [1, 2].randomElement() ?? 1
+            let start = Int.random(in: 0..<clockwise.count)
+
+            let indices = (0..<4).map { offset in
+                ((start + offset * stepSize * direction) % clockwise.count + clockwise.count) % clockwise.count
+            }
+            let sequence = indices.prefix(3).map { clockwise[$0] }
+            let correct = clockwise[indices[3]]
+            let wrong = clockwise.filter { $0 != correct }.shuffled().prefix(3)
+
             return PatternChallenge(
-                ageBand: ageBand,
+                ageBand: .older,
                 difficulty: difficulty,
                 instruction: "Find the rotation rule.",
                 voicePrompt: nil,
-                hintText: "The arrow rotates the same amount each step.",
+                hintText: "The arrow turns the same amount each step.",
                 sequence: sequence,
                 correctAnswer: correct,
-                allAnswers: options
+                allAnswers: ([correct] + wrong).shuffled()
             )
         }
+
+        // Growing-step number pattern: +n, +n+1, +n+2...
+        let base = Int.random(in: 2...12)
+        let firstStep = Int.random(in: 2...5)
+        let values = [
+            base,
+            base + firstStep,
+            base + firstStep + (firstStep + 1),
+            base + firstStep + (firstStep + 1) + (firstStep + 2),
+        ]
+        let sequence = values.prefix(3).map(String.init)
+        let correct = values[3]
+        let wrongAnswers = [correct - 1, correct + 1, correct + firstStep].filter { $0 != correct }
+
+        return PatternChallenge(
+            ageBand: .older,
+            difficulty: difficulty,
+            instruction: "Pick the next number.",
+            voicePrompt: nil,
+            hintText: "The jump between numbers grows by 1 each time.",
+            sequence: sequence,
+            correctAnswer: String(correct),
+            allAnswers: ([correct] + wrongAnswers).map(String.init).shuffled()
+        )
     }
 }
 
 public final class MemoryChallengeGenerator: ChallengeGenerator {
     public let challengeType: ChallengeType = .memory
 
-    private let symbolBank = ["🍎", "⭐", "🌙", "☀️", "🎈", "🐢", "🧩", "🚀", "🍓", "🎯"]
+    private let symbolBank = ["🍎", "⭐", "🌙", "☀️", "🎈", "🐢", "🧩", "🚀", "🍓", "🎯", "🐳", "🌈"]
 
     public init() {}
 
@@ -325,7 +399,7 @@ public final class MemoryChallengeGenerator: ChallengeGenerator {
         case .older: pairCount = min(9 + max(difficulty - 5, 0) / 2, 12)
         }
 
-        let symbols = Array(symbolBank.prefix(pairCount))
+        let symbols = Array(symbolBank.shuffled().prefix(pairCount))
 
         return MemoryChallenge(
             ageBand: ageBand,
@@ -342,45 +416,63 @@ public final class MemoryChallengeGenerator: ChallengeGenerator {
 public final class PuzzleChallengeGenerator: ChallengeGenerator {
     public let challengeType: ChallengeType = .puzzle
 
+    private struct ShapeHunt {
+        let name: String
+        let symbol: String
+        let hint: String
+    }
+
+    private static let shapeHunts: [ShapeHunt] = [
+        ShapeHunt(name: "triangle", symbol: "🔺", hint: "It has three corners."),
+        ShapeHunt(name: "circle", symbol: "🔵", hint: "It's perfectly round."),
+        ShapeHunt(name: "square", symbol: "🟨", hint: "It has four equal sides."),
+        ShapeHunt(name: "heart", symbol: "❤️", hint: "It means love."),
+        ShapeHunt(name: "star", symbol: "⭐", hint: "It twinkles in the sky."),
+    ]
+
+    /// Odd-one-out groups: three of a kind plus one item that doesn't belong.
+    private static let oddOneOutGroups: [(theme: String, members: [String], odd: String)] = [
+        ("animals", ["🐶", "🐱", "🐰"], "🚗"),
+        ("fruit", ["🍎", "🍌", "🍇"], "⚽"),
+        ("vehicles", ["🚗", "🚌", "🚲"], "🍕"),
+        ("sea creatures", ["🐟", "🐙", "🦀"], "🦅"),
+        ("things that fly", ["🦅", "🦋", "✈️"], "🐢"),
+        ("food", ["🍕", "🍔", "🌮"], "📚"),
+    ]
+
     public init() {}
 
     public func generate(ageBand: AgeBand, difficulty: Int) -> any Challenge {
         switch ageBand {
         case .young:
-            let correct = "Triangle"
+            let hunt = Self.shapeHunts.randomElement() ?? Self.shapeHunts[0]
+            let wrong = Self.shapeHunts
+                .filter { $0.name != hunt.name }
+                .shuffled()
+                .prefix(2)
+                .map(\.symbol)
+
             return PuzzleChallenge(
                 ageBand: ageBand,
                 difficulty: difficulty,
-                instruction: "Match the shape.",
-                voicePrompt: "Drag the right shape.",
-                hintText: "Look for the shape with three corners.",
-                prompt: "Find the triangle",
-                correctAnswer: correct,
-                allAnswers: [correct, "Circle", "Square"].shuffled()
+                instruction: "Find the shape.",
+                voicePrompt: "Tap the \(hunt.name)!",
+                hintText: hunt.hint,
+                prompt: "Tap the \(hunt.name)",
+                correctAnswer: hunt.symbol,
+                allAnswers: ([hunt.symbol] + wrong).shuffled()
             )
-        case .middle:
-            let correct = "Piece 4"
+        case .middle, .older:
+            let group = Self.oddOneOutGroups.randomElement() ?? Self.oddOneOutGroups[0]
             return PuzzleChallenge(
                 ageBand: ageBand,
                 difficulty: difficulty,
-                instruction: "Choose the piece that completes the puzzle.",
+                instruction: "Find the odd one out.",
                 voicePrompt: nil,
-                hintText: "Match the edges and corners first.",
-                prompt: "Which piece fits the gap?",
-                correctAnswer: correct,
-                allAnswers: ["Piece 1", "Piece 2", "Piece 3", correct].shuffled()
-            )
-        case .older:
-            let correct = "Move center tile left"
-            return PuzzleChallenge(
-                ageBand: ageBand,
-                difficulty: difficulty,
-                instruction: "Pick the best next move.",
-                voicePrompt: nil,
-                hintText: "Think about the final solved position of the center row.",
-                prompt: "Sliding puzzle: what move helps most?",
-                correctAnswer: correct,
-                allAnswers: ["Move top tile down", "Move center tile left", "Move bottom tile right", "Reset"].shuffled()
+                hintText: "Three of these are \(group.theme).",
+                prompt: "Which one doesn't belong?",
+                correctAnswer: group.odd,
+                allAnswers: (group.members + [group.odd]).shuffled()
             )
         }
     }

@@ -25,6 +25,10 @@ let package = Package(
                 .product(name: "Supabase", package: "supabase-swift"),
                 .product(name: "RevenueCat", package: "purchases-ios"),
                 .product(name: "PostHog", package: "posthog-ios"),
+            ],
+            exclude: [
+                "Assets.xcassets",
+                "Info.plist",
             ]
         ),
         .testTarget(
