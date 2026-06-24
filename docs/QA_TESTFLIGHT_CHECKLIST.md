@@ -51,8 +51,8 @@ Simulator pass criteria:
   parent-only iPhone install does not remotely lock a separate iPad at launch.
 - Setup seed explains that `Continue` stays disabled until Apple's picker
   returns at least one real app, category, or website selection, with the
-  disabled action, reason, and `Choose Screen Time items` recovery action
-  pinned at the bottom of the setup screen.
+  disabled action, reason, and `Choose apps, categories, or websites` recovery
+  action pinned at the bottom of the setup screen.
 - Seeded dashboard shows a child, recent activity, app tabs, settings entry,
   and a same-phone handoff card that can lock the parent dashboard.
 - Children tab seed shows the child profile, reports controls, and add-child
@@ -104,8 +104,8 @@ Simulator evidence handoff:
   gallery, and contact sheet were generated for the current git commit.
 - When regenerating evidence, explicitly spot-check the setup seed: it must show
   `Tell us about your child`, the Screen Time picker explanation, and the pinned
-  disabled Continue reason plus `Choose Screen Time items` action. A setup seed
-  that falls back to the welcome screen is not a valid pass.
+  disabled Continue reason plus `Choose apps, categories, or websites` action.
+  A setup seed that falls back to the welcome screen is not a valid pass.
 
 This simulator pass does not prove the real Screen Time shield loop. Keep the
 TestFlight hardware gates below as the launch blocker until they pass on
@@ -154,7 +154,7 @@ gallery and contact-sheet paths.
 | Childlock opened pending challenge from alert or Home | Pass / Fail |
 | Challenge completion cleared shield | Pass / Fail |
 | Monitoring re-armed for a new interval | Pass / Fail |
-| Child saw `Return to your app` guidance and manually reopened the now-unshielded content app/site | Pass / Fail |
+| Child saw `Back to your app` guidance and manually reopened the now-unshielded content app/site | Pass / Fail |
 | Parent dashboard stayed PIN-gated after hand-back | Pass / Fail |
 | RevenueCat paywall/offering behaved as expected | Pass / Fail / Not tested |
 | RevenueCat offering loaded monthly and annual packages | Pass / Fail / Not tested |
@@ -222,7 +222,7 @@ as sufficient for launch.
 16. Opening Childlock presents the pending challenge.
 17. Completing the challenge clears shields.
 18. Monitoring re-arms for another full interval.
-19. Child sees the `Return to your app` hand-back guidance, swipes up or presses
+19. Child sees the `Back to your app` hand-back guidance, swipes up or presses
     Home to reopen the now-unshielded content app/site, and
     cannot enter the dashboard without the parent PIN.
 20. `Ask Parent` creates a parent-visible more-time request and does not open
@@ -267,7 +267,7 @@ Use this when the parent and child share the same iPhone.
 5. Parent sets the PIN, taps `Lock Parent Dashboard` or leaves Childlock to
    let it auto-lock, and hands the phone to the child.
 6. Child continuously uses selected content until the threshold is reached.
-7. Child solves the challenge, sees `Return to your app`, swipes up or presses
+7. Child solves the challenge, sees `Back to your app`, swipes up or presses
    Home, and manually reopens the now-unshielded app/site.
 8. Child taps `I'm a parent` or tries to enter the dashboard.
 9. Expected: dashboard remains gated by the parent PIN.

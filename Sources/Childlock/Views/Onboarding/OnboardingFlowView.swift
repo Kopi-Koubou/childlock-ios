@@ -531,17 +531,29 @@ public struct OnboardingFlowView: View {
                 if shouldUseFamilyActivityPicker {
                     #if os(iOS) && canImport(FamilyControls)
                     VStack(alignment: .leading, spacing: ChildlockSpacing.xs) {
-                        Button {
-                            isFamilyActivityPickerPresented = true
-                        } label: {
-                            Label("Choose apps, categories, or websites", systemImage: "checklist")
-                        }
-                        .buttonStyle(ChildlockSecondaryButtonStyle())
+                        if viewModel.selectedMonitoredApps.isEmpty {
+                            HStack(alignment: .top, spacing: ChildlockSpacing.xs) {
+                                Image(systemName: "checklist")
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundStyle(ChildlockColor.primary)
+                                Text("No Screen Time items selected yet. Use the button below to choose real apps, categories, or websites.")
+                                    .font(ChildlockTypography.caption)
+                                    .foregroundStyle(ChildlockColor.textSecondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                        } else {
+                            Button {
+                                isFamilyActivityPickerPresented = true
+                            } label: {
+                                Label("Change apps, categories, or websites", systemImage: "checklist")
+                            }
+                            .buttonStyle(ChildlockSecondaryButtonStyle())
 
-                        Text("Select at least one item in Apple's Screen Time picker, then tap Done.")
-                            .font(ChildlockTypography.caption)
-                            .foregroundStyle(ChildlockColor.textSecondary)
-                            .fixedSize(horizontal: false, vertical: true)
+                            Text("Selection saved from Apple's Screen Time picker.")
+                                .font(ChildlockTypography.caption)
+                                .foregroundStyle(ChildlockColor.textSecondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
                     }
                     .familyActivityPicker(
                         isPresented: $isFamilyActivityPickerPresented,
@@ -564,11 +576,6 @@ public struct OnboardingFlowView: View {
                                 }
                             }
                         }
-                    } else {
-                        Text("No Screen Time items selected yet. If Continue stays disabled, reopen the picker, select at least one app, category, or website, then tap Done.")
-                            .font(ChildlockTypography.caption)
-                            .foregroundStyle(ChildlockColor.textSecondary)
-                            .fixedSize(horizontal: false, vertical: true)
                     }
                     #endif
                 } else {
@@ -639,7 +646,7 @@ public struct OnboardingFlowView: View {
                     isFamilyActivityPickerPresented = true
                     #endif
                 } label: {
-                    Label("Choose Screen Time items", systemImage: "checklist")
+                    Label("Choose apps, categories, or websites", systemImage: "checklist")
                 }
                 .buttonStyle(ChildlockSecondaryButtonStyle())
                 .accessibilityIdentifier("setup_footer_choose_screen_time_items")

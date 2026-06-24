@@ -4,7 +4,8 @@ import SwiftUI
 /// dashboard: the cover only dismisses after a parent enters the PIN.
 /// The child presses Home or swipes up, then returns to their now-unshielded
 /// app. iOS does not let Screen Time apps automatically reopen arbitrary
-/// third-party apps or restore media state.
+/// third-party apps or restore media state, so this screen makes the required
+/// hand-back feel like the final resume step rather than a technical caveat.
 public struct HandBackView: View {
     private let childName: String?
     private let onParentUnlock: () -> Void
@@ -51,16 +52,16 @@ public struct HandBackView: View {
                 HandBackStepRow(
                     iconName: "checkmark.circle.fill",
                     title: "Content unlocked",
-                    detail: "Your video, game, or site can open again."
+                    detail: "The shield is cleared and your content can open again."
                 )
 
                 HandBackReturnCue(
                     iconName: "arrow.up.forward.circle.fill",
-                    title: "Return to your app",
-                    detail: "Swipe up or press Home, then tap the same video, game, or site."
+                    title: "Back to your app",
+                    detail: "Swipe up or press Home once, then tap the app, video, game, or site you were using."
                 )
                 .accessibilityIdentifier("handback_resume_guidance")
-                .accessibilityLabel("Return to your app. Swipe up or press Home, then tap the same video, game, or site.")
+                .accessibilityLabel("Back to your app. Swipe up or press Home once, then tap the app, video, game, or site you were using.")
             }
             .accessibilityIdentifier("handback_steps")
             .padding(.top, ChildlockSpacing.xs)

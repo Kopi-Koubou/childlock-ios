@@ -14,6 +14,7 @@ SUMMARY_PATH="$OUTPUT_DIR/summary.md"
 GALLERY_PATH="$OUTPUT_DIR/gallery.html"
 CONTACT_SHEET_PATH="$OUTPUT_DIR/contact-sheet.png"
 GIT_COMMIT="$(git -C "$ROOT_DIR" rev-parse --short HEAD 2>/dev/null || echo "unknown")"
+SCREENSHOT_SETTLE_SECONDS="${QA_SCREENSHOT_SETTLE_SECONDS:-4}"
 
 DEFAULT_SIMULATORS=("iPhone 17" "iPad (A16)")
 SIMULATORS=("$@")
@@ -257,7 +258,7 @@ for simulator_name in "${SIMULATORS[@]}"; do
 
         echo "Launching $simulator_name with $seed"
         xcrun simctl launch --terminate-running-process "$simulator_id" "$BUNDLE_ID" "$seed" >/dev/null
-        sleep 2
+        sleep "$SCREENSHOT_SETTLE_SECONDS"
         xcrun simctl io "$simulator_id" screenshot "$screenshot_path" >/dev/null
 
         screenshot_file="$(basename "$screenshot_path")"
