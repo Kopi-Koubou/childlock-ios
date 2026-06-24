@@ -4,7 +4,8 @@ final class HandBackCopyTests: XCTestCase {
     func testHandBackKeepsChildInstructionPrimaryAndParentEntryVisible() throws {
         let contents = try readRepoFile("Sources/Childlock/Views/Challenges/HandBackView.swift")
 
-        XCTAssertTrue(contents.contains("Head back to your app. It's unlocked."))
+        XCTAssertTrue(contents.contains("Swipe up or press Home, then reopen your video or app. It's unpaused."))
+        XCTAssertTrue(contents.contains("iOS does not let Screen Time apps automatically reopen that app."))
         XCTAssertTrue(contents.contains("Label(\"I'm a parent\", systemImage: \"lock.fill\")"))
         XCTAssertTrue(contents.contains("accessibilityIdentifier(\"parent_unlock_entry\")"))
         XCTAssertTrue(contents.contains("accessibilityLabel(\"I'm a parent\")"))
@@ -31,6 +32,7 @@ final class HandBackCopyTests: XCTestCase {
 
         XCTAssertTrue(contents.contains("Ready to hand this device over?"))
         XCTAssertTrue(contents.contains("Lock parent controls first. Brain breaks still open for your child"))
+        XCTAssertTrue(contents.contains("When a monitored app pauses, the Childlock alert or Home opens the brain break."))
         XCTAssertTrue(contents.contains("handoffLockCard"))
         XCTAssertTrue(contents.contains("appState.lockSettings(pinService: pinService)"))
         XCTAssertTrue(contents.contains("accessibilityIdentifier(\"handoff_lock_parent_dashboard\")"))
@@ -129,6 +131,10 @@ final class HandBackCopyTests: XCTestCase {
 
         XCTAssertTrue(dashboard.contains("if shouldShowStartLockEnforcementAction"))
         XCTAssertTrue(dashboard.contains("if shouldShowStopLockEnforcementAction"))
+        XCTAssertTrue(dashboard.contains("Start Screen Time Enforcement"))
+        XCTAssertTrue(dashboard.contains("Stop Screen Time Enforcement"))
+        XCTAssertFalse(dashboard.contains("Start Lock Enforcement"))
+        XCTAssertFalse(dashboard.contains("Stop Lock Enforcement"))
         XCTAssertTrue(dashboard.contains("private var shouldShowStartLockEnforcementAction: Bool"))
         XCTAssertTrue(dashboard.contains("private var shouldShowStopLockEnforcementAction: Bool"))
         XCTAssertTrue(dashboard.contains("case .running, .intervalStarted, .thresholdReached, .challengeRequested, .moreTimeRequested:\n            return false"))

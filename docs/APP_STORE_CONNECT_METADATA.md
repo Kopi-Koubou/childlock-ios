@@ -89,10 +89,12 @@ Reviewer flow:
 5. Set a short brain-break interval.
 6. Open selected app/category/site content until the interval threshold is reached.
 7. The selected content is shielded with Childlock's Brain Break shield.
-8. Tap Start Brain Break, then open Childlock from Home or the notification and
-   solve the pending challenge.
+8. Tap Start Brain Break, then tap the Childlock notification or open Childlock
+   from Home and solve the pending challenge.
 9. Completing the challenge removes the shield and re-arms monitoring.
-10. The child hand-back screen requires the parent PIN before entering the parent dashboard.
+10. The child hand-back screen tells the child to reopen the now-unshielded
+    app manually and requires the parent PIN before entering the parent
+    dashboard.
 
 Sign-in uses Apple's native Sign in with Apple flow and, when configured for the
 submitted build, native Google Sign-In backed by Supabase Auth. Builds without

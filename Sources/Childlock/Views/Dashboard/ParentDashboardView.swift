@@ -199,7 +199,7 @@ public struct ParentDashboardView: View {
             }
             .childlockCard()
 
-            Text("Brain breaks still open automatically when a monitored app is paused.")
+            Text("When a monitored app pauses, the Childlock alert or Home opens the brain break.")
                 .font(ChildlockTypography.caption)
                 .foregroundStyle(ChildlockColor.textMuted)
                 .multilineTextAlignment(.center)
@@ -1374,7 +1374,7 @@ public struct ParentDashboardView: View {
                                     Button {
                                         Task { await startScreenTimeEnforcement() }
                                     } label: {
-                                        settingsRowContent(title: "Start Lock Enforcement", value: "", showChevron: true)
+                                        settingsRowContent(title: "Start Screen Time Enforcement", value: "", showChevron: true)
                                     }
                                     .buttonStyle(.plain)
                                     .disabled(appState.activeProfile == nil)
@@ -1386,7 +1386,7 @@ public struct ParentDashboardView: View {
                                     Button {
                                         stopScreenTimeEnforcement()
                                     } label: {
-                                        settingsRowContent(title: "Stop Lock Enforcement", value: "", showChevron: true)
+                                        settingsRowContent(title: "Stop Screen Time Enforcement", value: "", showChevron: true)
                                     }
                                     .buttonStyle(.plain)
                                     .disabled(appState.activeProfile == nil)

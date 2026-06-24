@@ -43,11 +43,12 @@ shielding, extension actions, purchases, and real hand-back behavior.
 | Selected content shields only after the threshold | Pass / Fail |  |
 | Shield copy says `Brain Break` | Pass / Fail |  |
 | `Start Brain Break` closes the selected app | Pass / Fail |  |
-| Childlock opens the pending challenge from notification or Home | Pass / Fail |  |
+| Childlock opens the pending challenge from alert or Home | Pass / Fail |  |
 | Denied-notification fallback opens the pending challenge from Home | Pass / Fail / N/A |  |
 | Challenge completion clears the shield | Pass / Fail |  |
 | Monitoring re-arms for another full interval | Pass / Fail |  |
 | Second full interval shields again | Pass / Fail |  |
+| Child manually reopens the now-unshielded content app | Pass / Fail |  |
 | Parent dashboard stays PIN-gated after hand-back | Pass / Fail |  |
 | `Ask Parent` creates a parent-visible request only | Pass / Fail |  |
 | `Give one more block` grants time and re-arms enforcement | Pass / Fail |  |
@@ -66,7 +67,7 @@ Use this when the parent and child share the same iPhone.
 | If multiple child profiles exist, parent taps `Make active` for the child before handoff | Pass / Fail / N/A |  |
 | Parent sets the PIN and hands the phone to the child | Pass / Fail / N/A |  |
 | Child continuously uses selected content until threshold is reached | Pass / Fail / N/A |  |
-| Child solves the challenge and returns to the unlocked app | Pass / Fail / N/A |  |
+| Child solves the challenge and manually reopens the unlocked app | Pass / Fail / N/A |  |
 | Child cannot reach parent dashboard without the PIN | Pass / Fail / N/A |  |
 
 ## Child iPad Scenario

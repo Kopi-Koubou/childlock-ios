@@ -123,7 +123,7 @@ public final class ChildlockShieldAction: ShieldActionDelegate {
         case .primaryButtonPressed:
             defaults.set(true, forKey: SharedDefaults.Key.challengePending)
             defaults.set("challenge_requested", forKey: SharedDefaults.Key.monitoringStatus)
-            clearBrainBreakNotification()
+            postBrainBreakNotification()
             completionHandler(.close)
         case .secondaryButtonPressed:
             let requestCount = defaults.integer(forKey: SharedDefaults.Key.moreTimeRequestCount)
@@ -138,11 +138,29 @@ public final class ChildlockShieldAction: ShieldActionDelegate {
         }
     }
 
-    private func clearBrainBreakNotification() {
+    private func postBrainBreakNotification() {
+        let alertsEnabled = defaults.object(forKey: SharedDefaults.Key.challengeAlertsEnabled) as? Bool ?? true
+        guard alertsEnabled else {
+            return
+        }
+
+        let content = UNMutableNotificationContent()
+        content.title = "Brain break ready"
+        content.body = "Tap to open Childlock and unlock your app."
+        content.sound = .default
+        content.interruptionLevel = .timeSensitive
+
         let center = UNUserNotificationCenter.current()
         let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]
         center.removePendingNotificationRequests(withIdentifiers: identifiers)
         center.removeDeliveredNotifications(withIdentifiers: identifiers)
+
+        let request = UNNotificationRequest(
+            identifier: SharedDefaults.NotificationIdentifier.brainBreak,
+            content: content,
+            trigger: nil
+        )
+        center.add(request)
     }
 
     private func postMoreTimeNotification() {
@@ -203,7 +221,7 @@ public final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
                 color: UIColor(hex: ChildlockColorHex.shieldInk)
             ),
             subtitle: ShieldConfiguration.Label(
-                text: "Tap Start, then open Childlock from Home.",
+                text: "Tap Start, then tap the Childlock alert.",
                 color: UIColor(hex: ChildlockColorHex.shieldInk)
             ),
             primaryButtonLabel: ShieldConfiguration.Label(

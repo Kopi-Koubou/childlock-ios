@@ -65,9 +65,13 @@ launch matrix.
 6. Open selected app/category/site content and use it continuously until the
    threshold is reached.
 7. Confirm the Childlock shield appears after the configured interval.
-8. Tap the shield action and return to Childlock.
+8. Tap the shield action, then tap the Childlock notification or open Childlock
+   from Home.
 9. Solve the pending challenge.
 10. Confirm shielding clears and monitoring re-arms.
-11. Confirm the hand-back screen blocks the dashboard until the parent PIN is
+11. Confirm the child can swipe up or press Home and manually reopen the
+    now-unshielded app/content. iOS does not let Childlock automatically return
+    to another app.
+12. Confirm the hand-back screen blocks the dashboard until the parent PIN is
     entered.
-12. Repeat on a child iPad if iPad support is part of the first launch promise.
+13. Repeat on a child iPad if iPad support is part of the first launch promise.

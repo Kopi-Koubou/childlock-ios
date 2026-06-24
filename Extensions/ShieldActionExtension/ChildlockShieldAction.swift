@@ -49,8 +49,8 @@ final class ChildlockShieldAction: ShieldActionDelegate {
         case .primaryButtonPressed:
             handleStartChallenge()
             // .close exits the blocked app to the home screen — the shield
-            // can't launch Childlock, so the child opens it from there
-            // (helped along by the brain-break notification).
+            // can't launch Childlock, so the refreshed notification is the
+            // child's tappable path into the challenge.
             completionHandler(.close)
         case .secondaryButtonPressed:
             handleRequestMoreTime()
@@ -67,14 +67,37 @@ final class ChildlockShieldAction: ShieldActionDelegate {
         let defaults = SharedDefaults.shared
         defaults.set(true, forKey: SharedDefaults.Key.challengePending)
         defaults.set("challenge_requested", forKey: SharedDefaults.Key.monitoringStatus)
-        clearBrainBreakNotification()
+        postBrainBreakNotification()
     }
 
-    private func clearBrainBreakNotification() {
+    private func postBrainBreakNotification() {
+        let alertsEnabled = SharedDefaults.shared.object(forKey: SharedDefaults.Key.challengeAlertsEnabled) as? Bool ?? true
+        guard alertsEnabled else {
+            logger.info("Skipping brain break notification because challenge alerts are disabled")
+            return
+        }
+
+        let content = UNMutableNotificationContent()
+        content.title = "Brain break ready"
+        content.body = "Tap to open Childlock and unlock your app."
+        content.sound = .default
+        content.interruptionLevel = .timeSensitive
+
         let center = UNUserNotificationCenter.current()
         let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]
         center.removePendingNotificationRequests(withIdentifiers: identifiers)
         center.removeDeliveredNotifications(withIdentifiers: identifiers)
+
+        let request = UNNotificationRequest(
+            identifier: SharedDefaults.NotificationIdentifier.brainBreak,
+            content: content,
+            trigger: nil
+        )
+        center.add(request) { [logger] error in
+            if let error {
+                logger.error("Failed to post brain break notification: \(error.localizedDescription)")
+            }
+        }
     }
 
     private func handleRequestMoreTime() {

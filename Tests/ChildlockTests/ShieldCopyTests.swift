@@ -54,7 +54,7 @@ final class ShieldCopyTests: XCTestCase {
 
         for contents in files {
             XCTAssertTrue(contents.contains("Brain Break"))
-            XCTAssertTrue(contents.contains("Tap Start, then open Childlock from Home."))
+            XCTAssertTrue(contents.contains("Tap Start, then tap the Childlock alert."))
             XCTAssertTrue(contents.contains("Start Brain Break"))
             XCTAssertFalse(contents.contains("text: \"Open Childlock\""))
             XCTAssertFalse(contents.contains("This app is paused. Open Childlock to unlock it."))
@@ -72,6 +72,10 @@ final class ShieldCopyTests: XCTestCase {
 
         XCTAssertTrue(notificationFiles[0].contains("Open Childlock from Home to unlock it."))
         XCTAssertTrue(notificationFiles[2].contains("Open Childlock from Home to unlock it."))
+        XCTAssertTrue(notificationFiles[1].contains("Brain break ready"))
+        XCTAssertTrue(notificationFiles[1].contains("Tap to open Childlock and unlock your app."))
+        XCTAssertTrue(notificationFiles[2].contains("Brain break ready"))
+        XCTAssertTrue(notificationFiles[2].contains("Tap to open Childlock and unlock your app."))
         XCTAssertTrue(notificationFiles[1].contains("Hand this device to your parent so they can respond in Childlock."))
         XCTAssertTrue(notificationFiles[2].contains("Hand this device to your parent so they can respond in Childlock."))
     }
@@ -176,7 +180,7 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertLessThan(unshieldRange.lowerBound, clearRange.lowerBound)
     }
 
-    func testStartBrainBreakClearsStaleBrainBreakNotification() throws {
+    func testStartBrainBreakRefreshesTappableBrainBreakNotification() throws {
         let files = try [
             "Extensions/ShieldActionExtension/ChildlockShieldAction.swift",
             "Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift",
@@ -186,15 +190,18 @@ final class ShieldCopyTests: XCTestCase {
             let primaryRange = try XCTUnwrap(contents.range(of: "case .primaryButtonPressed:"))
             let secondaryRange = try XCTUnwrap(contents.range(of: "case .secondaryButtonPressed:"))
             let primaryBlock = contents[primaryRange.lowerBound..<secondaryRange.lowerBound]
-            let startsChallengeAndClearsAlert = primaryBlock.contains("clearBrainBreakNotification()")
+            let startsChallengeAndRefreshesAlert = primaryBlock.contains("postBrainBreakNotification()")
                 || (primaryBlock.contains("handleStartChallenge()")
                     && contents.contains("private func handleStartChallenge()")
-                    && contents.contains("clearBrainBreakNotification()"))
+                    && contents.contains("postBrainBreakNotification()"))
 
-            XCTAssertTrue(startsChallengeAndClearsAlert)
+            XCTAssertTrue(startsChallengeAndRefreshesAlert)
+            XCTAssertTrue(contents.contains("content.title = \"Brain break ready\""))
+            XCTAssertTrue(contents.contains("content.body = \"Tap to open Childlock and unlock your app.\""))
             XCTAssertTrue(contents.contains("let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]"))
             XCTAssertTrue(contents.contains("removePendingNotificationRequests(withIdentifiers: identifiers)"))
             XCTAssertTrue(contents.contains("removeDeliveredNotifications(withIdentifiers: identifiers)"))
+            XCTAssertTrue(contents.contains("UNNotificationRequest("))
         }
     }
 

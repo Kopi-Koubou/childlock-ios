@@ -147,9 +147,10 @@ gallery and contact-sheet paths.
 | Shield appeared at |  |
 | Shield appeared only after threshold | Pass / Fail |
 | `Start Brain Break` closed selected app | Pass / Fail |
-| Childlock opened pending challenge from notification or Home | Pass / Fail |
+| Childlock opened pending challenge from alert or Home | Pass / Fail |
 | Challenge completion cleared shield | Pass / Fail |
 | Monitoring re-armed for a new interval | Pass / Fail |
+| Child manually reopened the now-unshielded content app | Pass / Fail |
 | Parent dashboard stayed PIN-gated after hand-back | Pass / Fail |
 | RevenueCat paywall/offering behaved as expected | Pass / Fail / Not tested |
 | Notes/blockers |  |
@@ -206,11 +207,12 @@ as sufficient for launch.
     shield timestamp and compare it with the configured interval.
 14. Shield copy says `Brain Break`.
 15. Primary shield action says `Start Brain Break`, closes the blocked app, and
-    leaves a notification/home-screen path back to Childlock.
+    leaves a Childlock alert/Home path back to the pending challenge.
 16. Opening Childlock presents the pending challenge.
 17. Completing the challenge clears shields.
 18. Monitoring re-arms for another full interval.
-19. Child sees hand-back screen and cannot enter the dashboard without the
+19. Child sees hand-back screen, swipes up or presses Home to reopen the
+    now-unshielded content app, and cannot enter the dashboard without the
     parent PIN.
 20. `Ask Parent` creates a parent-visible more-time request and does not open
     a pending child challenge before the parent responds.
@@ -246,7 +248,8 @@ Use this when the parent and child share the same iPhone.
 5. Parent sets the PIN, taps `Lock Parent Dashboard`, and hands the phone to
    the child.
 6. Child continuously uses selected content until the threshold is reached.
-7. Child solves the challenge and returns to the now-unlocked app.
+7. Child solves the challenge, swipes up or presses Home, and manually reopens
+   the now-unshielded app.
 8. Child taps `I'm a parent` or tries to enter the dashboard.
 9. Expected: dashboard remains gated by the parent PIN.
 

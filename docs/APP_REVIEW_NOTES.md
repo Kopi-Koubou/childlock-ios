@@ -16,12 +16,14 @@ Reviewer flow:
 7. Open selected app/category/site content and use it continuously until the
    interval threshold is reached.
 8. The selected content is shielded with Childlock's "Brain Break" shield.
-9. Tap "Start Brain Break", open Childlock from Home or the notification, and
-   solve the pending challenge.
+9. Tap "Start Brain Break", then tap the Childlock notification or open
+   Childlock from Home and solve the pending challenge.
 10. Completing the challenge removes the shield and re-arms monitoring for the
-   next interval.
+    next interval.
 11. After the celebration, the child sees the hand-back screen. A parent PIN is
-    required before entering the parent dashboard.
+    required before entering the parent dashboard. To resume the original app,
+    the child swipes up or presses Home and manually reopens the now-unshielded
+    app/content.
 
 Notes:
 
@@ -40,6 +42,10 @@ Notes:
   posts a local notification to guide the child back to the challenge when
   notifications are enabled. If notifications are denied or missed, pressing
   Home and opening Childlock presents the same pending challenge.
+- Childlock does not automatically return the child to another app after the
+  challenge. iOS does not provide a public Screen Time API to reopen arbitrary
+  apps or restore media state, so the hand-back screen tells the child to
+  reopen the now-unshielded app manually.
 - App selections are handled through Apple's FamilyControls picker. Opaque app
   selection tokens remain local/on-device.
 - Support: https://kouboulabs.com/childlock/support

@@ -325,10 +325,12 @@ The full TestFlight checklist lives in `docs/QA_TESTFLIGHT_CHECKLIST.md`.
 - Threshold shields selected content; record the shield timestamp and compare it
   with the configured interval.
 - "Start Brain Break" shield path reaches a pending challenge after the child
-  opens Childlock from Home or the notification.
+  taps the Childlock alert or opens Childlock from Home.
 - If notifications are denied or missed, Home -> Childlock still reaches the
   pending challenge.
 - Challenge completion removes shields.
+- Child manually reopens the now-unshielded app/content. iOS does not let
+  Childlock automatically return to another app or restore media state.
 - Monitoring re-arms for another full interval.
 - Parent PIN is required to leave the child hand-back screen for dashboard.
 - Ask Parent creates a parent-visible request, does not open a child challenge
