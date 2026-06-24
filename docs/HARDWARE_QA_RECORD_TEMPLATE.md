@@ -17,6 +17,7 @@ shielding, extension actions, purchases, and real hand-back behavior.
 | iOS version |  |
 | Scenario | Same phone / Child iPad / Child iPhone |
 | Latest simulator QA summary |  |
+| Google OAuth build settings | Configured / Missing or placeholder |
 | Parent sign-in tested | Apple / Google |
 | Notification state tested | Allowed / Denied |
 | Monitored selection | App / Category / Website |
@@ -84,7 +85,7 @@ Use this when the parent owns an iPhone and the child uses an iPad.
 | Decision Gate | Result | Notes |
 | --- | --- | --- |
 | Apple sign-in works in TestFlight | Pass / Fail |  |
-| Google sign-in works in TestFlight | Pass / Fail |  |
+| Google sign-in works in TestFlight if Google OAuth is configured | Pass / Fail / N/A |  |
 | Same-phone hardware QA passes | Pass / Fail / N/A |  |
 | Child-iPad hardware QA passes if iPad support remains in launch copy | Pass / Fail / N/A |  |
 | At least two full shield loops pass on real hardware | Pass / Fail |  |

@@ -26,6 +26,80 @@ else
     latest_simulator_summary="not generated yet"
 fi
 
+read_config_value() {
+    local file="$1"
+    local key="$2"
+
+    [[ -f "$file" ]] || return 0
+
+    awk -F '=' -v wanted_key="$key" '
+        /^[[:space:]]*$/ { next }
+        /^[[:space:]]*#/ { next }
+        /^[[:space:]]*\/\// { next }
+        {
+            name = $1
+            gsub(/^[ \t]+|[ \t]+$/, "", name)
+            if (name == wanted_key) {
+                value = $0
+                sub(/^[^=]*=/, "", value)
+                gsub(/^[ \t]+|[ \t]+$/, "", value)
+                print value
+                exit
+            }
+        }
+    ' "$file"
+}
+
+is_missing_config_value() {
+    local value="$1"
+    [[ -z "$value" || "$value" == *"YOUR_"* || "$value" == *"_YOUR_"* || "$value" == \$\(* ]]
+}
+
+expected_google_reversed_client_id() {
+    local ios_client_id="$1"
+    local suffix=".apps.googleusercontent.com"
+
+    if [[ "$ios_client_id" != *"$suffix" ]]; then
+        return 1
+    fi
+
+    local client_prefix="${ios_client_id%"$suffix"}"
+    printf "com.googleusercontent.apps.%s" "$client_prefix"
+}
+
+google_oauth_build_status() {
+    local file="$ROOT_DIR/Config/AppSecrets.local.xcconfig"
+    local ios_client_id
+    local web_client_id
+    local reversed_client_id
+    local expected_reversed_client_id
+
+    ios_client_id="$(read_config_value "$file" "GOOGLE_IOS_CLIENT_ID")"
+    web_client_id="$(read_config_value "$file" "GOOGLE_WEB_CLIENT_ID")"
+    reversed_client_id="$(read_config_value "$file" "GOOGLE_REVERSED_CLIENT_ID")"
+
+    if is_missing_config_value "$ios_client_id" \
+        || is_missing_config_value "$web_client_id" \
+        || is_missing_config_value "$reversed_client_id"; then
+        echo "Missing or placeholder"
+        return
+    fi
+
+    if ! expected_reversed_client_id="$(expected_google_reversed_client_id "$ios_client_id")"; then
+        echo "Invalid iOS client ID"
+        return
+    fi
+
+    if [[ "$reversed_client_id" != "$expected_reversed_client_id" ]]; then
+        echo "Reversed client ID mismatch"
+        return
+    fi
+
+    echo "Configured"
+}
+
+google_oauth_status="$(google_oauth_build_status)"
+
 case "$safe_scenario" in
     same-phone)
         scenario_label="Same phone"
@@ -74,6 +148,7 @@ replace_row "Tester" "$tester_name"
 replace_row "Date" "$record_date"
 replace_row "Scenario" "$scenario_label"
 replace_row "Latest simulator QA summary" "$latest_simulator_summary"
+replace_row "Google OAuth build settings" "$google_oauth_status"
 
 cat >> "$output_file" <<EOF
 

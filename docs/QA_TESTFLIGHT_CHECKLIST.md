@@ -179,6 +179,7 @@ available, and the latest simulator QA summary path.
 | iOS version |  |
 | Scenario | Same phone / Child iPad / Child iPhone |
 | Latest simulator QA summary |  |
+| Google OAuth build settings | Configured / Missing or placeholder |
 | Parent sign-in tested | Apple / Google |
 | Notification state tested | Allowed / Denied |
 | Monitored selection | App / Category / Website |
@@ -301,7 +302,7 @@ Submit to public App Review only after:
 
 - Hardware QA records above are filled in with no unresolved launch blockers.
 - Apple sign-in works in TestFlight.
-- Google sign-in works in TestFlight.
+- Google sign-in works in TestFlight if Google OAuth is configured.
 - Same-phone hardware QA passes.
 - Child iPad hardware QA passes, if iPad support remains a launch promise.
 - At least one full shield loop passes twice on real hardware.
