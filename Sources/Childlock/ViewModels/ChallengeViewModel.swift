@@ -117,6 +117,18 @@ public final class ChallengeViewModel {
         startTime = nil
     }
 
+    #if DEBUG
+    public func debugPresentHandBack(for profile: ChildProfile) {
+        activeProfile = profile
+        challenge = engine.generateChallenge(type: .math, for: profile)
+        state = .handback
+        attempts = 1
+        hintVisible = false
+        feedbackText = nil
+        startTime = clock()
+    }
+    #endif
+
     private func submitAnswer<T: Equatable>(selected: T, correct: T) {
         guard acceptsChallengeInput else { return }
 

@@ -253,22 +253,31 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(dashboard.contains("NotificationService.clearMoreTimeRequestAlerts()"))
     }
 
-    func testSimulatorSeedsCoverMathAndMemoryChallenges() throws {
+    func testSimulatorSeedsCoverChallengeAndHandBackScreens() throws {
         let rootView = try readRepoFile("Sources/Childlock/App/ChildlockRootView.swift")
+        let challengeViewModel = try readRepoFile("Sources/Childlock/ViewModels/ChallengeViewModel.swift")
         let memoryMatchView = try readRepoFile("Sources/Childlock/Views/Challenges/MemoryMatchView.swift")
         let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")
 
         XCTAssertTrue(rootView.contains("--childlock-qa-seed-pending-math-challenge"))
         XCTAssertTrue(rootView.contains("--childlock-qa-seed-pending-memory-challenge"))
+        XCTAssertTrue(rootView.contains("--childlock-qa-seed-handback"))
         XCTAssertTrue(rootView.contains("return .math"))
         XCTAssertTrue(rootView.contains("return .memory"))
+        XCTAssertTrue(rootView.contains("challengeViewModel.debugPresentHandBack(for: profile)"))
+
+        XCTAssertTrue(challengeViewModel.contains("#if DEBUG"))
+        XCTAssertTrue(challengeViewModel.contains("public func debugPresentHandBack(for profile: ChildProfile)"))
+        XCTAssertTrue(challengeViewModel.contains("state = .handback"))
 
         XCTAssertTrue(memoryMatchView.contains("#if DEBUG"))
         XCTAssertTrue(memoryMatchView.contains("ProcessInfo.processInfo.arguments.contains(\"--childlock-qa-seed-pending-memory-challenge\")"))
         XCTAssertTrue(memoryMatchView.contains(".shuffled()"))
 
         XCTAssertTrue(checklist.contains("`--childlock-qa-seed-pending-memory-challenge`"))
+        XCTAssertTrue(checklist.contains("`--childlock-qa-seed-handback`"))
         XCTAssertTrue(checklist.contains("memory pairs are deterministic in this Debug seed"))
+        XCTAssertTrue(checklist.contains("Hand-back seed tells the child to return to the unlocked app"))
     }
 
     func testHardwareChecklistCoversMultiChildShieldProfileRouting() throws {

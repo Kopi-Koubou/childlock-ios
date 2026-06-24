@@ -296,6 +296,7 @@ public struct ChildlockRootView: View {
         static let pendingChallenge = "--childlock-qa-seed-pending-challenge"
         static let pendingMathChallenge = "--childlock-qa-seed-pending-math-challenge"
         static let pendingMemoryChallenge = "--childlock-qa-seed-pending-memory-challenge"
+        static let handBack = "--childlock-qa-seed-handback"
         static let moreTimeRequest = "--childlock-qa-seed-more-time-request"
         static let childrenTab = "--childlock-qa-seed-children-tab"
         static let appsTab = "--childlock-qa-seed-apps-tab"
@@ -330,6 +331,7 @@ public struct ChildlockRootView: View {
             || arguments.contains(DebugLaunchArgument.pendingChallenge)
             || arguments.contains(DebugLaunchArgument.pendingMathChallenge)
             || arguments.contains(DebugLaunchArgument.pendingMemoryChallenge)
+            || arguments.contains(DebugLaunchArgument.handBack)
             || arguments.contains(DebugLaunchArgument.moreTimeRequest)
             || arguments.contains(DebugLaunchArgument.childrenTab)
             || arguments.contains(DebugLaunchArgument.appsTab)
@@ -357,6 +359,7 @@ public struct ChildlockRootView: View {
             || arguments.contains(DebugLaunchArgument.pendingChallenge)
             || arguments.contains(DebugLaunchArgument.pendingMathChallenge)
             || arguments.contains(DebugLaunchArgument.pendingMemoryChallenge)
+            || arguments.contains(DebugLaunchArgument.handBack)
             || arguments.contains(DebugLaunchArgument.moreTimeRequest)
             || arguments.contains(DebugLaunchArgument.childrenTab)
             || arguments.contains(DebugLaunchArgument.appsTab)
@@ -376,6 +379,11 @@ public struct ChildlockRootView: View {
                     : arguments.contains(DebugLaunchArgument.settingsTab) ? .settings
                     : .home
             )
+
+            if arguments.contains(DebugLaunchArgument.handBack),
+               let profile = appState.activeProfile {
+                challengeViewModel.debugPresentHandBack(for: profile)
+            }
         }
     }
 

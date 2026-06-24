@@ -36,6 +36,7 @@ contact sheet for a quick all-states scan.
 | `--childlock-qa-seed-pending-challenge` | Child brain-break challenge | `1234` after hand-back |
 | `--childlock-qa-seed-pending-math-challenge` | Child math brain-break challenge | `1234` after hand-back |
 | `--childlock-qa-seed-pending-memory-challenge` | Child memory brain-break challenge with deterministic card pairs | `1234` after hand-back |
+| `--childlock-qa-seed-handback` | Completed child hand-back screen after a solved challenge | `1234` |
 | `--childlock-qa-seed-more-time-request` | Parent dashboard with `Ask Parent` request banner | `1234` if locked later |
 | `--childlock-qa-seed-children-tab` | Parent Children tab with profile card and reports controls | `1234` if locked later |
 | `--childlock-qa-seed-add-child-sheet` | Parent add-child sheet with a save-ready draft profile | `1234` if locked later |
@@ -76,7 +77,7 @@ Simulator pass criteria:
 - Math and memory challenge seeds both render child-appropriate challenge UI;
   memory pairs are deterministic in this Debug seed for repeatable simulator QA.
 - Correct challenge answer records activity and moves to the hand-back screen.
-- Hand-back screen tells the child to return to the app and exposes only
+- Hand-back seed tells the child to return to the unlocked app and exposes only
   `I'm a parent`.
 - Parent PIN unlock remounts the dashboard.
 - More-time seed shows the parent request banner with `Give one more block` and
@@ -94,10 +95,11 @@ Simulator evidence handoff:
   physical QA record, so the record used during TestFlight points at the
   correct visual background evidence.
 - The current launch-readiness simulator sweep was last refreshed on
-  2026-06-24 and captured 28 screenshots across iPhone 17 and iPad (A16),
+  2026-06-24 and captured 30 screenshots across iPhone 17 and iPad (A16),
   covering onboarding, device-model copy, setup-disabled state, parent
-  dashboard, locked dashboard, child math/memory challenges, more-time request,
-  Children, Apps, Settings, add-child, and paywall fallback surfaces.
+  dashboard, locked dashboard, child math/memory challenges, hand-back,
+  more-time request, Children, Apps, Settings, add-child, and paywall fallback
+  surfaces.
 - When regenerating evidence, explicitly spot-check the setup seed: it must show
   `Tell us about your child`, the Screen Time picker explanation, and the pinned
   disabled Continue reason. A setup seed that falls back to the welcome screen
