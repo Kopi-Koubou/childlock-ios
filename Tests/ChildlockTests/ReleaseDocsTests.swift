@@ -248,7 +248,8 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(checklist.contains("docs/HARDWARE_QA_RECORD_TEMPLATE.md"))
         XCTAssertFalse(checklist.contains("20260624-140331"))
         XCTAssertTrue(normalizedChecklist.contains("Hardware QA records above are filled in with no unresolved launch blockers."))
-        XCTAssertTrue(normalizedProduction.contains("fill in the hardware QA records in `docs/QA_TESTFLIGHT_CHECKLIST.md`"))
+        XCTAssertTrue(normalizedProduction.contains("generate and complete hardware QA records with `scripts/new-hardware-qa-record.sh`"))
+        XCTAssertTrue(normalizedProduction.contains("`.build/hardware-qa-records/`"))
         XCTAssertTrue(normalizedProduction.contains("Do not treat a simulator pass or a successful archive upload as proof"))
 
         XCTAssertTrue(template.contains("## Required Shield Loop"))

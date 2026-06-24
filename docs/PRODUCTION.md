@@ -172,10 +172,12 @@ These checks catch compile, icon, privacy-manifest, and extension-shape
 regressions before a real archive upload. They do not replace TestFlight
 hardware QA.
 
-Before public App Review, fill in the hardware QA records in
-`docs/QA_TESTFLIGHT_CHECKLIST.md` for the same-phone flow and any child-iPad
-flow promised in App Store copy. Do not treat a simulator pass or a successful
-archive upload as proof that Family Controls shielding works on real devices.
+Before public App Review, generate and complete hardware QA records with
+`scripts/new-hardware-qa-record.sh`. The records are written under
+`.build/hardware-qa-records/` and should cover the same-phone flow plus any
+child-iPad flow promised in App Store copy. Do not treat a simulator pass or a
+successful archive upload as proof that Family Controls shielding works on real
+devices.
 
 Use the checked-in validation script for the full local gate:
 
