@@ -33,6 +33,14 @@ public final class AuthService {
     private let secureStore: SecureStore
     private static let authUserIDKey = "auth_user_id"
     private static let appleUserIDKey = "apple_user_id"
+    private static let authProviderKey = "auth_provider"
+
+    private enum AuthProvider: String {
+        case apple
+        case google
+        case external
+        case debug
+    }
 
     public init(secureStore: SecureStore = KeychainSecureStore()) {
         self.secureStore = secureStore
@@ -64,12 +72,19 @@ public final class AuthService {
 
     private func checkExistingCredential() {
         let storedAuthUserID = secureStore.loadString(key: Self.authUserIDKey)
-        guard let storedAppleUserID = secureStore.loadString(key: Self.appleUserIDKey) else {
+        let storedAppleUserID = secureStore.loadString(key: Self.appleUserIDKey)
+        let storedProvider = secureStore.loadString(key: Self.authProviderKey).flatMap(AuthProvider.init(rawValue:))
+
+        guard storedProvider == .apple || storedAppleUserID != nil else {
             if let storedAuthUserID {
                 state = .signedIn(userID: storedAuthUserID)
-                return
+            } else {
+                state = .signedOut
             }
+            return
+        }
 
+        guard let storedAppleUserID else {
             state = .signedOut
             return
         }
@@ -84,6 +99,7 @@ public final class AuthService {
                 case .revoked, .notFound:
                     self?.secureStore.delete(key: Self.authUserIDKey)
                     self?.secureStore.delete(key: Self.appleUserIDKey)
+                    self?.secureStore.delete(key: Self.authProviderKey)
                     self?.state = .signedOut
                 default:
                     self?.state = .signedIn(userID: storedAuthUserID ?? storedAppleUserID)
@@ -123,7 +139,7 @@ public final class AuthService {
                         nonce: rawNonce
                     )
                 )
-                completeSupabaseSignIn(session: session, appleUserID: appleUserID)
+                completeSupabaseSignIn(session: session, provider: .apple, appleUserID: appleUserID)
                 if email != nil || fullName != nil {
                     try? await DataSyncService.shared.syncParentProfile(
                         appleUserID: appleUserID,
@@ -143,6 +159,7 @@ public final class AuthService {
         lastErrorMessage = nil
         secureStore.saveString(appleUserID, key: Self.appleUserIDKey)
         secureStore.saveString(appleUserID, key: Self.authUserIDKey)
+        secureStore.saveString(AuthProvider.debug.rawValue, key: Self.authProviderKey)
         state = .signedIn(userID: appleUserID)
         return true
         #else
@@ -190,7 +207,7 @@ public final class AuthService {
                         nonce: rawNonce
                     )
                 )
-                completeSupabaseSignIn(session: session, appleUserID: nil)
+                completeSupabaseSignIn(session: session, provider: .google, appleUserID: nil)
                 return true
             } catch {
                 failSignIn("Google sign in could not be completed. Please try again.")
@@ -223,7 +240,7 @@ public final class AuthService {
 
         do {
             let session = try await client.auth.session(from: url)
-            completeSupabaseSignIn(session: session, appleUserID: nil)
+            completeSupabaseSignIn(session: session, provider: .external, appleUserID: nil)
             return true
         } catch {
             failSignIn("Account setup could not be completed. Please try again.")
@@ -238,6 +255,7 @@ public final class AuthService {
     public func signOut() {
         secureStore.delete(key: Self.authUserIDKey)
         secureStore.delete(key: Self.appleUserIDKey)
+        secureStore.delete(key: Self.authProviderKey)
         lastErrorMessage = nil
         state = .signedOut
 
@@ -258,6 +276,7 @@ public final class AuthService {
     public func debugSignIn(userID: String = "childlock-qa-parent") {
         lastErrorMessage = nil
         secureStore.saveString(userID, key: Self.authUserIDKey)
+        secureStore.saveString(AuthProvider.debug.rawValue, key: Self.authProviderKey)
         secureStore.delete(key: Self.appleUserIDKey)
         state = .signedIn(userID: userID)
     }
@@ -266,14 +285,16 @@ public final class AuthService {
     private func failSignIn(_ message: String) {
         secureStore.delete(key: Self.authUserIDKey)
         secureStore.delete(key: Self.appleUserIDKey)
+        secureStore.delete(key: Self.authProviderKey)
         lastErrorMessage = message
         state = .signedOut
     }
 
     #if canImport(Supabase)
-    private func completeSupabaseSignIn(session: Session, appleUserID: String?) {
+    private func completeSupabaseSignIn(session: Session, provider: AuthProvider, appleUserID: String?) {
         let authUserID = session.user.id.uuidString
         secureStore.saveString(authUserID, key: Self.authUserIDKey)
+        secureStore.saveString(provider.rawValue, key: Self.authProviderKey)
 
         if let appleUserID {
             secureStore.saveString(appleUserID, key: Self.appleUserIDKey)
