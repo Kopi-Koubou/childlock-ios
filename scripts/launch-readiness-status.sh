@@ -152,9 +152,9 @@ relative_latest_path() {
 
     latest="$(find "$root" -name "$name" -type f -print 2>/dev/null | sort | tail -n 1)"
     if [[ -n "$latest" ]]; then
-        echo "${latest#$ROOT_DIR/}"
+        echo "$latest"
     else
-        echo "not generated yet"
+        echo ""
     fi
 }
 
@@ -164,10 +164,14 @@ relative_latest_record() {
 
     latest="$(find "$ROOT_DIR/.build/hardware-qa-records" -name "${scenario}_*.md" -type f -print 2>/dev/null | sort | tail -n 1)"
     if [[ -n "$latest" ]]; then
-        echo "${latest#$ROOT_DIR/}"
+        echo "$latest"
     else
-        echo "not generated yet"
+        echo ""
     fi
+}
+
+current_git_commit() {
+    git -C "$ROOT_DIR" rev-parse --short HEAD 2>/dev/null || echo "unknown"
 }
 
 git_status_line() {
@@ -183,6 +187,70 @@ git_status_line() {
 
     echo "$branch $commit ($dirty)"
 }
+
+summary_git_commit() {
+    local file="$1"
+
+    [[ -f "$file" ]] || return 0
+    awk -F ':' '
+        $1 == "Git commit" {
+            value = $2
+            gsub(/^[ \t]+|[ \t]+$/, "", value)
+            print value
+            exit
+        }
+    ' "$file"
+}
+
+hardware_record_git_commit() {
+    local file="$1"
+
+    [[ -f "$file" ]] || return 0
+    awk -F '|' '
+        {
+            label = $2
+            gsub(/^[ \t]+|[ \t]+$/, "", label)
+            if (label == "Git commit") {
+                value = $3
+                gsub(/^[ \t]+|[ \t]+$/, "", value)
+                print value
+                exit
+            }
+        }
+    ' "$file"
+}
+
+describe_evidence_path() {
+    local file="$1"
+    local commit="$2"
+    local current_commit
+    local relative_file
+
+    if [[ -z "$file" ]]; then
+        echo "not generated yet"
+        return
+    fi
+
+    current_commit="$(current_git_commit)"
+    relative_file="${file#$ROOT_DIR/}"
+
+    if [[ -z "$commit" ]]; then
+        echo "$relative_file (commit unknown; regenerate for current build)"
+        return
+    fi
+
+    if [[ "$commit" == "$current_commit" ]]; then
+        echo "$relative_file (current commit $commit)"
+        return
+    fi
+
+    echo "$relative_file (stale commit $commit; current $current_commit)"
+}
+
+latest_summary="$(relative_latest_path "$ROOT_DIR/.build/qa-simulator-seeds" "summary.md")"
+latest_gallery="$(relative_latest_path "$ROOT_DIR/.build/qa-simulator-seeds" "gallery.html")"
+latest_same_phone_record="$(relative_latest_record "same-phone")"
+latest_child_ipad_record="$(relative_latest_record "child-ipad")"
 
 echo "Childlock launch readiness"
 echo
@@ -204,10 +272,10 @@ echo "- SUPABASE_SERVICE_ROLE_KEY: $(status_for_server_key "SUPABASE_SERVICE_ROL
 echo "- REVENUECAT_WEBHOOK_SECRET: $(status_for_server_key "REVENUECAT_WEBHOOK_SECRET")"
 echo
 echo "QA evidence"
-echo "- Latest simulator summary: $(relative_latest_path "$ROOT_DIR/.build/qa-simulator-seeds" "summary.md")"
-echo "- Latest simulator gallery: $(relative_latest_path "$ROOT_DIR/.build/qa-simulator-seeds" "gallery.html")"
-echo "- Latest same-phone record: $(relative_latest_record "same-phone")"
-echo "- Latest child-iPad record: $(relative_latest_record "child-ipad")"
+echo "- Latest simulator summary: $(describe_evidence_path "$latest_summary" "$(summary_git_commit "$latest_summary")")"
+echo "- Latest simulator gallery: $(describe_evidence_path "$latest_gallery" "$(summary_git_commit "$latest_summary")")"
+echo "- Latest same-phone record: $(describe_evidence_path "$latest_same_phone_record" "$(hardware_record_git_commit "$latest_same_phone_record")")"
+echo "- Latest child-iPad record: $(describe_evidence_path "$latest_child_ipad_record" "$(hardware_record_git_commit "$latest_child_ipad_record")")"
 echo
 echo "TestFlight hardware gates"
 echo "- Same-phone shield loop: required before launch"

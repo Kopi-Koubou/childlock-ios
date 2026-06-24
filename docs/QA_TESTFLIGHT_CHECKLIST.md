@@ -167,7 +167,8 @@ Minimum evidence before launch:
 Before starting hardware QA, run `scripts/launch-readiness-status.sh` from the
 repo root. It prints the current Google OAuth build status and latest
 `.build/qa-simulator-seeds` / `.build/hardware-qa-records` paths without
-printing secrets.
+printing secrets. If it marks simulator or hardware evidence as stale, generate
+fresh evidence for the current commit before treating it as launch proof.
 
 ## TestFlight Hardware Gates
 

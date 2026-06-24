@@ -284,6 +284,8 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(generator.contains("replace_row \"Latest simulator QA gallery\" \"$latest_simulator_gallery\""))
         XCTAssertTrue(generator.contains("same-phone)"))
         XCTAssertTrue(generator.contains("child-ipad)"))
+        XCTAssertTrue(simulatorSeedScript.contains("Git commit: $GIT_COMMIT"))
+        XCTAssertTrue(simulatorSeedScript.contains("Git commit $GIT_COMMIT"))
         XCTAssertTrue(simulatorSeedScript.contains("gallery.html"))
     }
 

@@ -12,6 +12,7 @@ RUN_ID="$(date +%Y%m%d-%H%M%S)"
 OUTPUT_DIR="$ROOT_DIR/.build/qa-simulator-seeds/$RUN_ID"
 SUMMARY_PATH="$OUTPUT_DIR/summary.md"
 GALLERY_PATH="$OUTPUT_DIR/gallery.html"
+GIT_COMMIT="$(git -C "$ROOT_DIR" rev-parse --short HEAD 2>/dev/null || echo "unknown")"
 
 DEFAULT_SIMULATORS=("iPhone 17" "iPad (A16)")
 SIMULATORS=("$@")
@@ -77,6 +78,7 @@ fi
     echo "# Childlock Simulator QA Seeds"
     echo ""
     echo "Run: $RUN_ID"
+    echo "Git commit: $GIT_COMMIT"
     echo ""
     echo "| Simulator | Seed | Screenshot |"
     echo "| --- | --- | --- |"
@@ -102,7 +104,7 @@ fi
     echo "</head>"
     echo "<body>"
     echo "  <h1>Childlock Simulator QA Seeds</h1>"
-    echo "  <p>Run $RUN_ID. Review phone and iPad launch states before TestFlight hardware QA.</p>"
+    echo "  <p>Run $RUN_ID. Git commit $GIT_COMMIT. Review phone and iPad launch states before TestFlight hardware QA.</p>"
     echo "  <main class=\"grid\">"
 } > "$GALLERY_PATH"
 
