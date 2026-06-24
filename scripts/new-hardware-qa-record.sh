@@ -156,6 +156,56 @@ replace_row() {
     mv "$tmp_file" "$output_file"
 }
 
+scenario_instructions() {
+    case "$safe_scenario" in
+        same-phone)
+            cat <<'EOF'
+## Scenario Instructions
+
+Fill `Required Shield Loop` and `Same Phone Scenario`.
+Mark `Child iPad Scenario` rows `N/A` unless this record also covers an iPad run.
+EOF
+            ;;
+        child-ipad)
+            cat <<'EOF'
+## Scenario Instructions
+
+Fill `Required Shield Loop` and `Child iPad Scenario`.
+Mark `Same Phone Scenario` rows `N/A` unless this record also covers a shared-phone run.
+EOF
+            ;;
+        *)
+            cat <<'EOF'
+## Scenario Instructions
+
+Fill `Required Shield Loop` and the scenario section that matches this device.
+Mark unrelated scenario rows `N/A`.
+EOF
+            ;;
+    esac
+}
+
+insert_scenario_instructions() {
+    local tmp_file="$output_file.tmp"
+    local instructions_file="$output_file.instructions.tmp"
+
+    scenario_instructions > "$instructions_file"
+
+    awk -v instructions_file="$instructions_file" '
+        $0 == "## Required Shield Loop" {
+            while ((getline line < instructions_file) > 0) {
+                print line
+            }
+            close(instructions_file)
+            print ""
+        }
+        { print }
+    ' "$output_file" > "$tmp_file"
+
+    rm -f "$instructions_file"
+    mv "$tmp_file" "$output_file"
+}
+
 replace_row "Build number" "$build_number"
 replace_row "Git commit" "$git_commit"
 replace_row "Tester" "$tester_name"
@@ -165,6 +215,7 @@ replace_row "Latest simulator QA summary" "$latest_simulator_summary"
 replace_row "Latest simulator QA gallery" "$latest_simulator_gallery"
 replace_row "Latest simulator QA contact sheet" "$latest_simulator_contact_sheet"
 replace_row "Google OAuth build settings" "$google_oauth_status"
+insert_scenario_instructions
 
 cat >> "$output_file" <<EOF
 

@@ -95,6 +95,9 @@ Simulator evidence handoff:
   newest generated simulator summary, gallery, and contact-sheet paths into the
   physical QA record, so the record used during TestFlight points at the
   correct visual background evidence.
+- Generated hardware records include scenario instructions. Fill `Required
+  Shield Loop` plus the matching scenario section, and mark unrelated scenario
+  rows `N/A`.
 - The latest generated simulator sweep should capture every seeded state across
   iPhone 17 and iPad (A16), covering onboarding, device-model copy,
   setup-disabled state, parent dashboard, locked dashboard, child math/memory
