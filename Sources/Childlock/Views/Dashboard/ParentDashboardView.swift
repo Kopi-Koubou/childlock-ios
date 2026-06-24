@@ -296,6 +296,10 @@ public struct ParentDashboardView: View {
                         moreTimeRequestBanner
                     }
 
+                    if !appState.profiles.isEmpty {
+                        handoffLockCard
+                    }
+
                     if let onTriggerChallenge {
                         Button("Practice Brain Break", action: onTriggerChallenge)
                             .buttonStyle(ChildlockPrimaryButtonStyle())
@@ -389,6 +393,49 @@ public struct ParentDashboardView: View {
             return "No brain breaks yet today for \(firstName)."
         }
         return "\(firstName)'s been engaged today — \(challengesCompleted) brain break\(challengesCompleted == 1 ? "" : "s") solved."
+    }
+
+    private var handoffLockCard: some View {
+        HStack(alignment: .top, spacing: ChildlockSpacing.sm) {
+            Image(systemName: "lock.shield.fill")
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundStyle(ChildlockColor.primary)
+                .frame(width: 40, height: 40)
+                .background(ChildlockColor.primarySoft)
+                .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.sm))
+
+            VStack(alignment: .leading, spacing: ChildlockSpacing.xs) {
+                Text("Ready to hand this device over?")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(ChildlockColor.textPrimary)
+
+                Text("Lock parent controls first. Brain breaks still open for your child, but settings stay behind your PIN.")
+                    .font(ChildlockTypography.caption)
+                    .foregroundStyle(ChildlockColor.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Button {
+                    appState.lockSettings(pinService: pinService)
+                } label: {
+                    Label("Lock Parent Dashboard", systemImage: "lock.fill")
+                }
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(.white)
+                .padding(.horizontal, ChildlockSpacing.md)
+                .padding(.vertical, 8)
+                .background(Capsule().fill(ChildlockColor.primary))
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("handoff_lock_parent_dashboard")
+                .accessibilityLabel("Lock Parent Dashboard before handoff")
+            }
+
+            Spacer(minLength: 0)
+        }
+        .padding(ChildlockSpacing.md)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(ChildlockColor.surface)
+        .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.card))
+        .childlockShadow(ChildlockShadow.sm)
     }
 
     private var moreTimeRequestBanner: some View {

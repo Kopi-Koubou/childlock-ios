@@ -26,6 +26,17 @@ final class HandBackCopyTests: XCTestCase {
         XCTAssertTrue(contents.contains("if !enteredPIN.isEmpty {\n                pinErrorText = nil\n            }"))
     }
 
+    func testHomeHandoffCardLocksParentDashboardBeforeSharedDeviceUse() throws {
+        let contents = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
+
+        XCTAssertTrue(contents.contains("Ready to hand this device over?"))
+        XCTAssertTrue(contents.contains("Lock parent controls first. Brain breaks still open for your child"))
+        XCTAssertTrue(contents.contains("handoffLockCard"))
+        XCTAssertTrue(contents.contains("appState.lockSettings(pinService: pinService)"))
+        XCTAssertTrue(contents.contains("accessibilityIdentifier(\"handoff_lock_parent_dashboard\")"))
+        XCTAssertTrue(contents.contains("accessibilityLabel(\"Lock Parent Dashboard before handoff\")"))
+    }
+
     func testInteractiveControlsDoNotExposeInternalIDsAsSpokenLabels() throws {
         let onboarding = try readRepoFile("Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift")
         let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
@@ -41,6 +52,8 @@ final class HandBackCopyTests: XCTestCase {
 
         XCTAssertTrue(dashboard.contains("accessibilityIdentifier(\"practice_brain_break\")"))
         XCTAssertTrue(dashboard.contains("accessibilityLabel(\"Practice Brain Break\")"))
+        XCTAssertTrue(dashboard.contains("accessibilityIdentifier(\"handoff_lock_parent_dashboard\")"))
+        XCTAssertTrue(dashboard.contains("accessibilityLabel(\"Lock Parent Dashboard before handoff\")"))
         XCTAssertTrue(dashboard.contains("accessibilityLabel(\"Settings\")"))
         XCTAssertTrue(dashboard.contains("accessibilityIdentifier(\"assign_monitored_\\(appName)\")"))
         XCTAssertTrue(dashboard.contains("\"Add \\(appName) to monitored apps\""))

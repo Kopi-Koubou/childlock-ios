@@ -46,7 +46,8 @@ Simulator pass criteria:
 - Fresh onboarding shows `Sign in with Apple` and `Continue with Google`.
 - Device setup seed explains same-phone use, child iPad setup, and that a
   parent-only iPhone install does not remotely lock a separate iPad at launch.
-- Seeded dashboard shows a child, recent activity, app tabs, and settings entry.
+- Seeded dashboard shows a child, recent activity, app tabs, settings entry,
+  and a same-phone handoff card that can lock the parent dashboard.
 - Children tab seed shows the child profile, reports controls, and add-child
   entry without overlap on iPhone and iPad.
 - Add-child sheet seed shows the child name, age, avatar, copied-settings
@@ -76,11 +77,12 @@ Latest simulator smoke pass, 2026-06-24:
   (A16), including the parent Children, Apps, Settings, add-child, and paywall
   surfaces.
 - Latest summary:
-  `.build/qa-simulator-seeds/20260624-110634/summary.md`.
+  `.build/qa-simulator-seeds/20260624-112111/summary.md`.
 - iPhone 17 simulator: `--childlock-qa-seed-onboarding-devices` rendered the
   local-first device setup copy without overlap.
 - iPhone 17 simulator: `--childlock-qa-seed-dashboard` rendered the parent
-  dashboard home state with child summary, recent activity, tabs, and settings.
+  dashboard home state with child summary, same-phone handoff lock card, recent
+  activity, tabs, and settings.
 - iPhone 17 simulator: `--childlock-qa-seed-children-tab` rendered the child
   profile/report view and add-child entry without overlap.
 - iPhone 17 simulator: `--childlock-qa-seed-add-child-sheet` rendered the
@@ -232,7 +234,8 @@ Use this when the parent and child share the same iPhone.
 1. Install Childlock on the shared iPhone.
 2. Parent signs in and completes setup on that iPhone.
 3. Parent selects apps/categories used by the child on that same iPhone.
-4. Parent sets the PIN and hands the phone to the child.
+4. Parent sets the PIN, taps `Lock Parent Dashboard`, and hands the phone to
+   the child.
 5. Child uses selected content until the threshold is reached.
 6. Child solves the challenge and returns to the now-unlocked app.
 7. Child taps `I'm a parent` or tries to enter the dashboard.
