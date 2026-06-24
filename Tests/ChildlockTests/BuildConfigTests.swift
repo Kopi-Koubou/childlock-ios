@@ -27,9 +27,11 @@ final class BuildConfigTests: XCTestCase {
     func testBuildScriptsAreRepoRelativeAndSafeForUnsignedPreflight() throws {
         let buildScript = try readRepoFile("build.sh")
         let validationScript = try readRepoFile("build-validation.sh")
+        let readinessScript = try readRepoFile("scripts/launch-readiness-status.sh")
         let production = try readRepoFile("docs/PRODUCTION.md")
+        let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")
 
-        for contents in [buildScript, validationScript] {
+        for contents in [buildScript, validationScript, readinessScript] {
             XCTAssertTrue(contents.contains("$(dirname \"$0\")"))
             XCTAssertFalse(contents.contains("/Users/devl/clawd/projects/childlock"))
             XCTAssertFalse(contents.contains("/Users/xav/Projects/Kopi-Koubou/childlock-ios"))
@@ -70,8 +72,24 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(production.contains(".build/validation-logs/"))
         XCTAssertTrue(production.contains("last 120 log lines"))
         XCTAssertTrue(production.contains("./build-validation.sh"))
+        XCTAssertTrue(production.contains("scripts/launch-readiness-status.sh"))
         XCTAssertTrue(production.contains("Google OAuth values may all be blank for an Apple-first build"))
         XCTAssertTrue(production.contains("REQUIRE_GOOGLE_OAUTH=1"))
+        XCTAssertTrue(checklist.contains("scripts/launch-readiness-status.sh"))
+        XCTAssertTrue(checklist.contains(".build/qa-simulator-seeds"))
+        XCTAssertTrue(checklist.contains(".build/hardware-qa-records"))
+        XCTAssertTrue(readinessScript.contains("GOOGLE_IOS_CLIENT_ID"))
+        XCTAssertTrue(readinessScript.contains("GOOGLE_WEB_CLIENT_ID"))
+        XCTAssertTrue(readinessScript.contains("GOOGLE_REVERSED_CLIENT_ID"))
+        XCTAssertTrue(readinessScript.contains("SUPABASE_ACCESS_TOKEN"))
+        XCTAssertTrue(readinessScript.contains("SUPABASE_SERVICE_ROLE_KEY"))
+        XCTAssertTrue(readinessScript.contains("REVENUECAT_WEBHOOK_SECRET"))
+        XCTAssertTrue(readinessScript.contains("hidden (missing or placeholder)"))
+        XCTAssertTrue(readinessScript.contains(".build/qa-simulator-seeds"))
+        XCTAssertTrue(readinessScript.contains(".build/hardware-qa-records"))
+        XCTAssertTrue(readinessScript.contains("same-phone"))
+        XCTAssertTrue(readinessScript.contains("child-ipad"))
+        XCTAssertTrue(readinessScript.contains("TestFlight hardware gates"))
     }
 
     func testLaunchRepoDoesNotKeepStaleGeneratedStatusArtifacts() throws {

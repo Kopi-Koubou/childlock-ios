@@ -164,6 +164,11 @@ Minimum evidence before launch:
   pending challenge.
 - One second full shield loop on the same device proving monitoring re-arms.
 
+Before starting hardware QA, run `scripts/launch-readiness-status.sh` from the
+repo root. It prints the current Google OAuth build status and latest
+`.build/qa-simulator-seeds` / `.build/hardware-qa-records` paths without
+printing secrets.
+
 ## TestFlight Hardware Gates
 
 Run these on a physical device with the TestFlight build. Do not treat Simulator

@@ -185,6 +185,20 @@ Use the checked-in validation script for the full local gate:
 ./build-validation.sh
 ```
 
+For a quick no-secret snapshot of what is still missing before building or
+submitting, run:
+
+```sh
+scripts/launch-readiness-status.sh
+```
+
+This reports app-facing settings, server/deploy secrets, Google OAuth build
+status, and the latest simulator/hardware QA evidence paths without printing
+credential values. If Google OAuth is `hidden (missing or placeholder)`, the
+submitted build should hide `Continue with Google`; after you create the Google
+iOS/Web OAuth clients and paste the public IDs into
+`Config/AppSecrets.local.xcconfig`, rerun this command before TestFlight QA.
+
 The script checks required app-facing values in
 `Config/AppSecrets.local.xcconfig`, required server/deploy values in
 `Config/production.env`, and confirms server-only secrets were not pasted into
