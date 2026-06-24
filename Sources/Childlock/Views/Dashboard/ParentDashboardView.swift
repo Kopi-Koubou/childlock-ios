@@ -34,6 +34,10 @@ public struct ParentDashboardView: View {
     @State private var moreTimeRequestCount = SharedDefaults.shared.integer(forKey: SharedDefaults.Key.moreTimeRequestCount)
     @State private var notificationAuthorizationStatus: ChildlockNotificationAuthorizationStatus = .unavailable
     @State private var isRequestingNotificationPermission = false
+    #if DEBUG
+    @State private var didApplyDebugPresentationSeed = false
+    @State private var isDebugPaywallPresented = false
+    #endif
     #if os(iOS) && canImport(FamilyControls)
     @State private var isAppsFamilyActivityPickerPresented = false
     @State private var isRequestingAppsScreenTimeAccess = false
@@ -67,6 +71,9 @@ public struct ParentDashboardView: View {
             refreshSharedDashboardState()
             refreshNotificationAuthorizationStatus()
             syncAppsSelectionStateFromActiveProfile()
+            #if DEBUG
+            applyDebugPresentationSeedIfNeeded()
+            #endif
         }
         .onChange(of: scenePhase) { _, phase in
             guard phase == .active else { return }
@@ -82,7 +89,37 @@ public struct ParentDashboardView: View {
                 pinErrorText = nil
             }
         }
+        #if DEBUG
+        .sheet(isPresented: $isDebugPaywallPresented) {
+            PaywallView {
+                isDebugPaywallPresented = false
+            }
+        }
+        #endif
     }
+
+    #if DEBUG
+    private func applyDebugPresentationSeedIfNeeded() {
+        guard !didApplyDebugPresentationSeed else { return }
+        didApplyDebugPresentationSeed = true
+
+        let arguments = Set(ProcessInfo.processInfo.arguments)
+        if arguments.contains("--childlock-qa-seed-add-child-sheet") {
+            addChildDraft = AddChildDraft(
+                name: "Leo",
+                age: 6,
+                avatarName: "sage",
+                intervalMinutes: appState.activeProfile?.intervalMinutes ?? 15
+            )
+            addChildErrorText = nil
+            isAddChildSheetPresented = true
+        }
+
+        if arguments.contains("--childlock-qa-seed-paywall") {
+            isDebugPaywallPresented = true
+        }
+    }
+    #endif
 
     private var dashboardTabs: some View {
         VStack(spacing: 0) {

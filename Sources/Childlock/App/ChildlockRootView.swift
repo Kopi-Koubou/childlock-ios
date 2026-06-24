@@ -269,6 +269,8 @@ public struct ChildlockRootView: View {
         static let childrenTab = "--childlock-qa-seed-children-tab"
         static let appsTab = "--childlock-qa-seed-apps-tab"
         static let settingsTab = "--childlock-qa-seed-settings-tab"
+        static let addChildSheet = "--childlock-qa-seed-add-child-sheet"
+        static let paywall = "--childlock-qa-seed-paywall"
     }
 
     private var debugForcedChallengeType: ChallengeType? {
@@ -300,6 +302,8 @@ public struct ChildlockRootView: View {
             || arguments.contains(DebugLaunchArgument.childrenTab)
             || arguments.contains(DebugLaunchArgument.appsTab)
             || arguments.contains(DebugLaunchArgument.settingsTab)
+            || arguments.contains(DebugLaunchArgument.addChildSheet)
+            || arguments.contains(DebugLaunchArgument.paywall)
         else {
             return
         }
@@ -319,14 +323,18 @@ public struct ChildlockRootView: View {
             || arguments.contains(DebugLaunchArgument.moreTimeRequest)
             || arguments.contains(DebugLaunchArgument.childrenTab)
             || arguments.contains(DebugLaunchArgument.appsTab)
-            || arguments.contains(DebugLaunchArgument.settingsTab) {
+            || arguments.contains(DebugLaunchArgument.settingsTab)
+            || arguments.contains(DebugLaunchArgument.addChildSheet)
+            || arguments.contains(DebugLaunchArgument.paywall) {
             seedDebugDashboard(
                 locked: arguments.contains(DebugLaunchArgument.lockedDashboard),
                 pendingChallenge: arguments.contains(DebugLaunchArgument.pendingChallenge)
                     || arguments.contains(DebugLaunchArgument.pendingMathChallenge)
                     || arguments.contains(DebugLaunchArgument.pendingMemoryChallenge),
                 moreTimeRequest: arguments.contains(DebugLaunchArgument.moreTimeRequest),
-                tab: arguments.contains(DebugLaunchArgument.childrenTab) ? .children
+                tab: arguments.contains(DebugLaunchArgument.addChildSheet) ? .children
+                    : arguments.contains(DebugLaunchArgument.paywall) ? .settings
+                    : arguments.contains(DebugLaunchArgument.childrenTab) ? .children
                     : arguments.contains(DebugLaunchArgument.appsTab) ? .apps
                     : arguments.contains(DebugLaunchArgument.settingsTab) ? .settings
                     : .home

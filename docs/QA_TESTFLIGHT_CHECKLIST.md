@@ -36,8 +36,10 @@ and iPad (A16), and writes screenshots plus a summary under
 | `--childlock-qa-seed-pending-memory-challenge` | Child memory brain-break challenge with deterministic card pairs | `1234` after hand-back |
 | `--childlock-qa-seed-more-time-request` | Parent dashboard with `Ask Parent` request banner | `1234` if locked later |
 | `--childlock-qa-seed-children-tab` | Parent Children tab with profile card and reports controls | `1234` if locked later |
+| `--childlock-qa-seed-add-child-sheet` | Parent add-child sheet with a save-ready draft profile | `1234` if locked later |
 | `--childlock-qa-seed-apps-tab` | Parent Apps tab with Screen Time selection and planning labels | `1234` if locked later |
 | `--childlock-qa-seed-settings-tab` | Parent Settings tab with Premium, notifications, account, reset, and enforcement rows | `1234` if locked later |
+| `--childlock-qa-seed-paywall` | Premium paywall fallback with reports-only upgrade positioning | `1234` if locked later |
 
 Simulator pass criteria:
 
@@ -47,10 +49,15 @@ Simulator pass criteria:
 - Seeded dashboard shows a child, recent activity, app tabs, and settings entry.
 - Children tab seed shows the child profile, reports controls, and add-child
   entry without overlap on iPhone and iPad.
+- Add-child sheet seed shows the child name, age, avatar, copied-settings
+  footer, and enabled save action without overlap on iPhone and iPad.
 - Apps tab seed shows Screen Time selection copy plus fallback planning labels
   without overlap on iPhone and iPad.
 - Settings tab seed shows Premium/restore, notifications, account, reset, and
   enforcement controls without overlap on iPhone and iPad.
+- Paywall seed keeps the upgrade framed around deeper reports, shows that
+  Screen Time enforcement remains included, and renders product-unavailable
+  fallback copy without overlap on iPhone and iPad.
 - Locked dashboard hides parent content until the PIN is entered.
 - Pending challenge exposes only the child challenge surface, not dashboard
   controls underneath.
@@ -65,14 +72,19 @@ Simulator pass criteria:
 
 Latest simulator smoke pass, 2026-06-24:
 
-- Simulator seed harness captured 22 screenshots across iPhone 17 and iPad
-  (A16), including the parent Children, Apps, and Settings tabs.
+- Simulator seed harness captured 26 screenshots across iPhone 17 and iPad
+  (A16), including the parent Children, Apps, Settings, add-child, and paywall
+  surfaces.
+- Latest summary:
+  `.build/qa-simulator-seeds/20260624-054314/summary.md`.
 - iPhone 17 simulator: `--childlock-qa-seed-onboarding-devices` rendered the
   local-first device setup copy without overlap.
 - iPhone 17 simulator: `--childlock-qa-seed-dashboard` rendered the parent
   dashboard home state with child summary, recent activity, tabs, and settings.
 - iPhone 17 simulator: `--childlock-qa-seed-children-tab` rendered the child
   profile/report view and add-child entry without overlap.
+- iPhone 17 simulator: `--childlock-qa-seed-add-child-sheet` rendered the
+  save-ready add-child sheet for `Leo` without overlap or clipping.
 - iPhone 17 simulator: `--childlock-qa-seed-apps-tab` rendered Screen Time
   selection, planning labels, fallback app choices, and the bottom tab bar
   without overlap.
@@ -97,8 +109,12 @@ Latest simulator smoke pass, 2026-06-24:
 - iPhone 17 simulator: Premium fallback showed unavailable annual/monthly
   products while preserving the message that Screen Time enforcement stays
   included. `Restore purchases` opened Apple's purchase auth sheet.
+- iPhone 17 simulator: `--childlock-qa-seed-paywall` rendered the reports-only
+  upgrade positioning, unavailable-product fallback, restore link, legal links,
+  and enforcement-included copy without overlap.
 - iPad (A16) simulator: `--childlock-qa-seed-children-tab`,
-  `--childlock-qa-seed-apps-tab`, and `--childlock-qa-seed-settings-tab` stayed
+  `--childlock-qa-seed-add-child-sheet`, `--childlock-qa-seed-apps-tab`,
+  `--childlock-qa-seed-settings-tab`, and `--childlock-qa-seed-paywall` stayed
   within the readable content width and showed the local-device Childlock model
   clearly.
 - iPhone 17 simulator: Settings -> `Reset Childlock on this device` -> `Confirm
