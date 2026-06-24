@@ -3,7 +3,8 @@ import SwiftUI
 /// Shown after a completed challenge. Keeps the child out of the parent
 /// dashboard: the cover only dismisses after a parent enters the PIN.
 /// The child presses Home or swipes up, then returns to their now-unshielded
-/// app. iOS does not let Screen Time apps automatically reopen that app.
+/// app. iOS does not let Screen Time apps automatically reopen arbitrary
+/// third-party apps or restore media state.
 public struct HandBackView: View {
     private let childName: String?
     private let onParentUnlock: () -> Void
@@ -53,13 +54,13 @@ public struct HandBackView: View {
                     detail: "Your video, game, or site can open again."
                 )
 
-                HandBackResumeCue(
-                    iconName: "house.fill",
-                    title: "Press Home now",
-                    detail: "Swipe up or press Home, then tap your video, game, or site."
+                HandBackReturnCue(
+                    iconName: "arrow.up.forward.circle.fill",
+                    title: "Return to your app",
+                    detail: "Swipe up or press Home, then tap the same video, game, or site."
                 )
                 .accessibilityIdentifier("handback_resume_guidance")
-                .accessibilityLabel("Press Home now. Swipe up or press Home, then tap your video, game, or site.")
+                .accessibilityLabel("Return to your app. Swipe up or press Home, then tap the same video, game, or site.")
             }
             .accessibilityIdentifier("handback_steps")
             .padding(.top, ChildlockSpacing.xs)
@@ -134,7 +135,7 @@ public struct HandBackView: View {
     }
 }
 
-private struct HandBackResumeCue: View {
+private struct HandBackReturnCue: View {
     let iconName: String
     let title: String
     let detail: String
@@ -142,27 +143,31 @@ private struct HandBackResumeCue: View {
     var body: some View {
         HStack(alignment: .center, spacing: ChildlockSpacing.sm) {
             Image(systemName: iconName)
-                .font(.system(size: 20, weight: .semibold))
+                .font(.system(size: 26, weight: .bold))
                 .foregroundStyle(ChildlockColor.surface)
-                .frame(width: 36, height: 36)
+                .frame(width: 48, height: 48)
                 .background(ChildlockColor.primary)
                 .clipShape(Circle())
 
-            VStack(alignment: .leading, spacing: 3) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(ChildlockTypography.bodyBold)
+                    .font(ChildlockTypography.subtitle)
                     .foregroundStyle(ChildlockColor.textPrimary)
                 Text(detail)
-                    .font(ChildlockTypography.caption)
-                    .foregroundStyle(ChildlockColor.textSecondary)
+                    .font(ChildlockTypography.body)
+                    .foregroundStyle(ChildlockColor.textPrimary.opacity(0.82))
                     .multilineTextAlignment(.leading)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(.vertical, ChildlockSpacing.md)
+        .padding(.vertical, ChildlockSpacing.lg)
         .padding(.horizontal, ChildlockSpacing.md)
         .background(ChildlockColor.primarySoft)
         .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.control))
+        .overlay {
+            RoundedRectangle(cornerRadius: ChildlockRadius.control)
+                .stroke(ChildlockColor.primary.opacity(0.18), lineWidth: 1)
+        }
         .accessibilityElement(children: .combine)
     }
 }

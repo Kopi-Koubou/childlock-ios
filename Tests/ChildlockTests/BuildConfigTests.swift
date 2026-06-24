@@ -74,7 +74,7 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(validationScript.contains("Start real child-like content in the selected app/site"))
         XCTAssertTrue(validationScript.contains("selected content shields only after the threshold"))
         XCTAssertTrue(validationScript.contains("pending challenge from the alert or Home"))
-        XCTAssertTrue(validationScript.contains("hand-back shows Press Home now guidance"))
+        XCTAssertTrue(validationScript.contains("hand-back shows Return to your app guidance"))
         XCTAssertTrue(validationScript.contains("Use docs/QA_TESTFLIGHT_CHECKLIST.md"))
         XCTAssertTrue(production.contains(".build/validation-logs/"))
         XCTAssertTrue(production.contains("last 120 log lines"))
