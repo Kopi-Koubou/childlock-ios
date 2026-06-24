@@ -37,6 +37,7 @@ shielding, extension actions, purchases, and real hand-back behavior.
 | Shield copy says `Brain Break` | Pass / Fail |  |
 | `Start Brain Break` closes the selected app | Pass / Fail |  |
 | Childlock opens the pending challenge from notification or Home | Pass / Fail |  |
+| Denied-notification fallback opens the pending challenge from Home | Pass / Fail / N/A |  |
 | Challenge completion clears the shield | Pass / Fail |  |
 | Monitoring re-arms for another full interval | Pass / Fail |  |
 | Second full interval shields again | Pass / Fail |  |
@@ -54,6 +55,7 @@ Use this when the parent and child share the same iPhone.
 | Parent installs Childlock on the shared iPhone | Pass / Fail / N/A |  |
 | Parent completes setup on that same iPhone | Pass / Fail / N/A |  |
 | Parent selects apps/categories used by the child on that same iPhone | Pass / Fail / N/A |  |
+| If multiple child profiles exist, parent taps `Make active` for the child before handoff | Pass / Fail / N/A |  |
 | Parent sets the PIN and hands the phone to the child | Pass / Fail / N/A |  |
 | Child uses selected content until threshold is reached | Pass / Fail / N/A |  |
 | Child solves the challenge and returns to the unlocked app | Pass / Fail / N/A |  |
