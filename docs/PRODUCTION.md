@@ -194,12 +194,14 @@ scripts/launch-readiness-status.sh
 
 This reports app-facing settings, server/deploy secrets, Google OAuth build
 status, and the latest simulator/hardware QA evidence paths without printing
-credential values. It also flags simulator summaries and hardware records that
-were generated for a stale commit, so regenerate QA evidence after changing the
-build you plan to submit. If Google OAuth is `hidden (missing or placeholder)`,
-the submitted build should hide `Continue with Google`; after you create the
-Google iOS/Web OAuth clients and paste the public IDs into
-`Config/AppSecrets.local.xcconfig`, rerun this command before TestFlight QA.
+credential values. Simulator evidence includes the summary, gallery, and
+`contact-sheet.png` overview from `scripts/qa-simulator-seeds.sh`. It also
+flags simulator summaries and hardware records that were generated for a stale
+commit, so regenerate QA evidence after changing the build you plan to submit.
+If Google OAuth is `hidden (missing or placeholder)`, the submitted build should
+hide `Continue with Google`; after you create the Google iOS/Web OAuth clients
+and paste the public IDs into `Config/AppSecrets.local.xcconfig`, rerun this
+command before TestFlight QA.
 
 The script checks required app-facing values in
 `Config/AppSecrets.local.xcconfig`, required server/deploy values in

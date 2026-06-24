@@ -12,6 +12,7 @@ RUN_ID="$(date +%Y%m%d-%H%M%S)"
 OUTPUT_DIR="$ROOT_DIR/.build/qa-simulator-seeds/$RUN_ID"
 SUMMARY_PATH="$OUTPUT_DIR/summary.md"
 GALLERY_PATH="$OUTPUT_DIR/gallery.html"
+CONTACT_SHEET_PATH="$OUTPUT_DIR/contact-sheet.png"
 GIT_COMMIT="$(git -C "$ROOT_DIR" rev-parse --short HEAD 2>/dev/null || echo "unknown")"
 
 DEFAULT_SIMULATORS=("iPhone 17" "iPad (A16)")
@@ -51,6 +52,131 @@ simulator_id_for_name() {
         | sed -E 's/.*\(([0-9A-Fa-f-]{36})\).*/\1/'
 }
 
+generate_contact_sheet() {
+    OUTPUT_DIR_FOR_CONTACT_SHEET="$OUTPUT_DIR" swift - <<'SWIFT'
+import AppKit
+import Darwin
+import Foundation
+
+func fail(_ message: String) -> Never {
+    FileHandle.standardError.write(Data((message + "\n").utf8))
+    exit(1)
+}
+
+guard let outputPath = ProcessInfo.processInfo.environment["OUTPUT_DIR_FOR_CONTACT_SHEET"] else {
+    fail("Missing OUTPUT_DIR_FOR_CONTACT_SHEET")
+}
+
+let root = URL(fileURLWithPath: outputPath, isDirectory: true)
+let screenshots: [URL]
+do {
+    screenshots = try FileManager.default.contentsOfDirectory(
+        at: root,
+        includingPropertiesForKeys: nil
+    )
+    .filter { url in
+        url.pathExtension.lowercased() == "png" && url.lastPathComponent != "contact-sheet.png"
+    }
+    .sorted { $0.lastPathComponent < $1.lastPathComponent }
+} catch {
+    fail("Could not list simulator screenshots: \(error)")
+}
+
+guard !screenshots.isEmpty else {
+    fail("No screenshots found for contact sheet")
+}
+
+let columns = screenshots.count > 16 ? 4 : 3
+let rows = Int(ceil(Double(screenshots.count) / Double(columns)))
+let margin: CGFloat = 28
+let gap: CGFloat = 18
+let cellWidth: CGFloat = 260
+let cellHeight: CGFloat = 600
+let titleHeight: CGFloat = 56
+let sheetWidth = margin * 2 + CGFloat(columns) * cellWidth + CGFloat(columns - 1) * gap
+let sheetHeight = margin * 2 + titleHeight + CGFloat(rows) * cellHeight + CGFloat(rows - 1) * gap
+let sheet = NSImage(size: NSSize(width: sheetWidth, height: sheetHeight))
+
+let titleAttributes: [NSAttributedString.Key: Any] = [
+    .font: NSFont.systemFont(ofSize: 26, weight: .semibold),
+    .foregroundColor: NSColor(calibratedRed: 0.12, green: 0.15, blue: 0.13, alpha: 1)
+]
+let labelParagraph = NSMutableParagraphStyle()
+labelParagraph.alignment = .center
+labelParagraph.lineBreakMode = .byWordWrapping
+let labelAttributes: [NSAttributedString.Key: Any] = [
+    .font: NSFont.monospacedSystemFont(ofSize: 10, weight: .regular),
+    .foregroundColor: NSColor(calibratedRed: 0.27, green: 0.34, blue: 0.29, alpha: 1),
+    .paragraphStyle: labelParagraph
+]
+
+sheet.lockFocus()
+NSColor(calibratedRed: 0.968, green: 0.960, blue: 0.928, alpha: 1).setFill()
+NSRect(origin: .zero, size: sheet.size).fill()
+
+"Childlock Simulator QA Seeds".draw(
+    at: NSPoint(x: margin, y: sheetHeight - margin - 34),
+    withAttributes: titleAttributes
+)
+
+for (index, file) in screenshots.enumerated() {
+    guard let image = NSImage(contentsOf: file) else {
+        fail("Could not read screenshot \(file.lastPathComponent)")
+    }
+
+    let column = index % columns
+    let row = index / columns
+    let x = margin + CGFloat(column) * (cellWidth + gap)
+    let y = sheetHeight - margin - titleHeight - CGFloat(row + 1) * cellHeight - CGFloat(row) * gap
+    let cardRect = NSRect(x: x, y: y, width: cellWidth, height: cellHeight)
+    let cardPath = NSBezierPath(roundedRect: cardRect, xRadius: 8, yRadius: 8)
+    NSColor.white.setFill()
+    cardPath.fill()
+    NSColor(calibratedRed: 0.90, green: 0.88, blue: 0.84, alpha: 1).setStroke()
+    cardPath.lineWidth = 1
+    cardPath.stroke()
+
+    let padding: CGFloat = 12
+    let labelHeight: CGFloat = 62
+    let imageMaxWidth = cellWidth - padding * 2
+    let imageMaxHeight = cellHeight - labelHeight - padding * 2
+    let scale = min(imageMaxWidth / image.size.width, imageMaxHeight / image.size.height)
+    let drawSize = NSSize(width: image.size.width * scale, height: image.size.height * scale)
+    let imageRect = NSRect(
+        x: x + padding + (imageMaxWidth - drawSize.width) / 2,
+        y: y + labelHeight + padding + (imageMaxHeight - drawSize.height) / 2,
+        width: drawSize.width,
+        height: drawSize.height
+    )
+    image.draw(in: imageRect)
+
+    let labelRect = NSRect(
+        x: x + padding,
+        y: y + padding,
+        width: imageMaxWidth,
+        height: labelHeight - padding
+    )
+    file.deletingPathExtension().lastPathComponent.draw(in: labelRect, withAttributes: labelAttributes)
+}
+
+sheet.unlockFocus()
+
+guard
+    let tiff = sheet.tiffRepresentation,
+    let bitmap = NSBitmapImageRep(data: tiff),
+    let png = bitmap.representation(using: .png, properties: [:])
+else {
+    fail("Could not render contact sheet PNG")
+}
+
+do {
+    try png.write(to: root.appendingPathComponent("contact-sheet.png"))
+} catch {
+    fail("Could not write contact sheet: \(error)")
+}
+SWIFT
+}
+
 mkdir -p "$OUTPUT_DIR"
 
 cd "$ROOT_DIR"
@@ -79,6 +205,7 @@ fi
     echo ""
     echo "Run: $RUN_ID"
     echo "Git commit: $GIT_COMMIT"
+    echo "Contact sheet: \`contact-sheet.png\`"
     echo ""
     echo "| Simulator | Seed | Screenshot |"
     echo "| --- | --- | --- |"
@@ -105,6 +232,7 @@ fi
     echo "<body>"
     echo "  <h1>Childlock Simulator QA Seeds</h1>"
     echo "  <p>Run $RUN_ID. Git commit $GIT_COMMIT. Review phone and iPad launch states before TestFlight hardware QA.</p>"
+    echo "  <p><a href=\"contact-sheet.png\">Open contact sheet</a></p>"
     echo "  <main class=\"grid\">"
 } > "$GALLERY_PATH"
 
@@ -158,8 +286,11 @@ if [[ "$actual_screenshot_count" != "$expected_screenshot_count" ]]; then
     exit 1
 fi
 
+generate_contact_sheet
+
 echo ""
 echo "Captured $actual_screenshot_count screenshots."
-echo "Done. Review screenshots, summary, and gallery:"
+echo "Done. Review screenshots, summary, gallery, and contact sheet:"
 echo "$SUMMARY_PATH"
 echo "$GALLERY_PATH"
+echo "$CONTACT_SHEET_PATH"

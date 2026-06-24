@@ -22,9 +22,9 @@ scripts/qa-simulator-seeds.sh
 ```
 
 The script builds a Debug simulator app, launches each seeded state on iPhone 17
-and iPad (A16), and writes screenshots, `summary.md`, and `gallery.html` under
-`.build/qa-simulator-seeds/`. Open `gallery.html` for visual review of the full
-phone/iPad parent and child UI set.
+and iPad (A16), and writes screenshots, `summary.md`, `gallery.html`, and
+`contact-sheet.png` under `.build/qa-simulator-seeds/`. Open `gallery.html` for visual review of the full phone/iPad parent and child UI set, or use the
+contact sheet for a quick all-states scan.
 
 | Launch argument | Expected screen | PIN |
 | --- | --- | --- |
@@ -85,13 +85,14 @@ Simulator pass criteria:
 Simulator evidence handoff:
 
 - Treat `.build/qa-simulator-seeds/<run-id>/summary.md` and
-  `.build/qa-simulator-seeds/<run-id>/gallery.html` as generated evidence, not
-  checked-in release metadata. Do not edit this checklist only to chase a new
-  run ID.
+  `.build/qa-simulator-seeds/<run-id>/gallery.html`, plus
+  `.build/qa-simulator-seeds/<run-id>/contact-sheet.png`, as generated
+  evidence, not checked-in release metadata. Do not edit this checklist only to
+  chase a new run ID.
 - `scripts/new-hardware-qa-record.sh <scenario> <build-number>` pre-fills the
-  newest generated simulator summary and gallery paths into the physical QA
-  record, so the record used during TestFlight points at the correct visual
-  background evidence.
+  newest generated simulator summary, gallery, and contact-sheet paths into the
+  physical QA record, so the record used during TestFlight points at the
+  correct visual background evidence.
 - The current launch-readiness simulator sweep was last refreshed on
   2026-06-24 and captured 28 screenshots across iPhone 17 and iPad (A16),
   covering onboarding, device-model copy, setup-disabled state, parent
@@ -122,7 +123,7 @@ scripts/new-hardware-qa-record.sh child-ipad <build-number>
 The generated record is based on `docs/HARDWARE_QA_RECORD_TEMPLATE.md`.
 It pre-fills the build number, date, scenario, git commit, tester name when
 available, the latest simulator QA summary path, and the latest simulator QA
-gallery path.
+gallery and contact-sheet paths.
 
 | Field | Value |
 | --- | --- |
@@ -135,6 +136,7 @@ gallery path.
 | Scenario | Same phone / Child iPad / Child iPhone |
 | Latest simulator QA summary |  |
 | Latest simulator QA gallery |  |
+| Latest simulator QA contact sheet |  |
 | Google OAuth build settings | Configured / Missing or placeholder |
 | Parent sign-in tested | Apple / Google / N/A |
 | Notification state tested | Allowed / Denied |

@@ -30,6 +30,11 @@ final class BuildConfigTests: XCTestCase {
         let readinessScript = try readRepoFile("scripts/launch-readiness-status.sh")
         let production = try readRepoFile("docs/PRODUCTION.md")
         let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")
+        let normalizedProduction = production.replacingOccurrences(
+            of: #"\s+"#,
+            with: " ",
+            options: .regularExpression
+        )
 
         for contents in [buildScript, validationScript, readinessScript] {
             XCTAssertTrue(contents.contains("$(dirname \"$0\")"))
@@ -73,12 +78,13 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(production.contains("last 120 log lines"))
         XCTAssertTrue(production.contains("./build-validation.sh"))
         XCTAssertTrue(production.contains("scripts/launch-readiness-status.sh"))
-        XCTAssertTrue(production.contains("flags simulator summaries and hardware records that"))
+        XCTAssertTrue(normalizedProduction.contains("flags simulator summaries and hardware records that"))
         XCTAssertTrue(production.contains("Google OAuth values may all be blank for an Apple-first build"))
         XCTAssertTrue(production.contains("REQUIRE_GOOGLE_OAUTH=1"))
         XCTAssertTrue(checklist.contains("scripts/launch-readiness-status.sh"))
         XCTAssertTrue(checklist.contains(".build/qa-simulator-seeds"))
         XCTAssertTrue(checklist.contains(".build/hardware-qa-records"))
+        XCTAssertTrue(checklist.contains("contact-sheet.png"))
         XCTAssertTrue(checklist.contains("marks simulator or hardware evidence as stale"))
         XCTAssertTrue(readinessScript.contains("GOOGLE_IOS_CLIENT_ID"))
         XCTAssertTrue(readinessScript.contains("GOOGLE_WEB_CLIENT_ID"))
@@ -89,6 +95,8 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(readinessScript.contains("hidden (missing or placeholder)"))
         XCTAssertTrue(readinessScript.contains(".build/qa-simulator-seeds"))
         XCTAssertTrue(readinessScript.contains(".build/hardware-qa-records"))
+        XCTAssertTrue(readinessScript.contains("contact-sheet.png"))
+        XCTAssertTrue(readinessScript.contains("Latest simulator contact sheet"))
         XCTAssertTrue(readinessScript.contains("summary_git_commit"))
         XCTAssertTrue(readinessScript.contains("hardware_record_git_commit"))
         XCTAssertTrue(readinessScript.contains("stale commit"))

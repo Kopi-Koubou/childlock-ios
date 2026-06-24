@@ -249,6 +249,7 @@ describe_evidence_path() {
 
 latest_summary="$(relative_latest_path "$ROOT_DIR/.build/qa-simulator-seeds" "summary.md")"
 latest_gallery="$(relative_latest_path "$ROOT_DIR/.build/qa-simulator-seeds" "gallery.html")"
+latest_contact_sheet="$(relative_latest_path "$ROOT_DIR/.build/qa-simulator-seeds" "contact-sheet.png")"
 latest_same_phone_record="$(relative_latest_record "same-phone")"
 latest_child_ipad_record="$(relative_latest_record "child-ipad")"
 
@@ -274,6 +275,7 @@ echo
 echo "QA evidence"
 echo "- Latest simulator summary: $(describe_evidence_path "$latest_summary" "$(summary_git_commit "$latest_summary")")"
 echo "- Latest simulator gallery: $(describe_evidence_path "$latest_gallery" "$(summary_git_commit "$latest_summary")")"
+echo "- Latest simulator contact sheet: $(describe_evidence_path "$latest_contact_sheet" "$(summary_git_commit "$latest_summary")")"
 echo "- Latest same-phone record: $(describe_evidence_path "$latest_same_phone_record" "$(hardware_record_git_commit "$latest_same_phone_record")")"
 echo "- Latest child-iPad record: $(describe_evidence_path "$latest_child_ipad_record" "$(hardware_record_git_commit "$latest_child_ipad_record")")"
 echo
