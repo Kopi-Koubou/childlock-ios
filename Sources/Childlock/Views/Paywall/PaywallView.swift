@@ -186,17 +186,20 @@ public struct PaywallView: View {
                                 .foregroundStyle(ChildlockColor.textSecondary)
                         }
                         Spacer()
-                        radioIndicator(selected: selectedPlan == .annual)
+                        radioIndicator(selected: annualPlanIsSelected)
                     }
                 }
                 .padding(ChildlockSpacing.md)
                 .background(
                     RoundedRectangle(cornerRadius: ChildlockRadius.card)
-                        .fill(ChildlockColor.primarySoft)
+                        .fill(annualPlanIsSelected ? ChildlockColor.primarySoft : ChildlockColor.surface)
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: ChildlockRadius.card)
-                        .stroke(ChildlockColor.primary, lineWidth: selectedPlan == .annual ? 2 : 1)
+                        .stroke(
+                            annualPlanIsSelected ? ChildlockColor.primary : ChildlockColor.surfaceMuted,
+                            lineWidth: annualPlanIsSelected ? 2 : 1.5
+                        )
                 )
             }
             .buttonStyle(.plain)
@@ -215,16 +218,19 @@ public struct PaywallView: View {
                             .foregroundStyle(ChildlockColor.textSecondary)
                     }
                     Spacer()
-                    radioIndicator(selected: selectedPlan == .monthly)
+                    radioIndicator(selected: monthlyPlanIsSelected)
                 }
                 .padding(ChildlockSpacing.md)
                 .background(
                     RoundedRectangle(cornerRadius: ChildlockRadius.card)
-                        .fill(ChildlockColor.surface)
+                        .fill(monthlyPlanIsSelected ? ChildlockColor.primarySoft : ChildlockColor.surface)
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: ChildlockRadius.card)
-                        .stroke(ChildlockColor.surfaceMuted, lineWidth: 1.5)
+                        .stroke(
+                            monthlyPlanIsSelected ? ChildlockColor.primary : ChildlockColor.surfaceMuted,
+                            lineWidth: monthlyPlanIsSelected ? 2 : 1.5
+                        )
                 )
             }
             .buttonStyle(.plain)
@@ -369,6 +375,14 @@ public struct PaywallView: View {
 
     private var selectedProductIsAvailable: Bool {
         selectedPlan == .annual ? annualPlanAvailable : monthlyPlanAvailable
+    }
+
+    private var annualPlanIsSelected: Bool {
+        selectedPlan == .annual && annualPlanAvailable
+    }
+
+    private var monthlyPlanIsSelected: Bool {
+        selectedPlan == .monthly && monthlyPlanAvailable
     }
 
     private var annualPlanAvailable: Bool {

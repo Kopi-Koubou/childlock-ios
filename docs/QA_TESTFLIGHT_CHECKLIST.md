@@ -118,7 +118,8 @@ Latest simulator smoke pass, 2026-06-24:
   Enforcement` without also showing `Stop Lock Enforcement`.
 - iPhone 17 simulator: Premium fallback showed unavailable annual/monthly
   products while preserving the message that Screen Time enforcement stays
-  included. `Restore purchases` opened Apple's purchase auth sheet.
+  included, and no unavailable plan rendered as selected. `Restore purchases`
+  opened Apple's purchase auth sheet.
 - iPhone 17 simulator: `--childlock-qa-seed-paywall` rendered the reports-only
   upgrade positioning, unavailable-product fallback, restore link, legal links,
   and enforcement-included copy without overlap.

@@ -23,6 +23,21 @@ final class PaywallCopyTests: XCTestCase {
         )
     }
 
+    func testUnavailablePlanRowsAreNotRenderedAsSelected() throws {
+        let contents = try readRepoFile("Sources/Childlock/Views/Paywall/PaywallView.swift")
+
+        XCTAssertTrue(contents.contains("private var annualPlanIsSelected: Bool"))
+        XCTAssertTrue(contents.contains("selectedPlan == .annual && annualPlanAvailable"))
+        XCTAssertTrue(contents.contains("private var monthlyPlanIsSelected: Bool"))
+        XCTAssertTrue(contents.contains("selectedPlan == .monthly && monthlyPlanAvailable"))
+        XCTAssertTrue(contents.contains("radioIndicator(selected: annualPlanIsSelected)"))
+        XCTAssertTrue(contents.contains("radioIndicator(selected: monthlyPlanIsSelected)"))
+        XCTAssertTrue(contents.contains("annualPlanIsSelected ? ChildlockColor.primarySoft : ChildlockColor.surface"))
+        XCTAssertTrue(contents.contains("monthlyPlanIsSelected ? ChildlockColor.primarySoft : ChildlockColor.surface"))
+        XCTAssertFalse(contents.contains("radioIndicator(selected: selectedPlan == .annual)"))
+        XCTAssertFalse(contents.contains("radioIndicator(selected: selectedPlan == .monthly)"))
+    }
+
     func testSubscriptionServiceDoesNotInferTrialStatusFromPurchaseAge() throws {
         let contents = try readRepoFile("Sources/Childlock/Services/SubscriptionService.swift")
 
