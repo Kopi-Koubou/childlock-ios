@@ -143,15 +143,33 @@ final class OnboardingViewModelTests: XCTestCase {
         viewModel.step = .setup
 
         XCTAssertEqual(viewModel.setupBlockingReason, "Type your child's name to continue.")
+        XCTAssertFalse(viewModel.needsMonitoringSelection)
 
         viewModel.childName = "Mia"
         XCTAssertEqual(viewModel.setupBlockingReason, "Allow Screen Time access before choosing monitored apps.")
+        XCTAssertFalse(viewModel.needsMonitoringSelection)
 
         viewModel.familyAuthorizationState = .authorized
+        XCTAssertTrue(viewModel.needsMonitoringSelection)
+
+        #if os(iOS) && canImport(FamilyControls)
+        XCTAssertEqual(viewModel.setupBlockingReason, "Choose at least one app, category, or website in the Screen Time picker, then tap Done.")
+        #else
         XCTAssertEqual(viewModel.setupBlockingReason, "Choose at least one monitored app.")
+        #endif
 
         viewModel.selectedMonitoredApps = ["Games"]
+
+        #if os(iOS) && canImport(FamilyControls)
+        XCTAssertTrue(viewModel.needsMonitoringSelection)
+        viewModel.setTokenizedSelection(
+            tokenData: Data([0x1, 0x2]),
+            displayNames: ["1 app selected"]
+        )
+        #endif
+
         XCTAssertNil(viewModel.setupBlockingReason)
+        XCTAssertFalse(viewModel.needsMonitoringSelection)
         XCTAssertTrue(viewModel.canContinue)
     }
 

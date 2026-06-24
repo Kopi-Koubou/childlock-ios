@@ -53,7 +53,8 @@ Simulator pass criteria:
   parent-only iPhone install does not remotely lock a separate iPad at launch.
 - Setup seed explains that `Continue` stays disabled until Apple's picker
   returns at least one real app, category, or website selection, with the
-  disabled action and reason pinned at the bottom of the setup screen.
+  disabled action, reason, and `Choose Screen Time items` recovery action
+  pinned at the bottom of the setup screen.
 - Seeded dashboard shows a child, recent activity, app tabs, settings entry,
   and a same-phone handoff card that can lock the parent dashboard.
 - Children tab seed shows the child profile, reports controls, and add-child
@@ -102,8 +103,8 @@ Simulator evidence handoff:
   surfaces.
 - When regenerating evidence, explicitly spot-check the setup seed: it must show
   `Tell us about your child`, the Screen Time picker explanation, and the pinned
-  disabled Continue reason. A setup seed that falls back to the welcome screen
-  is not a valid pass.
+  disabled Continue reason plus `Choose Screen Time items` action. A setup seed
+  that falls back to the welcome screen is not a valid pass.
 
 This simulator pass does not prove the real Screen Time shield loop. Keep the
 TestFlight hardware gates below as the launch blocker until they pass on

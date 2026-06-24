@@ -192,11 +192,16 @@ final class HandBackCopyTests: XCTestCase {
         XCTAssertTrue(onboarding.contains("No Screen Time items selected yet. If Continue stays disabled"))
         XCTAssertTrue(onboarding.contains("innerStepWithPinnedFooter"))
         XCTAssertTrue(onboarding.contains("setupFooter"))
+        XCTAssertTrue(onboarding.contains("shouldShowScreenTimePickerFooterAction"))
+        XCTAssertTrue(onboarding.contains("Choose Screen Time items"))
+        XCTAssertTrue(onboarding.contains("setup_footer_choose_screen_time_items"))
+        XCTAssertTrue(onboarding.contains("Open Apple's Screen Time picker to choose apps, categories, or websites."))
         XCTAssertTrue(onboarding.contains(".accessibilityHint(viewModel.setupBlockingReason ?? \"Continue to parent PIN setup.\")"))
         XCTAssertFalse(onboarding.contains("Choose video apps"))
         XCTAssertFalse(onboarding.contains("Choose games"))
         XCTAssertFalse(onboarding.contains("Choose social apps"))
         XCTAssertTrue(viewModel.contains("Choose at least one app, category, or website in the Screen Time picker, then tap Done."))
+        XCTAssertTrue(viewModel.contains("public var needsMonitoringSelection: Bool"))
     }
 
     func testParentDashboardUsesReadableContentWidthOnIPad() throws {

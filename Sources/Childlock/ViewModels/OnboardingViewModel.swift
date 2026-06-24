@@ -148,6 +148,12 @@ public final class OnboardingViewModel {
         return nil
     }
 
+    public var needsMonitoringSelection: Bool {
+        guard step == .setup else { return false }
+        guard familyAuthorizationState == .authorized else { return false }
+        return !hasRequiredMonitoringSelection
+    }
+
     public var isComplete: Bool {
         isFinished
     }

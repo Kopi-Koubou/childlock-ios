@@ -633,6 +633,19 @@ public struct OnboardingFlowView: View {
                 .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.control, style: .continuous))
             }
 
+            if shouldShowScreenTimePickerFooterAction {
+                Button {
+                    #if os(iOS) && canImport(FamilyControls)
+                    isFamilyActivityPickerPresented = true
+                    #endif
+                } label: {
+                    Label("Choose Screen Time items", systemImage: "checklist")
+                }
+                .buttonStyle(ChildlockSecondaryButtonStyle())
+                .accessibilityIdentifier("setup_footer_choose_screen_time_items")
+                .accessibilityHint("Open Apple's Screen Time picker to choose apps, categories, or websites.")
+            }
+
             Button("Continue") {
                 viewModel.goNext()
             }
@@ -641,6 +654,14 @@ public struct OnboardingFlowView: View {
             .opacity(viewModel.canContinue ? 1 : 0.45)
             .accessibilityHint(viewModel.setupBlockingReason ?? "Continue to parent PIN setup.")
         }
+    }
+
+    private var shouldShowScreenTimePickerFooterAction: Bool {
+        #if os(iOS) && canImport(FamilyControls)
+        return shouldUseFamilyActivityPicker && viewModel.needsMonitoringSelection
+        #else
+        return false
+        #endif
     }
 
     // MARK: - PIN + Done (Step 5)
