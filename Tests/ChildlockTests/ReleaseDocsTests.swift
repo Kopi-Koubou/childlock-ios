@@ -20,6 +20,8 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(googleAuth.contains("Unsupported provider: missing OAuth secret"))
         XCTAssertTrue(googleAuth.contains("Fix it in Supabase, not Xcode"))
         XCTAssertTrue(googleAuth.contains("TestFlight Proof"))
+        XCTAssertTrue(googleAuth.contains("Run this section only for a TestFlight build that includes real"))
+        XCTAssertTrue(googleAuth.contains("record Google as N/A in the hardware QA record"))
 
         for contents in [production, appReview] {
             let normalized = normalizeWhitespace(contents)
@@ -184,8 +186,10 @@ final class ReleaseDocsTests: XCTestCase {
         }
 
         XCTAssertTrue(checklist.contains("Parent signs in with Apple"))
-        XCTAssertTrue(checklist.contains("Sign in with Google and complete setup again."))
+        XCTAssertTrue(checklist.contains("If Google OAuth is configured and `Continue with Google` is visible, sign in"))
         XCTAssertTrue(checklist.contains("Confirm the app returns to fresh onboarding with no parent dashboard access."))
+        XCTAssertTrue(checklist.contains("If Google OAuth is configured and `Continue with Google` is visible"))
+        XCTAssertTrue(checklist.contains("record Google as N/A for this build and keep App Review notes Apple-first"))
         XCTAssertTrue(checklist.contains("start real child-like content"))
         XCTAssertTrue(checklist.contains("Record the content\n    app/activity and start time in the hardware QA record."))
         XCTAssertTrue(checklist.contains("Record the\n    shield timestamp and compare it with the configured interval."))
@@ -207,6 +211,7 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(checklist.contains("| Scenario | Same phone / Child iPad / Child iPhone |"))
         XCTAssertTrue(checklist.contains("| Latest simulator QA summary |"))
         XCTAssertTrue(checklist.contains("| Google OAuth build settings | Configured / Missing or placeholder |"))
+        XCTAssertTrue(checklist.contains("| Parent sign-in tested | Apple / Google / N/A |"))
         XCTAssertTrue(checklist.contains("| Content app/activity tested |"))
         XCTAssertTrue(checklist.contains("| Content started at |"))
         XCTAssertTrue(checklist.contains("| Shield appeared at |"))
@@ -215,6 +220,8 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(checklist.contains("| Parent dashboard stayed PIN-gated after hand-back | Pass / Fail |"))
         XCTAssertTrue(checklist.contains("One denied-notification pass proving Home -> Childlock still opens the"))
         XCTAssertTrue(checklist.contains("One second full shield loop on the same device proving monitoring re-arms."))
+        XCTAssertTrue(checklist.contains("record Google as N/A"))
+        XCTAssertTrue(checklist.contains("confirm the button is hidden"))
         XCTAssertTrue(checklist.contains("interactive `--childlock-qa-seed-pending-math-challenge`"))
         XCTAssertTrue(checklist.contains("`--childlock-qa-seed-onboarding-setup`"))
         XCTAssertTrue(checklist.contains("Continue` stays disabled until Apple's picker"))
@@ -236,6 +243,7 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(template.contains("| Git commit |"))
         XCTAssertTrue(template.contains("| Latest simulator QA summary |"))
         XCTAssertTrue(template.contains("| Google OAuth build settings | Configured / Missing or placeholder |"))
+        XCTAssertTrue(template.contains("| Parent sign-in tested | Apple / Google / N/A |"))
         XCTAssertTrue(template.contains("| Content app/activity tested |"))
         XCTAssertTrue(template.contains("| Content started at |"))
         XCTAssertTrue(template.contains("| Shield appeared at |"))

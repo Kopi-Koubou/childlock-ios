@@ -90,7 +90,7 @@ Latest simulator smoke pass, 2026-06-24:
   dashboard, child challenges, setup-disabled state, Children, Apps, Settings,
   add-child, more-time, and paywall surfaces.
 - Latest summary:
-  `.build/qa-simulator-seeds/20260624-133803/summary.md`.
+  `.build/qa-simulator-seeds/20260624-140331/summary.md`.
 - iPhone 17 simulator: `--childlock-qa-seed-onboarding-devices` rendered the
   local-first device setup copy without overlap.
 - iPhone 17 simulator: `--childlock-qa-seed-onboarding-setup` rendered the
@@ -180,7 +180,7 @@ available, and the latest simulator QA summary path.
 | Scenario | Same phone / Child iPad / Child iPhone |
 | Latest simulator QA summary |  |
 | Google OAuth build settings | Configured / Missing or placeholder |
-| Parent sign-in tested | Apple / Google |
+| Parent sign-in tested | Apple / Google / N/A |
 | Notification state tested | Allowed / Denied |
 | Monitored selection | App / Category / Website |
 | Content app/activity tested |  |
@@ -199,9 +199,10 @@ available, and the latest simulator QA summary path.
 Minimum evidence before launch:
 
 - One completed same-phone record with Apple sign-in.
-- One completed same-phone or child-device record with Google sign-in after
-  `GOOGLE_IOS_CLIENT_ID`, `GOOGLE_WEB_CLIENT_ID`, and
-  `GOOGLE_REVERSED_CLIENT_ID` are configured.
+- If the build has Google OAuth configured and `Continue with Google` is
+  visible, one completed same-phone or child-device record with Google sign-in.
+- If the build does not have Google OAuth configured, record Google as N/A,
+  confirm the button is hidden, and keep App Review notes Apple-first.
 - One completed child-iPad record if iPad support remains in App Store copy.
 - One denied-notification pass proving Home -> Childlock still opens the
   pending challenge.
@@ -217,9 +218,9 @@ as sufficient for launch.
 3. Complete setup once with Apple.
 4. From Settings, use `Reset Childlock on this device` -> `Confirm Reset`.
 5. Confirm the app returns to fresh onboarding with no parent dashboard access.
-6. Sign in with Google and complete setup again. If the Google button is not
-   visible, the TestFlight build is still missing the Google OAuth build
-   settings and is not ready for Google sign-in QA.
+6. If Google OAuth is configured and `Continue with Google` is visible, sign in
+   with Google and complete setup again. If the Google button is not visible,
+   record Google as N/A for this build and keep App Review notes Apple-first.
 7. Parent grants Screen Time access on the child-used device.
 8. Parent selects at least one real app, category, or website.
    - In the Childlock setup screen, tap `Choose apps, categories, or websites`,

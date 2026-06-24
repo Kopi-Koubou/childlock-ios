@@ -101,7 +101,13 @@ If Google opens and then returns to Childlock without completing signup, check
 
 ## TestFlight Proof
 
-Before App Review, install the TestFlight build and confirm:
+Run this section only for a TestFlight build that includes real
+`GOOGLE_IOS_CLIENT_ID`, `GOOGLE_WEB_CLIENT_ID`, and
+`GOOGLE_REVERSED_CLIENT_ID` build settings. Builds without those values should
+hide `Continue with Google`; record Google as N/A in the hardware QA record and
+make sure App Review notes do not promise Google sign-in for that build.
+
+Before App Review with Google enabled, install the TestFlight build and confirm:
 
 1. `Continue with Google` opens the Google OAuth flow.
 2. Google returns to Childlock through the reversed iOS client ID URL scheme.

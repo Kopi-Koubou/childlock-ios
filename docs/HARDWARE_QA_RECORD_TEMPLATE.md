@@ -18,7 +18,7 @@ shielding, extension actions, purchases, and real hand-back behavior.
 | Scenario | Same phone / Child iPad / Child iPhone |
 | Latest simulator QA summary |  |
 | Google OAuth build settings | Configured / Missing or placeholder |
-| Parent sign-in tested | Apple / Google |
+| Parent sign-in tested | Apple / Google / N/A |
 | Notification state tested | Allowed / Denied |
 | Monitored selection | App / Category / Website |
 | Content app/activity tested |  |

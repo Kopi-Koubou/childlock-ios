@@ -283,7 +283,8 @@ Use a physical child device. The simulator cannot validate the production loop.
 The full TestFlight checklist lives in `docs/QA_TESTFLIGHT_CHECKLIST.md`.
 
 - Fresh install opens onboarding.
-- Parent signs in with Apple or Google.
+- Parent signs in with Apple, or Google if the submitted build has Google OAuth
+  configured.
 - Parent grants Screen Time access on the child-used device.
 - Parent selects monitored apps/categories/websites.
 - Child starts real selected content and records the start time in the hardware
