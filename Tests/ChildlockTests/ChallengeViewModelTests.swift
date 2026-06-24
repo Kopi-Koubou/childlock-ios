@@ -52,6 +52,53 @@ final class ChallengeViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.results.count, 1)
     }
 
+    func testDuplicateCorrectAnswerDuringTransitionIsIgnored() {
+        let screenTime = MockScreenTimeManager()
+        var scheduledActions: [@MainActor () -> Void] = []
+        let viewModel = ChallengeViewModel(
+            screenTime: screenTime,
+            celebrationDuration: 2,
+            scheduler: { _, action in scheduledActions.append(action) }
+        )
+
+        let profile = ChildProfile(name: "Mia", age: 7, avatarName: "fox", intervalMinutes: 10)
+        viewModel.presentChallenge(for: profile, type: .math)
+
+        guard let challenge = viewModel.challenge as? MathChallenge else {
+            XCTFail("Expected generated math challenge")
+            return
+        }
+
+        viewModel.submitMathAnswer(challenge.correctAnswer)
+        viewModel.submitMathAnswer(challenge.correctAnswer)
+
+        XCTAssertEqual(viewModel.attempts, 1)
+        XCTAssertEqual(viewModel.results.count, 1)
+        XCTAssertEqual(viewModel.state, .correct)
+        XCTAssertEqual(scheduledActions.count, 1)
+    }
+
+    func testDuplicateMemoryCompletionDuringTransitionIsIgnored() {
+        let screenTime = MockScreenTimeManager()
+        var scheduledActions: [@MainActor () -> Void] = []
+        let viewModel = ChallengeViewModel(
+            screenTime: screenTime,
+            celebrationDuration: 2,
+            scheduler: { _, action in scheduledActions.append(action) }
+        )
+
+        let profile = ChildProfile(name: "Noah", age: 5, avatarName: "turtle", intervalMinutes: 5)
+        viewModel.presentChallenge(for: profile, type: .memory)
+
+        viewModel.submitMemoryCompletion()
+        viewModel.submitMemoryCompletion()
+
+        XCTAssertEqual(viewModel.attempts, 1)
+        XCTAssertEqual(viewModel.results.count, 1)
+        XCTAssertEqual(viewModel.state, .correct)
+        XCTAssertEqual(scheduledActions.count, 1)
+    }
+
     func testCorrectAnswerRearmsMonitoringAfterMoreTimeRequest() {
         let screenTime = MockScreenTimeManager()
         let viewModel = ChallengeViewModel(

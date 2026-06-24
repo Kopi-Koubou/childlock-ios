@@ -95,6 +95,7 @@ public final class ChallengeViewModel {
 
     public func submitMemoryCompletion() {
         guard challenge is MemoryChallenge else { return }
+        guard acceptsChallengeInput else { return }
 
         attempts += 1
         feedbackText = "Awesome!"
@@ -117,6 +118,8 @@ public final class ChallengeViewModel {
     }
 
     private func submitAnswer<T: Equatable>(selected: T, correct: T) {
+        guard acceptsChallengeInput else { return }
+
         attempts += 1
 
         if selected == correct {
@@ -140,6 +143,10 @@ public final class ChallengeViewModel {
                 self.state = .presenting
             }
         }
+    }
+
+    private var acceptsChallengeInput: Bool {
+        state == .presenting || state == .incorrect
     }
 
     private func unlockAndDismiss() {
