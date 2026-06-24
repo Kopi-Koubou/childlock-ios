@@ -253,6 +253,7 @@ public struct ChildlockRootView: View {
 
         #if DEBUG
         restoreDebugOnboardingDevicesSeedIfNeeded()
+        restoreDebugOnboardingSetupSeedIfNeeded()
         #endif
     }
 
@@ -409,6 +410,13 @@ public struct ChildlockRootView: View {
         guard ProcessInfo.processInfo.arguments.contains(DebugLaunchArgument.onboardingDevices) else { return }
 
         seedDebugOnboardingDevicesStep()
+    }
+
+    private func restoreDebugOnboardingSetupSeedIfNeeded() {
+        guard didApplyDebugLaunchSeed else { return }
+        guard ProcessInfo.processInfo.arguments.contains(DebugLaunchArgument.onboardingSetup) else { return }
+
+        seedDebugOnboardingSetupStep()
     }
 
     private func seedDebugDashboard(
