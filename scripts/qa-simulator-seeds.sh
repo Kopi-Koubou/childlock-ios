@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Build a Debug simulator app once, launch every Childlock QA seed, and capture
-# screenshots for visual review. Artifacts stay under ignored .build output.
+# screenshots plus a visual gallery. Artifacts stay under ignored .build output.
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 SCHEME="Childlock"
@@ -10,6 +10,8 @@ BUNDLE_ID="com.kopikoubou.childlock"
 DERIVED_DATA_PATH="$ROOT_DIR/.build/qa-simulator-seeds/DerivedData"
 RUN_ID="$(date +%Y%m%d-%H%M%S)"
 OUTPUT_DIR="$ROOT_DIR/.build/qa-simulator-seeds/$RUN_ID"
+SUMMARY_PATH="$OUTPUT_DIR/summary.md"
+GALLERY_PATH="$OUTPUT_DIR/gallery.html"
 
 DEFAULT_SIMULATORS=("iPhone 17" "iPad (A16)")
 SIMULATORS=("$@")
@@ -78,7 +80,31 @@ fi
     echo ""
     echo "| Simulator | Seed | Screenshot |"
     echo "| --- | --- | --- |"
-} > "$OUTPUT_DIR/summary.md"
+} > "$SUMMARY_PATH"
+
+{
+    echo "<!doctype html>"
+    echo "<html lang=\"en\">"
+    echo "<head>"
+    echo "  <meta charset=\"utf-8\">"
+    echo "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+    echo "  <title>Childlock Simulator QA Seeds $RUN_ID</title>"
+    echo "  <style>"
+    echo "    body { margin: 0; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f7f5ef; color: #1f2723; }"
+    echo "    h1 { margin: 0 0 4px; font-size: 28px; }"
+    echo "    p { margin: 0 0 20px; color: #68716b; }"
+    echo "    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; align-items: start; }"
+    echo "    article { background: white; border: 1px solid #e5e0d8; border-radius: 8px; padding: 12px; box-shadow: 0 6px 20px rgba(31, 39, 35, 0.08); }"
+    echo "    img { width: 100%; height: auto; border-radius: 6px; background: #eeeae1; }"
+    echo "    h2 { margin: 10px 0 4px; font-size: 16px; }"
+    echo "    code { color: #3f765f; font-size: 12px; overflow-wrap: anywhere; }"
+    echo "  </style>"
+    echo "</head>"
+    echo "<body>"
+    echo "  <h1>Childlock Simulator QA Seeds</h1>"
+    echo "  <p>Run $RUN_ID. Review phone and iPad launch states before TestFlight hardware QA.</p>"
+    echo "  <main class=\"grid\">"
+} > "$GALLERY_PATH"
 
 for simulator_name in "${SIMULATORS[@]}"; do
     simulator_id="$(simulator_id_for_name "$simulator_name")"
@@ -103,9 +129,24 @@ for simulator_name in "${SIMULATORS[@]}"; do
         sleep 2
         xcrun simctl io "$simulator_id" screenshot "$screenshot_path" >/dev/null
 
-        echo "| $simulator_name | \`$seed\` | \`$(basename "$screenshot_path")\` |" >> "$OUTPUT_DIR/summary.md"
+        screenshot_file="$(basename "$screenshot_path")"
+        echo "| $simulator_name | \`$seed\` | \`$screenshot_file\` |" >> "$SUMMARY_PATH"
+
+        {
+            echo "    <article>"
+            echo "      <a href=\"$screenshot_file\"><img src=\"$screenshot_file\" alt=\"$simulator_name $seed\"></a>"
+            echo "      <h2>$simulator_name</h2>"
+            echo "      <code>$seed</code>"
+            echo "    </article>"
+        } >> "$GALLERY_PATH"
     done
 done
+
+{
+    echo "  </main>"
+    echo "</body>"
+    echo "</html>"
+} >> "$GALLERY_PATH"
 
 expected_screenshot_count=$(( ${#SIMULATORS[@]} * ${#SEEDS[@]} ))
 actual_screenshot_count="$(find "$OUTPUT_DIR" -maxdepth 1 -name '*.png' | wc -l | tr -d ' ')"
@@ -117,5 +158,6 @@ fi
 
 echo ""
 echo "Captured $actual_screenshot_count screenshots."
-echo "Done. Review screenshots and summary:"
-echo "$OUTPUT_DIR/summary.md"
+echo "Done. Review screenshots, summary, and gallery:"
+echo "$SUMMARY_PATH"
+echo "$GALLERY_PATH"

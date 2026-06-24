@@ -216,6 +216,7 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(checklist.contains("| Git commit |"))
         XCTAssertTrue(checklist.contains("| Scenario | Same phone / Child iPad / Child iPhone |"))
         XCTAssertTrue(checklist.contains("| Latest simulator QA summary |"))
+        XCTAssertTrue(checklist.contains("Open `gallery.html` for visual review"))
         XCTAssertTrue(checklist.contains("| Google OAuth build settings | Configured / Missing or placeholder |"))
         XCTAssertTrue(checklist.contains("| Parent sign-in tested | Apple / Google / N/A |"))
         XCTAssertTrue(checklist.contains("| Content app/activity tested |"))
@@ -275,6 +276,7 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(generator.contains("replace_row \"Latest simulator QA summary\" \"$latest_simulator_summary\""))
         XCTAssertTrue(generator.contains("same-phone)"))
         XCTAssertTrue(generator.contains("child-ipad)"))
+        XCTAssertTrue(simulatorSeedScript.contains("gallery.html"))
     }
 
     func testScreenTimeSelectionTokensStayOutOfBackendSync() throws {

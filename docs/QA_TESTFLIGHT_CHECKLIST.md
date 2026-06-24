@@ -22,8 +22,9 @@ scripts/qa-simulator-seeds.sh
 ```
 
 The script builds a Debug simulator app, launches each seeded state on iPhone 17
-and iPad (A16), and writes screenshots plus a summary under
-`.build/qa-simulator-seeds/`.
+and iPad (A16), and writes screenshots, `summary.md`, and `gallery.html` under
+`.build/qa-simulator-seeds/`. Open `gallery.html` for visual review of the full
+phone/iPad parent and child UI set.
 
 | Launch argument | Expected screen | PIN |
 | --- | --- | --- |

@@ -272,6 +272,8 @@ final class AuthRedirectConfigTests: XCTestCase {
         XCTAssertTrue(simulatorQA.contains("--childlock-qa-seed-paywall"))
         XCTAssertTrue(simulatorQA.contains(".build/qa-simulator-seeds"))
         XCTAssertTrue(simulatorQA.contains("expected_screenshot_count"))
+        XCTAssertTrue(simulatorQA.contains("gallery.html"))
+        XCTAssertTrue(simulatorQA.contains("<main class=\\\"grid\\\">"))
     }
 
     private func readPropertyList(_ relativePath: String) throws -> [String: Any] {
