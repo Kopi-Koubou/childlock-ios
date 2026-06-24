@@ -41,6 +41,8 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(validationScript.contains("GOOGLE_IOS_CLIENT_ID"))
         XCTAssertTrue(validationScript.contains("GOOGLE_WEB_CLIENT_ID"))
         XCTAssertTrue(validationScript.contains("require_google_client_id_format"))
+        XCTAssertTrue(validationScript.contains("require_google_client_id_format \"Config/AppSecrets.local.xcconfig\" \"GOOGLE_IOS_CLIENT_ID\""))
+        XCTAssertTrue(validationScript.contains("require_google_client_id_format \"Config/AppSecrets.local.xcconfig\" \"GOOGLE_WEB_CLIENT_ID\""))
         XCTAssertTrue(validationScript.contains("has Google client ID format"))
         XCTAssertTrue(validationScript.contains("GOOGLE_REVERSED_CLIENT_ID"))
         XCTAssertTrue(validationScript.contains("GOOGLE_REVERSED_CLIENT_ID matches GOOGLE_IOS_CLIENT_ID"))

@@ -37,6 +37,24 @@ final class HandBackCopyTests: XCTestCase {
         XCTAssertTrue(contents.contains("accessibilityLabel(\"Lock Parent Dashboard before handoff\")"))
     }
 
+    func testChildrenTabMakesLaunchChildLimitAndActiveChildExplicit() throws {
+        let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
+        let appState = try readRepoFile("Sources/Childlock/ViewModels/AppState.swift")
+        let paywall = try readRepoFile("Sources/Childlock/Views/Paywall/PaywallView.swift")
+
+        XCTAssertTrue(appState.contains("public static let maxChildProfiles = 5"))
+        XCTAssertTrue(appState.contains("guard profiles.count < Self.maxChildProfiles else { return nil }"))
+        XCTAssertTrue(paywall.contains("comparisonRow(feature: \"Children\", free: \"5 children\", premium: \"5 children\")"))
+        XCTAssertTrue(dashboard.contains("canAddChildProfile"))
+        XCTAssertTrue(dashboard.contains("Childlock supports up to \\(AppState.maxChildProfiles) child profiles."))
+        XCTAssertTrue(dashboard.contains("Choose the active child before handing over a shared device."))
+        XCTAssertTrue(dashboard.contains("Text(\"Make active\")"))
+        XCTAssertTrue(dashboard.contains("private func makeProfileActive(_ profile: ChildProfile)"))
+        XCTAssertTrue(dashboard.contains("appState.setActiveProfile(id: profile.id)"))
+        XCTAssertTrue(dashboard.contains("refreshMonitoringIfRunning(for: profile)"))
+        XCTAssertTrue(dashboard.contains("accessibilityLabel(\"Make \\(profile.name) active on this device\")"))
+    }
+
     func testInteractiveControlsDoNotExposeInternalIDsAsSpokenLabels() throws {
         let onboarding = try readRepoFile("Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift")
         let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")

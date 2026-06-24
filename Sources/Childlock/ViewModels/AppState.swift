@@ -123,6 +123,7 @@ public final class AppState {
         }
     }
 
+    public static let maxChildProfiles = 5
     private static let supportedIntervals = [5, 10, 15, 20, 30]
 
     private let store: AppStateStoring
@@ -278,6 +279,8 @@ public final class AppState {
         difficultyOverride: DifficultyOverride = .auto,
         inheritMonitoredAppsFromActiveProfile: Bool = true
     ) -> ChildProfile? {
+        guard profiles.count < Self.maxChildProfiles else { return nil }
+
         let normalizedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !normalizedName.isEmpty else { return nil }
 

@@ -59,6 +59,10 @@ public struct ParentDashboardView: View {
         subscriptionService.currentTier == .premium
     }
 
+    private var canAddChildProfile: Bool {
+        appState.profiles.count < AppState.maxChildProfiles
+    }
+
     public var body: some View {
         Group {
             if appState.isPINLocked {
@@ -516,14 +520,12 @@ public struct ParentDashboardView: View {
 
             // Add a child button
             Button {
-                addChildDraft = AddChildDraft(intervalMinutes: appState.activeProfile?.intervalMinutes ?? 15)
-                addChildErrorText = nil
-                isAddChildSheetPresented = true
+                presentAddChildSheetIfPossible()
             } label: {
                 HStack {
-                    Image(systemName: "plus")
+                    Image(systemName: canAddChildProfile ? "plus" : "person.crop.circle.badge.checkmark")
                         .font(.system(size: 14, weight: .semibold))
-                    Text("Add a child")
+                    Text(canAddChildProfile ? "Add a child" : "Child limit reached")
                         .font(.system(size: 14, weight: .semibold))
                 }
                 .foregroundStyle(ChildlockColor.textMuted)
@@ -536,6 +538,8 @@ public struct ParentDashboardView: View {
                 )
             }
             .buttonStyle(.plain)
+            .disabled(!canAddChildProfile)
+            .opacity(canAddChildProfile ? 1 : 0.65)
         }
         .sheet(isPresented: $isAddChildSheetPresented) {
             addChildSheet
@@ -688,18 +692,17 @@ public struct ParentDashboardView: View {
                         }
                         Spacer()
                         Button {
-                            addChildDraft = AddChildDraft(intervalMinutes: appState.activeProfile?.intervalMinutes ?? 15)
-                            addChildErrorText = nil
-                            isAddChildSheetPresented = true
+                            presentAddChildSheetIfPossible()
                         } label: {
-                            Text("+ Add child")
+                            Text(canAddChildProfile ? "+ Add child" : "5 children")
                                 .font(.system(size: 14, weight: .semibold))
-                                .foregroundStyle(ChildlockColor.primaryDeep)
+                                .foregroundStyle(canAddChildProfile ? ChildlockColor.primaryDeep : ChildlockColor.textMuted)
                         }
                         .buttonStyle(.plain)
+                        .disabled(!canAddChildProfile)
                     }
 
-                    Text("Each child has their own age band, interval, and apps.")
+                    Text("Each child has their own age band, interval, apps, and active handoff state.")
                         .font(.system(size: 14))
                         .foregroundStyle(ChildlockColor.textMuted)
 
@@ -725,7 +728,7 @@ public struct ParentDashboardView: View {
                             Text("Supports up to 5 children")
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundStyle(ChildlockColor.primaryDeep)
-                            Text("Brain breaks stay available for every child profile.")
+                            Text("Choose the active child before handing over a shared device.")
                                 .font(.system(size: 12))
                                 .foregroundStyle(ChildlockColor.textMuted)
                         }
@@ -751,6 +754,7 @@ public struct ParentDashboardView: View {
         let summary = appState.summary(window: reportWindow, profileID: profile.id)
         let avatarColorIndex = appState.profiles.firstIndex(where: { $0.id == profile.id }) ?? 0
         let avatarColor = ChildlockAvatarColor.all[avatarColorIndex % ChildlockAvatarColor.all.count]
+        let isActive = appState.activeProfile?.id == profile.id
 
         return VStack(alignment: .leading, spacing: ChildlockSpacing.sm) {
             HStack(spacing: ChildlockSpacing.sm) {
@@ -778,9 +782,30 @@ public struct ParentDashboardView: View {
 
                 Spacer()
 
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(ChildlockColor.textFaint)
+                if isActive {
+                    Text("Active")
+                        .font(ChildlockTypography.label)
+                        .foregroundStyle(ChildlockColor.primaryDeep)
+                        .padding(.horizontal, ChildlockSpacing.xs)
+                        .padding(.vertical, 6)
+                        .background(ChildlockColor.primarySoft)
+                        .clipShape(Capsule())
+                } else {
+                    Button {
+                        makeProfileActive(profile)
+                    } label: {
+                        Text("Make active")
+                            .font(.system(size: 12, weight: .semibold))
+                    }
+                    .foregroundStyle(ChildlockColor.primaryDeep)
+                    .padding(.horizontal, ChildlockSpacing.xs)
+                    .padding(.vertical, 7)
+                    .background(ChildlockColor.surfaceMuted.opacity(0.7))
+                    .clipShape(Capsule())
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("make_active_child_\(profile.id.uuidString)")
+                    .accessibilityLabel("Make \(profile.name) active on this device")
+                }
             }
 
             if !profile.monitoredAppDisplayNames.isEmpty {
@@ -802,6 +827,12 @@ public struct ParentDashboardView: View {
         .background(ChildlockColor.surface)
         .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.card))
         .childlockShadow(ChildlockShadow.sm)
+    }
+
+    private func makeProfileActive(_ profile: ChildProfile) {
+        appState.setActiveProfile(id: profile.id)
+        syncAppsSelectionStateFromActiveProfile()
+        refreshMonitoringIfRunning(for: profile)
     }
 
     @ViewBuilder
@@ -1820,7 +1851,23 @@ public struct ParentDashboardView: View {
         #endif
     }
 
+    private func presentAddChildSheetIfPossible() {
+        guard canAddChildProfile else {
+            addChildErrorText = "Childlock supports up to \(AppState.maxChildProfiles) child profiles."
+            return
+        }
+
+        addChildDraft = AddChildDraft(intervalMinutes: appState.activeProfile?.intervalMinutes ?? 15)
+        addChildErrorText = nil
+        isAddChildSheetPresented = true
+    }
+
     private func saveNewChildProfile() {
+        guard canAddChildProfile else {
+            addChildErrorText = "Childlock supports up to \(AppState.maxChildProfiles) child profiles."
+            return
+        }
+
         guard
             let newProfile = appState.addProfile(
                 name: addChildDraft.name,

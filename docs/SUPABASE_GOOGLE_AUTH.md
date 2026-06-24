@@ -65,8 +65,9 @@ secret stays in Supabase only.
 4. Paste the Google Web client ID and iOS client ID in the provider's client ID
    field, separated by a comma, with the Web client ID first.
 5. Paste the Google Web client secret.
-6. Leave nonce checking enabled. The app sends a SHA-256 nonce to Google and
-   passes the raw nonce to Supabase during `signInWithIdToken`.
+6. Leave `Skip nonce check` off. Childlock uses GoogleSignIn-iOS 9.x custom
+   nonce support: the app sends a SHA-256 nonce to Google and passes the raw
+   nonce to Supabase during `signInWithIdToken`.
 7. Save.
 
 After this, the app's `Continue with Google` button should complete signup and
@@ -85,8 +86,8 @@ Fix it in Supabase, not Xcode:
 
 1. Go back to `Authentication` -> `Sign In / Providers` -> `Google`.
 2. Confirm the Web client ID, iOS client ID, Web client secret, and `Skip nonce
-   check` setting. Nonce check should be off only for a temporary debug build
-   that does not send a nonce.
+   check` setting. `Skip nonce check` should stay off for this app. Turn it on
+   only for a temporary debug build that does not send a nonce.
 3. Save the provider.
 4. Re-run `Continue with Google`.
 

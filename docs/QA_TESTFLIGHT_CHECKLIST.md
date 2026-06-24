@@ -50,6 +50,9 @@ Simulator pass criteria:
   and a same-phone handoff card that can lock the parent dashboard.
 - Children tab seed shows the child profile, reports controls, and add-child
   entry without overlap on iPhone and iPad.
+- Children tab makes the active child visible; if multiple children are added
+  on one shared device, `Make active` switches which child's settings and
+  monitoring are used before handoff.
 - Add-child sheet seed shows the child name, age, avatar, copied-settings
   footer, and enabled save action without overlap on iPhone and iPad.
 - Apps tab seed shows Screen Time selection copy plus fallback planning labels
@@ -77,14 +80,15 @@ Latest simulator smoke pass, 2026-06-24:
   (A16), including the parent Children, Apps, Settings, add-child, and paywall
   surfaces.
 - Latest summary:
-  `.build/qa-simulator-seeds/20260624-112111/summary.md`.
+  `.build/qa-simulator-seeds/20260624-114053/summary.md`.
 - iPhone 17 simulator: `--childlock-qa-seed-onboarding-devices` rendered the
   local-first device setup copy without overlap.
 - iPhone 17 simulator: `--childlock-qa-seed-dashboard` rendered the parent
   dashboard home state with child summary, same-phone handoff lock card, recent
   activity, tabs, and settings.
 - iPhone 17 simulator: `--childlock-qa-seed-children-tab` rendered the child
-  profile/report view and add-child entry without overlap.
+  profile/report view, active child badge, `Make active` sibling control, and
+  add-child entry without overlap.
 - iPhone 17 simulator: `--childlock-qa-seed-add-child-sheet` rendered the
   save-ready add-child sheet for `Leo` without overlap or clipping.
 - iPhone 17 simulator: `--childlock-qa-seed-apps-tab` rendered Screen Time
@@ -234,12 +238,14 @@ Use this when the parent and child share the same iPhone.
 1. Install Childlock on the shared iPhone.
 2. Parent signs in and completes setup on that iPhone.
 3. Parent selects apps/categories used by the child on that same iPhone.
-4. Parent sets the PIN, taps `Lock Parent Dashboard`, and hands the phone to
+4. If multiple child profiles exist, parent opens Children and taps
+   `Make active` on the child who is about to use the shared phone.
+5. Parent sets the PIN, taps `Lock Parent Dashboard`, and hands the phone to
    the child.
-5. Child uses selected content until the threshold is reached.
-6. Child solves the challenge and returns to the now-unlocked app.
-7. Child taps `I'm a parent` or tries to enter the dashboard.
-8. Expected: dashboard remains gated by the parent PIN.
+6. Child uses selected content until the threshold is reached.
+7. Child solves the challenge and returns to the now-unlocked app.
+8. Child taps `I'm a parent` or tries to enter the dashboard.
+9. Expected: dashboard remains gated by the parent PIN.
 
 Pass means Childlock can be marketed as supporting same-phone parent/child use.
 

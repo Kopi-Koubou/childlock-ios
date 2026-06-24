@@ -181,6 +181,7 @@ else
     require_config_value "Config/AppSecrets.local.xcconfig" "SUPABASE_URL" || config_failed=1
     require_config_value "Config/AppSecrets.local.xcconfig" "SUPABASE_PUBLISHABLE_KEY" || config_failed=1
     require_config_value "Config/AppSecrets.local.xcconfig" "GOOGLE_IOS_CLIENT_ID" || config_failed=1
+    require_google_client_id_format "Config/AppSecrets.local.xcconfig" "GOOGLE_IOS_CLIENT_ID" || config_failed=1
     require_config_value "Config/AppSecrets.local.xcconfig" "GOOGLE_WEB_CLIENT_ID" || config_failed=1
     require_google_client_id_format "Config/AppSecrets.local.xcconfig" "GOOGLE_WEB_CLIENT_ID" || config_failed=1
     require_config_value "Config/AppSecrets.local.xcconfig" "GOOGLE_REVERSED_CLIENT_ID" || config_failed=1

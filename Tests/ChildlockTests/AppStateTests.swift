@@ -166,6 +166,36 @@ final class AppStateTests: XCTestCase {
         XCTAssertEqual(appState.activeProfileID, newProfile?.id)
     }
 
+    func testAddProfileStopsAtLaunchChildLimit() {
+        let appState = AppState(store: InMemoryAppStateStore())
+        appState.completeOnboarding(
+            with: ChildProfile(name: "Child 1", age: 7, avatarName: "fox", intervalMinutes: 10),
+            pinConfigured: true
+        )
+
+        for index in 2...AppState.maxChildProfiles {
+            XCTAssertNotNil(
+                appState.addProfile(
+                    name: "Child \(index)",
+                    age: 7,
+                    avatarName: "fox",
+                    intervalMinutes: 10
+                )
+            )
+        }
+
+        XCTAssertEqual(appState.profiles.count, AppState.maxChildProfiles)
+        XCTAssertNil(
+            appState.addProfile(
+                name: "Child 6",
+                age: 7,
+                avatarName: "fox",
+                intervalMinutes: 10
+            )
+        )
+        XCTAssertEqual(appState.profiles.count, AppState.maxChildProfiles)
+    }
+
     func testSetMonitoredSelectionUpdatesTargetProfile() {
         let appState = AppState(store: InMemoryAppStateStore())
         let profile = ChildProfile(name: "Mia", age: 7, avatarName: "fox", intervalMinutes: 10)

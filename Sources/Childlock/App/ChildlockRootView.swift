@@ -387,6 +387,18 @@ public struct ChildlockRootView: View {
         appState.isAuthenticated = true
         appState.currentTab = tab
 
+        if tab == .children {
+            var siblingProfile = ChildProfile(
+                id: UUID(uuidString: "22222222-2222-2222-2222-222222222222") ?? UUID(),
+                name: "Leo",
+                age: 9,
+                avatarName: "bear",
+                intervalMinutes: 15
+            )
+            siblingProfile.setMonitoredSelectionData(nil, displayNames: ["Games"])
+            appState.updateProfile(siblingProfile)
+        }
+
         let firstResult = ChallengeResult(
             type: .math,
             difficultyLevel: 5,

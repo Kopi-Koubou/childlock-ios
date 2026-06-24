@@ -27,6 +27,8 @@ final class AuthRedirectConfigTests: XCTestCase {
         XCTAssertTrue(setupGuide.contains("GOOGLE_WEB_CLIENT_ID"))
         XCTAssertTrue(setupGuide.contains("GOOGLE_REVERSED_CLIENT_ID"))
         XCTAssertTrue(setupGuide.contains("The reversed client ID must match the iOS client ID prefix exactly"))
+        XCTAssertTrue(setupGuide.contains("Leave `Skip nonce check` off"))
+        XCTAssertTrue(setupGuide.contains("GoogleSignIn-iOS 9.x custom"))
     }
 
     @MainActor
@@ -209,6 +211,8 @@ final class AuthRedirectConfigTests: XCTestCase {
         XCTAssertTrue(rootView.contains("--childlock-qa-seed-apps-tab"))
         XCTAssertTrue(rootView.contains("--childlock-qa-seed-settings-tab"))
         XCTAssertTrue(rootView.contains("--childlock-qa-seed-paywall"))
+        XCTAssertTrue(rootView.contains("if tab == .children"))
+        XCTAssertTrue(rootView.contains("name: \"Leo\""))
         XCTAssertTrue(rootView.contains("appState.currentTab = tab"))
         XCTAssertTrue(rootView.contains("arguments.contains(DebugLaunchArgument.addChildSheet) ? .children"))
         XCTAssertTrue(rootView.contains("arguments.contains(DebugLaunchArgument.paywall) ? .settings"))
