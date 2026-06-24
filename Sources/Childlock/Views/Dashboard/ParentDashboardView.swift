@@ -897,6 +897,10 @@ public struct ParentDashboardView: View {
 
     private func monitoredSummaryText(for profile: ChildProfile) -> String {
         let count = profile.monitoredAppDisplayNames.count
+        if profile.monitoredSelectionTokenData == nil {
+            return "\(count) planning label\(count == 1 ? "" : "s")"
+        }
+
         return "\(count) monitored selection\(count == 1 ? "" : "s")"
     }
 
@@ -913,7 +917,7 @@ public struct ParentDashboardView: View {
                     Text("Apps")
                         .font(.system(size: 32, weight: .bold))
                         .foregroundStyle(ChildlockColor.textPrimary)
-                    Text("Brain breaks appear during these.")
+                    Text(appsTabSubtitle)
                         .font(.system(size: 14))
                         .foregroundStyle(ChildlockColor.textMuted)
 
@@ -924,7 +928,7 @@ public struct ParentDashboardView: View {
                         )
                     } else {
                         // Monitored section
-                        Text("MONITORED")
+                        Text(appsSelectionSectionTitle)
                             .font(ChildlockTypography.label)
                             .foregroundStyle(ChildlockColor.textMuted)
 
@@ -984,7 +988,7 @@ public struct ParentDashboardView: View {
                                 Text(appName)
                                     .font(.system(size: 15, weight: .medium))
                                     .foregroundStyle(ChildlockColor.textPrimary)
-                                Text("Brain break every \(activeProfile.intervalMinutes)m on this device")
+                                Text(monitoredSelectionDetailText(for: activeProfile))
                                     .font(.system(size: 12))
                                     .foregroundStyle(ChildlockColor.textMuted)
                             }
@@ -1046,6 +1050,47 @@ public struct ParentDashboardView: View {
         return "app.badge.fill"
     }
 
+    private var appsSelectionSectionTitle: String {
+        guard let activeProfile = appState.activeProfile else {
+            return "MONITORED"
+        }
+
+        if !activeProfile.monitoredAppDisplayNames.isEmpty,
+           activeProfile.monitoredSelectionTokenData == nil {
+            return "PLANNING LABELS"
+        }
+
+        return "MONITORED"
+    }
+
+    private var appsTabSubtitle: String {
+        guard appState.activeProfile != nil else {
+            return "Add a child, then choose what this device should protect."
+        }
+
+        if hasActiveScreenTimeSelection {
+            return "Brain breaks appear during these."
+        }
+
+        return "Choose real Screen Time items before testing enforcement."
+    }
+
+    private var appsAssignmentIntroText: String {
+        if hasActiveScreenTimeSelection {
+            return "Screen Time selection protects real apps, categories, or websites on this device."
+        }
+
+        return "Planning labels help setup, but they do not lock content. Enable Screen Time selection to choose real apps, categories, or websites."
+    }
+
+    private func monitoredSelectionDetailText(for profile: ChildProfile) -> String {
+        if profile.monitoredSelectionTokenData == nil {
+            return "Planning label only. Not locking content yet."
+        }
+
+        return "Brain break every \(profile.intervalMinutes)m on this device"
+    }
+
     private func appIconColor(for index: Int) -> Color {
         let colors: [Color] = [ChildlockColor.primary, ChildlockColor.accent, ChildlockColor.memory]
         return colors[index % colors.count]
@@ -1055,7 +1100,7 @@ public struct ParentDashboardView: View {
     private var appsAssignmentCard: some View {
         if appState.activeProfile != nil {
             VStack(alignment: .leading, spacing: ChildlockSpacing.sm) {
-                Text("Screen Time selection protects real apps on this device. Planning labels help simulator setup, but they do not lock apps until Screen Time access is enabled.")
+                Text(appsAssignmentIntroText)
                     .font(ChildlockTypography.caption)
                     .foregroundStyle(ChildlockColor.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
