@@ -38,6 +38,7 @@ SEEDS=(
     "--childlock-qa-seed-add-child-sheet"
     "--childlock-qa-seed-apps-tab"
     "--childlock-qa-seed-settings-tab"
+    "--childlock-qa-seed-settings-notifications-denied"
     "--childlock-qa-seed-paywall"
 )
 

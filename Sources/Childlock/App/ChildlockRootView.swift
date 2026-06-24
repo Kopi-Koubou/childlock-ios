@@ -302,6 +302,7 @@ public struct ChildlockRootView: View {
         static let childrenTab = "--childlock-qa-seed-children-tab"
         static let appsTab = "--childlock-qa-seed-apps-tab"
         static let settingsTab = "--childlock-qa-seed-settings-tab"
+        static let settingsNotificationsDenied = "--childlock-qa-seed-settings-notifications-denied"
         static let addChildSheet = "--childlock-qa-seed-add-child-sheet"
         static let paywall = "--childlock-qa-seed-paywall"
     }
@@ -338,6 +339,7 @@ public struct ChildlockRootView: View {
             || arguments.contains(DebugLaunchArgument.childrenTab)
             || arguments.contains(DebugLaunchArgument.appsTab)
             || arguments.contains(DebugLaunchArgument.settingsTab)
+            || arguments.contains(DebugLaunchArgument.settingsNotificationsDenied)
             || arguments.contains(DebugLaunchArgument.addChildSheet)
             || arguments.contains(DebugLaunchArgument.paywall)
         else {
@@ -367,13 +369,15 @@ public struct ChildlockRootView: View {
             || arguments.contains(DebugLaunchArgument.childrenTab)
             || arguments.contains(DebugLaunchArgument.appsTab)
             || arguments.contains(DebugLaunchArgument.settingsTab)
+            || arguments.contains(DebugLaunchArgument.settingsNotificationsDenied)
             || arguments.contains(DebugLaunchArgument.addChildSheet)
             || arguments.contains(DebugLaunchArgument.paywall) {
             let seededTab: AppState.Tab = arguments.contains(DebugLaunchArgument.addChildSheet) ? .children
                 : arguments.contains(DebugLaunchArgument.paywall) ? .settings
                 : arguments.contains(DebugLaunchArgument.childrenTab) ? .children
                 : arguments.contains(DebugLaunchArgument.appsTab) ? .apps
-                : arguments.contains(DebugLaunchArgument.settingsTab) ? .settings
+                : arguments.contains(DebugLaunchArgument.settingsTab)
+                    || arguments.contains(DebugLaunchArgument.settingsNotificationsDenied) ? .settings
                 : .home
 
             seedDebugDashboard(
@@ -385,7 +389,8 @@ public struct ChildlockRootView: View {
                 moreTimeRequest: arguments.contains(DebugLaunchArgument.moreTimeRequest)
                     || arguments.contains(DebugLaunchArgument.lockedMoreTimeRequest),
                 tab: seededTab,
-                monitoringStatus: arguments.contains(DebugLaunchArgument.settingsTab) ? "not_started" : "running"
+                monitoringStatus: arguments.contains(DebugLaunchArgument.settingsTab)
+                    || arguments.contains(DebugLaunchArgument.settingsNotificationsDenied) ? "not_started" : "running"
             )
 
             if arguments.contains(DebugLaunchArgument.handBack),

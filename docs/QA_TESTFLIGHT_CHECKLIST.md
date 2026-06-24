@@ -41,6 +41,7 @@ contact sheet for a quick all-states scan.
 | `--childlock-qa-seed-add-child-sheet` | Parent add-child sheet with a save-ready draft profile | `1234` if locked later |
 | `--childlock-qa-seed-apps-tab` | Parent Apps tab with Screen Time selection and planning labels | `1234` if locked later |
 | `--childlock-qa-seed-settings-tab` | Parent Settings tab with Premium, notifications, account, reset, and enforcement rows | `1234` if locked later |
+| `--childlock-qa-seed-settings-notifications-denied` | Parent Settings tab when iOS notifications are denied, showing the Home -> Childlock fallback | `1234` if locked later |
 | `--childlock-qa-seed-paywall` | Premium paywall fallback with reports-only upgrade positioning | `1234` if locked later |
 
 Simulator pass criteria:
@@ -70,6 +71,9 @@ Simulator pass criteria:
   without overlap on iPhone and iPad. With planning labels only, `Start Screen
   Time Enforcement` must be disabled until a real Screen Time picker selection
   exists.
+- Settings notification-denied seed shows iOS notification permission as `Off`,
+  offers `Open Notification Settings`, and explains that the child can still
+  press Home and open Childlock after tapping `Start`.
 - Paywall seed keeps the upgrade framed around deeper reports, shows that
   Screen Time enforcement remains included, and renders product-unavailable
   fallback copy without overlap on iPhone and iPad.
@@ -105,7 +109,7 @@ Simulator evidence handoff:
   iPhone 17 and iPad (A16), covering onboarding, device-model copy,
   setup-disabled state, parent dashboard, locked dashboard, child math/memory
   challenges, hand-back, more-time request, Children, Apps, Settings,
-  add-child, and paywall fallback surfaces. Run
+  notification-denied fallback, add-child, and paywall fallback surfaces. Run
   `scripts/launch-readiness-status.sh` to confirm the newest simulator summary,
   gallery, and contact sheet were generated for the current git commit.
 - When regenerating evidence, explicitly spot-check the setup seed: it must show

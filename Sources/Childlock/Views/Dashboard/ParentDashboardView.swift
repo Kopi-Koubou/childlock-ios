@@ -17,6 +17,7 @@ public struct ParentDashboardView: View {
     private let dashboardContentMaxWidth: CGFloat = 620
     private let dashboardScrollBottomPadding: CGFloat = 96
     private let parentLockContentMaxWidth: CGFloat = 420
+    private let settingsNotificationsAnchorID = "settings_notifications"
 
     @State private var enteredPIN = ""
     @State private var pinErrorText: String?
@@ -1240,50 +1241,51 @@ public struct ParentDashboardView: View {
 
     private var settingsTab: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: ChildlockSpacing.md) {
-                    // Header
-                    Text("MANAGE")
-                        .font(ChildlockTypography.label)
-                        .foregroundStyle(ChildlockColor.textMuted)
-                    Text("Settings")
-                        .font(.system(size: 32, weight: .bold))
-                        .foregroundStyle(ChildlockColor.textPrimary)
+            ScrollViewReader { scrollProxy in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: ChildlockSpacing.md) {
+                        // Header
+                        Text("MANAGE")
+                            .font(ChildlockTypography.label)
+                            .foregroundStyle(ChildlockColor.textMuted)
+                        Text("Settings")
+                            .font(.system(size: 32, weight: .bold))
+                            .foregroundStyle(ChildlockColor.textPrimary)
 
-                    if appState.isPINLocked {
-                        // PIN Lock section
-                        settingsSection(title: "PARENT PIN") {
-                            VStack(spacing: ChildlockSpacing.sm) {
-                                SecureField("Enter PIN", text: $enteredPIN)
-                                    .pinInputBehavior()
-                                    .font(ChildlockTypography.body)
-                                    .padding(.horizontal, ChildlockSpacing.sm)
-                                    .frame(height: 44)
-                                    .background(ChildlockColor.surfaceMuted.opacity(0.3))
-                                    .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.sm))
+                        if appState.isPINLocked {
+                            // PIN Lock section
+                            settingsSection(title: "PARENT PIN") {
+                                VStack(spacing: ChildlockSpacing.sm) {
+                                    SecureField("Enter PIN", text: $enteredPIN)
+                                        .pinInputBehavior()
+                                        .font(ChildlockTypography.body)
+                                        .padding(.horizontal, ChildlockSpacing.sm)
+                                        .frame(height: 44)
+                                        .background(ChildlockColor.surfaceMuted.opacity(0.3))
+                                        .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.sm))
 
-                                Button("Unlock Parent Dashboard") {
-                                    unlockParentDashboard()
+                                    Button("Unlock Parent Dashboard") {
+                                        unlockParentDashboard()
+                                    }
+                                    .buttonStyle(ChildlockPrimaryButtonStyle())
+
+                                    if let pinErrorText {
+                                        Text(pinErrorText)
+                                            .font(ChildlockTypography.caption)
+                                            .foregroundStyle(ChildlockColor.warning)
+                                    }
                                 }
-                                .buttonStyle(ChildlockPrimaryButtonStyle())
-
-                                if let pinErrorText {
-                                    Text(pinErrorText)
-                                        .font(ChildlockTypography.caption)
-                                        .foregroundStyle(ChildlockColor.warning)
-                                }
+                                .padding(ChildlockSpacing.md)
                             }
-                            .padding(ChildlockSpacing.md)
-                        }
-                    } else {
-                        // Account section
-                        settingsSection(title: "ACCOUNT") {
-                            VStack(spacing: 0) {
-                                settingsRow(
-                                    title: "Account sync",
-                                    value: appState.isAuthenticated ? "On" : "Off",
-                                    showChevron: false
-                                )
+                        } else {
+                            // Account section
+                            settingsSection(title: "ACCOUNT") {
+                                VStack(spacing: 0) {
+                                    settingsRow(
+                                        title: "Account sync",
+                                        value: appState.isAuthenticated ? "On" : "Off",
+                                        showChevron: false
+                                    )
 
                                 Divider().background(ChildlockColor.surfaceMuted)
 
@@ -1488,6 +1490,7 @@ public struct ParentDashboardView: View {
                                 }
                             }
                         }
+                        .id(settingsNotificationsAnchorID)
 
                         // Support section
                         settingsSection(title: "SUPPORT") {
@@ -1500,14 +1503,30 @@ public struct ParentDashboardView: View {
                             }
                         }
                     }
+                    }
+                    .padding(ChildlockSpacing.lg)
+                    .padding(.bottom, dashboardScrollBottomPadding)
+                    .frame(maxWidth: dashboardContentMaxWidth, alignment: .leading)
+                    .frame(maxWidth: .infinity)
                 }
-                .padding(ChildlockSpacing.lg)
-                .padding(.bottom, dashboardScrollBottomPadding)
-                .frame(maxWidth: dashboardContentMaxWidth, alignment: .leading)
-                .frame(maxWidth: .infinity)
+                .background(ChildlockColor.background.ignoresSafeArea())
+                .onAppear {
+                    scrollToDebugSettingsNotificationSectionIfNeeded(scrollProxy)
+                }
             }
-            .background(ChildlockColor.background.ignoresSafeArea())
         }
+    }
+
+    private func scrollToDebugSettingsNotificationSectionIfNeeded(_ scrollProxy: ScrollViewProxy) {
+        #if DEBUG
+        guard ProcessInfo.processInfo.arguments.contains("--childlock-qa-seed-settings-notifications-denied") else {
+            return
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            scrollProxy.scrollTo(settingsNotificationsAnchorID, anchor: .top)
+        }
+        #endif
     }
 
     private var screenTimeEnforcementGuidance: some View {
@@ -2010,6 +2029,13 @@ public struct ParentDashboardView: View {
     }
 
     private func refreshNotificationAuthorizationStatus() {
+        #if DEBUG
+        if let debugStatus = debugNotificationAuthorizationStatus {
+            notificationAuthorizationStatus = debugStatus
+            return
+        }
+        #endif
+
         Task {
             let status = await NotificationService.authorizationStatus()
             await MainActor.run {
@@ -2017,6 +2043,17 @@ public struct ParentDashboardView: View {
             }
         }
     }
+
+    #if DEBUG
+    private var debugNotificationAuthorizationStatus: ChildlockNotificationAuthorizationStatus? {
+        let arguments = Set(ProcessInfo.processInfo.arguments)
+        if arguments.contains("--childlock-qa-seed-settings-notifications-denied") {
+            return .denied
+        }
+
+        return nil
+    }
+    #endif
 
     @MainActor
     private func requestNotificationPermissionOrOpenSettings() async {
