@@ -148,6 +148,13 @@ final class ShieldCopyTests: XCTestCase {
 
         XCTAssertTrue(rootView.contains("guard !hasActiveMoreTimeRequest else { return }"))
         XCTAssertTrue(rootView.contains("SharedDefaults.shared.integer(forKey: SharedDefaults.Key.moreTimeRequestCount) > 0"))
+        XCTAssertTrue(dashboard.contains("private var monitoringProfile: ChildProfile?"))
+        XCTAssertTrue(dashboard.contains("SharedDefaults.shared.string(forKey: SharedDefaults.Key.activeMonitoringProfileID)"))
+        XCTAssertTrue(dashboard.contains("return appState.activeProfile"))
+        XCTAssertTrue(dashboard.contains("private var moreTimeRequestProfileName: String"))
+        XCTAssertTrue(dashboard.contains("return \"\\(moreTimeRequestProfileName) asked for more time. Enter your PIN to respond.\""))
+        XCTAssertTrue(dashboard.contains("Text(\"\\(moreTimeRequestProfileName) asked for more time\")"))
+        XCTAssertFalse(dashboard.contains("Text(\"\\(appState.activeProfile?.name ?? \"Your child\") asked for more time\")"))
         XCTAssertTrue(dashboard.contains("asked for more time. Enter your PIN to respond."))
         XCTAssertTrue(dashboard.contains("SharedDefaults.shared.set(false, forKey: SharedDefaults.Key.challengePending)"))
         XCTAssertTrue(dashboard.contains("Button(\"Keep blocked\")"))
@@ -167,6 +174,9 @@ final class ShieldCopyTests: XCTestCase {
         let clearStart = try XCTUnwrap(dashboard.range(of: "private func clearMoreTimeRequests()"))
         let grantBlock = String(dashboard[grantStart.lowerBound..<clearStart.lowerBound])
 
+        XCTAssertTrue(grantBlock.contains("guard let profile = monitoringProfile"))
+        XCTAssertFalse(grantBlock.contains("guard let profile = appState.activeProfile"))
+        XCTAssertTrue(grantBlock.contains("No monitored child profile available."))
         XCTAssertTrue(grantBlock.contains("try ScreenTimeManager.shared.startMonitoring(profile: profile)"))
         XCTAssertFalse(grantBlock.contains("try? ScreenTimeManager.shared.startMonitoring"))
         XCTAssertTrue(grantBlock.contains("monitoringErrorText = error.localizedDescription"))
@@ -178,6 +188,31 @@ final class ShieldCopyTests: XCTestCase {
 
         XCTAssertLessThan(restartRange.lowerBound, unshieldRange.lowerBound)
         XCTAssertLessThan(unshieldRange.lowerBound, clearRange.lowerBound)
+    }
+
+    func testStartEnforcementStillUsesActiveProfileForHandoffSetup() throws {
+        let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
+        let startStart = try XCTUnwrap(dashboard.range(of: "private func startScreenTimeEnforcement()"))
+        let stopStart = try XCTUnwrap(dashboard.range(of: "private func stopScreenTimeEnforcement()"))
+        let startBlock = String(dashboard[startStart.lowerBound..<stopStart.lowerBound])
+
+        XCTAssertTrue(startBlock.contains("guard let profile = appState.activeProfile"))
+        XCTAssertFalse(startBlock.contains("guard let profile = monitoringProfile"))
+        XCTAssertTrue(startBlock.contains("No active child profile available."))
+        XCTAssertTrue(startBlock.contains("try ScreenTimeManager.shared.startMonitoring(profile: profile)"))
+    }
+
+    func testStopEnforcementUsesMonitoredProfileOnSharedDevice() throws {
+        let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
+        let stopStart = try XCTUnwrap(dashboard.range(of: "private func stopScreenTimeEnforcement()"))
+        let end = try XCTUnwrap(dashboard.range(of: "\n    }\n}", range: stopStart.upperBound..<dashboard.endIndex))
+        let stopBlock = String(dashboard[stopStart.lowerBound..<end.upperBound])
+
+        XCTAssertTrue(stopBlock.contains("guard let profile = monitoringProfile"))
+        XCTAssertFalse(stopBlock.contains("guard let profile = appState.activeProfile"))
+        XCTAssertTrue(stopBlock.contains("No monitored child profile available."))
+        XCTAssertTrue(stopBlock.contains("ScreenTimeManager.shared.stopMonitoring(profile: profile)"))
+        XCTAssertTrue(dashboard.contains(".disabled(monitoringProfile == nil)"))
     }
 
     func testStartBrainBreakRefreshesTappableBrainBreakNotification() throws {

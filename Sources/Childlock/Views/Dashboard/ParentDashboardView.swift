@@ -214,7 +214,7 @@ public struct ParentDashboardView: View {
 
     private var parentLockSubtitle: String {
         if moreTimeRequestCount > 0 {
-            return "\(appState.activeProfile?.name ?? "Your child") asked for more time. Enter your PIN to respond."
+            return "\(moreTimeRequestProfileName) asked for more time. Enter your PIN to respond."
         }
 
         return "Enter your PIN to manage children, apps, reports, and settings."
@@ -450,7 +450,7 @@ public struct ParentDashboardView: View {
                 Image(systemName: "hand.raised.fill")
                     .font(.system(size: 16))
                     .foregroundStyle(ChildlockColor.accent)
-                Text("\(appState.activeProfile?.name ?? "Your child") asked for more time")
+                Text("\(moreTimeRequestProfileName) asked for more time")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(ChildlockColor.textPrimary)
                 Spacer()
@@ -487,9 +487,9 @@ public struct ParentDashboardView: View {
 
     private func grantMoreTime() {
         refreshSharedDashboardState()
-        guard let profile = appState.activeProfile else {
+        guard let profile = monitoringProfile else {
             monitoringStatusText = "failed"
-            monitoringErrorText = "No active child profile available."
+            monitoringErrorText = "No monitored child profile available."
             return
         }
 
@@ -1390,7 +1390,7 @@ public struct ParentDashboardView: View {
                                         settingsRowContent(title: "Stop Screen Time Enforcement", value: "", showChevron: true)
                                     }
                                     .buttonStyle(.plain)
-                                    .disabled(appState.activeProfile == nil)
+                                    .disabled(monitoringProfile == nil)
                                 }
 
                                 Divider().background(ChildlockColor.surfaceMuted)
@@ -1489,7 +1489,7 @@ public struct ParentDashboardView: View {
         case .thresholdReached, .challengeRequested:
             return "Brain Break is pending. Open Childlock from Home or the notification, complete the challenge, then confirm monitoring re-arms."
         case .moreTimeRequested:
-            return "Your child asked for more time. Enter the parent PIN, respond, then confirm enforcement re-arms for another full interval."
+            return "\(moreTimeRequestProfileName) asked for more time. Enter the parent PIN, respond, then confirm enforcement re-arms for another full interval."
         case .failed, .denied:
             return "Fix Screen Time access or the app selection before handing the device over."
         case .notStarted, .intervalEnded, .stopped, .none:
@@ -1512,6 +1512,22 @@ public struct ParentDashboardView: View {
 
     private var canCopyActiveScreenTimeSelection: Bool {
         appState.profiles.count >= 2 && hasActiveScreenTimeSelection
+    }
+
+    private var monitoringProfile: ChildProfile? {
+        if
+            let profileIDString = SharedDefaults.shared.string(forKey: SharedDefaults.Key.activeMonitoringProfileID),
+            let profileID = UUID(uuidString: profileIDString),
+            let profile = appState.profiles.first(where: { $0.id == profileID })
+        {
+            return profile
+        }
+
+        return appState.activeProfile
+    }
+
+    private var moreTimeRequestProfileName: String {
+        monitoringProfile?.name ?? "Your child"
     }
 
     private func settingsSection(title: String, @ViewBuilder content: () -> some View) -> some View {
@@ -2192,8 +2208,8 @@ public struct ParentDashboardView: View {
     }
 
     private func stopScreenTimeEnforcement() {
-        guard let profile = appState.activeProfile else {
-            monitoringErrorText = "No active child profile available."
+        guard let profile = monitoringProfile else {
+            monitoringErrorText = "No monitored child profile available."
             monitoringStatusText = "failed"
             return
         }
