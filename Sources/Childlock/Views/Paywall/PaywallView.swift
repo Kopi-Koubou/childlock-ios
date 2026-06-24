@@ -517,7 +517,8 @@ public struct PaywallView: View {
                 showError = true
             }
         } catch {
-            // User cancelled or other non-fatal error
+            errorMessage = "Purchase could not be completed. Please try again."
+            showError = true
         }
         #else
         offeringsErrorMessage = Self.subscriptionUnavailableMessage

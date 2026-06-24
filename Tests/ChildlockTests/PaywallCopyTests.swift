@@ -67,6 +67,8 @@ final class PaywallCopyTests: XCTestCase {
 
         XCTAssertTrue(contents.contains("let didActivatePremium = try await SubscriptionService.shared.purchase(productID: productID)"))
         XCTAssertTrue(contents.contains("if didActivatePremium {\n                dismiss()\n            }"))
+        XCTAssertTrue(contents.contains("Purchase could not be completed. Please try again."))
+        XCTAssertFalse(contents.contains("// User cancelled or other non-fatal error"))
         XCTAssertTrue(contents.contains("let didRestorePremium = try await SubscriptionService.shared.restorePurchases()"))
         XCTAssertTrue(contents.contains("if didRestorePremium {\n                dismiss()\n            } else {"))
         XCTAssertTrue(contents.contains("No active Childlock Premium purchase was found for this Apple ID."))
