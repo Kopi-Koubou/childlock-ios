@@ -137,6 +137,20 @@ final class HandBackCopyTests: XCTestCase {
         XCTAssertTrue(dashboard.contains("case .notStarted, .intervalEnded, .stopped, .denied, .failed, .none:\n            return false"))
     }
 
+    func testEnforcementSettingsExplainTestFlightHandoffSequence() throws {
+        let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
+
+        XCTAssertTrue(dashboard.contains("screenTimeEnforcementGuidance"))
+        XCTAssertTrue(dashboard.contains("screenTimeEnforcementGuidanceText"))
+        XCTAssertTrue(dashboard.contains("Same-phone test: lock the parent dashboard, hand this device over"))
+        XCTAssertTrue(dashboard.contains("For child iPad, run these steps on the iPad."))
+        XCTAssertTrue(dashboard.contains("For TestFlight: choose the shortest interval, start enforcement, lock the parent dashboard"))
+        XCTAssertTrue(dashboard.contains("Planning labels do not lock content."))
+        XCTAssertTrue(dashboard.contains("After selection, start enforcement, lock the parent dashboard, then hand this device over."))
+        XCTAssertTrue(dashboard.contains("On a child iPad, do this on the iPad."))
+        XCTAssertTrue(dashboard.contains("complete the challenge, then confirm monitoring re-arms"))
+    }
+
     func testParentChildDeviceModelIsClearInAppCopy() throws {
         let onboarding = try readRepoFile("Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift")
         let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")

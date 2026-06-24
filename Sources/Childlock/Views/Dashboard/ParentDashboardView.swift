@@ -1339,6 +1339,8 @@ public struct ParentDashboardView: View {
                                     .padding(.horizontal, ChildlockSpacing.md)
                                     .padding(.bottom, ChildlockSpacing.sm)
 
+                                screenTimeEnforcementGuidance
+
                                 if let monitoringErrorText {
                                     Text(monitoringErrorText)
                                         .font(ChildlockTypography.caption)
@@ -1432,6 +1434,46 @@ public struct ParentDashboardView: View {
                 .frame(maxWidth: .infinity)
             }
             .background(ChildlockColor.background.ignoresSafeArea())
+        }
+    }
+
+    private var screenTimeEnforcementGuidance: some View {
+        HStack(alignment: .top, spacing: ChildlockSpacing.xs) {
+            Image(systemName: "checklist")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(ChildlockColor.primary)
+                .frame(width: 18)
+
+            Text(screenTimeEnforcementGuidanceText)
+                .font(ChildlockTypography.caption)
+                .foregroundStyle(ChildlockColor.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, ChildlockSpacing.md)
+        .padding(.bottom, ChildlockSpacing.sm)
+    }
+
+    private var screenTimeEnforcementGuidanceText: String {
+        guard appState.activeProfile != nil else {
+            return "Add a child profile before starting a TestFlight shield-loop test."
+        }
+
+        if appState.activeProfile?.monitoredSelectionTokenData == nil {
+            return "Choose real apps, categories, or websites in Apps before testing. Planning labels do not lock content. After selection, start enforcement, lock the parent dashboard, then hand this device over. On a child iPad, do this on the iPad."
+        }
+
+        switch monitoringStatus {
+        case .running, .intervalStarted:
+            return "Same-phone test: lock the parent dashboard, hand this device over, then start selected content until Brain Break appears. For child iPad, run these steps on the iPad."
+        case .thresholdReached, .challengeRequested:
+            return "Brain Break is pending. Open Childlock from Home or the notification, complete the challenge, then confirm monitoring re-arms."
+        case .moreTimeRequested:
+            return "Your child asked for more time. Enter the parent PIN, respond, then confirm enforcement re-arms for another full interval."
+        case .failed, .denied:
+            return "Fix Screen Time access or the app selection before handing the device over."
+        case .notStarted, .intervalEnded, .stopped, .none:
+            return "For TestFlight: choose the shortest interval, start enforcement, lock the parent dashboard, then hand this device over."
         }
     }
 

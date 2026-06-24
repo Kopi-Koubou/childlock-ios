@@ -61,8 +61,9 @@ Simulator pass criteria:
   footer, and enabled save action without overlap on iPhone and iPad.
 - Apps tab seed shows Screen Time selection copy plus fallback planning labels
   without overlap on iPhone and iPad.
-- Settings tab seed shows Premium/restore, notifications, account, reset, and
-  enforcement controls without overlap on iPhone and iPad.
+- Settings tab seed shows Premium/restore, notifications, account, reset,
+  enforcement controls, and same-phone/child-iPad TestFlight handoff guidance
+  without overlap on iPhone and iPad.
 - Paywall seed keeps the upgrade framed around deeper reports, shows that
   Screen Time enforcement remains included, and renders product-unavailable
   fallback copy without overlap on iPhone and iPad.
@@ -87,7 +88,7 @@ Latest simulator smoke pass, 2026-06-24:
   dashboard, child challenges, setup-disabled state, Children, Apps, Settings,
   add-child, more-time, and paywall surfaces.
 - Latest summary:
-  `.build/qa-simulator-seeds/20260624-130846/summary.md`.
+  `.build/qa-simulator-seeds/20260624-132442/summary.md`.
 - iPhone 17 simulator: `--childlock-qa-seed-onboarding-devices` rendered the
   local-first device setup copy without overlap.
 - iPhone 17 simulator: `--childlock-qa-seed-onboarding-setup` rendered the
@@ -105,8 +106,8 @@ Latest simulator smoke pass, 2026-06-24:
   selection, planning labels, fallback app choices, and the bottom tab bar
   without overlap.
 - iPhone 17 simulator: `--childlock-qa-seed-settings-tab` rendered account,
-  reset, challenges, enforcement, notifications, and support/legal rows without
-  overlap.
+  reset, challenges, enforcement, same-phone/child-iPad handoff guidance,
+  notifications, and support/legal rows without overlap.
 - iPhone 17 simulator: `--childlock-qa-seed-locked-dashboard` hid parent
   content behind the PIN gate.
 - iPhone 17 simulator: `--childlock-qa-seed-pending-math-challenge` rendered
