@@ -40,9 +40,13 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(validationScript.contains("Config/AppSecrets.local.xcconfig"))
         XCTAssertTrue(validationScript.contains("GOOGLE_IOS_CLIENT_ID"))
         XCTAssertTrue(validationScript.contains("GOOGLE_WEB_CLIENT_ID"))
+        XCTAssertTrue(validationScript.contains("check_google_oauth_config"))
+        XCTAssertTrue(validationScript.contains("REQUIRE_GOOGLE_OAUTH"))
+        XCTAssertTrue(validationScript.contains("Google OAuth not configured; Continue with Google should stay hidden."))
+        XCTAssertTrue(validationScript.contains("Fill all Google values or leave all three blank so Google stays hidden."))
         XCTAssertTrue(validationScript.contains("require_google_client_id_format"))
-        XCTAssertTrue(validationScript.contains("require_google_client_id_format \"Config/AppSecrets.local.xcconfig\" \"GOOGLE_IOS_CLIENT_ID\""))
-        XCTAssertTrue(validationScript.contains("require_google_client_id_format \"Config/AppSecrets.local.xcconfig\" \"GOOGLE_WEB_CLIENT_ID\""))
+        XCTAssertTrue(validationScript.contains("require_google_client_id_format \"$file\" \"GOOGLE_IOS_CLIENT_ID\""))
+        XCTAssertTrue(validationScript.contains("require_google_client_id_format \"$file\" \"GOOGLE_WEB_CLIENT_ID\""))
         XCTAssertTrue(validationScript.contains("has Google client ID format"))
         XCTAssertTrue(validationScript.contains("GOOGLE_REVERSED_CLIENT_ID"))
         XCTAssertTrue(validationScript.contains("GOOGLE_REVERSED_CLIENT_ID matches GOOGLE_IOS_CLIENT_ID"))
@@ -66,6 +70,8 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(production.contains(".build/validation-logs/"))
         XCTAssertTrue(production.contains("last 120 log lines"))
         XCTAssertTrue(production.contains("./build-validation.sh"))
+        XCTAssertTrue(production.contains("Google OAuth values may all be blank for an Apple-first build"))
+        XCTAssertTrue(production.contains("REQUIRE_GOOGLE_OAUTH=1"))
     }
 
     func testLaunchRepoDoesNotKeepStaleGeneratedStatusArtifacts() throws {

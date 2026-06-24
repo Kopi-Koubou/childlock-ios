@@ -188,9 +188,14 @@ Use the checked-in validation script for the full local gate:
 The script checks required app-facing values in
 `Config/AppSecrets.local.xcconfig`, required server/deploy values in
 `Config/production.env`, and confirms server-only secrets were not pasted into
-the app config. It reports only present/missing status, not secret values. Full
-Xcode output is written under `.build/validation-logs/`; on failure, the script
-prints the last 120 log lines plus the full log path.
+the app config. Google OAuth values may all be blank for an Apple-first build;
+in that case `Continue with Google` should stay hidden and Google should be
+marked N/A in hardware QA. Partial or mismatched Google values fail validation
+because they can produce a visible but broken Google flow. To require Google
+sign-in for a Google-enabled release, run `REQUIRE_GOOGLE_OAUTH=1
+./build-validation.sh`. The script reports only present/missing status, not
+secret values. Full Xcode output is written under `.build/validation-logs/`; on
+failure, the script prints the last 120 log lines plus the full log path.
 
 For compile-only CI jobs where real secrets are intentionally unavailable:
 

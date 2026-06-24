@@ -107,6 +107,48 @@ require_google_client_id_format() {
     echo "✅ $key has Google client ID format"
 }
 
+check_google_oauth_config() {
+    local file="$1"
+    local ios_client_id
+    local web_client_id
+    local reversed_client_id
+    local configured_count=0
+    local google_failed=0
+
+    ios_client_id="$(read_config_value "$file" "GOOGLE_IOS_CLIENT_ID")"
+    web_client_id="$(read_config_value "$file" "GOOGLE_WEB_CLIENT_ID")"
+    reversed_client_id="$(read_config_value "$file" "GOOGLE_REVERSED_CLIENT_ID")"
+
+    is_missing_value "$ios_client_id" || configured_count=$((configured_count + 1))
+    is_missing_value "$web_client_id" || configured_count=$((configured_count + 1))
+    is_missing_value "$reversed_client_id" || configured_count=$((configured_count + 1))
+
+    if [[ "$configured_count" == "0" ]]; then
+        if [[ "${REQUIRE_GOOGLE_OAUTH:-0}" == "1" ]]; then
+            echo "❌ Google OAuth is required for this validation but is not configured."
+            return 1
+        fi
+
+        echo "⚠️  Google OAuth not configured; Continue with Google should stay hidden."
+        echo "ℹ️  Set REQUIRE_GOOGLE_OAUTH=1 ./build-validation.sh to require Google sign-in for this release."
+        return 0
+    fi
+
+    require_config_value "$file" "GOOGLE_IOS_CLIENT_ID" || google_failed=1
+    require_google_client_id_format "$file" "GOOGLE_IOS_CLIENT_ID" || google_failed=1
+    require_config_value "$file" "GOOGLE_WEB_CLIENT_ID" || google_failed=1
+    require_google_client_id_format "$file" "GOOGLE_WEB_CLIENT_ID" || google_failed=1
+    require_config_value "$file" "GOOGLE_REVERSED_CLIENT_ID" || google_failed=1
+    require_google_reversed_client_id_matches "$file" || google_failed=1
+
+    if [[ "$google_failed" == "1" ]]; then
+        echo "❌ Google OAuth is partially configured or invalid. Fill all Google values or leave all three blank so Google stays hidden."
+        return 1
+    fi
+
+    echo "✅ Google OAuth configured for this build"
+}
+
 require_missing_or_blank() {
     local file="$1"
     local key="$2"
@@ -180,12 +222,7 @@ else
 
     require_config_value "Config/AppSecrets.local.xcconfig" "SUPABASE_URL" || config_failed=1
     require_config_value "Config/AppSecrets.local.xcconfig" "SUPABASE_PUBLISHABLE_KEY" || config_failed=1
-    require_config_value "Config/AppSecrets.local.xcconfig" "GOOGLE_IOS_CLIENT_ID" || config_failed=1
-    require_google_client_id_format "Config/AppSecrets.local.xcconfig" "GOOGLE_IOS_CLIENT_ID" || config_failed=1
-    require_config_value "Config/AppSecrets.local.xcconfig" "GOOGLE_WEB_CLIENT_ID" || config_failed=1
-    require_google_client_id_format "Config/AppSecrets.local.xcconfig" "GOOGLE_WEB_CLIENT_ID" || config_failed=1
-    require_config_value "Config/AppSecrets.local.xcconfig" "GOOGLE_REVERSED_CLIENT_ID" || config_failed=1
-    require_google_reversed_client_id_matches "Config/AppSecrets.local.xcconfig" || config_failed=1
+    check_google_oauth_config "Config/AppSecrets.local.xcconfig" || config_failed=1
     require_config_value "Config/AppSecrets.local.xcconfig" "REVENUECAT_API_KEY" || config_failed=1
 
     require_missing_or_blank "Config/AppSecrets.local.xcconfig" "SUPABASE_ACCESS_TOKEN" || config_failed=1
