@@ -79,7 +79,7 @@ Simulator pass criteria:
   `I'm a parent`.
 - Parent PIN unlock remounts the dashboard.
 - More-time seed shows the parent request banner with `Give one more block` and
-  `Dismiss`.
+  `Keep blocked`.
 
 Latest simulator smoke pass, 2026-06-24:
 
@@ -248,10 +248,12 @@ as sufficient for launch.
 20. `Ask Parent` creates a parent-visible more-time request and does not open
     a pending child challenge before the parent responds.
 21. `Give one more block` grants another block and then re-arms enforcement.
-22. Restarting enforcement clears stale child challenge and Ask Parent state.
-23. If multiple child profiles exist, the pending challenge uses the monitored
+22. `Keep blocked` clears the parent request while keeping the child blocked
+    until they start and complete the brain break.
+23. Restarting enforcement clears stale child challenge and Ask Parent state.
+24. If multiple child profiles exist, the pending challenge uses the monitored
     child's age/profile.
-24. Support, Privacy, and Terms links open correctly from App Store metadata.
+25. Support, Privacy, and Terms links open correctly from App Store metadata.
 
 ## Fresh Setup Reset
 

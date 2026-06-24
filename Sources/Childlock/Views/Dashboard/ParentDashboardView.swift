@@ -472,8 +472,8 @@ public struct ParentDashboardView: View {
                 .background(Capsule().fill(ChildlockColor.primary))
                 .buttonStyle(.plain)
 
-                Button("Dismiss") {
-                    clearMoreTimeRequests()
+                Button("Keep blocked") {
+                    denyMoreTimeRequest()
                 }
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(ChildlockColor.textSecondary)
@@ -518,6 +518,13 @@ public struct ParentDashboardView: View {
         SharedDefaults.shared.removeObject(forKey: SharedDefaults.Key.lastMoreTimeRequestDate)
         NotificationService.clearMoreTimeRequestAlerts()
         moreTimeRequestCount = 0
+    }
+
+    private func denyMoreTimeRequest() {
+        clearMoreTimeRequests()
+        SharedDefaults.shared.set("threshold_reached", forKey: SharedDefaults.Key.monitoringStatus)
+        monitoringStatusText = "threshold_reached"
+        monitoringErrorText = nil
     }
 
     private var yourChildrenSection: some View {

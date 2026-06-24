@@ -49,6 +49,7 @@ shielding, extension actions, purchases, and real hand-back behavior.
 | Parent dashboard stays PIN-gated after hand-back | Pass / Fail |  |
 | `Ask Parent` creates a parent-visible request only | Pass / Fail |  |
 | `Give one more block` grants time and re-arms enforcement | Pass / Fail |  |
+| `Keep blocked` clears the parent request and leaves the child blocked | Pass / Fail |  |
 | Restarting enforcement clears stale child challenge/request state | Pass / Fail |  |
 
 ## Same Phone Scenario

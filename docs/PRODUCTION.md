@@ -304,7 +304,8 @@ The full TestFlight checklist lives in `docs/QA_TESTFLIGHT_CHECKLIST.md`.
 - Monitoring re-arms for another full interval.
 - Parent PIN is required to leave the child hand-back screen for dashboard.
 - Ask Parent creates a parent-visible request, does not open a child challenge
-  before the parent responds, and can grant one more block.
+  before the parent responds, can grant one more block, and can explicitly keep
+  the child blocked.
 - Same shared phone flow keeps dashboard/settings PIN-protected after child use.
 - Child iPad flow is tested by installing and configuring Childlock on the iPad.
 - Support, Privacy, and Terms links open successfully.
