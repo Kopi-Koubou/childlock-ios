@@ -35,7 +35,7 @@ contact sheet for a quick all-states scan.
 | `--childlock-qa-seed-pending-math-challenge` | Child math brain-break challenge | `1234` after hand-back |
 | `--childlock-qa-seed-pending-memory-challenge` | Child memory brain-break challenge with deterministic card pairs | `1234` after hand-back |
 | `--childlock-qa-seed-handback` | Completed child hand-back screen after a solved challenge | `1234` |
-| `--childlock-qa-seed-more-time-request` | Parent dashboard with `Ask Parent` request banner | `1234` if locked later |
+| `--childlock-qa-seed-more-time-request` | Parent dashboard with a more-time request banner | `1234` if locked later |
 | `--childlock-qa-seed-children-tab` | Parent Children tab with profile card and reports controls | `1234` if locked later |
 | `--childlock-qa-seed-add-child-sheet` | Parent add-child sheet with a save-ready draft profile | `1234` if locked later |
 | `--childlock-qa-seed-apps-tab` | Parent Apps tab with Screen Time selection and planning labels | `1234` if locked later |
@@ -79,7 +79,7 @@ Simulator pass criteria:
   memory pairs are deterministic in this Debug seed for repeatable simulator QA.
 - Correct challenge answer records activity and moves to the hand-back screen.
 - Hand-back seed tells the child to return to the unlocked app and exposes only
-  `I'm a parent`.
+  `Parent`.
 - Parent PIN unlock remounts the dashboard.
 - More-time seed shows the parent request banner with `Give one more block` and
   `Keep blocked`.
@@ -157,11 +157,11 @@ gallery and contact-sheet paths.
 | Content started at |  |
 | Shield appeared at |  |
 | Shield appeared only after threshold | Pass / Fail |
-| `Start Brain Break` closed selected app | Pass / Fail |
+| `Start` closed selected app | Pass / Fail |
 | Childlock opened pending challenge from alert or Home | Pass / Fail |
 | Challenge completion cleared shield | Pass / Fail |
 | Monitoring re-armed for a new interval | Pass / Fail |
-| Child saw `Swipe up` guidance and returned to the now-unshielded content app/site | Pass / Fail |
+| Child saw `Go back` guidance and returned to the now-unshielded content app/site | Pass / Fail |
 | Parent dashboard stayed PIN-gated after hand-back | Pass / Fail |
 | RevenueCat paywall/offering behaved as expected | Pass / Fail / Not tested |
 | RevenueCat offering loaded monthly and annual packages | Pass / Fail / Not tested |
@@ -194,6 +194,16 @@ If a hardware record is marked `pending TestFlight build` or `incomplete
 checklist`, finish the real-device run and regenerate or fill the record before
 submitting to public App Review.
 
+Before public App Review, run:
+
+```sh
+scripts/launch-readiness-status.sh --strict
+```
+
+Strict mode must pass before submission. It exits nonzero while the current
+commit lacks production secrets, current simulator QA evidence, completed
+same-phone and child-iPad hardware records, paid-flow QA, or a clean git tree.
+
 ## TestFlight Hardware Gates
 
 Run these on a physical device with the TestFlight build. Do not treat Simulator
@@ -215,7 +225,7 @@ as sufficient for launch.
      selection summary.
 9. Parent chooses the shortest brain-break interval.
 10. Parent enables notifications when prompted. Also test a denied-notification
-   pass: after tapping `Start Brain Break`, press Home and open Childlock.
+   pass: after tapping `Start`, press Home and open Childlock.
 11. Open the selected app/category/site and start real child-like content,
     such as a video, game session, social feed, or website. Record the content
     app/activity and start time in the hardware QA record.
@@ -224,20 +234,20 @@ as sufficient for launch.
 13. Selected content shields only after the threshold is reached. Record the
     shield timestamp and compare it with the configured interval.
 14. Shield copy says `Brain Break`.
-15. Primary shield action says `Start Brain Break`, closes the blocked app, and
+15. Primary shield action says `Start`, closes the blocked app, and
     leaves a Childlock alert/Home path back to the pending challenge.
 16. Opening Childlock presents the pending challenge.
 17. Completing the challenge clears shields.
 18. Monitoring re-arms for another full interval.
-19. Child sees the `Swipe up` hand-back guidance, uses Home or the
+19. Child sees the `Go back` hand-back guidance, uses Home or the
     app switcher to return to the now-unshielded content app/site, and
     cannot enter the dashboard without the parent PIN.
-20. `Ask Parent` creates a parent-visible more-time request and does not open
+20. `Parent` creates a parent-visible more-time request and does not open
     a pending child challenge before the parent responds.
 21. `Give one more block` grants another block and then re-arms enforcement.
 22. `Keep blocked` clears the parent request while keeping the child blocked
     until they start and complete the brain break.
-23. Restarting enforcement clears stale child challenge and Ask Parent state.
+23. Restarting enforcement clears stale child challenge and more-time request state.
 24. If multiple child profiles exist, the pending challenge uses the monitored
     child's age/profile.
 25. Support, Privacy, and Terms links open correctly from App Store metadata.
@@ -274,9 +284,9 @@ Use this when the parent and child share the same iPhone.
 5. Parent sets the PIN, taps `Lock Parent Dashboard` or leaves Childlock to
    let it auto-lock, and hands the phone to the child.
 6. Child continuously uses selected content until the threshold is reached.
-7. Child solves the challenge, sees `Swipe up`, then uses Home or
+7. Child solves the challenge, sees `Go back`, then uses Home or
    the app switcher to return to the now-unshielded app/site.
-8. Child taps `I'm a parent` or tries to enter the dashboard.
+8. Child taps `Parent` or tries to enter the dashboard.
 9. Expected: dashboard remains gated by the parent PIN.
 
 Pass means Childlock can be marketed as supporting same-phone parent/child use.

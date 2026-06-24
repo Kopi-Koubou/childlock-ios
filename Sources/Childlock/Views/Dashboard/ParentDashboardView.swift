@@ -1982,7 +1982,7 @@ public struct ParentDashboardView: View {
 
     private var notificationGuidanceText: String {
         if notificationAuthorizationStatus == .denied {
-            return "Challenge alerts are off. The child can still tap Start Brain Break, press Home, and open Childlock to continue."
+            return "Challenge alerts are off. The child can still tap Start, press Home, and open Childlock to continue."
         }
 
         if notificationAuthorizationStatus.allowsDelivery {

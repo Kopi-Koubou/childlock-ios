@@ -54,8 +54,12 @@ final class ShieldCopyTests: XCTestCase {
 
         for contents in files {
             XCTAssertTrue(contents.contains("Brain Break"))
-            XCTAssertTrue(contents.contains("Tap Start, then open Childlock from the alert or Home."))
-            XCTAssertTrue(contents.contains("Start Brain Break"))
+            XCTAssertTrue(contents.contains("Tap Start. Then tap the alert."))
+            XCTAssertTrue(contents.contains("text: \"Start\""))
+            XCTAssertTrue(contents.contains("text: \"Parent\""))
+            XCTAssertFalse(contents.contains("Tap Start, then open Childlock from the alert or Home."))
+            XCTAssertFalse(contents.contains("Start Brain Break"))
+            XCTAssertFalse(contents.contains("Ask Parent"))
             XCTAssertFalse(contents.contains("text: \"Open Childlock\""))
             XCTAssertFalse(contents.contains("This app is paused. Open Childlock to unlock it."))
         }
@@ -70,14 +74,14 @@ final class ShieldCopyTests: XCTestCase {
             XCTAssertFalse(contents.contains("Your child asked for more screen time. Open Childlock to respond."))
         }
 
-        XCTAssertTrue(notificationFiles[0].contains("Tap this alert or open Childlock from Home."))
-        XCTAssertTrue(notificationFiles[2].contains("Tap this alert or open Childlock from Home."))
+        XCTAssertTrue(notificationFiles[0].contains("Tap to solve."))
+        XCTAssertTrue(notificationFiles[2].contains("Tap to solve."))
         XCTAssertTrue(notificationFiles[1].contains("Brain break ready"))
-        XCTAssertTrue(notificationFiles[1].contains("Tap this alert or open Childlock from Home to finish."))
+        XCTAssertTrue(notificationFiles[1].contains("Tap to solve."))
         XCTAssertTrue(notificationFiles[2].contains("Brain break ready"))
-        XCTAssertTrue(notificationFiles[2].contains("Tap this alert or open Childlock from Home to finish."))
-        XCTAssertTrue(notificationFiles[1].contains("Hand this device to your parent so they can respond in Childlock."))
-        XCTAssertTrue(notificationFiles[2].contains("Hand this device to your parent so they can respond in Childlock."))
+        XCTAssertTrue(notificationFiles[2].contains("Tap to solve."))
+        XCTAssertTrue(notificationFiles[1].contains("Give this to your parent."))
+        XCTAssertTrue(notificationFiles[2].contains("Give this to your parent."))
     }
 
     func testNotificationSettingsExplainHomeFallbackWhenAlertsAreDenied() throws {
@@ -86,7 +90,7 @@ final class ShieldCopyTests: XCTestCase {
         let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")
 
         XCTAssertTrue(dashboard.contains("iOS notification permission"))
-        XCTAssertTrue(dashboard.contains("The child can still tap Start Brain Break, press Home, and open Childlock to continue."))
+        XCTAssertTrue(dashboard.contains("The child can still tap Start, press Home, and open Childlock to continue."))
         XCTAssertTrue(dashboard.contains("UIApplication.openNotificationSettingsURLString"))
         XCTAssertTrue(reviewNotes.contains("pressing\n  Home and opening Childlock presents the same pending challenge"))
         XCTAssertTrue(checklist.contains("denied-notification"))
@@ -232,7 +236,7 @@ final class ShieldCopyTests: XCTestCase {
 
             XCTAssertTrue(startsChallengeAndRefreshesAlert)
             XCTAssertTrue(contents.contains("content.title = \"Brain break ready\""))
-            XCTAssertTrue(contents.contains("content.body = \"Tap this alert or open Childlock from Home to finish.\""))
+            XCTAssertTrue(contents.contains("content.body = \"Tap to solve.\""))
             XCTAssertTrue(contents.contains("let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]"))
             XCTAssertTrue(contents.contains("removePendingNotificationRequests(withIdentifiers: identifiers)"))
             XCTAssertTrue(contents.contains("removeDeliveredNotifications(withIdentifiers: identifiers)"))
@@ -339,7 +343,7 @@ final class ShieldCopyTests: XCTestCase {
             XCTAssertTrue(screenTimeManager.contains("SharedDefaults.Key.\(key)"))
         }
 
-        XCTAssertTrue(checklist.contains("Restarting enforcement clears stale child challenge and Ask Parent state."))
+        XCTAssertTrue(checklist.contains("Restarting enforcement clears stale child challenge and more-time request state."))
     }
 
     private func readRepoFile(_ relativePath: String) throws -> String {

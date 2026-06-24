@@ -89,10 +89,10 @@ Reviewer flow:
 5. Set a short brain-break interval.
 6. Open selected app/category/site content until the interval threshold is reached.
 7. The selected content is shielded with Childlock's Brain Break shield.
-8. Tap Start Brain Break, then tap the Childlock notification or open Childlock
+8. Tap Start, then tap the Childlock notification or open Childlock
    from Home and solve the pending challenge.
 9. Completing the challenge removes the shield and re-arms monitoring.
-10. The child hand-back screen says `Swipe up`, guides the child
+10. The child hand-back screen says `Go back`, guides the child
     back through Home or the app switcher, and requires the parent PIN before
     entering the parent dashboard.
 

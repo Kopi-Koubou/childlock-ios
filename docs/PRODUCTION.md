@@ -206,6 +206,17 @@ hide `Continue with Google`; after you create the Google iOS/Web OAuth clients
 and paste the public IDs into `Config/AppSecrets.local.xcconfig`, rerun this
 command before TestFlight QA.
 
+Before submitting to public App Review, run the strict launch gate:
+
+```sh
+scripts/launch-readiness-status.sh --strict
+```
+
+Strict mode exits nonzero while production secrets, current simulator evidence,
+same-phone hardware QA, child-iPad hardware QA, paid-flow QA, or a clean git
+tree are still missing. Treat a strict failure as a launch blocker, not a
+warning.
+
 The script checks required app-facing values in
 `Config/AppSecrets.local.xcconfig`, required server/deploy values in
 `Config/production.env`, and confirms server-only secrets were not pasted into
@@ -324,17 +335,17 @@ The full TestFlight checklist lives in `docs/QA_TESTFLIGHT_CHECKLIST.md`.
 - First interval does not shield immediately.
 - Threshold shields selected content; record the shield timestamp and compare it
   with the configured interval.
-- "Start Brain Break" shield path reaches a pending challenge after the child
+- "Start" shield path reaches a pending challenge after the child
   taps the Childlock alert or opens Childlock from Home.
 - If notifications are denied or missed, Home -> Childlock still reaches the
   pending challenge.
 - Challenge completion removes shields.
-- The hand-back screen says `Swipe up`, and the child returns to
+- The hand-back screen says `Go back`, and the child returns to
   the now-unshielded app/content. iOS does not let Childlock automatically
   return to another app or restore media state.
 - Monitoring re-arms for another full interval.
 - Parent PIN is required to leave the child hand-back screen for dashboard.
-- Ask Parent creates a parent-visible request, does not open a child challenge
+- Parent creates a parent-visible request, does not open a child challenge
   before the parent responds, can grant one more block, and can explicitly keep
   the child blocked.
 - Same shared phone flow keeps dashboard/settings PIN-protected after child use:

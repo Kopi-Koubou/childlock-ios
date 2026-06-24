@@ -56,7 +56,7 @@ Test order:
 1. Run same-phone first.
    Parent sets up on the shared iPhone, locks the parent dashboard, hands the
    phone over, child consumes selected content, shield appears after threshold,
-   child solves the brain break, sees Swipe up, returns to unlocked content,
+   child solves the brain break, sees Go back, returns to unlocked content,
    and the dashboard stays PIN-gated.
 
 2. Run child-iPad if iPad support remains in launch copy.
@@ -64,7 +64,7 @@ Test order:
    install is not remote iPad control for this launch.
 
 3. Run one denied-notification pass.
-   After Start Brain Break, press Home and open Childlock. The pending
+   After Start, press Home and open Childlock. The pending
    challenge should still appear.
 
 4. Run one second full shield loop on the same device.

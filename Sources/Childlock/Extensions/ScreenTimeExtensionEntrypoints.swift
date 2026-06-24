@@ -57,7 +57,7 @@ public final class ChildlockDeviceActivityMonitor: DeviceActivityMonitor {
 
         let content = UNMutableNotificationContent()
         content.title = "Brain break time!"
-        content.body = "Tap this alert or open Childlock from Home."
+        content.body = "Tap to solve."
         content.sound = .default
         content.interruptionLevel = .timeSensitive
 
@@ -146,7 +146,7 @@ public final class ChildlockShieldAction: ShieldActionDelegate {
 
         let content = UNMutableNotificationContent()
         content.title = "Brain break ready"
-        content.body = "Tap this alert or open Childlock from Home to finish."
+        content.body = "Tap to solve."
         content.sound = .default
         content.interruptionLevel = .timeSensitive
 
@@ -166,7 +166,7 @@ public final class ChildlockShieldAction: ShieldActionDelegate {
     private func postMoreTimeNotification() {
         let content = UNMutableNotificationContent()
         content.title = "More time requested"
-        content.body = "Hand this device to your parent so they can respond in Childlock."
+        content.body = "Give this to your parent."
         content.sound = .default
         content.interruptionLevel = .timeSensitive
 
@@ -221,16 +221,16 @@ public final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
                 color: UIColor(hex: ChildlockColorHex.shieldInk)
             ),
             subtitle: ShieldConfiguration.Label(
-                text: "Tap Start, then open Childlock from the alert or Home.",
+                text: "Tap Start. Then tap the alert.",
                 color: UIColor(hex: ChildlockColorHex.shieldInk)
             ),
             primaryButtonLabel: ShieldConfiguration.Label(
-                text: "Start Brain Break",
+                text: "Start",
                 color: UIColor(hex: ChildlockColorHex.white)
             ),
             primaryButtonBackgroundColor: UIColor(hex: ChildlockColorHex.forestSage),
             secondaryButtonLabel: ShieldConfiguration.Label(
-                text: "Ask Parent",
+                text: "Parent",
                 color: UIColor(hex: ChildlockColorHex.shieldInk)
             )
         )

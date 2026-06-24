@@ -68,7 +68,7 @@ final class ChildlockMonitor: DeviceActivityMonitor {
 
         let content = UNMutableNotificationContent()
         content.title = "Brain break time!"
-        content.body = "Tap this alert or open Childlock from Home."
+        content.body = "Tap to solve."
         content.sound = .default
         content.interruptionLevel = .timeSensitive
 

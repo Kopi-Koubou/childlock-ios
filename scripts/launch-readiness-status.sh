@@ -8,6 +8,35 @@ ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 APP_CONFIG_BASE="$ROOT_DIR/Config/AppSecrets.xcconfig"
 APP_CONFIG_LOCAL="$ROOT_DIR/Config/AppSecrets.local.xcconfig"
 SERVER_CONFIG="$ROOT_DIR/Config/production.env"
+STRICT_MODE=0
+
+usage() {
+    cat <<EOF
+Usage: scripts/launch-readiness-status.sh [--strict]
+
+Prints a no-secret Childlock launch readiness snapshot.
+
+Options:
+  --strict  Exit nonzero when public App Review launch gates are not complete.
+  -h, --help  Show this help.
+EOF
+}
+
+case "${1:-}" in
+    "")
+        ;;
+    --strict)
+        STRICT_MODE=1
+        ;;
+    -h|--help)
+        usage
+        exit 0
+        ;;
+    *)
+        usage
+        exit 1
+        ;;
+esac
 
 read_config_value() {
     local file="$1"
@@ -187,7 +216,7 @@ git_status_line() {
 
     branch="$(git -C "$ROOT_DIR" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")"
     commit="$(git -C "$ROOT_DIR" rev-parse --short HEAD 2>/dev/null || echo "unknown")"
-    if ! git -C "$ROOT_DIR" diff --quiet || ! git -C "$ROOT_DIR" diff --cached --quiet; then
+    if [[ -n "$(git -C "$ROOT_DIR" status --porcelain --untracked-files=normal)" ]]; then
         dirty="dirty"
     fi
 
@@ -328,6 +357,74 @@ describe_hardware_record() {
     echo "$evidence; $completion"
 }
 
+append_strict_blocker() {
+    strict_blockers+=("$1")
+}
+
+collect_strict_blockers() {
+    local current_commit
+    local summary_commit
+    local same_phone_commit
+    local child_ipad_commit
+    local same_phone_completion
+    local child_ipad_completion
+    local google_status
+
+    strict_blockers=()
+    current_commit="$(current_git_commit)"
+
+    if [[ -n "$(git -C "$ROOT_DIR" status --porcelain --untracked-files=normal)" ]]; then
+        append_strict_blocker "Git tree is dirty; commit, stash, or remove local changes before launch."
+    fi
+
+    for key in SUPABASE_URL SUPABASE_PUBLISHABLE_KEY REVENUECAT_API_KEY; do
+        if [[ "$(status_for_app_key "$key")" != "set" ]]; then
+            append_strict_blocker "App-facing build setting $key is missing or placeholder."
+        fi
+    done
+
+    google_status="$(google_oauth_status)"
+    if [[ "$google_status" == invalid* ]]; then
+        append_strict_blocker "Google OAuth build settings are $google_status; fill all three values or leave all three blank."
+    fi
+
+    for key in SUPABASE_PROJECT_REF SUPABASE_ACCESS_TOKEN SUPABASE_SERVICE_ROLE_KEY REVENUECAT_WEBHOOK_SECRET; do
+        if [[ "$(status_for_server_key "$key")" != "set" ]]; then
+            append_strict_blocker "Server/deploy secret $key is missing or placeholder in Config/production.env."
+        fi
+    done
+
+    summary_commit="$(summary_git_commit "$latest_summary")"
+    for evidence in \
+        "summary:$latest_summary" \
+        "gallery:$latest_gallery" \
+        "contact sheet:$latest_contact_sheet"; do
+        local evidence_label="${evidence%%:*}"
+        local evidence_file="${evidence#*:}"
+        if [[ -z "$evidence_file" || ! -f "$evidence_file" ]]; then
+            append_strict_blocker "Simulator QA $evidence_label is not generated yet."
+        elif [[ -z "$summary_commit" || "$summary_commit" != "$current_commit" ]]; then
+            append_strict_blocker "Simulator QA $evidence_label is stale or has unknown commit; regenerate with scripts/qa-simulator-seeds.sh."
+        fi
+    done
+
+    same_phone_commit="$(hardware_record_git_commit "$latest_same_phone_record")"
+    same_phone_completion="$(hardware_record_completion_status "$latest_same_phone_record")"
+    if [[ -z "$latest_same_phone_record" || "$same_phone_commit" != "$current_commit" ]]; then
+        append_strict_blocker "Same-phone hardware QA record is missing or stale."
+    elif [[ "$same_phone_completion" != "filled; review manually" ]]; then
+        append_strict_blocker "Same-phone hardware QA record is not launch-complete: $same_phone_completion."
+    fi
+
+    child_ipad_commit="$(hardware_record_git_commit "$latest_child_ipad_record")"
+    child_ipad_completion="$(hardware_record_completion_status "$latest_child_ipad_record")"
+    if [[ -z "$latest_child_ipad_record" || "$child_ipad_commit" != "$current_commit" ]]; then
+        append_strict_blocker "Child-iPad hardware QA record is missing or stale."
+    elif [[ "$child_ipad_completion" != "filled; review manually" ]]; then
+        append_strict_blocker "Child-iPad hardware QA record is not launch-complete: $child_ipad_completion."
+    fi
+}
+
 latest_summary="$(relative_latest_path "$ROOT_DIR/.build/qa-simulator-seeds" "summary.md")"
 latest_gallery="$(relative_latest_path "$ROOT_DIR/.build/qa-simulator-seeds" "gallery.html")"
 latest_contact_sheet="$(relative_latest_path "$ROOT_DIR/.build/qa-simulator-seeds" "contact-sheet.png")"
@@ -374,6 +471,23 @@ echo
 echo "Useful commands"
 echo "- ./build-validation.sh"
 echo "- REQUIRE_GOOGLE_OAUTH=1 ./build-validation.sh"
+echo "- scripts/launch-readiness-status.sh --strict"
 echo "- scripts/prepare-testflight-qa.sh <testflight-build>"
 echo "- scripts/new-hardware-qa-record.sh same-phone <testflight-build>"
 echo "- scripts/new-hardware-qa-record.sh child-ipad <testflight-build>"
+
+if [[ "$STRICT_MODE" -eq 1 ]]; then
+    collect_strict_blockers
+    echo
+    echo "Strict launch gate"
+    if (( ${#strict_blockers[@]} == 0 )); then
+        echo "- PASS: no launch blockers detected by this local gate."
+        exit 0
+    fi
+
+    echo "- BLOCKED: do not submit to public App Review yet."
+    for blocker in "${strict_blockers[@]}"; do
+        echo "  - $blocker"
+    done
+    exit 1
+fi

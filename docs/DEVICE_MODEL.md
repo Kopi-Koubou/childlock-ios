@@ -71,7 +71,7 @@ launch matrix.
    from Home.
 9. Solve the pending challenge.
 10. Confirm shielding clears and monitoring re-arms.
-11. Confirm the child sees `Swipe up`, uses Home or the app
+11. Confirm the child sees `Go back`, uses Home or the app
     switcher to return to the now-unshielded app/content. iOS does
     not let Childlock automatically return to another app.
 12. Confirm the hand-back screen blocks the dashboard until the parent PIN is

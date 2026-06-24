@@ -39,16 +39,16 @@ public struct HandBackView: View {
                     .foregroundStyle(ChildlockColor.primary)
             }
 
-            Text("All done\(childName.map { ", \($0)" } ?? "")!")
+            Text("Done!")
                 .font(ChildlockTypography.childTitle)
                 .foregroundStyle(ChildlockColor.textPrimary)
 
             HandBackReturnCue(
                 iconName: "arrow.up",
-                title: "Swipe up"
+                title: "Go back"
             )
             .accessibilityIdentifier("handback_resume_guidance")
-            .accessibilityLabel("Swipe up to go back.")
+            .accessibilityLabel("Go back to your app.")
             .padding(.top, ChildlockSpacing.xs)
 
             Spacer()
@@ -87,7 +87,7 @@ public struct HandBackView: View {
                 Button {
                     isParentSectionVisible = true
                 } label: {
-                    Label("I'm a parent", systemImage: "lock.fill")
+                    Label("Parent", systemImage: "lock.fill")
                         .font(ChildlockTypography.caption)
                         .foregroundStyle(ChildlockColor.textSecondary)
                         .padding(.horizontal, ChildlockSpacing.md)
@@ -98,7 +98,7 @@ public struct HandBackView: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("parent_unlock_entry")
-                .accessibilityLabel("I'm a parent")
+                .accessibilityLabel("Parent unlock")
             }
         }
         .frame(maxWidth: handBackContentMaxWidth)
