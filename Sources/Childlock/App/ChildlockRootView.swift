@@ -366,18 +366,21 @@ public struct ChildlockRootView: View {
             || arguments.contains(DebugLaunchArgument.settingsTab)
             || arguments.contains(DebugLaunchArgument.addChildSheet)
             || arguments.contains(DebugLaunchArgument.paywall) {
+            let seededTab: AppState.Tab = arguments.contains(DebugLaunchArgument.addChildSheet) ? .children
+                : arguments.contains(DebugLaunchArgument.paywall) ? .settings
+                : arguments.contains(DebugLaunchArgument.childrenTab) ? .children
+                : arguments.contains(DebugLaunchArgument.appsTab) ? .apps
+                : arguments.contains(DebugLaunchArgument.settingsTab) ? .settings
+                : .home
+
             seedDebugDashboard(
                 locked: arguments.contains(DebugLaunchArgument.lockedDashboard),
                 pendingChallenge: arguments.contains(DebugLaunchArgument.pendingChallenge)
                     || arguments.contains(DebugLaunchArgument.pendingMathChallenge)
                     || arguments.contains(DebugLaunchArgument.pendingMemoryChallenge),
                 moreTimeRequest: arguments.contains(DebugLaunchArgument.moreTimeRequest),
-                tab: arguments.contains(DebugLaunchArgument.addChildSheet) ? .children
-                    : arguments.contains(DebugLaunchArgument.paywall) ? .settings
-                    : arguments.contains(DebugLaunchArgument.childrenTab) ? .children
-                    : arguments.contains(DebugLaunchArgument.appsTab) ? .apps
-                    : arguments.contains(DebugLaunchArgument.settingsTab) ? .settings
-                    : .home
+                tab: seededTab,
+                monitoringStatus: arguments.contains(DebugLaunchArgument.settingsTab) ? "not_started" : "running"
             )
 
             if arguments.contains(DebugLaunchArgument.handBack),
@@ -431,7 +434,8 @@ public struct ChildlockRootView: View {
         locked: Bool,
         pendingChallenge: Bool,
         moreTimeRequest: Bool,
-        tab: AppState.Tab = .home
+        tab: AppState.Tab = .home,
+        monitoringStatus: String = "running"
     ) {
         let now = Date()
         var profile = ChildProfile(
@@ -496,7 +500,7 @@ public struct ChildlockRootView: View {
         ]
 
         let defaults = SharedDefaults.shared
-        defaults.set("running", forKey: SharedDefaults.Key.monitoringStatus)
+        defaults.set(monitoringStatus, forKey: SharedDefaults.Key.monitoringStatus)
         defaults.set(profile.id.uuidString, forKey: SharedDefaults.Key.activeProfileID)
         defaults.set(profile.id.uuidString, forKey: SharedDefaults.Key.activeMonitoringProfileID)
         defaults.set(now.timeIntervalSince1970, forKey: SharedDefaults.Key.monitoringLastStartedAt)

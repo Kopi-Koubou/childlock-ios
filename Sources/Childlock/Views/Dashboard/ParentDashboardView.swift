@@ -1115,8 +1115,8 @@ public struct ParentDashboardView: View {
                     applyActiveSelectionToAllChildren()
                 }
                 .buttonStyle(ChildlockSecondaryButtonStyle())
-                .disabled(appState.profiles.count < 2 || appState.activeProfile?.monitoredAppDisplayNames.isEmpty == true)
-                .opacity((appState.profiles.count < 2 || appState.activeProfile?.monitoredAppDisplayNames.isEmpty == true) ? 0.5 : 1.0)
+                .disabled(!canCopyActiveScreenTimeSelection)
+                .opacity(canCopyActiveScreenTimeSelection ? 1.0 : 0.5)
 
                 Text("Use this for siblings who share this device. For a separate child iPad, install and configure Childlock on that iPad too.")
                     .font(ChildlockTypography.caption)
@@ -1377,7 +1377,8 @@ public struct ParentDashboardView: View {
                                         settingsRowContent(title: "Start Screen Time Enforcement", value: "", showChevron: true)
                                     }
                                     .buttonStyle(.plain)
-                                    .disabled(appState.activeProfile == nil)
+                                    .disabled(!canStartScreenTimeEnforcement)
+                                    .opacity(canStartScreenTimeEnforcement ? 1 : 0.45)
                                 }
 
                                 if shouldShowStopLockEnforcementAction {
@@ -1494,6 +1495,23 @@ public struct ParentDashboardView: View {
         case .notStarted, .intervalEnded, .stopped, .none:
             return "For TestFlight: choose the shortest interval, start enforcement, lock the parent dashboard or leave Childlock to auto-lock, then hand this device over."
         }
+    }
+
+    private var hasActiveScreenTimeSelection: Bool {
+        guard let activeProfile = appState.activeProfile else {
+            return false
+        }
+
+        return activeProfile.monitoredSelectionTokenData != nil
+            && !activeProfile.monitoredAppDisplayNames.isEmpty
+    }
+
+    private var canStartScreenTimeEnforcement: Bool {
+        appState.activeProfile != nil && hasActiveScreenTimeSelection
+    }
+
+    private var canCopyActiveScreenTimeSelection: Bool {
+        appState.profiles.count >= 2 && hasActiveScreenTimeSelection
     }
 
     private func settingsSection(title: String, @ViewBuilder content: () -> some View) -> some View {
@@ -2042,6 +2060,12 @@ public struct ParentDashboardView: View {
             return
         }
 
+        guard hasActiveScreenTimeSelection else {
+            appsErrorText = "Choose real apps, categories, or websites with Screen Time before copying this selection."
+            appsStatusText = nil
+            return
+        }
+
         let updatedChildrenCount = appState.applyActiveProfileMonitoredSelectionToAllChildren()
         if updatedChildrenCount == 0 {
             appsStatusText = nil
@@ -2143,6 +2167,12 @@ public struct ParentDashboardView: View {
     private func startScreenTimeEnforcement() async {
         guard let profile = appState.activeProfile else {
             monitoringErrorText = "No active child profile available."
+            monitoringStatusText = "failed"
+            return
+        }
+
+        guard hasActiveScreenTimeSelection else {
+            monitoringErrorText = "Choose real apps, categories, or websites in Apps before starting enforcement."
             monitoringStatusText = "failed"
             return
         }

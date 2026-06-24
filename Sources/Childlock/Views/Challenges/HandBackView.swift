@@ -12,6 +12,7 @@ public struct HandBackView: View {
     @State private var enteredPIN = ""
     @State private var pinErrorText: String?
     @State private var isParentSectionVisible = false
+    @State private var didShowResumeStep = false
 
     private let handBackContentMaxWidth: CGFloat = 560
 
@@ -42,7 +43,7 @@ public struct HandBackView: View {
                 .font(ChildlockTypography.childTitle)
                 .foregroundStyle(ChildlockColor.textPrimary)
 
-            Text("Nice work. Your app is unblocked now.")
+            Text("Nice work. Your app is unlocked now.")
                 .font(ChildlockTypography.childBody)
                 .foregroundStyle(ChildlockColor.textSecondary)
                 .multilineTextAlignment(.center)
@@ -50,14 +51,24 @@ public struct HandBackView: View {
             VStack(spacing: ChildlockSpacing.sm) {
                 HandBackStepRow(
                     iconName: "checkmark.circle.fill",
-                    title: "Ready to resume",
+                    title: "Content unlocked",
                     detail: "Your video, game, or site can open again."
                 )
-                HandBackStepRow(
-                    iconName: "arrow.up.forward.app.fill",
-                    title: "Reopen your app",
-                    detail: "Swipe up or press Home, then tap your video, game, or site again."
-                )
+
+                Button {
+                    didShowResumeStep = true
+                } label: {
+                    HandBackResumeCue(
+                        iconName: didShowResumeStep ? "house.fill" : "arrow.up.forward.app.fill",
+                        title: didShowResumeStep ? "Press Home now" : "Ready to go back",
+                        detail: didShowResumeStep
+                            ? "Swipe up or press Home, then tap your video, game, or site."
+                            : "Tap here when you are ready for the last step."
+                    )
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("handback_resume_action")
+                .accessibilityLabel(didShowResumeStep ? "Press Home now" : "Ready to go back")
             }
             .accessibilityIdentifier("handback_steps")
             .padding(.top, ChildlockSpacing.xs)
@@ -129,6 +140,44 @@ public struct HandBackView: View {
         if enteredPIN != sanitized {
             enteredPIN = sanitized
         }
+    }
+}
+
+private struct HandBackResumeCue: View {
+    let iconName: String
+    let title: String
+    let detail: String
+
+    var body: some View {
+        HStack(alignment: .center, spacing: ChildlockSpacing.sm) {
+            Image(systemName: iconName)
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundStyle(ChildlockColor.surface)
+                .frame(width: 36, height: 36)
+                .background(ChildlockColor.primary)
+                .clipShape(Circle())
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title)
+                    .font(ChildlockTypography.bodyBold)
+                    .foregroundStyle(ChildlockColor.textPrimary)
+                Text(detail)
+                    .font(ChildlockTypography.caption)
+                    .foregroundStyle(ChildlockColor.textSecondary)
+                    .multilineTextAlignment(.leading)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            Image(systemName: "chevron.right")
+                .font(.system(size: 14, weight: .bold))
+                .foregroundStyle(ChildlockColor.textSecondary)
+                .opacity(title == "Ready to go back" ? 1 : 0)
+        }
+        .padding(.vertical, ChildlockSpacing.md)
+        .padding(.horizontal, ChildlockSpacing.md)
+        .background(ChildlockColor.primarySoft)
+        .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.control))
+        .accessibilityElement(children: .combine)
     }
 }
 

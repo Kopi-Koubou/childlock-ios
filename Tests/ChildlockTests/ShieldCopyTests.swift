@@ -262,6 +262,7 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(rootView.contains("--childlock-qa-seed-pending-math-challenge"))
         XCTAssertTrue(rootView.contains("--childlock-qa-seed-pending-memory-challenge"))
         XCTAssertTrue(rootView.contains("--childlock-qa-seed-handback"))
+        XCTAssertTrue(rootView.contains("monitoringStatus: arguments.contains(DebugLaunchArgument.settingsTab) ? \"not_started\" : \"running\""))
         XCTAssertTrue(rootView.contains("return .math"))
         XCTAssertTrue(rootView.contains("return .memory"))
         XCTAssertTrue(rootView.contains("challengeViewModel.debugPresentHandBack(for: profile)"))
