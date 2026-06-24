@@ -120,6 +120,7 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(readinessScript.contains("same-phone"))
         XCTAssertTrue(readinessScript.contains("child-ipad"))
         XCTAssertTrue(readinessScript.contains("TestFlight hardware gates"))
+        XCTAssertTrue(readinessScript.contains("scripts/prepare-testflight-qa.sh <testflight-build>"))
     }
 
     func testLaunchRepoDoesNotKeepStaleGeneratedStatusArtifacts() throws {

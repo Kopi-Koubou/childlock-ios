@@ -362,5 +362,6 @@ echo
 echo "Useful commands"
 echo "- ./build-validation.sh"
 echo "- REQUIRE_GOOGLE_OAUTH=1 ./build-validation.sh"
+echo "- scripts/prepare-testflight-qa.sh <testflight-build>"
 echo "- scripts/new-hardware-qa-record.sh same-phone <testflight-build>"
 echo "- scripts/new-hardware-qa-record.sh child-ipad <testflight-build>"
