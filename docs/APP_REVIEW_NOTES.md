@@ -37,8 +37,7 @@ Notes:
   supported because the parent dashboard remains PIN-protected. Childlock is
   not presented as a parent-phone remote controller for a separate child iPad in
   this launch build.
-- Childlock does not attempt to launch itself from the shield extension because
-  iOS does not allow that. The shield closes the blocked app and Childlock also
+- In this build, the shield action closes the blocked app and Childlock also
   posts a local notification to guide the child back to the challenge when
   notifications are enabled. If notifications are denied or missed, pressing
   Home and opening Childlock presents the same pending challenge.
