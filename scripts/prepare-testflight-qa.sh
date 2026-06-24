@@ -56,7 +56,7 @@ Test order:
 1. Run same-phone first.
    Parent sets up on the shared iPhone, locks the parent dashboard, hands the
    phone over, child consumes selected content, shield appears after threshold,
-   child solves the brain break, sees Go back, returns to unlocked content,
+   child solves the brain break, sees Back to app, returns to unlocked content,
    and the dashboard stays PIN-gated.
 
 2. Run child-iPad if iPad support remains in launch copy.

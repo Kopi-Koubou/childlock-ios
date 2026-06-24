@@ -44,11 +44,11 @@ public struct HandBackView: View {
                 .foregroundStyle(ChildlockColor.textPrimary)
 
             HandBackReturnCue(
-                iconName: "arrow.up",
-                title: "Go back"
+                iconName: "arrow.backward",
+                title: "Back to app"
             )
             .accessibilityIdentifier("handback_resume_guidance")
-            .accessibilityLabel("Go back to your app.")
+            .accessibilityLabel("Back to app.")
             .padding(.top, ChildlockSpacing.xs)
 
             Spacer()
