@@ -40,7 +40,7 @@ public struct HandBackView: View {
                 .font(ChildlockTypography.childTitle)
                 .foregroundStyle(ChildlockColor.textPrimary)
 
-            Text("Swipe up or press Home, then reopen your video or app. It's unpaused.")
+            Text("Swipe up or press Home, then reopen your video or app. It's unlocked.")
                 .font(ChildlockTypography.childBody)
                 .foregroundStyle(ChildlockColor.textSecondary)
                 .multilineTextAlignment(.center)
