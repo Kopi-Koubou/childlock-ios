@@ -200,7 +200,7 @@ public struct ParentDashboardView: View {
             }
             .childlockCard()
 
-            Text("When a monitored app pauses, the Childlock alert or Home opens the brain break.")
+            Text("Brain breaks still open from the alert or Home.")
                 .font(ChildlockTypography.caption)
                 .foregroundStyle(ChildlockColor.textMuted)
                 .multilineTextAlignment(.center)
@@ -411,11 +411,11 @@ public struct ParentDashboardView: View {
                 .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.sm))
 
             VStack(alignment: .leading, spacing: ChildlockSpacing.xs) {
-                Text("Ready to hand this device over?")
+                Text("Before you hand it over")
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(ChildlockColor.textPrimary)
 
-                Text("Tap Lock before handoff. If you leave Childlock, it locks automatically. Brain breaks still open; settings stay behind your PIN.")
+                Text("Lock parent settings. Brain breaks still open for your child.")
                     .font(ChildlockTypography.caption)
                     .foregroundStyle(ChildlockColor.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)

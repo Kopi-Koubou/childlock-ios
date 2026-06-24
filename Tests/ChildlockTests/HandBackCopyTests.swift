@@ -52,9 +52,9 @@ final class HandBackCopyTests: XCTestCase {
     func testHomeHandoffCardLocksParentDashboardBeforeSharedDeviceUse() throws {
         let contents = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
 
-        XCTAssertTrue(contents.contains("Ready to hand this device over?"))
-        XCTAssertTrue(contents.contains("Tap Lock before handoff. If you leave Childlock, it locks automatically. Brain breaks still open"))
-        XCTAssertTrue(contents.contains("When a monitored app pauses, the Childlock alert or Home opens the brain break."))
+        XCTAssertTrue(contents.contains("Before you hand it over"))
+        XCTAssertTrue(contents.contains("Lock parent settings. Brain breaks still open for your child."))
+        XCTAssertTrue(contents.contains("Brain breaks still open from the alert or Home."))
         XCTAssertTrue(contents.contains("handoffLockCard"))
         XCTAssertTrue(contents.contains("appState.lockSettings(pinService: pinService)"))
         XCTAssertTrue(contents.contains("accessibilityIdentifier(\"handoff_lock_parent_dashboard\")"))
