@@ -126,29 +126,21 @@ private struct HandBackReturnCue: View {
     let title: String
 
     var body: some View {
-        VStack(spacing: ChildlockSpacing.sm) {
+        VStack(spacing: ChildlockSpacing.md) {
             Image(systemName: iconName)
-                .font(.system(size: 34, weight: .bold))
+                .font(.system(size: 40, weight: .bold))
                 .foregroundStyle(.white)
-                .frame(width: 72, height: 72)
+                .frame(width: 88, height: 88)
                 .background(ChildlockColor.primary)
                 .clipShape(Circle())
                 .childlockShadow(ChildlockShadow.sm)
 
             Text(title)
-                .font(ChildlockTypography.subtitle)
+                .font(.system(size: 34, weight: .semibold, design: .rounded))
                 .foregroundStyle(ChildlockColor.textPrimary)
                 .multilineTextAlignment(.center)
         }
-        .padding(.vertical, ChildlockSpacing.lg)
-        .padding(.horizontal, ChildlockSpacing.md)
-        .frame(maxWidth: .infinity)
-        .background(ChildlockColor.primarySoft)
-        .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.control))
-        .overlay {
-            RoundedRectangle(cornerRadius: ChildlockRadius.control)
-                .stroke(ChildlockColor.primary.opacity(0.18), lineWidth: 1)
-        }
         .accessibilityElement(children: .combine)
+        .accessibilityHint("Use Home or the app switcher.")
     }
 }
