@@ -198,6 +198,9 @@ credential values. Simulator evidence includes the summary, gallery, and
 `contact-sheet.png` overview from `scripts/qa-simulator-seeds.sh`. It also
 flags simulator summaries and hardware records that were generated for a stale
 commit, so regenerate QA evidence after changing the build you plan to submit.
+Hardware records with `pending-testflight-build`, unfilled device metadata, or
+unresolved `Pass / Fail` choices are still reported as pending/incomplete and
+are not launch proof.
 If Google OAuth is `hidden (missing or placeholder)`, the submitted build should
 hide `Continue with Google`; after you create the Google iOS/Web OAuth clients
 and paste the public IDs into `Config/AppSecrets.local.xcconfig`, rerun this

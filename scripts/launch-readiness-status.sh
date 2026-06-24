@@ -206,11 +206,19 @@ hardware_record_git_commit() {
     local file="$1"
 
     [[ -f "$file" ]] || return 0
-    awk -F '|' '
+    hardware_record_field "$file" "Git commit"
+}
+
+hardware_record_field() {
+    local file="$1"
+    local field="$2"
+
+    [[ -f "$file" ]] || return 0
+    awk -F '|' -v wanted="$field" '
         {
             label = $2
             gsub(/^[ \t]+|[ \t]+$/, "", label)
-            if (label == "Git commit") {
+            if (label == wanted) {
                 value = $3
                 gsub(/^[ \t]+|[ \t]+$/, "", value)
                 print value
@@ -247,6 +255,64 @@ describe_evidence_path() {
     echo "$relative_file (stale commit $commit; current $current_commit)"
 }
 
+hardware_record_completion_status() {
+    local file="$1"
+    local build_number
+    local field
+    local value
+
+    if [[ -z "$file" || ! -f "$file" ]]; then
+        echo "not generated yet"
+        return
+    fi
+
+    build_number="$(hardware_record_field "$file" "Build number")"
+    if [[ -z "$build_number" || "$build_number" == "unknown-build" || "$build_number" == "pending-testflight-build" ]]; then
+        echo "pending TestFlight build"
+        return
+    fi
+
+    local required_fields=(
+        "Device model"
+        "iOS version"
+        "Parent sign-in tested"
+        "Notification state tested"
+        "Monitored selection"
+        "Content app/activity tested"
+        "Brain-break interval"
+        "Content started at"
+        "Shield appeared at"
+        "RevenueCat paywall/offering behaved as expected"
+    )
+
+    for field in "${required_fields[@]}"; do
+        value="$(hardware_record_field "$file" "$field")"
+        if [[ -z "$value" || "$value" == *" / "* ]]; then
+            echo "incomplete checklist"
+            return
+        fi
+    done
+
+    if grep -Eq '\|[[:space:]]*(Pass / Fail|Pass / Fail / N/A|Apple / Google / N/A|Allowed / Denied|App / Category / Website|Configured / Missing or placeholder)[[:space:]]*\|' "$file"; then
+        echo "incomplete checklist"
+        return
+    fi
+
+    echo "filled; review manually"
+}
+
+describe_hardware_record() {
+    local file="$1"
+    local commit="$2"
+    local evidence
+    local completion
+
+    evidence="$(describe_evidence_path "$file" "$commit")"
+    completion="$(hardware_record_completion_status "$file")"
+
+    echo "$evidence; $completion"
+}
+
 latest_summary="$(relative_latest_path "$ROOT_DIR/.build/qa-simulator-seeds" "summary.md")"
 latest_gallery="$(relative_latest_path "$ROOT_DIR/.build/qa-simulator-seeds" "gallery.html")"
 latest_contact_sheet="$(relative_latest_path "$ROOT_DIR/.build/qa-simulator-seeds" "contact-sheet.png")"
@@ -276,8 +342,8 @@ echo "QA evidence"
 echo "- Latest simulator summary: $(describe_evidence_path "$latest_summary" "$(summary_git_commit "$latest_summary")")"
 echo "- Latest simulator gallery: $(describe_evidence_path "$latest_gallery" "$(summary_git_commit "$latest_summary")")"
 echo "- Latest simulator contact sheet: $(describe_evidence_path "$latest_contact_sheet" "$(summary_git_commit "$latest_summary")")"
-echo "- Latest same-phone record: $(describe_evidence_path "$latest_same_phone_record" "$(hardware_record_git_commit "$latest_same_phone_record")")"
-echo "- Latest child-iPad record: $(describe_evidence_path "$latest_child_ipad_record" "$(hardware_record_git_commit "$latest_child_ipad_record")")"
+echo "- Latest same-phone record: $(describe_hardware_record "$latest_same_phone_record" "$(hardware_record_git_commit "$latest_same_phone_record")")"
+echo "- Latest child-iPad record: $(describe_hardware_record "$latest_child_ipad_record" "$(hardware_record_git_commit "$latest_child_ipad_record")")"
 echo
 echo "TestFlight hardware gates"
 echo "- Same-phone shield loop: required before launch"

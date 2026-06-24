@@ -171,6 +171,9 @@ repo root. It prints the current Google OAuth build status and latest
 `.build/qa-simulator-seeds` / `.build/hardware-qa-records` paths without
 printing secrets. If it marks simulator or hardware evidence as stale, generate
 fresh evidence for the current commit before treating it as launch proof.
+If a hardware record is marked `pending TestFlight build` or `incomplete
+checklist`, finish the real-device run and regenerate or fill the record before
+submitting to public App Review.
 
 ## TestFlight Hardware Gates
 

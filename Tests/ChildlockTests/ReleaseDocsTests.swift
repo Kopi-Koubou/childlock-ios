@@ -253,6 +253,9 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(normalizedProduction.contains("generate and complete hardware QA records with `scripts/new-hardware-qa-record.sh`"))
         XCTAssertTrue(normalizedProduction.contains("`.build/hardware-qa-records/`"))
         XCTAssertTrue(normalizedProduction.contains("Do not treat a simulator pass or a successful archive upload as proof"))
+        XCTAssertTrue(normalizedProduction.contains("Hardware records with `pending-testflight-build`, unfilled device metadata, or unresolved `Pass / Fail` choices are still reported as pending/incomplete"))
+        XCTAssertTrue(checklist.contains("pending TestFlight build"))
+        XCTAssertTrue(checklist.contains("incomplete\nchecklist"))
 
         XCTAssertTrue(template.contains("## Required Shield Loop"))
         XCTAssertTrue(template.contains("| Git commit |"))
