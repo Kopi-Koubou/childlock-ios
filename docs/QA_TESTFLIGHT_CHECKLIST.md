@@ -180,6 +180,7 @@ available, and the latest simulator QA summary path.
 | iOS version |  |
 | Scenario | Same phone / Child iPad / Child iPhone |
 | Latest simulator QA summary |  |
+| Latest simulator QA gallery |  |
 | Google OAuth build settings | Configured / Missing or placeholder |
 | Parent sign-in tested | Apple / Google / N/A |
 | Notification state tested | Allowed / Denied |

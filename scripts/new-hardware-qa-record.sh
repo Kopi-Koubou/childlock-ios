@@ -26,6 +26,13 @@ else
     latest_simulator_summary="not generated yet"
 fi
 
+latest_simulator_gallery="$(find "$ROOT_DIR/.build/qa-simulator-seeds" -path "*/gallery.html" -type f -print 2>/dev/null | sort | tail -n 1)"
+if [[ -n "$latest_simulator_gallery" ]]; then
+    latest_simulator_gallery="${latest_simulator_gallery#$ROOT_DIR/}"
+else
+    latest_simulator_gallery="not generated yet"
+fi
+
 read_config_value() {
     local file="$1"
     local key="$2"
@@ -148,6 +155,7 @@ replace_row "Tester" "$tester_name"
 replace_row "Date" "$record_date"
 replace_row "Scenario" "$scenario_label"
 replace_row "Latest simulator QA summary" "$latest_simulator_summary"
+replace_row "Latest simulator QA gallery" "$latest_simulator_gallery"
 replace_row "Google OAuth build settings" "$google_oauth_status"
 
 cat >> "$output_file" <<EOF
