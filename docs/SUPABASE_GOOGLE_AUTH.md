@@ -20,6 +20,10 @@ Current app wiring:
 - Public Web/server client ID location: `Config/AppSecrets.local.xcconfig`
 - Secret location: Supabase dashboard only, never `Config/AppSecrets.xcconfig`
 
+The app shows `Continue with Google` only when Supabase and all three Google
+build settings are configured. Placeholder builds hide the button so Apple
+sign-in remains usable while Google setup is still in progress.
+
 ## Google Cloud
 
 1. Open Google Cloud Console.

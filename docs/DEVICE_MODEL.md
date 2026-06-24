@@ -55,7 +55,7 @@ Use `docs/QA_TESTFLIGHT_CHECKLIST.md` for the full same-phone and child-iPad
 launch matrix.
 
 1. Install the TestFlight build on the child-used device.
-2. Sign in with Apple or Google.
+2. Sign in with Apple, or Google if the build has Google OAuth configured.
 3. Grant Screen Time access.
 4. Select at least one real app, category, or website.
 5. Set the shortest brain-break interval.

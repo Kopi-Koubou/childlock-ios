@@ -27,7 +27,7 @@ and iPad (A16), and writes screenshots plus a summary under
 
 | Launch argument | Expected screen | PIN |
 | --- | --- | --- |
-| `--childlock-qa-reset` | Fresh onboarding with Apple and Google sign-in | none |
+| `--childlock-qa-reset` | Fresh onboarding with Sign in with Apple; Google appears only when OAuth IDs are configured | none |
 | `--childlock-qa-seed-onboarding-devices` | Signed-in onboarding on the local-first device setup step | none |
 | `--childlock-qa-seed-onboarding-setup` | Signed-in setup with Screen Time authorized and no picker selection returned yet | none |
 | `--childlock-qa-seed-dashboard` | Unlocked parent dashboard for child `Mia` | `1234` if locked later |
@@ -44,7 +44,9 @@ and iPad (A16), and writes screenshots plus a summary under
 
 Simulator pass criteria:
 
-- Fresh onboarding shows `Sign in with Apple` and `Continue with Google`.
+- Fresh onboarding shows `Sign in with Apple`. `Continue with Google` is shown
+  only when the build has real Supabase and Google OAuth IDs; placeholder builds
+  hide it rather than exposing a dead-end button.
 - Device setup seed explains same-phone use, child iPad setup, and that a
   parent-only iPhone install does not remotely lock a separate iPad at launch.
 - Setup seed explains that `Continue` stays disabled until Apple's picker
@@ -88,7 +90,7 @@ Latest simulator smoke pass, 2026-06-24:
   dashboard, child challenges, setup-disabled state, Children, Apps, Settings,
   add-child, more-time, and paywall surfaces.
 - Latest summary:
-  `.build/qa-simulator-seeds/20260624-132442/summary.md`.
+  `.build/qa-simulator-seeds/20260624-133803/summary.md`.
 - iPhone 17 simulator: `--childlock-qa-seed-onboarding-devices` rendered the
   local-first device setup copy without overlap.
 - iPhone 17 simulator: `--childlock-qa-seed-onboarding-setup` rendered the
@@ -140,7 +142,8 @@ Latest simulator smoke pass, 2026-06-24:
   within the readable content width and showed the local-device Childlock model
   clearly.
 - iPhone 17 simulator: Settings -> `Reset Childlock on this device` -> `Confirm
-  Reset` returned to fresh onboarding with Apple and Google sign-in.
+  Reset` returned to fresh onboarding with Sign in with Apple; Google remains
+  conditional on OAuth build settings.
 - iPad (A16) simulator: `--childlock-qa-seed-onboarding-devices`,
   `--childlock-qa-seed-onboarding-setup`, and
   `--childlock-qa-seed-dashboard` rendered with readable constrained content.
@@ -195,7 +198,9 @@ available, and the latest simulator QA summary path.
 Minimum evidence before launch:
 
 - One completed same-phone record with Apple sign-in.
-- One completed same-phone or child-device record with Google sign-in.
+- One completed same-phone or child-device record with Google sign-in after
+  `GOOGLE_IOS_CLIENT_ID`, `GOOGLE_WEB_CLIENT_ID`, and
+  `GOOGLE_REVERSED_CLIENT_ID` are configured.
 - One completed child-iPad record if iPad support remains in App Store copy.
 - One denied-notification pass proving Home -> Childlock still opens the
   pending challenge.
@@ -211,7 +216,9 @@ as sufficient for launch.
 3. Complete setup once with Apple.
 4. From Settings, use `Reset Childlock on this device` -> `Confirm Reset`.
 5. Confirm the app returns to fresh onboarding with no parent dashboard access.
-6. Sign in with Google and complete setup again.
+6. Sign in with Google and complete setup again. If the Google button is not
+   visible, the TestFlight build is still missing the Google OAuth build
+   settings and is not ready for Google sign-in QA.
 7. Parent grants Screen Time access on the child-used device.
 8. Parent selects at least one real app, category, or website.
    - In the Childlock setup screen, tap `Choose apps, categories, or websites`,

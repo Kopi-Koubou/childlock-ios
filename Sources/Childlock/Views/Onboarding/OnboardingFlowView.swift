@@ -245,14 +245,16 @@ public struct OnboardingFlowView: View {
                     .fixedSize(horizontal: false, vertical: true)
                 #endif
 
-                Button {
-                    signInWithGoogle()
-                } label: {
-                    GoogleSignInButtonLabel(isInProgress: isGoogleSignInInProgress)
+                if shouldShowGoogleSignIn {
+                    Button {
+                        signInWithGoogle()
+                    } label: {
+                        GoogleSignInButtonLabel(isInProgress: isGoogleSignInInProgress)
+                    }
+                    .buttonStyle(ChildlockSecondaryButtonStyle())
+                    .disabled(isGoogleSignInInProgress)
+                    .opacity(isGoogleSignInInProgress ? 0.7 : 1.0)
                 }
-                .buttonStyle(ChildlockSecondaryButtonStyle())
-                .disabled(isGoogleSignInInProgress)
-                .opacity(isGoogleSignInInProgress ? 0.7 : 1.0)
 
                 if let signInErrorText {
                     Text(signInErrorText)
@@ -274,7 +276,16 @@ public struct OnboardingFlowView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
     }
 
+    private var shouldShowGoogleSignIn: Bool {
+        BackendConfig.current.isSupabaseConfigured && BackendConfig.current.isGoogleSignInConfigured
+    }
+
     private func signInWithGoogle() {
+        guard shouldShowGoogleSignIn else {
+            signInErrorText = "Google sign in is not available in this build. Please use Sign in with Apple for now."
+            return
+        }
+
         isGoogleSignInInProgress = true
         signInErrorText = nil
 

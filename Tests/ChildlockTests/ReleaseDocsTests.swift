@@ -22,10 +22,14 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(googleAuth.contains("TestFlight Proof"))
 
         for contents in [production, appReview] {
-            XCTAssertTrue(contents.contains("Apple or Google"))
-            XCTAssertTrue(contents.contains("There is no separate username/password account"))
-            XCTAssertFalse(contents.localizedCaseInsensitiveContains("no-login"))
-            XCTAssertFalse(contents.localizedCaseInsensitiveContains("free trial"))
+            let normalized = normalizeWhitespace(contents)
+            XCTAssertTrue(normalized.contains("Google"))
+            XCTAssertTrue(normalized.contains("valid"))
+            XCTAssertTrue(normalized.contains("OAuth IDs"))
+            XCTAssertTrue(normalized.contains("non-working"))
+            XCTAssertTrue(normalized.contains("There is no separate username/password account"))
+            XCTAssertFalse(normalized.localizedCaseInsensitiveContains("no-login"))
+            XCTAssertFalse(normalized.localizedCaseInsensitiveContains("free trial"))
         }
     }
 

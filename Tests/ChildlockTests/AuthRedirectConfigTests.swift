@@ -54,10 +54,13 @@ final class AuthRedirectConfigTests: XCTestCase {
         XCTAssertTrue(authService.contains("secureStore.saveString(provider.rawValue, key: Self.authProviderKey)"))
         XCTAssertTrue(authService.contains("secureStore.delete(key: Self.authProviderKey)"))
         XCTAssertTrue(rootView.contains("if authService.handleGoogleRedirectURL(url)"))
+        XCTAssertTrue(onboarding.contains("if shouldShowGoogleSignIn"))
+        XCTAssertTrue(onboarding.contains("BackendConfig.current.isSupabaseConfigured && BackendConfig.current.isGoogleSignInConfigured"))
         XCTAssertTrue(onboarding.contains("Continue with Google"))
         XCTAssertTrue(onboarding.contains("Connecting to Google"))
         XCTAssertTrue(onboarding.contains("GoogleSignInButtonLabel(isInProgress: isGoogleSignInInProgress)"))
         XCTAssertTrue(onboarding.contains("AuthService.shared.handleGoogleSignIn()"))
+        XCTAssertTrue(onboarding.contains("guard shouldShowGoogleSignIn else"))
         XCTAssertTrue(onboarding.contains(".accessibilityElement(children: .ignore)"))
     }
 
@@ -182,6 +185,7 @@ final class AuthRedirectConfigTests: XCTestCase {
 
         XCTAssertTrue(authService.contains("failSignIn(\"Account setup is unavailable right now. Please try again later.\")"))
         XCTAssertTrue(authService.contains("Google sign in is not available in this build. Please use Sign in with Apple for now."))
+        XCTAssertTrue(onboarding.contains("Google sign in is not available in this build. Please use Sign in with Apple for now."))
         XCTAssertFalse(authService.contains("Add the Google iOS client ID"))
         XCTAssertFalse(authService.contains("URL scheme, then try again"))
         XCTAssertFalse(authService.contains("identity token. Check the Google iOS client"))

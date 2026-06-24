@@ -7,7 +7,8 @@ device.
 Reviewer flow:
 
 1. Launch Childlock on an iPhone or iPad running iOS 17 or later.
-2. Sign in with Apple or Google as the parent/guardian.
+2. Sign in with Apple as the parent/guardian. If the submitted build has Google
+   OAuth configured, Google sign-in is also available.
 3. Complete onboarding as the parent/guardian.
 4. Grant Screen Time access when prompted.
 5. Select one or more apps/categories to monitor.
@@ -25,9 +26,10 @@ Reviewer flow:
 Notes:
 
 - Screen Time enforcement is available without purchase.
-- Sign-in uses Apple's native Sign in with Apple flow or native Google Sign-In
-  backed by Supabase Auth. There is no separate username/password account for
-  App Review to use.
+- Sign-in uses Apple's native Sign in with Apple flow and, when configured for
+  the submitted build, native Google Sign-In backed by Supabase Auth. Google is
+  hidden in builds without valid OAuth IDs rather than exposing a non-working
+  button. There is no separate username/password account for App Review to use.
 - Childlock locks apps on the device where setup is completed. For a child iPad,
   install and configure Childlock on the iPad. Same-phone parent/child use is
   supported because the parent dashboard remains PIN-protected. Childlock is
