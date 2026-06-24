@@ -195,7 +195,11 @@ public final class AppState {
     }
 
     @discardableResult
-    public func completeOnboarding(with profile: ChildProfile, pinConfigured: Bool) -> Bool {
+    public func completeOnboarding(
+        with profile: ChildProfile,
+        pinConfigured: Bool,
+        localOwnerUserID: String? = nil
+    ) -> Bool {
         guard pinConfigured else {
             return false
         }
@@ -215,9 +219,36 @@ public final class AppState {
 
         var updatedSettings = settings
         updatedSettings.hasCompletedOnboarding = true
+        if let localOwnerUserID {
+            updatedSettings.localOwnerUserID = localOwnerUserID
+        }
         settings = updatedSettings
 
         return true
+    }
+
+    public var localSetupOwnerUserID: String? {
+        settings.localOwnerUserID
+    }
+
+    public func bindLocalSetup(to userID: String) {
+        guard hasCompletedOnboarding else { return }
+        guard settings.localOwnerUserID != userID else { return }
+
+        var updatedSettings = settings
+        updatedSettings.localOwnerUserID = userID
+        settings = updatedSettings
+    }
+
+    public func localSetupBelongs(to userID: String) -> Bool {
+        guard hasCompletedOnboarding else { return true }
+        guard let localOwnerUserID = settings.localOwnerUserID else {
+            // Legacy local setups created before account ownership was persisted
+            // bind to the first signed-in account that opens them.
+            return true
+        }
+
+        return localOwnerUserID == userID
     }
 
     public func setActiveProfile(id: UUID) {

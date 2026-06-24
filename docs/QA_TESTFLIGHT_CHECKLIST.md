@@ -257,9 +257,11 @@ as sufficient for launch.
 
 Use Settings -> `Reset Childlock on this device` when you need a real fresh
 setup pass on the same TestFlight install. This is different from Sign Out:
-Sign Out pauses local enforcement and preserves local parent settings, while
-Reset stops local enforcement, clears child profiles, app selections, reports,
-and the parent PIN on that device.
+Sign Out pauses local enforcement and preserves local parent settings for the
+same signed-in parent account. Signing in with a different account starts fresh
+setup so child profiles do not sync to the wrong parent. Reset stops local
+enforcement, clears child profiles, app selections, reports, and the parent PIN
+on that device.
 
 ## Same Phone Scenario
 

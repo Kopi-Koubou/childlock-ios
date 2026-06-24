@@ -336,7 +336,7 @@ public struct ParentDashboardView: View {
                 }
                 Button("Cancel", role: .cancel) {}
             } message: {
-                Text("Local enforcement pauses, and parent settings stay on this device. Sign in again to restart or manage Childlock.")
+                Text("Local enforcement pauses, and parent settings stay on this device. Sign in again with the same account to restart or manage Childlock.")
             }
         }
     }
@@ -1250,7 +1250,7 @@ public struct ParentDashboardView: View {
                                     Divider().background(ChildlockColor.surfaceMuted)
 
                                     VStack(alignment: .leading, spacing: ChildlockSpacing.sm) {
-                                        Text("Local enforcement pauses. Parent settings stay on this device, and you can sign in again to restart Childlock.")
+                                        Text("Local enforcement pauses. Parent settings stay on this device for this account. Signing in with a different account starts fresh setup.")
                                             .font(ChildlockTypography.caption)
                                             .foregroundStyle(ChildlockColor.textSecondary)
                                             .fixedSize(horizontal: false, vertical: true)

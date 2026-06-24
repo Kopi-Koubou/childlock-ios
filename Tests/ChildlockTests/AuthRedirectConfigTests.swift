@@ -108,6 +108,7 @@ final class AuthRedirectConfigTests: XCTestCase {
         XCTAssertTrue(dashboard.contains("Sign Out"))
         XCTAssertTrue(dashboard.contains("Confirm Sign Out"))
         XCTAssertTrue(dashboard.contains("Local enforcement pauses. Parent settings stay on this device"))
+        XCTAssertTrue(dashboard.contains("Signing in with a different account starts fresh setup."))
         XCTAssertTrue(dashboard.contains("profilesToStop.forEach { ScreenTimeManager.shared.stopMonitoring(profile: $0) }"))
         XCTAssertTrue(dashboard.contains("NotificationService.clearShieldFlowAlerts()"))
         XCTAssertTrue(dashboard.contains("AuthService.shared.signOut()"))
@@ -159,7 +160,7 @@ final class AuthRedirectConfigTests: XCTestCase {
         XCTAssertTrue(rootView.contains("onboardingViewModel.goNext()"))
         XCTAssertTrue(
             normalizedRootView.contains(
-                "case .signedIn(let userID): appState.isAuthenticated = true resumeOnboardingAfterExistingSignInIfNeeded() syncServicesForAuthenticatedUserIfNeeded(userID)"
+                "case .signedIn(let userID): reconcileLocalSetupOwnerIfNeeded(userID) appState.isAuthenticated = true resumeOnboardingAfterExistingSignInIfNeeded() syncServicesForAuthenticatedUserIfNeeded(userID)"
             )
         )
     }
@@ -177,6 +178,23 @@ final class AuthRedirectConfigTests: XCTestCase {
         XCTAssertTrue(rootView.contains("try? await DataSyncService.shared.sync(appState: appState)"))
         XCTAssertTrue(rootView.contains("AnalyticsService.reset()"))
         XCTAssertTrue(rootView.contains("await SubscriptionService.shared.logOut()"))
+    }
+
+    func testAccountSwitchDoesNotSyncOldLocalFamilyStateToNewParent() throws {
+        let rootView = try readRepoFile("Sources/Childlock/App/ChildlockRootView.swift")
+        let appState = try readRepoFile("Sources/Childlock/ViewModels/AppState.swift")
+
+        XCTAssertTrue(appState.contains("public var localSetupOwnerUserID: String?"))
+        XCTAssertTrue(appState.contains("public func bindLocalSetup(to userID: String)"))
+        XCTAssertTrue(appState.contains("public func localSetupBelongs(to userID: String) -> Bool"))
+        XCTAssertTrue(rootView.contains("appState.localSetupBelongs(to: userID)"))
+        XCTAssertTrue(rootView.contains("reconcileLocalSetupOwnerIfNeeded(userID)"))
+        XCTAssertTrue(rootView.contains("appState.bindLocalSetup(to: userID)"))
+        XCTAssertTrue(rootView.contains("resetLocalSetupForAccountSwitch()"))
+        XCTAssertTrue(rootView.contains("profilesToStop.forEach { ScreenTimeManager.shared.stopMonitoring(profile: $0) }"))
+        XCTAssertTrue(rootView.contains("SharedDefaults.clearLocalSetupState()"))
+        XCTAssertTrue(rootView.contains("PINService.shared.clearPIN()"))
+        XCTAssertTrue(rootView.contains("appState.resetForFreshSetup()"))
     }
 
     func testProductionSignInDoesNotExposeNoLoginFallbacks() throws {

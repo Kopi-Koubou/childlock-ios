@@ -25,7 +25,8 @@ public struct ChildlockRootView: View {
     }
 
     private var canShowDashboard: Bool {
-        appState.hasCompletedOnboarding && authService.isSignedIn
+        guard let userID = authService.userID else { return false }
+        return appState.hasCompletedOnboarding && appState.localSetupBelongs(to: userID)
     }
 
     private var rootContent: some View {
@@ -143,7 +144,11 @@ public struct ChildlockRootView: View {
             return
         }
 
-        appState.completeOnboarding(with: output.profile, pinConfigured: true)
+        appState.completeOnboarding(
+            with: output.profile,
+            pinConfigured: true,
+            localOwnerUserID: authUserID
+        )
         onboardingViewModel.clearPersistedSelection()
 
         // The monitor extension announces brain breaks via local notification —
@@ -176,6 +181,7 @@ public struct ChildlockRootView: View {
     private func syncAuthState() {
         switch authService.state {
         case .signedIn(let userID):
+            reconcileLocalSetupOwnerIfNeeded(userID)
             appState.isAuthenticated = true
             resumeOnboardingAfterExistingSignInIfNeeded()
             syncServicesForAuthenticatedUserIfNeeded(userID)
@@ -208,6 +214,29 @@ public struct ChildlockRootView: View {
         Task {
             await SubscriptionService.shared.logOut()
         }
+    }
+
+    private func reconcileLocalSetupOwnerIfNeeded(_ userID: String) {
+        guard appState.hasCompletedOnboarding else { return }
+
+        if appState.localSetupOwnerUserID == nil {
+            appState.bindLocalSetup(to: userID)
+            return
+        }
+
+        guard appState.localSetupBelongs(to: userID) else {
+            resetLocalSetupForAccountSwitch()
+            return
+        }
+    }
+
+    private func resetLocalSetupForAccountSwitch() {
+        let profilesToStop = appState.profiles
+        profilesToStop.forEach { ScreenTimeManager.shared.stopMonitoring(profile: $0) }
+        NotificationService.clearShieldFlowAlerts()
+        SharedDefaults.clearLocalSetupState()
+        PINService.shared.clearPIN()
+        appState.resetForFreshSetup()
     }
 
     private func resumeOnboardingAfterExistingSignInIfNeeded() {
@@ -400,7 +429,11 @@ public struct ChildlockRootView: View {
 
         _ = PINService.shared.setPIN("1234")
         authService.debugSignIn()
-        appState.completeOnboarding(with: profile, pinConfigured: true)
+        appState.completeOnboarding(
+            with: profile,
+            pinConfigured: true,
+            localOwnerUserID: authService.userID
+        )
         appState.isAuthenticated = true
         appState.currentTab = tab
 

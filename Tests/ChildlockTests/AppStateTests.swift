@@ -13,6 +13,38 @@ final class AppStateTests: XCTestCase {
         XCTAssertFalse(appState.isPINLocked)
     }
 
+    func testCompleteOnboardingCanBindLocalSetupToAuthenticatedUser() {
+        let appState = AppState(store: InMemoryAppStateStore())
+        let profile = ChildProfile(name: "Mia", age: 7, avatarName: "fox", intervalMinutes: 10)
+
+        let completed = appState.completeOnboarding(
+            with: profile,
+            pinConfigured: true,
+            localOwnerUserID: "parent-a"
+        )
+
+        XCTAssertTrue(completed)
+        XCTAssertEqual(appState.localSetupOwnerUserID, "parent-a")
+        XCTAssertTrue(appState.localSetupBelongs(to: "parent-a"))
+        XCTAssertFalse(appState.localSetupBelongs(to: "parent-b"))
+    }
+
+    func testLegacyLocalSetupCanBindToFirstSignedInUser() {
+        let appState = AppState(store: InMemoryAppStateStore())
+        let profile = ChildProfile(name: "Mia", age: 7, avatarName: "fox", intervalMinutes: 10)
+
+        appState.completeOnboarding(with: profile, pinConfigured: true)
+
+        XCTAssertNil(appState.localSetupOwnerUserID)
+        XCTAssertTrue(appState.localSetupBelongs(to: "parent-a"))
+
+        appState.bindLocalSetup(to: "parent-a")
+
+        XCTAssertEqual(appState.localSetupOwnerUserID, "parent-a")
+        XCTAssertTrue(appState.localSetupBelongs(to: "parent-a"))
+        XCTAssertFalse(appState.localSetupBelongs(to: "parent-b"))
+    }
+
     func testCompleteOnboardingRequiresSavedPIN() {
         let appState = AppState(store: InMemoryAppStateStore())
         let profile = ChildProfile(name: "Mia", age: 7, avatarName: "fox", intervalMinutes: 10)
@@ -242,7 +274,7 @@ final class AppStateTests: XCTestCase {
         let store = InMemoryAppStateStore()
         let appState = AppState(store: store)
         let profile = ChildProfile(name: "Mia", age: 7, avatarName: "fox", intervalMinutes: 10)
-        appState.completeOnboarding(with: profile, pinConfigured: true)
+        appState.completeOnboarding(with: profile, pinConfigured: true, localOwnerUserID: "parent-a")
         appState.currentTab = .settings
         appState.isAuthenticated = true
         appState.sessions = [
@@ -266,6 +298,7 @@ final class AppStateTests: XCTestCase {
         XCTAssertTrue(appState.sessions.isEmpty)
         XCTAssertNil(appState.activeProfileID)
         XCTAssertEqual(appState.settings, .default)
+        XCTAssertNil(appState.localSetupOwnerUserID)
         XCTAssertNil(store.snapshot)
     }
 }
