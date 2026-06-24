@@ -94,6 +94,12 @@ status_for_server_key() {
     fi
 }
 
+server_secret_next_steps_needed() {
+    [[ "$(status_for_server_key "SUPABASE_ACCESS_TOKEN")" == "missing-or-placeholder" ]] \
+        || [[ "$(status_for_server_key "SUPABASE_SERVICE_ROLE_KEY")" == "missing-or-placeholder" ]] \
+        || [[ "$(status_for_server_key "REVENUECAT_WEBHOOK_SECRET")" == "missing-or-placeholder" ]]
+}
+
 expected_google_reversed_client_id() {
     local ios_client_id="$1"
     local suffix=".apps.googleusercontent.com"
@@ -346,6 +352,12 @@ echo "- SUPABASE_PROJECT_REF: $(status_for_server_key "SUPABASE_PROJECT_REF")"
 echo "- SUPABASE_ACCESS_TOKEN: $(status_for_server_key "SUPABASE_ACCESS_TOKEN")"
 echo "- SUPABASE_SERVICE_ROLE_KEY: $(status_for_server_key "SUPABASE_SERVICE_ROLE_KEY")"
 echo "- REVENUECAT_WEBHOOK_SECRET: $(status_for_server_key "REVENUECAT_WEBHOOK_SECRET")"
+if server_secret_next_steps_needed; then
+    echo "  Fill Config/production.env from Config/production.env.example."
+    echo "  Keep these server-only; do not paste them into app xcconfig files."
+    echo "  Deploy after filling: source Config/production.env && supabase link --project-ref \"\$SUPABASE_PROJECT_REF\" && supabase db push && supabase functions deploy revenuecat-webhook && supabase secrets set REVENUECAT_WEBHOOK_SECRET=\"\$REVENUECAT_WEBHOOK_SECRET\""
+    echo "  RevenueCat webhook URL: https://jkncpveupvozsmbbkvgq.supabase.co/functions/v1/revenuecat-webhook"
+fi
 echo
 echo "QA evidence"
 echo "- Latest simulator summary: $(describe_evidence_path "$latest_summary" "$(summary_git_commit "$latest_summary")")"
