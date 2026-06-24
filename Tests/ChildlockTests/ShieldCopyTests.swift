@@ -308,6 +308,9 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(rootView.contains("--childlock-qa-seed-pending-math-challenge"))
         XCTAssertTrue(rootView.contains("--childlock-qa-seed-pending-memory-challenge"))
         XCTAssertTrue(rootView.contains("--childlock-qa-seed-handback"))
+        XCTAssertTrue(rootView.contains("--childlock-qa-seed-locked-more-time-request"))
+        XCTAssertTrue(rootView.contains("locked: arguments.contains(DebugLaunchArgument.lockedDashboard)\n                    || arguments.contains(DebugLaunchArgument.lockedMoreTimeRequest)"))
+        XCTAssertTrue(rootView.contains("moreTimeRequest: arguments.contains(DebugLaunchArgument.moreTimeRequest)\n                    || arguments.contains(DebugLaunchArgument.lockedMoreTimeRequest)"))
         XCTAssertTrue(rootView.contains("monitoringStatus: arguments.contains(DebugLaunchArgument.settingsTab) ? \"not_started\" : \"running\""))
         XCTAssertTrue(rootView.contains("return .math"))
         XCTAssertTrue(rootView.contains("return .memory"))
@@ -323,8 +326,10 @@ final class ShieldCopyTests: XCTestCase {
 
         XCTAssertTrue(checklist.contains("`--childlock-qa-seed-pending-memory-challenge`"))
         XCTAssertTrue(checklist.contains("`--childlock-qa-seed-handback`"))
+        XCTAssertTrue(checklist.contains("`--childlock-qa-seed-locked-more-time-request`"))
         XCTAssertTrue(checklist.contains("memory pairs are deterministic in this Debug seed"))
         XCTAssertTrue(checklist.contains("Hand-back seed tells the child to return to the unlocked app"))
+        XCTAssertTrue(checklist.contains("Locked more-time seed keeps the dashboard hidden"))
     }
 
     func testHardwareChecklistCoversMultiChildShieldProfileRouting() throws {

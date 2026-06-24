@@ -298,6 +298,7 @@ public struct ChildlockRootView: View {
         static let pendingMemoryChallenge = "--childlock-qa-seed-pending-memory-challenge"
         static let handBack = "--childlock-qa-seed-handback"
         static let moreTimeRequest = "--childlock-qa-seed-more-time-request"
+        static let lockedMoreTimeRequest = "--childlock-qa-seed-locked-more-time-request"
         static let childrenTab = "--childlock-qa-seed-children-tab"
         static let appsTab = "--childlock-qa-seed-apps-tab"
         static let settingsTab = "--childlock-qa-seed-settings-tab"
@@ -333,6 +334,7 @@ public struct ChildlockRootView: View {
             || arguments.contains(DebugLaunchArgument.pendingMemoryChallenge)
             || arguments.contains(DebugLaunchArgument.handBack)
             || arguments.contains(DebugLaunchArgument.moreTimeRequest)
+            || arguments.contains(DebugLaunchArgument.lockedMoreTimeRequest)
             || arguments.contains(DebugLaunchArgument.childrenTab)
             || arguments.contains(DebugLaunchArgument.appsTab)
             || arguments.contains(DebugLaunchArgument.settingsTab)
@@ -361,6 +363,7 @@ public struct ChildlockRootView: View {
             || arguments.contains(DebugLaunchArgument.pendingMemoryChallenge)
             || arguments.contains(DebugLaunchArgument.handBack)
             || arguments.contains(DebugLaunchArgument.moreTimeRequest)
+            || arguments.contains(DebugLaunchArgument.lockedMoreTimeRequest)
             || arguments.contains(DebugLaunchArgument.childrenTab)
             || arguments.contains(DebugLaunchArgument.appsTab)
             || arguments.contains(DebugLaunchArgument.settingsTab)
@@ -374,11 +377,13 @@ public struct ChildlockRootView: View {
                 : .home
 
             seedDebugDashboard(
-                locked: arguments.contains(DebugLaunchArgument.lockedDashboard),
+                locked: arguments.contains(DebugLaunchArgument.lockedDashboard)
+                    || arguments.contains(DebugLaunchArgument.lockedMoreTimeRequest),
                 pendingChallenge: arguments.contains(DebugLaunchArgument.pendingChallenge)
                     || arguments.contains(DebugLaunchArgument.pendingMathChallenge)
                     || arguments.contains(DebugLaunchArgument.pendingMemoryChallenge),
-                moreTimeRequest: arguments.contains(DebugLaunchArgument.moreTimeRequest),
+                moreTimeRequest: arguments.contains(DebugLaunchArgument.moreTimeRequest)
+                    || arguments.contains(DebugLaunchArgument.lockedMoreTimeRequest),
                 tab: seededTab,
                 monitoringStatus: arguments.contains(DebugLaunchArgument.settingsTab) ? "not_started" : "running"
             )

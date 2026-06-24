@@ -33,6 +33,7 @@ SEEDS=(
     "--childlock-qa-seed-pending-memory-challenge"
     "--childlock-qa-seed-handback"
     "--childlock-qa-seed-more-time-request"
+    "--childlock-qa-seed-locked-more-time-request"
     "--childlock-qa-seed-children-tab"
     "--childlock-qa-seed-add-child-sheet"
     "--childlock-qa-seed-apps-tab"

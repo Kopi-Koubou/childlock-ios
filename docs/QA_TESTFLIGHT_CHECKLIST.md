@@ -36,6 +36,7 @@ contact sheet for a quick all-states scan.
 | `--childlock-qa-seed-pending-memory-challenge` | Child memory brain-break challenge with deterministic card pairs | `1234` after hand-back |
 | `--childlock-qa-seed-handback` | Completed child hand-back screen after a solved challenge | `1234` |
 | `--childlock-qa-seed-more-time-request` | Parent dashboard with a more-time request banner | `1234` if locked later |
+| `--childlock-qa-seed-locked-more-time-request` | Parent PIN gate after the child asks for more time on a shared device | `1234` |
 | `--childlock-qa-seed-children-tab` | Parent Children tab with profile card and reports controls | `1234` if locked later |
 | `--childlock-qa-seed-add-child-sheet` | Parent add-child sheet with a save-ready draft profile | `1234` if locked later |
 | `--childlock-qa-seed-apps-tab` | Parent Apps tab with Screen Time selection and planning labels | `1234` if locked later |
@@ -83,6 +84,8 @@ Simulator pass criteria:
 - Parent PIN unlock remounts the dashboard.
 - More-time seed shows the parent request banner with `Allow 5 min` and
   `Keep blocked`.
+- Locked more-time seed keeps the dashboard hidden, shows the request in the
+  PIN-gate subtitle, and requires `1234` before the parent can respond.
 
 Simulator evidence handoff:
 
