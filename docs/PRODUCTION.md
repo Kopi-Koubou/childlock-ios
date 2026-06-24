@@ -329,14 +329,17 @@ The full TestFlight checklist lives in `docs/QA_TESTFLIGHT_CHECKLIST.md`.
 - If notifications are denied or missed, Home -> Childlock still reaches the
   pending challenge.
 - Challenge completion removes shields.
-- Child manually reopens the now-unshielded app/content. iOS does not let
+- The hand-back screen says `Reopen your app`, and the child manually reopens
+  the now-unshielded app/content. iOS does not let
   Childlock automatically return to another app or restore media state.
 - Monitoring re-arms for another full interval.
 - Parent PIN is required to leave the child hand-back screen for dashboard.
 - Ask Parent creates a parent-visible request, does not open a child challenge
   before the parent responds, can grant one more block, and can explicitly keep
   the child blocked.
-- Same shared phone flow keeps dashboard/settings PIN-protected after child use.
+- Same shared phone flow keeps dashboard/settings PIN-protected after child use:
+  the parent taps `Lock Parent Dashboard` before handoff or leaves Childlock so
+  the dashboard auto-locks in the background.
 - Child iPad flow is tested by installing and configuring Childlock on the iPad.
 - If subscriptions are attached to the submitted App Store version, RevenueCat
   loads monthly and annual packages, sandbox purchase activates `Childlock Pro`,

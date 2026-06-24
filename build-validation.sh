@@ -326,7 +326,7 @@ echo "5. Start real child-like content in the selected app/site and record the s
 echo "6. Verify: selected content shields only after the threshold; record the shield timestamp."
 echo "7. Verify: Start Brain Break closes the shielded app and Childlock opens the pending challenge from Home/notification."
 echo "8. Verify: challenge completion clears shields and re-arms monitoring."
-echo "9. Verify: hand-back keeps the parent dashboard behind the PIN."
+echo "9. Verify: hand-back shows Reopen your app guidance and keeps the parent dashboard behind the PIN."
 echo ""
 echo "Use docs/QA_TESTFLIGHT_CHECKLIST.md for the full same-phone and child-iPad matrix."
 echo ""

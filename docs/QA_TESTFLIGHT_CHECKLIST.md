@@ -153,7 +153,7 @@ gallery and contact-sheet paths.
 | Childlock opened pending challenge from alert or Home | Pass / Fail |
 | Challenge completion cleared shield | Pass / Fail |
 | Monitoring re-armed for a new interval | Pass / Fail |
-| Child manually reopened the now-unshielded content app | Pass / Fail |
+| Child saw `Reopen your app` guidance and manually reopened the now-unshielded content app/site | Pass / Fail |
 | Parent dashboard stayed PIN-gated after hand-back | Pass / Fail |
 | RevenueCat paywall/offering behaved as expected | Pass / Fail / Not tested |
 | RevenueCat offering loaded monthly and annual packages | Pass / Fail / Not tested |
@@ -221,9 +221,9 @@ as sufficient for launch.
 16. Opening Childlock presents the pending challenge.
 17. Completing the challenge clears shields.
 18. Monitoring re-arms for another full interval.
-19. Child sees hand-back screen, swipes up or presses Home to reopen the
-    now-unshielded content app, and cannot enter the dashboard without the
-    parent PIN.
+19. Child sees the `Reopen your app` hand-back guidance, swipes up or presses
+    Home to reopen the now-unshielded content app/site, and cannot enter the
+    dashboard without the parent PIN.
 20. `Ask Parent` creates a parent-visible more-time request and does not open
     a pending child challenge before the parent responds.
 21. `Give one more block` grants another block and then re-arms enforcement.
@@ -266,8 +266,8 @@ Use this when the parent and child share the same iPhone.
 5. Parent sets the PIN, taps `Lock Parent Dashboard` or leaves Childlock to
    let it auto-lock, and hands the phone to the child.
 6. Child continuously uses selected content until the threshold is reached.
-7. Child solves the challenge, swipes up or presses Home, and manually reopens
-   the now-unshielded app.
+7. Child solves the challenge, sees `Reopen your app`, swipes up or presses
+   Home, and manually reopens the now-unshielded app/site.
 8. Child taps `I'm a parent` or tries to enter the dashboard.
 9. Expected: dashboard remains gated by the parent PIN.
 
