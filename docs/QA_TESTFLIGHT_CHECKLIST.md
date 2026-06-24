@@ -82,72 +82,25 @@ Simulator pass criteria:
 - More-time seed shows the parent request banner with `Give one more block` and
   `Keep blocked`.
 
-Latest simulator smoke pass, 2026-06-24:
+Simulator evidence handoff:
 
-- Fresh XcodeBuildMCP Debug launch with `--childlock-qa-reset` succeeded on
-  iPhone 17.
-- Simulator seed harness captured 28 screenshots across iPhone 17 and iPad
-  (A16), including onboarding, device-model, parent dashboard, locked
-  dashboard, child challenges, setup-disabled state, Children, Apps, Settings,
-  add-child, more-time, and paywall surfaces.
-- Latest summary:
-  `.build/qa-simulator-seeds/20260624-140331/summary.md`.
-- iPhone 17 simulator: `--childlock-qa-seed-onboarding-devices` rendered the
-  local-first device setup copy without overlap.
-- iPhone 17 simulator: `--childlock-qa-seed-onboarding-setup` rendered the
-  Screen Time picker explanation plus pinned disabled Continue reason without
-  overlap.
-- iPhone 17 simulator: `--childlock-qa-seed-dashboard` rendered the parent
-  dashboard home state with child summary, same-phone handoff lock card, recent
-  activity, tabs, and settings.
-- iPhone 17 simulator: `--childlock-qa-seed-children-tab` rendered the child
-  profile/report view, active child badge, `Make active` sibling control, and
-  add-child entry without overlap.
-- iPhone 17 simulator: `--childlock-qa-seed-add-child-sheet` rendered the
-  save-ready add-child sheet for `Leo` without overlap or clipping.
-- iPhone 17 simulator: `--childlock-qa-seed-apps-tab` rendered Screen Time
-  selection, planning labels, fallback app choices, and the bottom tab bar
-  without overlap.
-- iPhone 17 simulator: `--childlock-qa-seed-settings-tab` rendered account,
-  reset, challenges, enforcement, same-phone/child-iPad handoff guidance,
-  notifications, and support/legal rows without overlap.
-- iPhone 17 simulator: `--childlock-qa-seed-locked-dashboard` hid parent
-  content behind the PIN gate.
-- iPhone 17 simulator: `--childlock-qa-seed-pending-math-challenge` rendered
-  only the child challenge surface.
-- iPhone 17 simulator: `--childlock-qa-seed-pending-memory-challenge` rendered
-  the memory challenge grid without clipping, completed deterministic pairs,
-  recorded a new Memory activity, and returned to the PIN-gated parent hand-back
-  flow.
-- iPhone 17 simulator: interactive `--childlock-qa-seed-pending-math-challenge`
-  completed a correct answer, showed the child hand-back screen, kept the parent
-  dashboard behind the PIN, then unlocked with PIN `1234` and recorded the new
-  Math activity in Recent Activity.
-- iPhone 17 simulator: `--childlock-qa-seed-more-time-request` rendered the
-  parent-visible request banner without opening a pending child challenge;
-  `Give one more block` cleared the request and kept the parent dashboard on
-  screen.
-- iPhone 17 simulator: Settings showed only the enforcement action that matched
-  current status, so failed or permission-needed states offer `Start Lock
-  Enforcement` without also showing `Stop Lock Enforcement`.
-- iPhone 17 simulator: Premium fallback showed unavailable annual/monthly
-  products while preserving the message that Screen Time enforcement stays
-  included, and no unavailable plan rendered as selected. `Restore purchases`
-  opened Apple's purchase auth sheet.
-- iPhone 17 simulator: `--childlock-qa-seed-paywall` rendered the reports-only
-  upgrade positioning, unavailable-product fallback, restore link, legal links,
-  and enforcement-included copy without overlap.
-- iPad (A16) simulator: `--childlock-qa-seed-children-tab`,
-  `--childlock-qa-seed-add-child-sheet`, `--childlock-qa-seed-apps-tab`,
-  `--childlock-qa-seed-settings-tab`, and `--childlock-qa-seed-paywall` stayed
-  within the readable content width and showed the local-device Childlock model
-  clearly.
-- iPhone 17 simulator: Settings -> `Reset Childlock on this device` -> `Confirm
-  Reset` returned to fresh onboarding with Sign in with Apple; Google remains
-  conditional on OAuth build settings.
-- iPad (A16) simulator: `--childlock-qa-seed-onboarding-devices`,
-  `--childlock-qa-seed-onboarding-setup`, and
-  `--childlock-qa-seed-dashboard` rendered with readable constrained content.
+- Treat `.build/qa-simulator-seeds/<run-id>/summary.md` and
+  `.build/qa-simulator-seeds/<run-id>/gallery.html` as generated evidence, not
+  checked-in release metadata. Do not edit this checklist only to chase a new
+  run ID.
+- `scripts/new-hardware-qa-record.sh <scenario> <build-number>` pre-fills the
+  newest generated simulator summary and gallery paths into the physical QA
+  record, so the record used during TestFlight points at the correct visual
+  background evidence.
+- The current launch-readiness simulator sweep was last refreshed on
+  2026-06-24 and captured 28 screenshots across iPhone 17 and iPad (A16),
+  covering onboarding, device-model copy, setup-disabled state, parent
+  dashboard, locked dashboard, child math/memory challenges, more-time request,
+  Children, Apps, Settings, add-child, and paywall fallback surfaces.
+- When regenerating evidence, explicitly spot-check the setup seed: it must show
+  `Tell us about your child`, the Screen Time picker explanation, and the pinned
+  disabled Continue reason. A setup seed that falls back to the welcome screen
+  is not a valid pass.
 
 This simulator pass does not prove the real Screen Time shield loop. Keep the
 TestFlight hardware gates below as the launch blocker until they pass on
@@ -168,7 +121,8 @@ scripts/new-hardware-qa-record.sh child-ipad <build-number>
 
 The generated record is based on `docs/HARDWARE_QA_RECORD_TEMPLATE.md`.
 It pre-fills the build number, date, scenario, git commit, tester name when
-available, and the latest simulator QA summary path.
+available, the latest simulator QA summary path, and the latest simulator QA
+gallery path.
 
 | Field | Value |
 | --- | --- |
