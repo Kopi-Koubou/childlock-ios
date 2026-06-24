@@ -260,6 +260,7 @@ public struct ChildlockRootView: View {
     private enum DebugLaunchArgument {
         static let reset = "--childlock-qa-reset"
         static let onboardingDevices = "--childlock-qa-seed-onboarding-devices"
+        static let onboardingSetup = "--childlock-qa-seed-onboarding-setup"
         static let dashboard = "--childlock-qa-seed-dashboard"
         static let lockedDashboard = "--childlock-qa-seed-locked-dashboard"
         static let pendingChallenge = "--childlock-qa-seed-pending-challenge"
@@ -293,6 +294,7 @@ public struct ChildlockRootView: View {
         let arguments = Set(ProcessInfo.processInfo.arguments)
         guard arguments.contains(DebugLaunchArgument.reset)
             || arguments.contains(DebugLaunchArgument.onboardingDevices)
+            || arguments.contains(DebugLaunchArgument.onboardingSetup)
             || arguments.contains(DebugLaunchArgument.dashboard)
             || arguments.contains(DebugLaunchArgument.lockedDashboard)
             || arguments.contains(DebugLaunchArgument.pendingChallenge)
@@ -312,6 +314,11 @@ public struct ChildlockRootView: View {
 
         if arguments.contains(DebugLaunchArgument.onboardingDevices) {
             seedDebugOnboardingDevicesStep()
+            return
+        }
+
+        if arguments.contains(DebugLaunchArgument.onboardingSetup) {
+            seedDebugOnboardingSetupStep()
             return
         }
 
@@ -356,6 +363,16 @@ public struct ChildlockRootView: View {
         onboardingViewModel.markSignupComplete()
         onboardingViewModel.familyAuthorizationState = .authorized
         onboardingViewModel.step = .devices
+    }
+
+    private func seedDebugOnboardingSetupStep() {
+        authService.debugSignIn()
+        appState.isAuthenticated = true
+        onboardingViewModel.markSignupComplete()
+        onboardingViewModel.familyAuthorizationState = .authorized
+        onboardingViewModel.childName = "Mia"
+        onboardingViewModel.childAge = 7
+        onboardingViewModel.step = .setup
     }
 
     private func restoreDebugOnboardingDevicesSeedIfNeeded() {

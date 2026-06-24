@@ -520,9 +520,10 @@ public struct OnboardingFlowView: View {
                             }
                         }
                     } else {
-                        Text("Nothing selected yet.")
+                        Text("No Screen Time items selected yet. If Continue stays disabled, reopen the picker, select at least one app, category, or website, then tap Done.")
                             .font(ChildlockTypography.caption)
                             .foregroundStyle(ChildlockColor.textSecondary)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                     #endif
                 } else {
@@ -588,6 +589,7 @@ public struct OnboardingFlowView: View {
             .buttonStyle(ChildlockPrimaryButtonStyle())
             .disabled(!viewModel.canContinue)
             .opacity(viewModel.canContinue ? 1 : 0.45)
+            .accessibilityHint(viewModel.setupBlockingReason ?? "Continue to parent PIN setup.")
         }
     }
 

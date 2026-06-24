@@ -20,6 +20,7 @@ fi
 SEEDS=(
     "--childlock-qa-reset"
     "--childlock-qa-seed-onboarding-devices"
+    "--childlock-qa-seed-onboarding-setup"
     "--childlock-qa-seed-dashboard"
     "--childlock-qa-seed-locked-dashboard"
     "--childlock-qa-seed-pending-challenge"

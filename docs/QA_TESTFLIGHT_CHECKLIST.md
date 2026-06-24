@@ -29,6 +29,7 @@ and iPad (A16), and writes screenshots plus a summary under
 | --- | --- | --- |
 | `--childlock-qa-reset` | Fresh onboarding with Apple and Google sign-in | none |
 | `--childlock-qa-seed-onboarding-devices` | Signed-in onboarding on the local-first device setup step | none |
+| `--childlock-qa-seed-onboarding-setup` | Signed-in setup with Screen Time authorized and no picker selection returned yet | none |
 | `--childlock-qa-seed-dashboard` | Unlocked parent dashboard for child `Mia` | `1234` if locked later |
 | `--childlock-qa-seed-locked-dashboard` | Parent dashboard lock screen | `1234` |
 | `--childlock-qa-seed-pending-challenge` | Child brain-break challenge | `1234` after hand-back |
@@ -46,6 +47,8 @@ Simulator pass criteria:
 - Fresh onboarding shows `Sign in with Apple` and `Continue with Google`.
 - Device setup seed explains same-phone use, child iPad setup, and that a
   parent-only iPhone install does not remotely lock a separate iPad at launch.
+- Setup seed explains that `Continue` stays disabled until Apple's picker
+  returns at least one real app, category, or website selection.
 - Seeded dashboard shows a child, recent activity, app tabs, settings entry,
   and a same-phone handoff card that can lock the parent dashboard.
 - Children tab seed shows the child profile, reports controls, and add-child
@@ -78,14 +81,17 @@ Latest simulator smoke pass, 2026-06-24:
 
 - Fresh XcodeBuildMCP Debug launch with `--childlock-qa-reset` succeeded on
   iPhone 17.
-- Simulator seed harness captured 26 screenshots across iPhone 17 and iPad
+- Simulator seed harness captured 28 screenshots across iPhone 17 and iPad
   (A16), including onboarding, device-model, parent dashboard, locked
-  dashboard, child challenges, Children, Apps, Settings, add-child, more-time,
-  and paywall surfaces.
+  dashboard, child challenges, setup-disabled state, Children, Apps, Settings,
+  add-child, more-time, and paywall surfaces.
 - Latest summary:
-  `.build/qa-simulator-seeds/20260624-123921/summary.md`.
+  `.build/qa-simulator-seeds/20260624-125808/summary.md`.
 - iPhone 17 simulator: `--childlock-qa-seed-onboarding-devices` rendered the
   local-first device setup copy without overlap.
+- iPhone 17 simulator: `--childlock-qa-seed-onboarding-setup` rendered the
+  Screen Time picker explanation for the disabled Continue state without
+  overlap.
 - iPhone 17 simulator: `--childlock-qa-seed-dashboard` rendered the parent
   dashboard home state with child summary, same-phone handoff lock card, recent
   activity, tabs, and settings.
@@ -133,7 +139,8 @@ Latest simulator smoke pass, 2026-06-24:
   clearly.
 - iPhone 17 simulator: Settings -> `Reset Childlock on this device` -> `Confirm
   Reset` returned to fresh onboarding with Apple and Google sign-in.
-- iPad (A16) simulator: `--childlock-qa-seed-onboarding-devices` and
+- iPad (A16) simulator: `--childlock-qa-seed-onboarding-devices`,
+  `--childlock-qa-seed-onboarding-setup`, and
   `--childlock-qa-seed-dashboard` rendered with readable constrained content.
 
 This simulator pass does not prove the real Screen Time shield loop. Keep the
