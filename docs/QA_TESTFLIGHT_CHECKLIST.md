@@ -76,11 +76,14 @@ Simulator pass criteria:
 
 Latest simulator smoke pass, 2026-06-24:
 
+- Fresh XcodeBuildMCP Debug launch with `--childlock-qa-reset` succeeded on
+  iPhone 17.
 - Simulator seed harness captured 26 screenshots across iPhone 17 and iPad
-  (A16), including the parent Children, Apps, Settings, add-child, and paywall
-  surfaces.
+  (A16), including onboarding, device-model, parent dashboard, locked
+  dashboard, child challenges, Children, Apps, Settings, add-child, more-time,
+  and paywall surfaces.
 - Latest summary:
-  `.build/qa-simulator-seeds/20260624-114053/summary.md`.
+  `.build/qa-simulator-seeds/20260624-123921/summary.md`.
 - iPhone 17 simulator: `--childlock-qa-seed-onboarding-devices` rendered the
   local-first device setup copy without overlap.
 - iPhone 17 simulator: `--childlock-qa-seed-dashboard` rendered the parent
