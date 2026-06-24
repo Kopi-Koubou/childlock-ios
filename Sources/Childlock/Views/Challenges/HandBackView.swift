@@ -12,8 +12,6 @@ public struct HandBackView: View {
     @State private var enteredPIN = ""
     @State private var pinErrorText: String?
     @State private var isParentSectionVisible = false
-    @State private var didShowResumeStep = false
-
     private let handBackContentMaxWidth: CGFloat = 560
 
     public init(
@@ -55,20 +53,13 @@ public struct HandBackView: View {
                     detail: "Your video, game, or site can open again."
                 )
 
-                Button {
-                    didShowResumeStep = true
-                } label: {
-                    HandBackResumeCue(
-                        iconName: didShowResumeStep ? "house.fill" : "arrow.up.forward.app.fill",
-                        title: didShowResumeStep ? "Press Home now" : "Ready to go back",
-                        detail: didShowResumeStep
-                            ? "Swipe up or press Home, then tap your video, game, or site."
-                            : "Tap here when you are ready for the last step."
-                    )
-                }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier("handback_resume_action")
-                .accessibilityLabel(didShowResumeStep ? "Press Home now" : "Ready to go back")
+                HandBackResumeCue(
+                    iconName: "house.fill",
+                    title: "Press Home now",
+                    detail: "Swipe up or press Home, then tap your video, game, or site."
+                )
+                .accessibilityIdentifier("handback_resume_guidance")
+                .accessibilityLabel("Press Home now. Swipe up or press Home, then tap your video, game, or site.")
             }
             .accessibilityIdentifier("handback_steps")
             .padding(.top, ChildlockSpacing.xs)
@@ -167,11 +158,6 @@ private struct HandBackResumeCue: View {
                     .multilineTextAlignment(.leading)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-
-            Image(systemName: "chevron.right")
-                .font(.system(size: 14, weight: .bold))
-                .foregroundStyle(ChildlockColor.textSecondary)
-                .opacity(title == "Ready to go back" ? 1 : 0)
         }
         .padding(.vertical, ChildlockSpacing.md)
         .padding(.horizontal, ChildlockSpacing.md)
