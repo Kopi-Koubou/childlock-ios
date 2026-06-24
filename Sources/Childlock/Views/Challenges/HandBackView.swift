@@ -2,7 +2,7 @@ import SwiftUI
 
 /// Shown after a completed challenge. Keeps the child out of the parent
 /// dashboard: the cover only dismisses after a parent enters the PIN.
-/// The child just presses home or swipes up and returns to their now-unshielded
+/// The child presses Home or swipes up, then returns to their now-unshielded
 /// app. iOS does not let Screen Time apps automatically reopen that app.
 public struct HandBackView: View {
     private let childName: String?
@@ -42,7 +42,7 @@ public struct HandBackView: View {
                 .font(ChildlockTypography.childTitle)
                 .foregroundStyle(ChildlockColor.textPrimary)
 
-            Text("Nice work. Childlock removed the block.")
+            Text("Nice work. Your app is unblocked now.")
                 .font(ChildlockTypography.childBody)
                 .foregroundStyle(ChildlockColor.textSecondary)
                 .multilineTextAlignment(.center)
@@ -50,13 +50,13 @@ public struct HandBackView: View {
             VStack(spacing: ChildlockSpacing.sm) {
                 HandBackStepRow(
                     iconName: "checkmark.circle.fill",
-                    title: "Unlocked now",
-                    detail: "Your video or app can open again."
+                    title: "Ready to resume",
+                    detail: "Your video, game, or site can open again."
                 )
                 HandBackStepRow(
-                    iconName: "house.fill",
-                    title: "Go back from Home",
-                    detail: "Swipe up or press Home, then choose your app."
+                    iconName: "arrow.up.forward.app.fill",
+                    title: "Return from Home",
+                    detail: "Swipe up or press Home, then tap the app you were using."
                 )
             }
             .accessibilityIdentifier("handback_steps")

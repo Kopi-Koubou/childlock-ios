@@ -40,7 +40,8 @@ Notes:
 - In this build, the shield action closes the blocked app and Childlock also
   posts a local notification to guide the child back to the challenge when
   notifications are enabled. If notifications are denied or missed, pressing
-  Home and opening Childlock presents the same pending challenge.
+  Home and opening Childlock presents the same pending challenge. Once Childlock
+  is foregrounded, it automatically opens the pending brain break.
 - Childlock does not automatically return the child to another app after the
   challenge. iOS does not provide a public Screen Time API to reopen arbitrary
   apps or restore media state, so the hand-back screen tells the child to

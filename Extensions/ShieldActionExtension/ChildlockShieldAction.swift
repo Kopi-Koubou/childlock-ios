@@ -79,7 +79,7 @@ final class ChildlockShieldAction: ShieldActionDelegate {
 
         let content = UNMutableNotificationContent()
         content.title = "Brain break ready"
-        content.body = "Tap to open Childlock and unlock your app."
+        content.body = "Tap to open Childlock and finish your brain break."
         content.sound = .default
         content.interruptionLevel = .timeSensitive
 

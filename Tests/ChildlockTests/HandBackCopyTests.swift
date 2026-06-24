@@ -4,12 +4,12 @@ final class HandBackCopyTests: XCTestCase {
     func testHandBackKeepsChildInstructionPrimaryAndParentEntryVisible() throws {
         let contents = try readRepoFile("Sources/Childlock/Views/Challenges/HandBackView.swift")
 
-        XCTAssertTrue(contents.contains("Nice work. Childlock removed the block."))
+        XCTAssertTrue(contents.contains("Nice work. Your app is unblocked now."))
         XCTAssertTrue(contents.contains("HandBackStepRow("))
-        XCTAssertTrue(contents.contains("Unlocked now"))
-        XCTAssertTrue(contents.contains("Your video or app can open again."))
-        XCTAssertTrue(contents.contains("Go back from Home"))
-        XCTAssertTrue(contents.contains("Swipe up or press Home, then choose your app."))
+        XCTAssertTrue(contents.contains("Ready to resume"))
+        XCTAssertTrue(contents.contains("Your video, game, or site can open again."))
+        XCTAssertTrue(contents.contains("Return from Home"))
+        XCTAssertTrue(contents.contains("Swipe up or press Home, then tap the app you were using."))
         XCTAssertTrue(contents.contains("accessibilityIdentifier(\"handback_steps\")"))
         XCTAssertTrue(contents.contains("private let handBackContentMaxWidth: CGFloat = 560"))
         XCTAssertTrue(contents.contains(".frame(maxWidth: handBackContentMaxWidth)"))
