@@ -76,7 +76,7 @@ Latest simulator smoke pass, 2026-06-24:
   (A16), including the parent Children, Apps, Settings, add-child, and paywall
   surfaces.
 - Latest summary:
-  `.build/qa-simulator-seeds/20260624-054314/summary.md`.
+  `.build/qa-simulator-seeds/20260624-110634/summary.md`.
 - iPhone 17 simulator: `--childlock-qa-seed-onboarding-devices` rendered the
   local-first device setup copy without overlap.
 - iPhone 17 simulator: `--childlock-qa-seed-dashboard` rendered the parent
@@ -99,6 +99,10 @@ Latest simulator smoke pass, 2026-06-24:
   the memory challenge grid without clipping, completed deterministic pairs,
   recorded a new Memory activity, and returned to the PIN-gated parent hand-back
   flow.
+- iPhone 17 simulator: interactive `--childlock-qa-seed-pending-math-challenge`
+  completed a correct answer, showed the child hand-back screen, kept the parent
+  dashboard behind the PIN, then unlocked with PIN `1234` and recorded the new
+  Math activity in Recent Activity.
 - iPhone 17 simulator: `--childlock-qa-seed-more-time-request` rendered the
   parent-visible request banner without opening a pending child challenge;
   `Give one more block` cleared the request and kept the parent dashboard on
