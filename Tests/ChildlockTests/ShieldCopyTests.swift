@@ -160,6 +160,11 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(dashboard.contains("Text(\"\\(moreTimeRequestProfileName) asked for more time\")"))
         XCTAssertFalse(dashboard.contains("Text(\"\\(appState.activeProfile?.name ?? \"Your child\") asked for more time\")"))
         XCTAssertTrue(dashboard.contains("asked for more time. Enter your PIN to respond."))
+        XCTAssertTrue(dashboard.contains("private var moreTimeGrantButtonTitle: String"))
+        XCTAssertTrue(dashboard.contains("return \"Allow \\(minutes) min\""))
+        XCTAssertTrue(dashboard.contains("private var moreTimeGrantAccessibilityLabel: String"))
+        XCTAssertTrue(dashboard.contains("return \"Allow \\(minutes) minute\\(minutes == 1 ? \"\" : \"s\")\""))
+        XCTAssertFalse(dashboard.contains("Give one more block"))
         XCTAssertTrue(dashboard.contains("SharedDefaults.shared.set(false, forKey: SharedDefaults.Key.challengePending)"))
         XCTAssertTrue(dashboard.contains("Button(\"Keep blocked\")"))
         XCTAssertFalse(dashboard.contains("Button(\"Dismiss\")"))
@@ -170,6 +175,8 @@ final class ShieldCopyTests: XCTestCase {
         let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")
         XCTAssertTrue(checklist.contains("does not open\n    a pending child challenge before the parent responds"))
         XCTAssertTrue(checklist.contains("`Keep blocked` clears the parent request while keeping the child blocked"))
+        XCTAssertTrue(checklist.contains("`Allow 5 min`"))
+        XCTAssertFalse(checklist.contains("Give one more block"))
     }
 
     func testGrantMoreTimeOnlyClearsRequestAfterMonitoringRestarts() throws {

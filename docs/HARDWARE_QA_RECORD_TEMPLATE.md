@@ -55,7 +55,7 @@ shielding, extension actions, purchases, and real hand-back behavior.
 | Child sees `Back` guidance and returns to the now-unshielded content app/site | Pass / Fail |  |
 | Parent dashboard stays PIN-gated after hand-back | Pass / Fail |  |
 | `Parent` creates a parent-visible request only | Pass / Fail |  |
-| `Give one more block` grants time and re-arms enforcement | Pass / Fail |  |
+| `Allow <interval>` grants time and re-arms enforcement | Pass / Fail |  |
 | `Keep blocked` clears the parent request and leaves the child blocked | Pass / Fail |  |
 | Restarting enforcement clears stale child challenge/request state | Pass / Fail |  |
 

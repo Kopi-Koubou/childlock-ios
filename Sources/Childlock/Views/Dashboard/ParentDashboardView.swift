@@ -464,7 +464,7 @@ public struct ParentDashboardView: View {
             }
 
             HStack(spacing: ChildlockSpacing.sm) {
-                Button("Give one more block") {
+                Button(moreTimeGrantButtonTitle) {
                     grantMoreTime()
                 }
                 .font(.system(size: 13, weight: .semibold))
@@ -473,6 +473,7 @@ public struct ParentDashboardView: View {
                 .padding(.vertical, 8)
                 .background(Capsule().fill(ChildlockColor.primary))
                 .buttonStyle(.plain)
+                .accessibilityLabel(moreTimeGrantAccessibilityLabel)
 
                 Button("Keep blocked") {
                     denyMoreTimeRequest()
@@ -1608,6 +1609,22 @@ public struct ParentDashboardView: View {
 
     private var moreTimeRequestProfileName: String {
         monitoringProfile?.name ?? "Your child"
+    }
+
+    private var moreTimeGrantButtonTitle: String {
+        guard let minutes = monitoringProfile?.intervalMinutes else {
+            return "Allow time"
+        }
+
+        return "Allow \(minutes) min"
+    }
+
+    private var moreTimeGrantAccessibilityLabel: String {
+        guard let minutes = monitoringProfile?.intervalMinutes else {
+            return "Allow more time"
+        }
+
+        return "Allow \(minutes) minute\(minutes == 1 ? "" : "s")"
     }
 
     private func settingsSection(title: String, @ViewBuilder content: () -> some View) -> some View {

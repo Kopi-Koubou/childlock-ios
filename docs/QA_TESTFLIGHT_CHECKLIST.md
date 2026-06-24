@@ -81,7 +81,7 @@ Simulator pass criteria:
 - Hand-back seed tells the child to return to the unlocked app and exposes only
   `Parent`.
 - Parent PIN unlock remounts the dashboard.
-- More-time seed shows the parent request banner with `Give one more block` and
+- More-time seed shows the parent request banner with `Allow 5 min` and
   `Keep blocked`.
 
 Simulator evidence handoff:
@@ -247,7 +247,7 @@ as sufficient for launch.
     cannot enter the dashboard without the parent PIN.
 20. `Parent` creates a parent-visible more-time request and does not open
     a pending child challenge before the parent responds.
-21. `Give one more block` grants another block and then re-arms enforcement.
+21. `Allow <interval>` grants another full interval and then re-arms enforcement.
 22. `Keep blocked` clears the parent request while keeping the child blocked
     until they start and complete the brain break.
 23. Restarting enforcement clears stale child challenge and more-time request state.
