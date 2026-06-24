@@ -486,17 +486,29 @@ public struct ParentDashboardView: View {
     }
 
     private func grantMoreTime() {
-        clearMoreTimeRequests()
-        ScreenTimeManager.shared.removeShields()
+        refreshSharedDashboardState()
+        guard let profile = appState.activeProfile else {
+            monitoringStatusText = "failed"
+            monitoringErrorText = "No active child profile available."
+            return
+        }
+
+        guard ChildlockMonitoringStatus(storedValue: monitoringStatusText)?.canRearmMonitoring == true else {
+            monitoringErrorText = "Monitoring is not ready to grant more time. Restart lock enforcement from Settings."
+            return
+        }
 
         // Restarting monitoring resets the usage threshold, so the child gets
         // one full interval before the next brain break.
-        if
-            let profile = appState.activeProfile,
-            ChildlockMonitoringStatus(storedValue: monitoringStatusText)?.canRearmMonitoring == true
-        {
-            try? ScreenTimeManager.shared.startMonitoring(profile: profile)
-            monitoringStatusText = SharedDefaults.shared.string(forKey: SharedDefaults.Key.monitoringStatus) ?? monitoringStatusText
+        do {
+            try ScreenTimeManager.shared.startMonitoring(profile: profile)
+            ScreenTimeManager.shared.removeShields()
+            clearMoreTimeRequests()
+            refreshSharedDashboardState()
+            monitoringErrorText = nil
+        } catch {
+            refreshSharedDashboardState()
+            monitoringErrorText = error.localizedDescription
         }
     }
 

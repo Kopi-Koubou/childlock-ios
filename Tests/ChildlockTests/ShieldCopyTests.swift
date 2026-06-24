@@ -134,6 +134,25 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(checklist.contains("does not open\n    a pending child challenge before the parent responds"))
     }
 
+    func testGrantMoreTimeOnlyClearsRequestAfterMonitoringRestarts() throws {
+        let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
+        let grantStart = try XCTUnwrap(dashboard.range(of: "private func grantMoreTime()"))
+        let clearStart = try XCTUnwrap(dashboard.range(of: "private func clearMoreTimeRequests()"))
+        let grantBlock = String(dashboard[grantStart.lowerBound..<clearStart.lowerBound])
+
+        XCTAssertTrue(grantBlock.contains("try ScreenTimeManager.shared.startMonitoring(profile: profile)"))
+        XCTAssertFalse(grantBlock.contains("try? ScreenTimeManager.shared.startMonitoring"))
+        XCTAssertTrue(grantBlock.contains("monitoringErrorText = error.localizedDescription"))
+        XCTAssertTrue(grantBlock.contains("Monitoring is not ready to grant more time."))
+
+        let restartRange = try XCTUnwrap(grantBlock.range(of: "try ScreenTimeManager.shared.startMonitoring(profile: profile)"))
+        let unshieldRange = try XCTUnwrap(grantBlock.range(of: "ScreenTimeManager.shared.removeShields()"))
+        let clearRange = try XCTUnwrap(grantBlock.range(of: "clearMoreTimeRequests()"))
+
+        XCTAssertLessThan(restartRange.lowerBound, unshieldRange.lowerBound)
+        XCTAssertLessThan(unshieldRange.lowerBound, clearRange.lowerBound)
+    }
+
     func testStartBrainBreakClearsStaleBrainBreakNotification() throws {
         let files = try [
             "Extensions/ShieldActionExtension/ChildlockShieldAction.swift",
