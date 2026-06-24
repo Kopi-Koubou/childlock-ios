@@ -92,7 +92,7 @@ Reviewer flow:
 8. Tap Start, then tap the Childlock notification or open Childlock
    from Home and solve the pending challenge.
 9. Completing the challenge removes the shield and re-arms monitoring.
-10. The child hand-back screen says `Back to app`, guides the child
+10. The child hand-back screen says `Back`, guides the child
     back through Home or the app switcher, and requires the parent PIN before
     entering the parent dashboard.
 

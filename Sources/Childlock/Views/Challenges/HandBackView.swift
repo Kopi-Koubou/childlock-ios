@@ -2,10 +2,9 @@ import SwiftUI
 
 /// Shown after a completed challenge. Keeps the child out of the parent
 /// dashboard: the cover only dismisses after a parent enters the PIN.
-/// The child presses Home or swipes up, then returns to their now-unshielded
-/// app. iOS does not let Screen Time apps automatically reopen arbitrary
-/// third-party apps or restore media state, so this screen makes the required
-/// hand-back feel like the final resume step rather than a technical caveat.
+/// The child returns to their now-unshielded app from Home or the app switcher.
+/// iOS does not let Screen Time apps automatically reopen arbitrary third-party
+/// apps or restore media state, so the visible copy stays icon-first and brief.
 public struct HandBackView: View {
     private let childName: String?
     private let onParentUnlock: () -> Void
@@ -30,25 +29,16 @@ public struct HandBackView: View {
         VStack(spacing: ChildlockSpacing.lg) {
             Spacer()
 
-            ZStack {
-                Circle()
-                    .fill(ChildlockColor.primarySoft)
-                    .frame(width: 96, height: 96)
-                Image(systemName: "play.fill")
-                    .font(.system(size: 36, weight: .bold))
-                    .foregroundStyle(ChildlockColor.primary)
-            }
-
-            Text("Done!")
+            Text("Done")
                 .font(ChildlockTypography.childTitle)
                 .foregroundStyle(ChildlockColor.textPrimary)
 
             HandBackReturnCue(
                 iconName: "arrow.backward",
-                title: "Back to app"
+                title: "Back"
             )
             .accessibilityIdentifier("handback_resume_guidance")
-            .accessibilityLabel("Back to app.")
+            .accessibilityLabel("Back.")
             .padding(.top, ChildlockSpacing.xs)
 
             Spacer()
@@ -87,11 +77,10 @@ public struct HandBackView: View {
                 Button {
                     isParentSectionVisible = true
                 } label: {
-                    Label("Parent", systemImage: "lock.fill")
+                    Image(systemName: "lock.fill")
                         .font(ChildlockTypography.caption)
                         .foregroundStyle(ChildlockColor.textSecondary)
-                        .padding(.horizontal, ChildlockSpacing.md)
-                        .frame(height: 40)
+                        .frame(width: 44, height: 40)
                         .background(ChildlockColor.surface)
                         .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.control))
                         .childlockShadow(ChildlockShadow.sm)
