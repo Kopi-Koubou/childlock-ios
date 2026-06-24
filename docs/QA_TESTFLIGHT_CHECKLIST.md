@@ -238,6 +238,8 @@ Use this when the parent and child share the same iPhone.
 3. Parent selects apps/categories used by the child on that same iPhone.
 4. If multiple child profiles exist, parent opens Children and taps
    `Make active` on the child who is about to use the shared phone.
+   Only one active child monitor runs on a configured device at a time.
+   Switching the active child replaces the previous local monitor.
 5. Parent sets the PIN, taps `Lock Parent Dashboard`, and hands the phone to
    the child.
 6. Child continuously uses selected content until the threshold is reached.

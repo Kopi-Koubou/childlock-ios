@@ -53,6 +53,7 @@ public final class ScreenTimeManager: ScreenTimeManaging {
     private let store: ManagedSettingsStore
     private let center: DeviceActivityCenter
     private let defaults: UserDefaults
+    private let activeActivityName = DeviceActivityName("childlock.active")
 
     public init(
         store: ManagedSettingsStore = ManagedSettingsStore(),
@@ -136,8 +137,10 @@ public final class ScreenTimeManager: ScreenTimeManaging {
             throw ScreenTimeError.missingMonitoredSelection
         }
 
-        let activityName = activityName(for: profile.id)
-        center.stopMonitoring([activityName])
+        // Launch supports one active child per configured device. Reusing one
+        // DeviceActivity name prevents old sibling monitors from firing after
+        // the parent switches the active child before handoff.
+        center.stopMonitoring([activeActivityName])
 
         let schedule = DeviceActivitySchedule(
             intervalStart: DateComponents(hour: 0, minute: 0),
@@ -154,7 +157,7 @@ public final class ScreenTimeManager: ScreenTimeManaging {
 
         do {
             try center.startMonitoring(
-                activityName,
+                activeActivityName,
                 during: schedule,
                 events: [DeviceActivityEvent.Name("interval_reached"): event]
             )
@@ -176,8 +179,7 @@ public final class ScreenTimeManager: ScreenTimeManaging {
     }
 
     public func stopMonitoring(profile: ChildProfile) {
-        let activityName = activityName(for: profile.id)
-        center.stopMonitoring([activityName])
+        center.stopMonitoring([activeActivityName])
         removeShields()
         clearTransientShieldState()
 
@@ -210,10 +212,6 @@ public final class ScreenTimeManager: ScreenTimeManaging {
 
     private func refreshAuthorizationStatus() {
         isAuthorized = AuthorizationCenter.shared.authorizationStatus == .approved
-    }
-
-    private func activityName(for profileID: UUID) -> DeviceActivityName {
-        DeviceActivityName("childlock.\(profileID.uuidString)")
     }
 
     private func isLikelyEntitlementError(_ error: Error) -> Bool {

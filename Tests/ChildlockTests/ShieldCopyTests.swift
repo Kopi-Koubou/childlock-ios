@@ -29,6 +29,23 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(normalizedRootView.contains("triggerChallenge(for: profile)"))
     }
 
+    func testScreenTimeMonitoringUsesOneActiveChildMonitorPerDevice() throws {
+        let screenTime = try readRepoFile("Sources/Childlock/Services/ScreenTimeManager.swift")
+        let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
+        let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")
+        let deviceModel = try readRepoFile("docs/DEVICE_MODEL.md")
+
+        XCTAssertTrue(screenTime.contains("private let activeActivityName = DeviceActivityName(\"childlock.active\")"))
+        XCTAssertTrue(screenTime.contains("one active child per configured device"))
+        XCTAssertTrue(screenTime.contains("center.stopMonitoring([activeActivityName])"))
+        XCTAssertTrue(screenTime.contains("try center.startMonitoring(\n                activeActivityName,"))
+        XCTAssertFalse(screenTime.contains("DeviceActivityName(\"childlock.\\(profileID.uuidString)\")"))
+
+        XCTAssertTrue(dashboard.contains("refreshMonitoringIfRunning(for: profile)"))
+        XCTAssertTrue(checklist.contains("Only one active child monitor runs on a configured device at a time."))
+        XCTAssertTrue(deviceModel.contains("One active child monitor runs per configured device at a time."))
+    }
+
     func testShieldAndNotificationCopyMatchesPlatformBehavior() throws {
         let files = try [
             "Extensions/ShieldConfigurationExtension/ChildlockShieldConfiguration.swift",

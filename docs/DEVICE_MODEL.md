@@ -14,6 +14,9 @@ apps or categories, and starts monitoring.
 - Child iPad or child-owned iPhone: supported when Childlock is installed and
   configured on that child device. Run onboarding on the iPad/iPhone that needs
   app shielding.
+- One active child monitor runs per configured device at a time. On a shared
+  device with multiple child profiles, `Make active` chooses which child's
+  interval and app selection are enforced before handoff.
 - Multiple child devices: repeat setup on each device the child uses. The same
   parent account can sign in on each device, but launch QA should treat each
   configured device as its own enforcement point.
