@@ -33,6 +33,11 @@ final class ReleaseDocsTests: XCTestCase {
             XCTAssertFalse(normalized.localizedCaseInsensitiveContains("no-login"))
             XCTAssertFalse(normalized.localizedCaseInsensitiveContains("free trial"))
         }
+
+        let normalizedProduction = normalizeWhitespace(production)
+        XCTAssertTrue(normalizedProduction.contains("If the submitted build shows Google sign-in"))
+        XCTAssertTrue(normalizedProduction.contains("otherwise, Google should stay hidden and be marked N/A in hardware QA"))
+        XCTAssertFalse(normalizedProduction.contains("until the Supabase Apple and Google providers are enabled"))
     }
 
     func testProductionRunbookKeepsAppSecretsInIgnoredLocalConfig() throws {

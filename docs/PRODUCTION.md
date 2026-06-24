@@ -88,9 +88,11 @@ value into the iOS app.
 
 Apple auth setup is tracked in `docs/SUPABASE_APPLE_AUTH.md`. Google auth setup
 is tracked in `docs/SUPABASE_GOOGLE_AUTH.md`. Do not submit a production build
-until the Supabase Apple and Google providers are enabled and saved, and the app
-build has `GOOGLE_IOS_CLIENT_ID`, `GOOGLE_WEB_CLIENT_ID`, and
-`GOOGLE_REVERSED_CLIENT_ID`.
+until the Supabase Apple provider is enabled and saved. If the submitted build
+shows Google sign-in, the Supabase Google provider must also be enabled and the
+app build must have `GOOGLE_IOS_CLIENT_ID`, `GOOGLE_WEB_CLIENT_ID`, and
+`GOOGLE_REVERSED_CLIENT_ID`; otherwise, Google should stay hidden and be marked
+N/A in hardware QA.
 
 For Xcode Cloud, create `Config/AppSecrets.local.xcconfig` in a pre-build script
 from Xcode Cloud environment variables, or pass equivalent build settings on the
