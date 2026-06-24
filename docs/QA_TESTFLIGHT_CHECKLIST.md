@@ -124,6 +124,13 @@ scripts/new-hardware-qa-record.sh same-phone <build-number>
 scripts/new-hardware-qa-record.sh child-ipad <build-number>
 ```
 
+For the normal launch pass, use the wrapper so both required records are
+created together and the same-phone / child-iPad test order is printed:
+
+```sh
+scripts/prepare-testflight-qa.sh <build-number>
+```
+
 The generated record is based on `docs/HARDWARE_QA_RECORD_TEMPLATE.md`.
 It pre-fills the build number, date, scenario, git commit, tester name when
 available, the latest simulator QA summary path, and the latest simulator QA
