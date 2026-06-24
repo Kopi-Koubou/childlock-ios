@@ -20,7 +20,10 @@ shielding, extension actions, purchases, and real hand-back behavior.
 | Parent sign-in tested | Apple / Google |
 | Notification state tested | Allowed / Denied |
 | Monitored selection | App / Category / Website |
+| Content app/activity tested |  |
 | Brain-break interval |  |
+| Content started at |  |
+| Shield appeared at |  |
 | RevenueCat paywall/offering behaved as expected | Pass / Fail / Not tested |
 | Notes/blockers |  |
 
@@ -32,8 +35,9 @@ shielding, extension actions, purchases, and real hand-back behavior.
 | Parent sign-in completes | Pass / Fail |  |
 | Screen Time authorization completes on the child-used device | Pass / Fail |  |
 | App/category/website selection is non-empty before setup can continue | Pass / Fail |  |
+| Child continuously consumes selected content during the interval | Pass / Fail |  |
 | First interval starts without immediately shielding | Pass / Fail |  |
-| Selected app shields only after the threshold | Pass / Fail |  |
+| Selected content shields only after the threshold | Pass / Fail |  |
 | Shield copy says `Brain Break` | Pass / Fail |  |
 | `Start Brain Break` closes the selected app | Pass / Fail |  |
 | Childlock opens the pending challenge from notification or Home | Pass / Fail |  |
@@ -57,7 +61,7 @@ Use this when the parent and child share the same iPhone.
 | Parent selects apps/categories used by the child on that same iPhone | Pass / Fail / N/A |  |
 | If multiple child profiles exist, parent taps `Make active` for the child before handoff | Pass / Fail / N/A |  |
 | Parent sets the PIN and hands the phone to the child | Pass / Fail / N/A |  |
-| Child uses selected content until threshold is reached | Pass / Fail / N/A |  |
+| Child continuously uses selected content until threshold is reached | Pass / Fail / N/A |  |
 | Child solves the challenge and returns to the unlocked app | Pass / Fail / N/A |  |
 | Child cannot reach parent dashboard without the PIN | Pass / Fail / N/A |  |
 
@@ -71,6 +75,7 @@ Use this when the parent owns an iPhone and the child uses an iPad.
 | Parent signs in with the same parent account on the child iPad | Pass / Fail / N/A |  |
 | Parent completes Screen Time authorization on the iPad | Pass / Fail / N/A |  |
 | Parent selects iPad apps/categories/websites on the iPad | Pass / Fail / N/A |  |
+| Child continuously uses selected iPad content until threshold is reached | Pass / Fail / N/A |  |
 | Child completes the shield -> Childlock -> challenge -> hand-back loop on the iPad | Pass / Fail / N/A |  |
 | Parent-only iPhone install is not treated as remote iPad control | Pass / Fail / N/A |  |
 

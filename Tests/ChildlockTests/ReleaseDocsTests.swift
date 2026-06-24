@@ -141,6 +141,9 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(checklist.contains("Parent signs in with Apple"))
         XCTAssertTrue(checklist.contains("Sign in with Google and complete setup again."))
         XCTAssertTrue(checklist.contains("Confirm the app returns to fresh onboarding with no parent dashboard access."))
+        XCTAssertTrue(checklist.contains("start real child-like content"))
+        XCTAssertTrue(checklist.contains("Record the content\n    app/activity and start time in the hardware QA record."))
+        XCTAssertTrue(checklist.contains("Record the\n    shield timestamp and compare it with the configured interval."))
     }
 
     func testTestFlightChecklistCapturesLaunchGateEvidence() throws {
@@ -156,6 +159,9 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(checklist.contains("| Git commit |"))
         XCTAssertTrue(checklist.contains("| Scenario | Same phone / Child iPad / Child iPhone |"))
         XCTAssertTrue(checklist.contains("| Latest simulator QA summary |"))
+        XCTAssertTrue(checklist.contains("| Content app/activity tested |"))
+        XCTAssertTrue(checklist.contains("| Content started at |"))
+        XCTAssertTrue(checklist.contains("| Shield appeared at |"))
         XCTAssertTrue(checklist.contains("It pre-fills the build number, date, scenario, git commit"))
         XCTAssertTrue(checklist.contains("| Shield appeared only after threshold | Pass / Fail |"))
         XCTAssertTrue(checklist.contains("| Parent dashboard stayed PIN-gated after hand-back | Pass / Fail |"))
@@ -173,11 +179,17 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(template.contains("## Required Shield Loop"))
         XCTAssertTrue(template.contains("| Git commit |"))
         XCTAssertTrue(template.contains("| Latest simulator QA summary |"))
+        XCTAssertTrue(template.contains("| Content app/activity tested |"))
+        XCTAssertTrue(template.contains("| Content started at |"))
+        XCTAssertTrue(template.contains("| Shield appeared at |"))
+        XCTAssertTrue(template.contains("Child continuously consumes selected content during the interval"))
         XCTAssertTrue(template.contains("Second full interval shields again"))
         XCTAssertTrue(template.contains("Denied-notification fallback opens the pending challenge from Home"))
         XCTAssertTrue(template.contains("## Same Phone Scenario"))
         XCTAssertTrue(template.contains("parent taps `Make active` for the child before handoff"))
+        XCTAssertTrue(template.contains("Child continuously uses selected content until threshold is reached"))
         XCTAssertTrue(template.contains("## Child iPad Scenario"))
+        XCTAssertTrue(template.contains("Child continuously uses selected iPad content until threshold is reached"))
         XCTAssertTrue(template.contains("Parent-only iPhone install is not treated as remote iPad control"))
         XCTAssertTrue(template.contains("Google sign-in works in TestFlight"))
 
