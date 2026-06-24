@@ -13,6 +13,8 @@ public struct HandBackView: View {
     @State private var pinErrorText: String?
     @State private var isParentSectionVisible = false
 
+    private let handBackContentMaxWidth: CGFloat = 560
+
     public init(
         childName: String? = nil,
         pinService: PINService? = nil,
@@ -40,10 +42,25 @@ public struct HandBackView: View {
                 .font(ChildlockTypography.childTitle)
                 .foregroundStyle(ChildlockColor.textPrimary)
 
-            Text("Swipe up or press Home, then reopen your video or app. It's unlocked.")
+            Text("Nice work. Childlock removed the block.")
                 .font(ChildlockTypography.childBody)
                 .foregroundStyle(ChildlockColor.textSecondary)
                 .multilineTextAlignment(.center)
+
+            VStack(spacing: ChildlockSpacing.sm) {
+                HandBackStepRow(
+                    iconName: "checkmark.circle.fill",
+                    title: "Unlocked now",
+                    detail: "Your video or app can open again."
+                )
+                HandBackStepRow(
+                    iconName: "house.fill",
+                    title: "Go back from Home",
+                    detail: "Swipe up or press Home, then choose your app."
+                )
+            }
+            .accessibilityIdentifier("handback_steps")
+            .padding(.top, ChildlockSpacing.xs)
 
             Spacer()
 
@@ -95,6 +112,7 @@ public struct HandBackView: View {
                 .accessibilityLabel("I'm a parent")
             }
         }
+        .frame(maxWidth: handBackContentMaxWidth)
         .padding(ChildlockSpacing.lg)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(ChildlockColor.background.ignoresSafeArea())
@@ -111,5 +129,35 @@ public struct HandBackView: View {
         if enteredPIN != sanitized {
             enteredPIN = sanitized
         }
+    }
+}
+
+private struct HandBackStepRow: View {
+    let iconName: String
+    let title: String
+    let detail: String
+
+    var body: some View {
+        HStack(alignment: .top, spacing: ChildlockSpacing.sm) {
+            Image(systemName: iconName)
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundStyle(ChildlockColor.primary)
+                .frame(width: 28, height: 28)
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title)
+                    .font(ChildlockTypography.bodyBold)
+                    .foregroundStyle(ChildlockColor.textPrimary)
+                Text(detail)
+                    .font(ChildlockTypography.caption)
+                    .foregroundStyle(ChildlockColor.textSecondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(.vertical, ChildlockSpacing.sm)
+        .padding(.horizontal, ChildlockSpacing.md)
+        .background(ChildlockColor.surface)
+        .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.control))
+        .accessibilityElement(children: .combine)
     }
 }

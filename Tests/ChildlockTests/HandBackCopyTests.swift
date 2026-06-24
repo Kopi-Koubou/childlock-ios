@@ -4,7 +4,15 @@ final class HandBackCopyTests: XCTestCase {
     func testHandBackKeepsChildInstructionPrimaryAndParentEntryVisible() throws {
         let contents = try readRepoFile("Sources/Childlock/Views/Challenges/HandBackView.swift")
 
-        XCTAssertTrue(contents.contains("Swipe up or press Home, then reopen your video or app. It's unlocked."))
+        XCTAssertTrue(contents.contains("Nice work. Childlock removed the block."))
+        XCTAssertTrue(contents.contains("HandBackStepRow("))
+        XCTAssertTrue(contents.contains("Unlocked now"))
+        XCTAssertTrue(contents.contains("Your video or app can open again."))
+        XCTAssertTrue(contents.contains("Go back from Home"))
+        XCTAssertTrue(contents.contains("Swipe up or press Home, then choose your app."))
+        XCTAssertTrue(contents.contains("accessibilityIdentifier(\"handback_steps\")"))
+        XCTAssertTrue(contents.contains("private let handBackContentMaxWidth: CGFloat = 560"))
+        XCTAssertTrue(contents.contains(".frame(maxWidth: handBackContentMaxWidth)"))
         XCTAssertFalse(contents.localizedCaseInsensitiveContains("unpaused"))
         XCTAssertTrue(contents.contains("iOS does not let Screen Time apps automatically reopen that app."))
         XCTAssertTrue(contents.contains("Label(\"I'm a parent\", systemImage: \"lock.fill\")"))
