@@ -57,7 +57,7 @@ public final class ChildlockDeviceActivityMonitor: DeviceActivityMonitor {
 
         let content = UNMutableNotificationContent()
         content.title = "Brain break time!"
-        content.body = "Open Childlock from Home to unlock it."
+        content.body = "Tap this alert or open Childlock from Home."
         content.sound = .default
         content.interruptionLevel = .timeSensitive
 
@@ -146,7 +146,7 @@ public final class ChildlockShieldAction: ShieldActionDelegate {
 
         let content = UNMutableNotificationContent()
         content.title = "Brain break ready"
-        content.body = "Tap to open Childlock and finish your brain break."
+        content.body = "Tap this alert or open Childlock from Home to finish."
         content.sound = .default
         content.interruptionLevel = .timeSensitive
 
@@ -221,7 +221,7 @@ public final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
                 color: UIColor(hex: ChildlockColorHex.shieldInk)
             ),
             subtitle: ShieldConfiguration.Label(
-                text: "Tap Start, then open Childlock.",
+                text: "Tap Start, then open Childlock from the alert or Home.",
                 color: UIColor(hex: ChildlockColorHex.shieldInk)
             ),
             primaryButtonLabel: ShieldConfiguration.Label(

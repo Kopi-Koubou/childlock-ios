@@ -57,8 +57,8 @@ final class ChildlockMonitor: DeviceActivityMonitor {
         postBrainBreakNotification()
     }
 
-    /// The shield itself can't launch Childlock, so a notification is the
-    /// child's tappable path from the blocked app into the challenge.
+    /// The shield itself can't launch Childlock, so the alert plus the Home
+    /// fallback are the child's supported paths into the challenge.
     private func postBrainBreakNotification() {
         let alertsEnabled = SharedDefaults.shared.object(forKey: SharedDefaults.Key.challengeAlertsEnabled) as? Bool ?? true
         guard alertsEnabled else {
@@ -68,7 +68,7 @@ final class ChildlockMonitor: DeviceActivityMonitor {
 
         let content = UNMutableNotificationContent()
         content.title = "Brain break time!"
-        content.body = "Open Childlock from Home to unlock it."
+        content.body = "Tap this alert or open Childlock from Home."
         content.sound = .default
         content.interruptionLevel = .timeSensitive
 

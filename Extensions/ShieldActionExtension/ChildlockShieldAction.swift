@@ -48,9 +48,9 @@ final class ChildlockShieldAction: ShieldActionDelegate {
         switch action {
         case .primaryButtonPressed:
             handleStartChallenge()
-            // .close exits the blocked app to the home screen — the shield
-            // can't launch Childlock, so the refreshed notification is the
-            // child's tappable path into the challenge.
+            // .close exits the blocked app to the home screen. The shield
+            // can't launch Childlock, so the refreshed notification and Home
+            // icon are the child's supported paths into the challenge.
             completionHandler(.close)
         case .secondaryButtonPressed:
             handleRequestMoreTime()
@@ -79,7 +79,7 @@ final class ChildlockShieldAction: ShieldActionDelegate {
 
         let content = UNMutableNotificationContent()
         content.title = "Brain break ready"
-        content.body = "Tap to open Childlock and finish your brain break."
+        content.body = "Tap this alert or open Childlock from Home to finish."
         content.sound = .default
         content.interruptionLevel = .timeSensitive
 
