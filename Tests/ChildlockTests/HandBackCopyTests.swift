@@ -210,10 +210,14 @@ final class HandBackCopyTests: XCTestCase {
         let onboarding = try readRepoFile("Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift")
         let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
 
-        XCTAssertTrue(onboarding.contains("Shared iPhone? Set it up here."))
-        XCTAssertTrue(onboarding.contains("Child iPad? Install and run setup on the iPad too"))
-        XCTAssertTrue(onboarding.contains("a parent-only iPhone install will not lock the iPad at launch"))
-        XCTAssertTrue(onboarding.contains("A separate parent-phone remote dashboard is not included at launch."))
+        XCTAssertTrue(onboarding.contains("Childlock protects this device. Set it up wherever your child watches or plays."))
+        XCTAssertTrue(onboarding.contains("heading: \"Shared iPhone\""))
+        XCTAssertTrue(onboarding.contains("Set up here. Lock the dashboard, then hand it over."))
+        XCTAssertTrue(onboarding.contains("heading: \"Child iPad\""))
+        XCTAssertTrue(onboarding.contains("Install Childlock on the iPad and run setup there."))
+        XCTAssertTrue(onboarding.contains("heading: \"Parent-only phone\""))
+        XCTAssertTrue(onboarding.contains("Good for account checks. It will not lock a separate iPad."))
+        XCTAssertTrue(onboarding.contains("Screen Time controls run where setup is completed. Parent settings still stay behind your PIN."))
 
         XCTAssertTrue(dashboard.contains("Locks this device only. Child iPad setup happens on the iPad."))
         XCTAssertFalse(onboarding.localizedCaseInsensitiveContains("remotely lock"))

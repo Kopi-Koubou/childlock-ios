@@ -366,7 +366,7 @@ public struct OnboardingFlowView: View {
                     .font(ChildlockTypography.title)
                     .foregroundStyle(ChildlockColor.textPrimary)
 
-                Text("Childlock protects the device your child actually uses. Shared iPhone? Set it up here. Child iPad? Install and run setup on the iPad too; a parent-only iPhone install will not lock the iPad at launch.")
+                Text("Childlock protects this device. Set it up wherever your child watches or plays.")
                     .font(ChildlockTypography.body)
                     .foregroundStyle(ChildlockColor.textSecondary)
             }
@@ -375,18 +375,18 @@ public struct OnboardingFlowView: View {
             VStack(alignment: .leading, spacing: ChildlockSpacing.md) {
                 deviceStepRow(
                     icon: "iphone",
-                    heading: "Shared phone is supported",
-                    body: "Set up this phone, keep the dashboard behind your PIN, and hand it back after each challenge."
+                    heading: "Shared iPhone",
+                    body: "Set up here. Lock the dashboard, then hand it over."
                 )
                 deviceStepRow(
                     icon: "ipad",
-                    heading: "Child iPad needs its own setup",
-                    body: "Run setup on the iPad so Apple's Screen Time controls can pause apps there."
+                    heading: "Child iPad",
+                    body: "Install Childlock on the iPad and run setup there."
                 )
                 deviceStepRow(
-                    icon: "lock.shield",
-                    heading: "Parent settings stay protected",
-                    body: "Your child can solve puzzles, but they cannot change monitoring without the PIN."
+                    icon: "info.circle",
+                    heading: "Parent-only phone",
+                    body: "Good for account checks. It will not lock a separate iPad."
                 )
             }
             .childlockCard()
@@ -397,7 +397,7 @@ public struct OnboardingFlowView: View {
                 Image(systemName: "info.circle")
                     .font(.system(size: 16))
                     .foregroundStyle(ChildlockColor.primary)
-                Text("For launch, Childlock locks apps on the device where setup is completed. A separate parent-phone remote dashboard is not included at launch.")
+                Text("Screen Time controls run where setup is completed. Parent settings still stay behind your PIN.")
                     .font(ChildlockTypography.caption)
                     .foregroundStyle(ChildlockColor.textSecondary)
             }
