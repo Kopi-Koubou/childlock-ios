@@ -1,10 +1,12 @@
 # Childlock Device Model
 
-Last checked: 2026-06-24
-
 Childlock's launch build is a local-first Screen Time app. It locks apps on the
 device where the parent completes onboarding, grants Screen Time access, chooses
 apps or categories, and starts monitoring.
+
+Use `scripts/launch-readiness-status.sh` for the current simulator and hardware
+QA evidence. This document describes the launch device model, not a dated QA
+snapshot.
 
 ## Supported For Launch
 

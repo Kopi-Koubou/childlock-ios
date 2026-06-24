@@ -1,7 +1,5 @@
 # Childlock TestFlight QA Checklist
 
-Last checked: 2026-06-24
-
 This checklist separates simulator confidence from real Screen Time proof. The
 simulator can validate onboarding state, parent dashboard gating, challenge UI,
 and hand-back behavior. A TestFlight build on physical hardware is still
@@ -97,12 +95,13 @@ Simulator evidence handoff:
   newest generated simulator summary, gallery, and contact-sheet paths into the
   physical QA record, so the record used during TestFlight points at the
   correct visual background evidence.
-- The current launch-readiness simulator sweep was last refreshed on
-  2026-06-24 and captured 30 screenshots across iPhone 17 and iPad (A16),
-  covering onboarding, device-model copy, setup-disabled state, parent
-  dashboard, locked dashboard, child math/memory challenges, hand-back,
-  more-time request, Children, Apps, Settings, add-child, and paywall fallback
-  surfaces.
+- The latest generated simulator sweep should capture every seeded state across
+  iPhone 17 and iPad (A16), covering onboarding, device-model copy,
+  setup-disabled state, parent dashboard, locked dashboard, child math/memory
+  challenges, hand-back, more-time request, Children, Apps, Settings,
+  add-child, and paywall fallback surfaces. Run
+  `scripts/launch-readiness-status.sh` to confirm the newest simulator summary,
+  gallery, and contact sheet were generated for the current git commit.
 - When regenerating evidence, explicitly spot-check the setup seed: it must show
   `Tell us about your child`, the Screen Time picker explanation, and the pinned
   disabled Continue reason plus `Choose Screen Time items` action. A setup seed
