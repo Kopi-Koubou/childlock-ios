@@ -48,7 +48,8 @@ Simulator pass criteria:
 - Device setup seed explains same-phone use, child iPad setup, and that a
   parent-only iPhone install does not remotely lock a separate iPad at launch.
 - Setup seed explains that `Continue` stays disabled until Apple's picker
-  returns at least one real app, category, or website selection.
+  returns at least one real app, category, or website selection, with the
+  disabled action and reason pinned at the bottom of the setup screen.
 - Seeded dashboard shows a child, recent activity, app tabs, settings entry,
   and a same-phone handoff card that can lock the parent dashboard.
 - Children tab seed shows the child profile, reports controls, and add-child
@@ -86,11 +87,11 @@ Latest simulator smoke pass, 2026-06-24:
   dashboard, child challenges, setup-disabled state, Children, Apps, Settings,
   add-child, more-time, and paywall surfaces.
 - Latest summary:
-  `.build/qa-simulator-seeds/20260624-125808/summary.md`.
+  `.build/qa-simulator-seeds/20260624-130846/summary.md`.
 - iPhone 17 simulator: `--childlock-qa-seed-onboarding-devices` rendered the
   local-first device setup copy without overlap.
 - iPhone 17 simulator: `--childlock-qa-seed-onboarding-setup` rendered the
-  Screen Time picker explanation for the disabled Continue state without
+  Screen Time picker explanation plus pinned disabled Continue reason without
   overlap.
 - iPhone 17 simulator: `--childlock-qa-seed-dashboard` rendered the parent
   dashboard home state with child summary, same-phone handoff lock card, recent

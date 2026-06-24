@@ -161,6 +161,8 @@ final class HandBackCopyTests: XCTestCase {
         XCTAssertTrue(onboarding.contains("Choose apps, categories, or websites"))
         XCTAssertTrue(onboarding.contains("Select at least one item in Apple's Screen Time picker, then tap Done."))
         XCTAssertTrue(onboarding.contains("No Screen Time items selected yet. If Continue stays disabled"))
+        XCTAssertTrue(onboarding.contains("innerStepWithPinnedFooter"))
+        XCTAssertTrue(onboarding.contains("setupFooter"))
         XCTAssertTrue(onboarding.contains(".accessibilityHint(viewModel.setupBlockingReason ?? \"Continue to parent PIN setup.\")"))
         XCTAssertFalse(onboarding.contains("Choose video apps"))
         XCTAssertFalse(onboarding.contains("Choose games"))

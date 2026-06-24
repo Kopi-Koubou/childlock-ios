@@ -31,7 +31,11 @@ public struct OnboardingFlowView: View {
             case .devices:
                 innerStep { devicesStep }
             case .setup:
-                innerStep { setupStep }
+                innerStepWithPinnedFooter {
+                    setupStep
+                } footer: {
+                    setupFooter
+                }
             case .pinAndDone:
                 innerStep { pinAndDoneStep }
             }
@@ -55,28 +59,7 @@ public struct OnboardingFlowView: View {
 
     private func innerStep<Content: View>(@ViewBuilder content: () -> Content) -> some View {
         VStack(spacing: 0) {
-            // Top bar: back button + step indicator
-            HStack {
-                if viewModel.canGoBack {
-                    Button {
-                        viewModel.goBack()
-                    } label: {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 18, weight: .medium))
-                            .foregroundStyle(ChildlockColor.textPrimary)
-                    }
-                } else {
-                    Color.clear.frame(width: 24, height: 24)
-                }
-
-                Spacer()
-                stepIndicator
-                Spacer()
-                Color.clear.frame(width: 24, height: 24)
-            }
-            .padding(.horizontal, ChildlockSpacing.lg)
-            .padding(.top, ChildlockSpacing.sm)
-            .padding(.bottom, ChildlockSpacing.md)
+            stepTopBar
 
             ScrollView {
                 VStack(alignment: .leading, spacing: ChildlockSpacing.lg) {
@@ -88,6 +71,57 @@ public struct OnboardingFlowView: View {
                 .frame(maxWidth: .infinity)
             }
         }
+    }
+
+    private func innerStepWithPinnedFooter<Content: View, Footer: View>(
+        @ViewBuilder content: () -> Content,
+        @ViewBuilder footer: () -> Footer
+    ) -> some View {
+        VStack(spacing: 0) {
+            stepTopBar
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: ChildlockSpacing.lg) {
+                    content()
+                }
+                .padding(.horizontal, ChildlockSpacing.lg)
+                .padding(.bottom, ChildlockSpacing.lg)
+                .frame(maxWidth: onboardingContentMaxWidth, alignment: .leading)
+                .frame(maxWidth: .infinity)
+            }
+
+            footer()
+                .padding(.horizontal, ChildlockSpacing.lg)
+                .padding(.top, ChildlockSpacing.sm)
+                .padding(.bottom, ChildlockSpacing.lg)
+                .frame(maxWidth: onboardingContentMaxWidth)
+                .frame(maxWidth: .infinity)
+                .background(ChildlockColor.background)
+        }
+    }
+
+    private var stepTopBar: some View {
+        HStack {
+            if viewModel.canGoBack {
+                Button {
+                    viewModel.goBack()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundStyle(ChildlockColor.textPrimary)
+                }
+            } else {
+                Color.clear.frame(width: 24, height: 24)
+            }
+
+            Spacer()
+            stepIndicator
+            Spacer()
+            Color.clear.frame(width: 24, height: 24)
+        }
+        .padding(.horizontal, ChildlockSpacing.lg)
+        .padding(.top, ChildlockSpacing.sm)
+        .padding(.bottom, ChildlockSpacing.md)
     }
 
     // MARK: - Step Indicator Dots
@@ -565,6 +599,11 @@ public struct OnboardingFlowView: View {
             }
             .childlockCard()
 
+        }
+    }
+
+    private var setupFooter: some View {
+        VStack(spacing: ChildlockSpacing.sm) {
             if let blockingReason = viewModel.setupBlockingReason {
                 HStack(alignment: .top, spacing: ChildlockSpacing.xs) {
                     Image(systemName: "info.circle.fill")

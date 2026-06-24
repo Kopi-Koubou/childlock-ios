@@ -213,6 +213,8 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(checklist.contains("interactive `--childlock-qa-seed-pending-math-challenge`"))
         XCTAssertTrue(checklist.contains("`--childlock-qa-seed-onboarding-setup`"))
         XCTAssertTrue(checklist.contains("Continue` stays disabled until Apple's picker"))
+        XCTAssertTrue(checklist.contains("disabled action and reason pinned at the bottom"))
+        XCTAssertTrue(checklist.contains("pinned disabled Continue reason"))
         XCTAssertTrue(simulatorSeedScript.contains("\"--childlock-qa-seed-onboarding-setup\""))
         XCTAssertTrue(rootView.contains("static let onboardingSetup = \"--childlock-qa-seed-onboarding-setup\""))
         XCTAssertTrue(rootView.contains("seedDebugOnboardingSetupStep()"))
