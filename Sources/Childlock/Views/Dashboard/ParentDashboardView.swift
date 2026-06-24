@@ -413,7 +413,7 @@ public struct ParentDashboardView: View {
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(ChildlockColor.textPrimary)
 
-                Text("Lock parent controls first. Brain breaks still open for your child, but settings stay behind your PIN.")
+                Text("Tap Lock before handoff. If you leave Childlock, it locks automatically. Brain breaks still open; settings stay behind your PIN.")
                     .font(ChildlockTypography.caption)
                     .foregroundStyle(ChildlockColor.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -1479,12 +1479,12 @@ public struct ParentDashboardView: View {
         }
 
         if appState.activeProfile?.monitoredSelectionTokenData == nil {
-            return "Choose real apps, categories, or websites in Apps before testing. Planning labels do not lock content. After selection, start enforcement, lock the parent dashboard, then hand this device over. On a child iPad, do this on the iPad."
+            return "Choose real apps, categories, or websites in Apps before testing. Planning labels do not lock content. After selection, start enforcement, lock the parent dashboard or leave Childlock to auto-lock, then hand this device over. On a child iPad, do this on the iPad."
         }
 
         switch monitoringStatus {
         case .running, .intervalStarted:
-            return "Same-phone test: lock the parent dashboard, hand this device over, then start selected content until Brain Break appears. For child iPad, run these steps on the iPad."
+            return "Same-phone test: lock the parent dashboard or leave Childlock to auto-lock, hand this device over, then start selected content until Brain Break appears. For child iPad, run these steps on the iPad."
         case .thresholdReached, .challengeRequested:
             return "Brain Break is pending. Open Childlock from Home or the notification, complete the challenge, then confirm monitoring re-arms."
         case .moreTimeRequested:
@@ -1492,7 +1492,7 @@ public struct ParentDashboardView: View {
         case .failed, .denied:
             return "Fix Screen Time access or the app selection before handing the device over."
         case .notStarted, .intervalEnded, .stopped, .none:
-            return "For TestFlight: choose the shortest interval, start enforcement, lock the parent dashboard, then hand this device over."
+            return "For TestFlight: choose the shortest interval, start enforcement, lock the parent dashboard or leave Childlock to auto-lock, then hand this device over."
         }
     }
 

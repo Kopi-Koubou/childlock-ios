@@ -149,6 +149,27 @@ final class AuthRedirectConfigTests: XCTestCase {
         )
     }
 
+    func testParentDashboardAutoLocksWhenAppLeavesForeground() throws {
+        let rootView = try readRepoFile("Sources/Childlock/App/ChildlockRootView.swift")
+        let normalizedRootView = normalizeWhitespace(rootView)
+
+        XCTAssertTrue(rootView.contains("@Environment(\\.scenePhase) private var scenePhase"))
+        XCTAssertTrue(rootView.contains(".onChange(of: scenePhase)"))
+        XCTAssertTrue(rootView.contains("lockParentDashboardIfNeeded()"))
+        XCTAssertTrue(rootView.contains("private func lockParentDashboardIfNeeded()"))
+        XCTAssertTrue(rootView.contains("appState.lockSettings()"))
+        XCTAssertTrue(
+            normalizedRootView.contains(
+                "if phase == .active {"
+            )
+        )
+        XCTAssertTrue(
+            normalizedRootView.contains(
+                "} else { lockParentDashboardIfNeeded() }"
+            )
+        )
+    }
+
     func testExistingSignedInSessionResumesOnboardingPastWelcome() throws {
         let rootView = try readRepoFile("Sources/Childlock/App/ChildlockRootView.swift")
         let normalizedRootView = normalizeWhitespace(rootView)

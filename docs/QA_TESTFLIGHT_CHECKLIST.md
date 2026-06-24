@@ -263,8 +263,8 @@ Use this when the parent and child share the same iPhone.
    `Make active` on the child who is about to use the shared phone.
    Only one active child monitor runs on a configured device at a time.
    Switching the active child replaces the previous local monitor.
-5. Parent sets the PIN, taps `Lock Parent Dashboard`, and hands the phone to
-   the child.
+5. Parent sets the PIN, taps `Lock Parent Dashboard` or leaves Childlock to
+   let it auto-lock, and hands the phone to the child.
 6. Child continuously uses selected content until the threshold is reached.
 7. Child solves the challenge, swipes up or presses Home, and manually reopens
    the now-unshielded app.

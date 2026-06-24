@@ -241,6 +241,7 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(checklist.contains("Premium is still active"))
         XCTAssertTrue(checklist.contains("One denied-notification pass proving Home -> Childlock still opens the"))
         XCTAssertTrue(checklist.contains("One second full shield loop on the same device proving monitoring re-arms."))
+        XCTAssertTrue(checklist.contains("leaves Childlock to\n   let it auto-lock"))
         XCTAssertTrue(checklist.contains("record Google as N/A"))
         XCTAssertTrue(checklist.contains("confirm the button is hidden"))
         XCTAssertTrue(checklist.contains("`--childlock-qa-seed-onboarding-setup`"))

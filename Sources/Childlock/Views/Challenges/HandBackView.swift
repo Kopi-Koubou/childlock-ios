@@ -55,8 +55,8 @@ public struct HandBackView: View {
                 )
                 HandBackStepRow(
                     iconName: "arrow.up.forward.app.fill",
-                    title: "Return from Home",
-                    detail: "Swipe up or press Home, then tap the app you were using."
+                    title: "Reopen your app",
+                    detail: "Swipe up or press Home, then tap your video, game, or site again."
                 )
             }
             .accessibilityIdentifier("handback_steps")
