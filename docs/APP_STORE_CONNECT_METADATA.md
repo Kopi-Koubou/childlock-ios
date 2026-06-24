@@ -29,7 +29,7 @@ Description:
 ```text
 Childlock helps parents turn selected screen time into short learning breaks.
 
-Set up Childlock on the device your child uses, choose the apps or categories you want to monitor with Apple's Screen Time picker, and pick a brain-break interval. When the interval is reached, Childlock pauses the selected app and guides your child back to a quick age-aware challenge.
+Set up Childlock on the device your child uses, choose the apps, categories, or websites you want to monitor with Apple's Screen Time picker, and pick a brain-break interval. When the interval is reached, Childlock pauses selected content and guides your child back to a quick age-aware challenge.
 
 Parents keep settings protected with a PIN. Children can solve challenges and hand the device back, but they cannot change monitoring settings.
 
@@ -86,8 +86,8 @@ Reviewer flow:
 3. Grant Screen Time access when prompted.
 4. Select one or more apps/categories to monitor.
 5. Set a short brain-break interval.
-6. Open a selected app until the interval threshold is reached.
-7. The app is shielded with Childlock's Brain Break shield.
+6. Open selected app/category/site content until the interval threshold is reached.
+7. The selected content is shielded with Childlock's Brain Break shield.
 8. Tap Start Brain Break, then open Childlock from Home or the notification and
    solve the pending challenge.
 9. Completing the challenge removes the shield and re-arms monitoring.

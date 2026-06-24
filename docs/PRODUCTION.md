@@ -282,9 +282,12 @@ The full TestFlight checklist lives in `docs/QA_TESTFLIGHT_CHECKLIST.md`.
 - Fresh install opens onboarding.
 - Parent signs in with Apple or Google.
 - Parent grants Screen Time access on the child-used device.
-- Parent selects monitored apps/categories.
+- Parent selects monitored apps/categories/websites.
+- Child starts real selected content and records the start time in the hardware
+  QA record.
 - First interval does not shield immediately.
-- Threshold shields the selected app.
+- Threshold shields selected content; record the shield timestamp and compare it
+  with the configured interval.
 - "Start Brain Break" shield path reaches a pending challenge after the child
   opens Childlock from Home or the notification.
 - If notifications are denied or missed, Home -> Childlock still reaches the

@@ -126,6 +126,47 @@ final class ReleaseDocsTests: XCTestCase {
         }
     }
 
+    func testReviewMaterialsMatchContentConsumptionHardwareGate() throws {
+        let metadata = try readRepoFile("docs/APP_STORE_CONNECT_METADATA.md")
+        let appReview = try readRepoFile("docs/APP_REVIEW_NOTES.md")
+        let production = try readRepoFile("docs/PRODUCTION.md")
+        let deviceModel = try readRepoFile("docs/DEVICE_MODEL.md")
+
+        for contents in [metadata, appReview, deviceModel] {
+            let normalized = normalizeWhitespace(contents)
+            XCTAssertTrue(normalized.contains("selected app/category/site content"))
+            XCTAssertFalse(normalized.contains("Open a selected app until the interval threshold is reached."))
+            XCTAssertFalse(normalized.contains("Open a selected app and use it until the interval threshold is reached."))
+        }
+
+        XCTAssertTrue(
+            normalizeWhitespace(metadata).contains(
+                "choose the apps, categories, or websites you want to monitor"
+            )
+        )
+        XCTAssertTrue(
+            normalizeWhitespace(metadata).contains(
+                "Childlock pauses selected content"
+            )
+        )
+        XCTAssertTrue(
+            normalizeWhitespace(production).contains(
+                "Child starts real selected content and records the start time"
+            )
+        )
+        XCTAssertTrue(
+            normalizeWhitespace(production).contains(
+                "Threshold shields selected content; record the shield timestamp"
+            )
+        )
+        XCTAssertFalse(production.contains("Threshold shields the selected app."))
+        XCTAssertTrue(
+            normalizeWhitespace(deviceModel).contains(
+                "Confirm the Childlock shield appears after the configured interval."
+            )
+        )
+    }
+
     func testTestFlightDocsExplainFreshSetupResetForAuthRetesting() throws {
         let production = try readRepoFile("docs/PRODUCTION.md")
         let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")

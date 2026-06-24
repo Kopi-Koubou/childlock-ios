@@ -12,8 +12,9 @@ Reviewer flow:
 4. Grant Screen Time access when prompted.
 5. Select one or more apps/categories to monitor.
 6. Set a short brain-break interval for testing.
-7. Open a selected app and use it until the interval threshold is reached.
-8. The selected app is shielded with Childlock's "Brain Break" shield.
+7. Open selected app/category/site content and use it continuously until the
+   interval threshold is reached.
+8. The selected content is shielded with Childlock's "Brain Break" shield.
 9. Tap "Start Brain Break", open Childlock from Home or the notification, and
    solve the pending challenge.
 10. Completing the challenge removes the shield and re-arms monitoring for the

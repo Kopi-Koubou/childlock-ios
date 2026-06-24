@@ -59,8 +59,9 @@ launch matrix.
 3. Grant Screen Time access.
 4. Select at least one real app, category, or website.
 5. Set the shortest brain-break interval.
-6. Open selected content until the threshold is reached.
-7. Confirm the Childlock shield appears.
+6. Open selected app/category/site content and use it continuously until the
+   threshold is reached.
+7. Confirm the Childlock shield appears after the configured interval.
 8. Tap the shield action and return to Childlock.
 9. Solve the pending challenge.
 10. Confirm shielding clears and monitoring re-arms.
