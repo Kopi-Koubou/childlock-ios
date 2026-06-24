@@ -146,7 +146,7 @@ public final class ChallengeViewModel {
     }
 
     private var acceptsChallengeInput: Bool {
-        state == .presenting || state == .incorrect
+        state == .presenting
     }
 
     private func unlockAndDismiss() {

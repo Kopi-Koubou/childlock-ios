@@ -78,6 +78,41 @@ final class ChallengeViewModelTests: XCTestCase {
         XCTAssertEqual(scheduledActions.count, 1)
     }
 
+    func testAnswersDuringIncorrectFeedbackAreIgnoredUntilChallengeResets() {
+        let screenTime = MockScreenTimeManager()
+        var scheduledActions: [@MainActor () -> Void] = []
+        let viewModel = ChallengeViewModel(
+            screenTime: screenTime,
+            celebrationDuration: 2,
+            scheduler: { _, action in scheduledActions.append(action) }
+        )
+
+        let profile = ChildProfile(name: "Mia", age: 7, avatarName: "fox", intervalMinutes: 10)
+        viewModel.presentChallenge(for: profile, type: .math)
+
+        guard let challenge = viewModel.challenge as? MathChallenge,
+              let wrong = challenge.allAnswers.first(where: { $0 != challenge.correctAnswer }) else {
+            XCTFail("Expected generated math challenge")
+            return
+        }
+
+        viewModel.submitMathAnswer(wrong)
+        viewModel.submitMathAnswer(challenge.correctAnswer)
+        viewModel.submitMathAnswer(wrong)
+
+        XCTAssertEqual(viewModel.attempts, 1)
+        XCTAssertEqual(viewModel.results.count, 0)
+        XCTAssertEqual(viewModel.state, .incorrect)
+        XCTAssertEqual(scheduledActions.count, 1)
+
+        scheduledActions.removeFirst()()
+        viewModel.submitMathAnswer(challenge.correctAnswer)
+
+        XCTAssertEqual(viewModel.attempts, 2)
+        XCTAssertEqual(viewModel.results.count, 1)
+        XCTAssertEqual(viewModel.state, .correct)
+    }
+
     func testDuplicateMemoryCompletionDuringTransitionIsIgnored() {
         let screenTime = MockScreenTimeManager()
         var scheduledActions: [@MainActor () -> Void] = []
