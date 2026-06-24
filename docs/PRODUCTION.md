@@ -338,4 +338,8 @@ The full TestFlight checklist lives in `docs/QA_TESTFLIGHT_CHECKLIST.md`.
   the child blocked.
 - Same shared phone flow keeps dashboard/settings PIN-protected after child use.
 - Child iPad flow is tested by installing and configuring Childlock on the iPad.
+- If subscriptions are attached to the submitted App Store version, RevenueCat
+  loads monthly and annual packages, sandbox purchase activates `Childlock Pro`,
+  restore purchases reactivates Premium, and Premium remains active after app
+  restart.
 - Support, Privacy, and Terms links open successfully.

@@ -283,6 +283,10 @@ hardware_record_completion_status() {
         "Content started at"
         "Shield appeared at"
         "RevenueCat paywall/offering behaved as expected"
+        "RevenueCat offering loaded monthly and annual packages"
+        "Purchase activates Childlock Premium entitlement"
+        "Restore purchases reactivates Premium"
+        "Premium status persists after app restart"
     )
 
     for field in "${required_fields[@]}"; do
@@ -295,6 +299,11 @@ hardware_record_completion_status() {
 
     if grep -Eq '\|[[:space:]]*(Pass / Fail|Pass / Fail / N/A|Apple / Google / N/A|Allowed / Denied|App / Category / Website|Configured / Missing or placeholder)[[:space:]]*\|' "$file"; then
         echo "incomplete checklist"
+        return
+    fi
+
+    if grep -Eq '\|[[:space:]]*(RevenueCat paywall/offering behaved as expected|RevenueCat offering loaded monthly and annual packages|Purchase activates Childlock Premium entitlement|Restore purchases reactivates Premium|Premium status persists after app restart)[[:space:]]*\|[[:space:]]*Not tested[[:space:]]*\|' "$file"; then
+        echo "incomplete paid-flow QA"
         return
     fi
 

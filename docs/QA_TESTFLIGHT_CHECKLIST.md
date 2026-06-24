@@ -155,6 +155,10 @@ gallery and contact-sheet paths.
 | Child manually reopened the now-unshielded content app | Pass / Fail |
 | Parent dashboard stayed PIN-gated after hand-back | Pass / Fail |
 | RevenueCat paywall/offering behaved as expected | Pass / Fail / Not tested |
+| RevenueCat offering loaded monthly and annual packages | Pass / Fail / Not tested |
+| Purchase activates Childlock Premium entitlement | Pass / Fail / Not tested |
+| Restore purchases reactivates Premium | Pass / Fail / Not tested |
+| Premium status persists after app restart | Pass / Fail / Not tested |
 | Notes/blockers |  |
 
 Minimum evidence before launch:
@@ -168,6 +172,9 @@ Minimum evidence before launch:
 - One denied-notification pass proving Home -> Childlock still opens the
   pending challenge.
 - One second full shield loop on the same device proving monitoring re-arms.
+- If subscriptions remain attached to the App Store version, one purchase and
+  restore pass proving RevenueCat returns monthly/annual packages, activates
+  `Childlock Pro`, restores Premium, and keeps Premium active after app restart.
 
 Before starting hardware QA, run `scripts/launch-readiness-status.sh` from the
 repo root. It prints the current Google OAuth build status and latest
@@ -225,6 +232,14 @@ as sufficient for launch.
 24. If multiple child profiles exist, the pending challenge uses the monitored
     child's age/profile.
 25. Support, Privacy, and Terms links open correctly from App Store metadata.
+26. If subscriptions are attached to this App Store version, open the paywall
+    and confirm RevenueCat loads monthly and annual products.
+27. Complete a sandbox purchase and confirm the Settings row changes from
+    `Upgrade` to `Active`.
+28. Delete/reinstall or reset as needed, tap `Restore purchases`, and confirm
+    Premium becomes active again.
+29. Force quit and relaunch Childlock, then confirm Premium is still active and
+    weekly/all-time Children reports remain available.
 
 ## Fresh Setup Reset
 
@@ -282,6 +297,8 @@ Submit to public App Review only after:
 - Hardware QA records above are filled in with no unresolved launch blockers.
 - Apple sign-in works in TestFlight.
 - Google sign-in works in TestFlight if Google OAuth is configured.
+- RevenueCat purchase and restore QA passes if subscriptions remain attached to
+  this app version.
 - Same-phone hardware QA passes.
 - Child iPad hardware QA passes, if iPad support remains a launch promise.
 - At least one full shield loop passes twice on real hardware.

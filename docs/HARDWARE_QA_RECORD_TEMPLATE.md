@@ -28,6 +28,10 @@ shielding, extension actions, purchases, and real hand-back behavior.
 | Content started at |  |
 | Shield appeared at |  |
 | RevenueCat paywall/offering behaved as expected | Pass / Fail / Not tested |
+| RevenueCat offering loaded monthly and annual packages | Pass / Fail / Not tested |
+| Purchase activates Childlock Premium entitlement | Pass / Fail / Not tested |
+| Restore purchases reactivates Premium | Pass / Fail / Not tested |
+| Premium status persists after app restart | Pass / Fail / Not tested |
 | Notes/blockers |  |
 
 ## Required Shield Loop
@@ -90,6 +94,7 @@ Use this when the parent owns an iPhone and the child uses an iPad.
 | --- | --- | --- |
 | Apple sign-in works in TestFlight | Pass / Fail |  |
 | Google sign-in works in TestFlight if Google OAuth is configured | Pass / Fail / N/A |  |
+| RevenueCat purchase and restore QA passes if subscriptions remain attached to this app version | Pass / Fail / N/A |  |
 | Same-phone hardware QA passes | Pass / Fail / N/A |  |
 | Child-iPad hardware QA passes if iPad support remains in launch copy | Pass / Fail / N/A |  |
 | At least two full shield loops pass on real hardware | Pass / Fail |  |
