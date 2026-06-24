@@ -15,6 +15,7 @@ public struct ParentDashboardView: View {
     private let pinService: PINService
     private let fallbackAppChoices = ["YouTube", "Netflix", "Games", "Social Video"]
     private let dashboardContentMaxWidth: CGFloat = 620
+    private let dashboardScrollBottomPadding: CGFloat = 96
     private let parentLockContentMaxWidth: CGFloat = 420
 
     @State private var enteredPIN = ""
@@ -323,6 +324,7 @@ public struct ParentDashboardView: View {
                     }
                 }
                 .padding(ChildlockSpacing.lg)
+                .padding(.bottom, dashboardScrollBottomPadding)
                 .frame(maxWidth: dashboardContentMaxWidth, alignment: .leading)
                 .frame(maxWidth: .infinity)
             }
@@ -758,6 +760,7 @@ public struct ParentDashboardView: View {
                     .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.card))
                 }
                 .padding(ChildlockSpacing.lg)
+                .padding(.bottom, dashboardScrollBottomPadding)
                 .frame(maxWidth: dashboardContentMaxWidth, alignment: .leading)
                 .frame(maxWidth: .infinity)
             }
@@ -946,6 +949,7 @@ public struct ParentDashboardView: View {
                     }
                 }
                 .padding(ChildlockSpacing.lg)
+                .padding(.bottom, dashboardScrollBottomPadding)
                 .frame(maxWidth: dashboardContentMaxWidth, alignment: .leading)
                 .frame(maxWidth: .infinity)
             }
@@ -1395,7 +1399,7 @@ public struct ParentDashboardView: View {
                             VStack(spacing: 0) {
                                 settingsRow(title: "Screen Time Enforcement", value: monitoringStatusLabel, showChevron: false)
 
-                                Text("Locks apps on this device only. For a child iPad, install and configure Childlock on the iPad.")
+                                Text("Locks this device only. Child iPad setup happens on the iPad.")
                                     .font(ChildlockTypography.caption)
                                     .foregroundStyle(ChildlockColor.textSecondary)
                                     .fixedSize(horizontal: false, vertical: true)
@@ -1438,14 +1442,16 @@ public struct ParentDashboardView: View {
                                     .disabled(monitoringProfile == nil)
                                 }
 
-                                Divider().background(ChildlockColor.surfaceMuted)
+                                if shouldShowStopLockEnforcementAction {
+                                    Divider().background(ChildlockColor.surfaceMuted)
 
-                                Button {
-                                    appState.lockSettings(pinService: pinService)
-                                } label: {
-                                    settingsRowContent(title: "Lock Parent Dashboard", value: "", showChevron: true)
+                                    Button {
+                                        appState.lockSettings(pinService: pinService)
+                                    } label: {
+                                        settingsRowContent(title: "Lock Parent Dashboard", value: "", showChevron: true)
+                                    }
+                                    .buttonStyle(.plain)
                                 }
-                                .buttonStyle(.plain)
                             }
                         }
 
@@ -1495,6 +1501,7 @@ public struct ParentDashboardView: View {
                     }
                 }
                 .padding(ChildlockSpacing.lg)
+                .padding(.bottom, dashboardScrollBottomPadding)
                 .frame(maxWidth: dashboardContentMaxWidth, alignment: .leading)
                 .frame(maxWidth: .infinity)
             }
@@ -1503,42 +1510,70 @@ public struct ParentDashboardView: View {
     }
 
     private var screenTimeEnforcementGuidance: some View {
-        HStack(alignment: .top, spacing: ChildlockSpacing.xs) {
-            Image(systemName: "checklist")
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(ChildlockColor.primary)
-                .frame(width: 18)
+        VStack(alignment: .leading, spacing: ChildlockSpacing.xs) {
+            ForEach(Array(screenTimeEnforcementGuidanceSteps.enumerated()), id: \.offset) { index, step in
+                HStack(alignment: .top, spacing: ChildlockSpacing.xs) {
+                    Text("\(index + 1)")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundStyle(.white)
+                        .frame(width: 18, height: 18)
+                        .background(ChildlockColor.primary)
+                        .clipShape(Circle())
+                        .padding(.top, 1)
 
-            Text(screenTimeEnforcementGuidanceText)
-                .font(ChildlockTypography.caption)
-                .foregroundStyle(ChildlockColor.textSecondary)
-                .fixedSize(horizontal: false, vertical: true)
+                    Text(step)
+                        .font(ChildlockTypography.caption)
+                        .foregroundStyle(ChildlockColor.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, ChildlockSpacing.md)
         .padding(.bottom, ChildlockSpacing.sm)
     }
 
-    private var screenTimeEnforcementGuidanceText: String {
+    private var screenTimeEnforcementGuidanceSteps: [String] {
         guard appState.activeProfile != nil else {
-            return "Add a child profile before starting a TestFlight shield-loop test."
+            return ["Add a child profile before starting a TestFlight shield-loop test."]
         }
 
         if appState.activeProfile?.monitoredSelectionTokenData == nil {
-            return "Choose real apps, categories, or websites in Apps before testing. Planning labels do not lock content. After selection, start enforcement, lock the parent dashboard or leave Childlock to auto-lock, then hand this device over. On a child iPad, do this on the iPad."
+            return [
+                "Choose real apps in Apps.",
+                "Planning labels don't lock.",
+                "Start, then lock dashboard.",
+                "Child iPad: repeat setup there.",
+            ]
         }
 
         switch monitoringStatus {
         case .running, .intervalStarted:
-            return "Same-phone test: lock the parent dashboard or leave Childlock to auto-lock, hand this device over, then start selected content until Brain Break appears. For child iPad, run these steps on the iPad."
+            return [
+                "Lock the parent dashboard or leave Childlock to auto-lock.",
+                "Hand this device over and start selected content until Brain Break appears.",
+                "For a child iPad, run these steps on the iPad.",
+            ]
         case .thresholdReached, .challengeRequested:
-            return "Brain Break is pending. Open Childlock from Home or the notification, complete the challenge, then confirm monitoring re-arms."
+            return [
+                "Brain Break is pending.",
+                "Open Childlock from Home or the notification.",
+                "Complete the challenge, then confirm monitoring re-arms.",
+            ]
         case .moreTimeRequested:
-            return "\(moreTimeRequestProfileName) asked for more time. Enter the parent PIN, respond, then confirm enforcement re-arms for another full interval."
+            return [
+                "\(moreTimeRequestProfileName) asked for more time.",
+                "Enter the parent PIN and respond.",
+                "Confirm enforcement re-arms for another full interval.",
+            ]
         case .failed, .denied:
-            return "Fix Screen Time access or the app selection before handing the device over."
+            return ["Fix Screen Time access or the app selection before handing the device over."]
         case .notStarted, .intervalEnded, .stopped, .none:
-            return "For TestFlight: choose the shortest interval, start enforcement, lock the parent dashboard or leave Childlock to auto-lock, then hand this device over."
+            return [
+                "Choose the shortest interval for TestFlight.",
+                "Start enforcement.",
+                "Lock the parent dashboard or leave Childlock to auto-lock, then hand this device over.",
+            ]
         }
     }
 

@@ -43,27 +43,18 @@ public struct HandBackView: View {
                 .font(ChildlockTypography.childTitle)
                 .foregroundStyle(ChildlockColor.textPrimary)
 
-            Text("Nice work. Your app is unlocked now.")
+            Text("You can go back now.")
                 .font(ChildlockTypography.childBody)
                 .foregroundStyle(ChildlockColor.textSecondary)
                 .multilineTextAlignment(.center)
 
-            VStack(spacing: ChildlockSpacing.sm) {
-                HandBackStepRow(
-                    iconName: "checkmark.circle.fill",
-                    title: "Content unlocked",
-                    detail: "The shield is cleared and your content can open again."
-                )
-
-                HandBackReturnCue(
-                    iconName: "arrow.up.forward.circle.fill",
-                    title: "Back to your app",
-                    detail: "Swipe up or press Home once, then tap the app, video, game, or site you were using."
-                )
-                .accessibilityIdentifier("handback_resume_guidance")
-                .accessibilityLabel("Back to your app. Swipe up or press Home once, then tap the app, video, game, or site you were using.")
-            }
-            .accessibilityIdentifier("handback_steps")
+            HandBackReturnCue(
+                iconName: "arrow.up",
+                title: "Swipe up",
+                detail: "Open your app."
+            )
+            .accessibilityIdentifier("handback_resume_guidance")
+            .accessibilityLabel("Swipe up. Open your app.")
             .padding(.top, ChildlockSpacing.xs)
 
             Spacer()
@@ -142,63 +133,35 @@ private struct HandBackReturnCue: View {
     let detail: String
 
     var body: some View {
-        HStack(alignment: .center, spacing: ChildlockSpacing.sm) {
+        VStack(spacing: ChildlockSpacing.sm) {
             Image(systemName: iconName)
-                .font(.system(size: 26, weight: .bold))
-                .foregroundStyle(ChildlockColor.surface)
-                .frame(width: 48, height: 48)
+                .font(.system(size: 34, weight: .bold))
+                .foregroundStyle(.white)
+                .frame(width: 72, height: 72)
                 .background(ChildlockColor.primary)
                 .clipShape(Circle())
+                .childlockShadow(ChildlockShadow.sm)
 
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(ChildlockTypography.subtitle)
-                    .foregroundStyle(ChildlockColor.textPrimary)
-                Text(detail)
-                    .font(ChildlockTypography.body)
-                    .foregroundStyle(ChildlockColor.textPrimary.opacity(0.82))
-                    .multilineTextAlignment(.leading)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            Text(title)
+                .font(ChildlockTypography.subtitle)
+                .foregroundStyle(ChildlockColor.textPrimary)
+                .multilineTextAlignment(.center)
+
+            Text(detail)
+                .font(ChildlockTypography.body)
+                .foregroundStyle(ChildlockColor.textPrimary.opacity(0.82))
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .padding(.vertical, ChildlockSpacing.lg)
         .padding(.horizontal, ChildlockSpacing.md)
+        .frame(maxWidth: .infinity)
         .background(ChildlockColor.primarySoft)
         .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.control))
         .overlay {
             RoundedRectangle(cornerRadius: ChildlockRadius.control)
                 .stroke(ChildlockColor.primary.opacity(0.18), lineWidth: 1)
         }
-        .accessibilityElement(children: .combine)
-    }
-}
-
-private struct HandBackStepRow: View {
-    let iconName: String
-    let title: String
-    let detail: String
-
-    var body: some View {
-        HStack(alignment: .top, spacing: ChildlockSpacing.sm) {
-            Image(systemName: iconName)
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundStyle(ChildlockColor.primary)
-                .frame(width: 28, height: 28)
-
-            VStack(alignment: .leading, spacing: 3) {
-                Text(title)
-                    .font(ChildlockTypography.bodyBold)
-                    .foregroundStyle(ChildlockColor.textPrimary)
-                Text(detail)
-                    .font(ChildlockTypography.caption)
-                    .foregroundStyle(ChildlockColor.textSecondary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .padding(.vertical, ChildlockSpacing.sm)
-        .padding(.horizontal, ChildlockSpacing.md)
-        .background(ChildlockColor.surface)
-        .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.control))
         .accessibilityElement(children: .combine)
     }
 }

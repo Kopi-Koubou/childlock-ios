@@ -92,8 +92,8 @@ Reviewer flow:
 8. Tap Start Brain Break, then tap the Childlock notification or open Childlock
    from Home and solve the pending challenge.
 9. Completing the challenge removes the shield and re-arms monitoring.
-10. The child hand-back screen says `Back to your app`, guides the child to
-    reopen the now-unshielded app manually, and requires the parent PIN before
+10. The child hand-back screen says `Swipe up`, guides the child
+    back through Home or the app switcher, and requires the parent PIN before
     entering the parent dashboard.
 
 Sign-in uses Apple's native Sign in with Apple flow and, when configured for the

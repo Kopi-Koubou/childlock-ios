@@ -329,7 +329,7 @@ The full TestFlight checklist lives in `docs/QA_TESTFLIGHT_CHECKLIST.md`.
 - If notifications are denied or missed, Home -> Childlock still reaches the
   pending challenge.
 - Challenge completion removes shields.
-- The hand-back screen says `Back to your app`, and the child manually reopens
+- The hand-back screen says `Swipe up`, and the child returns to
   the now-unshielded app/content. iOS does not let Childlock automatically
   return to another app or restore media state.
 - Monitoring re-arms for another full interval.
