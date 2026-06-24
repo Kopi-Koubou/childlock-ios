@@ -30,9 +30,17 @@ public struct BackendConfig: Equatable, Sendable {
     }
 
     public var isGoogleSignInConfigured: Bool {
-        googleIOSClientID?.isEmpty == false
-            && googleWebClientID?.isEmpty == false
-            && googleReversedClientID?.isEmpty == false
+        guard
+            let googleIOSClientID,
+            !googleIOSClientID.isEmpty,
+            googleWebClientID?.isEmpty == false,
+            let googleReversedClientID,
+            !googleReversedClientID.isEmpty
+        else {
+            return false
+        }
+
+        return googleReversedClientID == Self.expectedGoogleReversedClientID(for: googleIOSClientID)
     }
 
     private static func stringValue(
@@ -73,5 +81,15 @@ public struct BackendConfig: Equatable, Sendable {
 
         let uppercased = value.uppercased()
         return uppercased.contains("YOUR_") || uppercased.contains("_YOUR_")
+    }
+
+    private static func expectedGoogleReversedClientID(for iosClientID: String) -> String? {
+        let suffix = ".apps.googleusercontent.com"
+        guard iosClientID.hasSuffix(suffix) else { return nil }
+
+        let clientPrefix = String(iosClientID.dropLast(suffix.count))
+        guard !clientPrefix.isEmpty else { return nil }
+
+        return "com.googleusercontent.apps.\(clientPrefix)"
     }
 }

@@ -71,4 +71,28 @@ final class BackendConfigTests: XCTestCase {
         XCTAssertTrue(config.isSupabaseConfigured)
         XCTAssertTrue(config.isGoogleSignInConfigured)
     }
+
+    func testGoogleSignInRequiresReversedClientIDToMatchIOSClientID() {
+        let mismatchedReversedClientID = BackendConfig(environment: [
+            "SUPABASE_URL": "https://jkncpveupvozsmbbkvgq.supabase.co",
+            "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_live_public_key",
+            "GOOGLE_IOS_CLIENT_ID": "1234567890-abc.apps.googleusercontent.com",
+            "GOOGLE_WEB_CLIENT_ID": "9876543210-web.apps.googleusercontent.com",
+            "GOOGLE_REVERSED_CLIENT_ID": "com.googleusercontent.apps.wrong-client",
+        ])
+
+        XCTAssertTrue(mismatchedReversedClientID.isSupabaseConfigured)
+        XCTAssertFalse(mismatchedReversedClientID.isGoogleSignInConfigured)
+
+        let malformedIOSClientID = BackendConfig(environment: [
+            "SUPABASE_URL": "https://jkncpveupvozsmbbkvgq.supabase.co",
+            "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_live_public_key",
+            "GOOGLE_IOS_CLIENT_ID": "1234567890-abc",
+            "GOOGLE_WEB_CLIENT_ID": "9876543210-web.apps.googleusercontent.com",
+            "GOOGLE_REVERSED_CLIENT_ID": "com.googleusercontent.apps.1234567890-abc",
+        ])
+
+        XCTAssertTrue(malformedIOSClientID.isSupabaseConfigured)
+        XCTAssertFalse(malformedIOSClientID.isGoogleSignInConfigured)
+    }
 }
