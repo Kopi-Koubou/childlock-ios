@@ -43,18 +43,12 @@ public struct HandBackView: View {
                 .font(ChildlockTypography.childTitle)
                 .foregroundStyle(ChildlockColor.textPrimary)
 
-            Text("You can go back now.")
-                .font(ChildlockTypography.childBody)
-                .foregroundStyle(ChildlockColor.textSecondary)
-                .multilineTextAlignment(.center)
-
             HandBackReturnCue(
                 iconName: "arrow.up",
-                title: "Swipe up",
-                detail: "Open your app."
+                title: "Swipe up"
             )
             .accessibilityIdentifier("handback_resume_guidance")
-            .accessibilityLabel("Swipe up. Open your app.")
+            .accessibilityLabel("Swipe up to go back.")
             .padding(.top, ChildlockSpacing.xs)
 
             Spacer()
@@ -130,7 +124,6 @@ public struct HandBackView: View {
 private struct HandBackReturnCue: View {
     let iconName: String
     let title: String
-    let detail: String
 
     var body: some View {
         VStack(spacing: ChildlockSpacing.sm) {
@@ -146,12 +139,6 @@ private struct HandBackReturnCue: View {
                 .font(ChildlockTypography.subtitle)
                 .foregroundStyle(ChildlockColor.textPrimary)
                 .multilineTextAlignment(.center)
-
-            Text(detail)
-                .font(ChildlockTypography.body)
-                .foregroundStyle(ChildlockColor.textPrimary.opacity(0.82))
-                .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
         }
         .padding(.vertical, ChildlockSpacing.lg)
         .padding(.horizontal, ChildlockSpacing.md)
