@@ -73,6 +73,7 @@ Test order:
    This proves monitoring re-arms after challenge completion.
 
 Checklist:
+- docs/TESTFLIGHT_RUN_SHEET.md
 - docs/QA_TESTFLIGHT_CHECKLIST.md
 
 Launch is not ready until the generated records are filled with passing results

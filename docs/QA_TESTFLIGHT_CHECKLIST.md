@@ -144,6 +144,9 @@ created together and the same-phone / child-iPad test order is printed:
 scripts/prepare-testflight-qa.sh <build-number>
 ```
 
+Use `docs/TESTFLIGHT_RUN_SHEET.md` as the short field guide while holding the
+test device. This checklist remains the full source of truth.
+
 The generated record is based on `docs/HARDWARE_QA_RECORD_TEMPLATE.md`.
 It pre-fills the build number, date, scenario, git commit, tester name when
 available, the latest simulator QA summary path, and the latest simulator QA

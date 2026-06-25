@@ -79,6 +79,7 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(validationScript.contains("pending challenge from the alert or Home"))
         XCTAssertTrue(validationScript.contains("hand-back shows Done plus the back-arrow cue"))
         XCTAssertTrue(testFlightQAPacketScript.contains("sees Done plus the back-arrow cue"))
+        XCTAssertTrue(validationScript.contains("Use docs/TESTFLIGHT_RUN_SHEET.md while testing on device."))
         XCTAssertTrue(validationScript.contains("Use docs/QA_TESTFLIGHT_CHECKLIST.md"))
         XCTAssertTrue(production.contains(".build/validation-logs/"))
         XCTAssertTrue(production.contains("last 120 log lines"))

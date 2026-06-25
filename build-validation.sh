@@ -328,6 +328,7 @@ echo "7. Verify: Start closes the shielded app and Childlock opens the pending c
 echo "8. Verify: challenge completion clears shields and re-arms monitoring."
 echo "9. Verify: hand-back shows Done plus the back-arrow cue and keeps the parent dashboard behind the PIN."
 echo ""
+echo "Use docs/TESTFLIGHT_RUN_SHEET.md while testing on device."
 echo "Use docs/QA_TESTFLIGHT_CHECKLIST.md for the full same-phone and child-iPad matrix."
 echo ""
 echo "=== Build validation script complete ==="

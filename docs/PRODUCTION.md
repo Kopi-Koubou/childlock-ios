@@ -330,6 +330,8 @@ xcodebuild -project Childlock.xcodeproj \
 
 Use a physical child device. The simulator cannot validate the production loop.
 The full TestFlight checklist lives in `docs/QA_TESTFLIGHT_CHECKLIST.md`.
+Use `docs/TESTFLIGHT_RUN_SHEET.md` as the short device-in-hand guide for the
+same-phone, child-iPad, denied-notification, second-loop, and purchase passes.
 
 - Fresh install opens onboarding.
 - Parent signs in with Apple, or Google if the submitted build has Google OAuth
