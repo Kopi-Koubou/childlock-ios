@@ -132,10 +132,11 @@ The App Store support, privacy, and terms links live in the separate
 
 Deploy that repo after changing the static pages under `public/childlock/`.
 
-Before App Review, verify the live URLs used by App Store Connect and in-app
-settings:
+Before App Review, verify the paste-ready App Store copy and the live URLs used
+by App Store Connect and in-app settings:
 
 ```sh
+scripts/check-app-store-submission-copy.sh
 scripts/check-public-release-links.sh
 ```
 

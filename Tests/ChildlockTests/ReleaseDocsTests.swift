@@ -64,6 +64,8 @@ final class ReleaseDocsTests: XCTestCase {
         let production = try readRepoFile("docs/PRODUCTION.md")
         let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")
         let linkChecker = try readRepoFile("scripts/check-public-release-links.sh")
+        let copyChecker = try readRepoFile("scripts/check-app-store-submission-copy.sh")
+        let readiness = try readRepoFile("scripts/launch-readiness-status.sh")
         let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
         let paywall = try readRepoFile("Sources/Childlock/Views/Paywall/PaywallView.swift")
 
@@ -71,16 +73,33 @@ final class ReleaseDocsTests: XCTestCase {
         let privacyURL = "https://kouboulabs.com/childlock/privacy"
         let termsURL = "https://kouboulabs.com/childlock/terms"
 
-        for contents in [metadata, appReview, dashboard, linkChecker] {
+        for contents in [metadata, appReview, dashboard, linkChecker, copyChecker] {
             XCTAssertTrue(contents.contains(supportURL))
             XCTAssertTrue(contents.contains(privacyURL))
             XCTAssertTrue(contents.contains(termsURL))
         }
 
+        XCTAssertTrue(production.contains("scripts/check-app-store-submission-copy.sh"))
+        XCTAssertTrue(checklist.contains("scripts/check-app-store-submission-copy.sh"))
+        XCTAssertTrue(readiness.contains("scripts/check-app-store-submission-copy.sh"))
         XCTAssertTrue(production.contains("scripts/check-public-release-links.sh"))
         XCTAssertTrue(checklist.contains("scripts/check-public-release-links.sh"))
         XCTAssertTrue(linkChecker.contains("curl -LsS"))
         XCTAssertTrue(linkChecker.contains("text/html"))
+        XCTAssertTrue(copyChecker.contains("check_max(\"App name\""))
+        XCTAssertTrue(copyChecker.contains("check_max(\"Subtitle\""))
+        XCTAssertTrue(copyChecker.contains("check_max(\"Promotional text\""))
+        XCTAssertTrue(copyChecker.contains("check_max(\"Description\""))
+        XCTAssertTrue(copyChecker.contains("check_max(\"Keywords\""))
+        XCTAssertTrue(copyChecker.contains("monthlyProductID"))
+        XCTAssertTrue(copyChecker.contains("annualProductID"))
+        XCTAssertTrue(copyChecker.contains("premiumEntitlementID"))
+        XCTAssertTrue(copyChecker.contains("There is no separate username/password account"))
+        XCTAssertTrue(copyChecker.contains("Screen Time enforcement is available without purchase"))
+        XCTAssertTrue(copyChecker.contains("not presented as a parent-phone remote controller"))
+        XCTAssertTrue(copyChecker.contains("For a child iPad, install and configure Childlock on the iPad"))
+        XCTAssertTrue(copyChecker.contains("free trial"))
+        XCTAssertTrue(copyChecker.contains("Raw Screen Time app selection token payloads"))
 
         XCTAssertTrue(dashboard.contains("Help Center"))
         XCTAssertTrue(dashboard.contains("Privacy Policy"))

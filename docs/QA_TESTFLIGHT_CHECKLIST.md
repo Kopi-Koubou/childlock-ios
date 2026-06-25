@@ -269,8 +269,9 @@ as sufficient for launch.
 25. If multiple child profiles exist, the pending challenge uses the monitored
     child's age/profile.
 26. Support, Privacy, and Terms links open correctly from App Store metadata.
-    Run `scripts/check-public-release-links.sh` before App Review to verify the
-    public pages are live.
+    Run `scripts/check-app-store-submission-copy.sh` before App Review to catch
+    paste limits, product IDs, review notes, and entitlement drift. Then run
+    `scripts/check-public-release-links.sh` to verify the public pages are live.
 27. If subscriptions are attached to this App Store version, open the paywall
     and confirm RevenueCat loads monthly and annual products.
 28. Complete a sandbox purchase and confirm the Settings row changes from
