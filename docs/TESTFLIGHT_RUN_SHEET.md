@@ -91,7 +91,8 @@ Stop and mark the record blocked if any of these happen:
 - The shield appears immediately instead of after the interval.
 - `Start` does not leave a path back to Childlock.
 - The child can reach the parent dashboard without the PIN.
-- A parent-only iPhone install is needed to control a separate iPad.
+- The child-iPad pass appears to require a parent-only iPhone install to
+  remotely control a separate iPad. That is not a supported v1 launch claim.
 - RevenueCat cannot load products while subscriptions are attached to the
   submitted App Store version.
 

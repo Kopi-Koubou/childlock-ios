@@ -263,6 +263,8 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(normalizedRunSheet.contains("Do not mark it as remote iPad control."))
         XCTAssertTrue(normalizedRunSheet.contains("Run one denied-notification pass"))
         XCTAssertTrue(normalizedRunSheet.contains("Run one second full interval"))
+        XCTAssertTrue(normalizedRunSheet.contains("The child-iPad pass appears to require a parent-only iPhone install to remotely control a separate iPad. That is not a supported v1 launch claim."))
+        XCTAssertFalse(normalizedRunSheet.contains("A parent-only iPhone install is needed to control a separate iPad."))
         XCTAssertTrue(normalizedRunSheet.contains("Submit only when strict mode passes"))
         XCTAssertTrue(checklist.contains("| Build number |"))
         XCTAssertTrue(checklist.contains("| Git commit |"))
