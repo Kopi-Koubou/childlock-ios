@@ -34,7 +34,11 @@ public struct ChildlockRootView: View {
             ChildlockColor.background.ignoresSafeArea()
 
             if canShowDashboard {
+                #if DEBUG
                 ParentDashboardView(appState: appState, onTriggerChallenge: { triggerChallenge() })
+                #else
+                ParentDashboardView(appState: appState)
+                #endif
             } else {
                 OnboardingFlowView(viewModel: onboardingViewModel)
                     .onChange(of: onboardingViewModel.isComplete) { _, isComplete in

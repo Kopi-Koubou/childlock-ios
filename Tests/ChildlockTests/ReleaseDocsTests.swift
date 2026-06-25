@@ -303,6 +303,7 @@ final class ReleaseDocsTests: XCTestCase {
         XCTAssertTrue(checklist.contains("confirm the button is hidden"))
         XCTAssertTrue(checklist.contains("`--childlock-qa-seed-onboarding-setup`"))
         XCTAssertTrue(checklist.contains("`--childlock-qa-seed-handback`"))
+        XCTAssertTrue(checklist.contains("Debug\n  simulator seeds may show `Practice Brain Break`; TestFlight/Release builds\n  should not show that QA-only shortcut."))
         XCTAssertTrue(checklist.contains("Continue` stays disabled until Apple's picker"))
         XCTAssertTrue(checklist.contains("disabled action, reason, and `Choose apps, categories, or websites` recovery"))
         XCTAssertTrue(normalizedChecklist.contains("pinned disabled Continue reason"))

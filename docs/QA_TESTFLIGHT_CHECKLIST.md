@@ -56,7 +56,9 @@ Simulator pass criteria:
   disabled action, reason, and `Choose apps, categories, or websites` recovery
   action pinned at the bottom of the setup screen.
 - Seeded dashboard shows a child, recent activity, app tabs, settings entry,
-  and a same-phone handoff card that can lock the parent dashboard.
+  and a same-phone handoff card that can lock the parent dashboard. Debug
+  simulator seeds may show `Practice Brain Break`; TestFlight/Release builds
+  should not show that QA-only shortcut.
 - Children tab seed shows the child profile, reports controls, and add-child
   entry without overlap on iPhone and iPad.
 - Children tab makes the active child visible; if multiple children are added

@@ -234,6 +234,18 @@ final class AuthRedirectConfigTests: XCTestCase {
         XCTAssertFalse(onboarding.localizedCaseInsensitiveContains("continue without"))
     }
 
+    func testPracticeBrainBreakEntryPointStaysDebugOnly() throws {
+        let rootView = normalizeWhitespace(
+            try readRepoFile("Sources/Childlock/App/ChildlockRootView.swift")
+        )
+        let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
+
+        XCTAssertTrue(dashboard.contains("Button(\"Practice Brain Break\", action: onTriggerChallenge)"))
+        XCTAssertTrue(dashboard.contains("if let onTriggerChallenge"))
+        XCTAssertTrue(rootView.contains("#if DEBUG ParentDashboardView(appState: appState, onTriggerChallenge: { triggerChallenge() }) #else ParentDashboardView(appState: appState) #endif"))
+        XCTAssertFalse(rootView.contains("#else ParentDashboardView(appState: appState, onTriggerChallenge: { triggerChallenge() }) #endif"))
+    }
+
     func testDebugLaunchSeedsStayDebugOnly() throws {
         let authService = normalizeWhitespace(
             try readRepoFile("Sources/Childlock/Services/AuthService.swift")
