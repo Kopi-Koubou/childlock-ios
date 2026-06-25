@@ -347,16 +347,76 @@ hardware_record_completion_status() {
     echo "filled; review manually"
 }
 
+hardware_record_simulator_evidence_status() {
+    local file="$1"
+    local summary_path
+    local gallery_path
+    local contact_sheet_path
+    local summary_file
+    local gallery_file
+    local contact_sheet_file
+    local current_commit
+    local commit
+
+    if [[ -z "$file" || ! -f "$file" ]]; then
+        echo "simulator evidence missing"
+        return
+    fi
+
+    summary_path="$(hardware_record_field "$file" "Latest simulator QA summary")"
+    gallery_path="$(hardware_record_field "$file" "Latest simulator QA gallery")"
+    contact_sheet_path="$(hardware_record_field "$file" "Latest simulator QA contact sheet")"
+
+    if [[ -z "$summary_path" || "$summary_path" == not\ generated* ]]; then
+        echo "simulator evidence missing"
+        return
+    fi
+
+    if [[ "$summary_path" == /* ]]; then
+        summary_file="$summary_path"
+    else
+        summary_file="$ROOT_DIR/$summary_path"
+    fi
+
+    if [[ "$gallery_path" == /* ]]; then
+        gallery_file="$gallery_path"
+    else
+        gallery_file="$ROOT_DIR/$gallery_path"
+    fi
+
+    if [[ "$contact_sheet_path" == /* ]]; then
+        contact_sheet_file="$contact_sheet_path"
+    else
+        contact_sheet_file="$ROOT_DIR/$contact_sheet_path"
+    fi
+
+    if [[ ! -f "$summary_file" || ! -f "$gallery_file" || ! -f "$contact_sheet_file" ]]; then
+        echo "simulator evidence file missing"
+        return
+    fi
+
+    current_commit="$(current_git_commit)"
+    commit="$(summary_git_commit "$summary_file")"
+    if [[ -z "$commit" || "$commit" != "$current_commit" ]]; then
+        echo "simulator evidence stale"
+        return
+    fi
+
+    echo "simulator evidence current"
+}
+
 describe_hardware_record() {
     local file="$1"
     local commit="$2"
     local evidence
     local completion
+    local simulator_evidence
 
     evidence="$(describe_evidence_path "$file" "$commit")"
     completion="$(hardware_record_completion_status "$file")"
+    simulator_evidence="$(hardware_record_simulator_evidence_status "$file")"
 
-    echo "$evidence; $completion"
+    echo "$evidence; $completion; $simulator_evidence"
 }
 
 append_strict_blocker() {
@@ -370,6 +430,8 @@ collect_strict_blockers() {
     local child_ipad_commit
     local same_phone_completion
     local child_ipad_completion
+    local same_phone_simulator_evidence
+    local child_ipad_simulator_evidence
     local google_status
 
     strict_blockers=()
@@ -412,18 +474,24 @@ collect_strict_blockers() {
 
     same_phone_commit="$(hardware_record_git_commit "$latest_same_phone_record")"
     same_phone_completion="$(hardware_record_completion_status "$latest_same_phone_record")"
+    same_phone_simulator_evidence="$(hardware_record_simulator_evidence_status "$latest_same_phone_record")"
     if [[ -z "$latest_same_phone_record" || "$same_phone_commit" != "$current_commit" ]]; then
         append_strict_blocker "Same-phone hardware QA record is missing or stale."
     elif [[ "$same_phone_completion" != "filled; review manually" ]]; then
         append_strict_blocker "Same-phone hardware QA record is not launch-complete: $same_phone_completion."
+    elif [[ "$same_phone_simulator_evidence" != "simulator evidence current" ]]; then
+        append_strict_blocker "Same-phone hardware QA record does not point to current simulator evidence: $same_phone_simulator_evidence."
     fi
 
     child_ipad_commit="$(hardware_record_git_commit "$latest_child_ipad_record")"
     child_ipad_completion="$(hardware_record_completion_status "$latest_child_ipad_record")"
+    child_ipad_simulator_evidence="$(hardware_record_simulator_evidence_status "$latest_child_ipad_record")"
     if [[ -z "$latest_child_ipad_record" || "$child_ipad_commit" != "$current_commit" ]]; then
         append_strict_blocker "Child-iPad hardware QA record is missing or stale."
     elif [[ "$child_ipad_completion" != "filled; review manually" ]]; then
         append_strict_blocker "Child-iPad hardware QA record is not launch-complete: $child_ipad_completion."
+    elif [[ "$child_ipad_simulator_evidence" != "simulator evidence current" ]]; then
+        append_strict_blocker "Child-iPad hardware QA record does not point to current simulator evidence: $child_ipad_simulator_evidence."
     fi
 }
 

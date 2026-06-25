@@ -19,25 +19,46 @@ output_file="$output_dir/${safe_scenario:-manual}_${safe_build:-unknown-build}.m
 git_commit="$(git -C "$ROOT_DIR" rev-parse --short HEAD 2>/dev/null || echo "unknown")"
 tester_name="$(git -C "$ROOT_DIR" config user.name 2>/dev/null || true)"
 tester_name="${tester_name:-${USER:-}}"
-latest_simulator_summary="$(find "$ROOT_DIR/.build/qa-simulator-seeds" -path "*/summary.md" -type f -print 2>/dev/null | sort | tail -n 1)"
+
+summary_git_commit() {
+    local file="$1"
+
+    [[ -f "$file" ]] || return 0
+    awk -F ':' '
+        $1 == "Git commit" {
+            value = $2
+            gsub(/^[ \t]+|[ \t]+$/, "", value)
+            print value
+            exit
+        }
+    ' "$file"
+}
+
+latest_current_simulator_summary() {
+    local summary
+
+    [[ -d "$ROOT_DIR/.build/qa-simulator-seeds" ]] || return 0
+
+    while read -r summary; do
+        if [[ "$(summary_git_commit "$summary")" == "$git_commit" ]]; then
+            echo "$summary"
+            return 0
+        fi
+    done < <(find "$ROOT_DIR/.build/qa-simulator-seeds" -path "*/summary.md" -type f -print 2>/dev/null | sort -r)
+}
+
+latest_simulator_summary="$(latest_current_simulator_summary)"
 if [[ -n "$latest_simulator_summary" ]]; then
+    latest_simulator_dir="$(dirname "$latest_simulator_summary")"
+    latest_simulator_gallery="$latest_simulator_dir/gallery.html"
+    latest_simulator_contact_sheet="$latest_simulator_dir/contact-sheet.png"
     latest_simulator_summary="${latest_simulator_summary#$ROOT_DIR/}"
-else
-    latest_simulator_summary="not generated yet"
-fi
-
-latest_simulator_gallery="$(find "$ROOT_DIR/.build/qa-simulator-seeds" -path "*/gallery.html" -type f -print 2>/dev/null | sort | tail -n 1)"
-if [[ -n "$latest_simulator_gallery" ]]; then
     latest_simulator_gallery="${latest_simulator_gallery#$ROOT_DIR/}"
-else
-    latest_simulator_gallery="not generated yet"
-fi
-
-latest_simulator_contact_sheet="$(find "$ROOT_DIR/.build/qa-simulator-seeds" -path "*/contact-sheet.png" -type f -print 2>/dev/null | sort | tail -n 1)"
-if [[ -n "$latest_simulator_contact_sheet" ]]; then
     latest_simulator_contact_sheet="${latest_simulator_contact_sheet#$ROOT_DIR/}"
 else
-    latest_simulator_contact_sheet="not generated yet"
+    latest_simulator_summary="not generated for current commit; run scripts/qa-simulator-seeds.sh"
+    latest_simulator_gallery="not generated for current commit; run scripts/qa-simulator-seeds.sh"
+    latest_simulator_contact_sheet="not generated for current commit; run scripts/qa-simulator-seeds.sh"
 fi
 
 read_config_value() {

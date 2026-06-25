@@ -105,6 +105,9 @@ Simulator evidence handoff:
 - Generated hardware records include scenario instructions. Fill `Required
   Shield Loop` plus the matching scenario section, and mark unrelated scenario
   rows `N/A`.
+- Hardware records only pre-fill simulator evidence generated for the current
+  git commit. If the fields say `not generated for current commit`, run
+  `scripts/qa-simulator-seeds.sh` first, then regenerate the hardware records.
 - The latest generated simulator sweep should capture every seeded state across
   iPhone 17 and iPad (A16), covering onboarding, device-model copy,
   setup-disabled state, parent dashboard, locked dashboard, child math/memory
@@ -214,7 +217,8 @@ scripts/launch-readiness-status.sh --strict
 
 Strict mode must pass before submission. It exits nonzero while the current
 commit lacks production secrets, current simulator QA evidence, completed
-same-phone and child-iPad hardware records, paid-flow QA, or a clean git tree.
+same-phone and child-iPad hardware records pointing at current simulator
+evidence, paid-flow QA, or a clean git tree.
 
 ## TestFlight Hardware Gates
 
