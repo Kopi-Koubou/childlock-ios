@@ -105,7 +105,9 @@ Screen Time enforcement is available without purchase. Childlock Premium unlocks
 
 Childlock locks apps on the device where setup is completed. For a child iPad,
 install and configure Childlock on the iPad. Same-phone parent/child use is
-supported because the parent dashboard remains PIN-protected.
+supported because the parent dashboard remains PIN-protected. Childlock is not
+presented as a parent-phone remote controller for a separate child iPad in this
+launch build.
 ```
 
 ## Subscriptions
