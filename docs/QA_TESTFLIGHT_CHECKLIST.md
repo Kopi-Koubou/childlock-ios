@@ -173,7 +173,7 @@ gallery and contact-sheet paths.
 | Childlock opened pending challenge from alert or Home | Pass / Fail |
 | Challenge completion cleared shield | Pass / Fail |
 | Monitoring re-armed for a new interval | Pass / Fail |
-| Child saw `Back` guidance and returned to the now-unshielded content app/site | Pass / Fail |
+| Child saw `Done` plus the back-arrow cue and returned to the now-unshielded content app/site | Pass / Fail |
 | Parent dashboard stayed PIN-gated after hand-back | Pass / Fail |
 | RevenueCat paywall/offering behaved as expected | Pass / Fail / Not tested |
 | RevenueCat offering loaded monthly and annual packages | Pass / Fail / Not tested |
@@ -253,7 +253,7 @@ as sufficient for launch.
 17. Opening Childlock presents the pending challenge.
 18. Completing the challenge clears shields.
 19. Monitoring re-arms for another full interval.
-20. Child sees the `Back` hand-back guidance, uses Home or the
+20. Child sees `Done` plus the back-arrow hand-back cue, uses Home or the
     app switcher to return to the now-unshielded content app/site, and
     cannot enter the dashboard without the parent PIN.
 21. `Parent` creates a parent-visible more-time request and does not open
@@ -300,7 +300,7 @@ Use this when the parent and child share the same iPhone.
 6. Parent sets the PIN, taps `Lock Parent Dashboard` or leaves Childlock to
    let it auto-lock, and hands the phone to the child.
 7. Child continuously uses selected content until the threshold is reached.
-8. Child solves the challenge, sees `Back`, then uses Home or
+8. Child solves the challenge, sees `Done` plus the back-arrow cue, then uses Home or
    the app switcher to return to the now-unshielded app/site.
 9. Child taps `Parent` or tries to enter the dashboard.
 10. Expected: dashboard remains gated by the parent PIN.

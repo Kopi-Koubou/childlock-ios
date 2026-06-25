@@ -33,13 +33,10 @@ public struct HandBackView: View {
                 .font(ChildlockTypography.childTitle)
                 .foregroundStyle(ChildlockColor.textPrimary)
 
-            HandBackReturnCue(
-                iconName: "arrow.backward",
-                title: "Back"
-            )
-            .accessibilityIdentifier("handback_resume_guidance")
-            .accessibilityLabel("Back.")
-            .padding(.top, ChildlockSpacing.xs)
+            HandBackReturnCue(iconName: "arrow.backward")
+                .accessibilityIdentifier("handback_resume_guidance")
+                .accessibilityLabel("Back.")
+                .padding(.top, ChildlockSpacing.xs)
 
             Spacer()
 
@@ -112,24 +109,16 @@ public struct HandBackView: View {
 
 private struct HandBackReturnCue: View {
     let iconName: String
-    let title: String
 
     var body: some View {
-        VStack(spacing: ChildlockSpacing.md) {
-            Image(systemName: iconName)
-                .font(.system(size: 40, weight: .bold))
-                .foregroundStyle(.white)
-                .frame(width: 88, height: 88)
-                .background(ChildlockColor.primary)
-                .clipShape(Circle())
-                .childlockShadow(ChildlockShadow.sm)
-
-            Text(title)
-                .font(.system(size: 34, weight: .semibold, design: .rounded))
-                .foregroundStyle(ChildlockColor.textPrimary)
-                .multilineTextAlignment(.center)
-        }
-        .accessibilityElement(children: .combine)
-        .accessibilityHint("Use Home or the app switcher.")
+        Image(systemName: iconName)
+            .font(.system(size: 48, weight: .bold))
+            .foregroundStyle(.white)
+            .frame(width: 96, height: 96)
+            .background(ChildlockColor.primary)
+            .clipShape(Circle())
+            .childlockShadow(ChildlockShadow.sm)
+            .accessibilityElement(children: .combine)
+            .accessibilityHint("Use Home or the app switcher.")
     }
 }

@@ -20,10 +20,10 @@ Reviewer flow:
    Childlock from Home and solve the pending challenge.
 10. Completing the challenge removes the shield and re-arms monitoring for the
     next interval.
-11. After the celebration, the child sees the hand-back screen with `Back`
-    guidance. A parent PIN is required before entering the parent
-    dashboard. To resume the original app, the child uses Home or the app
-    switcher to return to the now-unshielded app/content.
+11. After the celebration, the child sees a concise hand-back screen with
+    `Done` and a single back-arrow cue. A parent PIN is required before
+    entering the parent dashboard. To resume the original app, the child uses
+    Home or the app switcher to return to the now-unshielded app/content.
 
 Notes:
 
@@ -44,8 +44,9 @@ Notes:
   is foregrounded, it automatically opens the pending brain break.
 - Childlock does not automatically return the child to another app after the
   challenge. iOS does not provide a public Screen Time API to reopen arbitrary
-  apps or restore media state, so the hand-back screen says `Back`; the
-  child uses Home or the app switcher to return.
+  apps or restore media state, so the hand-back screen stays very brief:
+  `Done` plus a back-arrow cue. The child uses Home or the app switcher to
+  return.
 - App selections are handled through Apple's FamilyControls picker. Opaque app
   selection tokens remain local/on-device.
 - Support: https://kouboulabs.com/childlock/support
