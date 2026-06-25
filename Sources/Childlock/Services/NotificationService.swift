@@ -25,8 +25,7 @@ public enum NotificationService {
     public static func requestPermission() async -> Bool {
         #if os(iOS) && canImport(UserNotifications)
         do {
-            let options: UNAuthorizationOptions = [.alert, .badge, .sound, .timeSensitive]
-            return try await UNUserNotificationCenter.current().requestAuthorization(options: options)
+            return try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
         } catch {
             return false
         }

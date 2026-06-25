@@ -95,6 +95,9 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(normalizedProduction.contains("flags simulator summaries and hardware records that"))
         XCTAssertTrue(production.contains("Google OAuth values may all be blank for an Apple-first build"))
         XCTAssertTrue(production.contains("REQUIRE_GOOGLE_OAUTH=1"))
+        XCTAssertTrue(production.contains("Time Sensitive Notifications for Childlock, DeviceActivityMonitorExtension,"))
+        XCTAssertTrue(production.contains("ShieldActionExtension"))
+        XCTAssertTrue(production.contains("shield configuration extension does not post"))
         XCTAssertTrue(checklist.contains("scripts/launch-readiness-status.sh"))
         XCTAssertTrue(checklist.contains("scripts/launch-readiness-status.sh --strict"))
         XCTAssertTrue(checklist.contains("Strict mode must pass before submission."))
@@ -259,10 +262,18 @@ final class BuildConfigTests: XCTestCase {
         let appEntitlements = try readPropertyList("childlock.entitlements")
         XCTAssertEqual(appEntitlements["com.apple.developer.applesignin"] as? [String], ["Default"])
         try assertFamilyControlsEntitlements(appEntitlements)
+        try assertTimeSensitiveNotificationEntitlement(appEntitlements)
 
-        try assertFamilyControlsEntitlements(readPropertyList("DeviceActivityMonitorExtension.entitlements"))
-        try assertFamilyControlsEntitlements(readPropertyList("Extensions/ShieldActionExtension/ShieldActionExtension.entitlements"))
-        try assertFamilyControlsEntitlements(readPropertyList("Extensions/ShieldConfigurationExtension/ShieldConfigurationExtension.entitlements"))
+        let monitorEntitlements = try readPropertyList("DeviceActivityMonitorExtension.entitlements")
+        let shieldActionEntitlements = try readPropertyList("Extensions/ShieldActionExtension/ShieldActionExtension.entitlements")
+        let shieldConfigurationEntitlements = try readPropertyList("Extensions/ShieldConfigurationExtension/ShieldConfigurationExtension.entitlements")
+
+        try assertFamilyControlsEntitlements(monitorEntitlements)
+        try assertFamilyControlsEntitlements(shieldActionEntitlements)
+        try assertFamilyControlsEntitlements(shieldConfigurationEntitlements)
+        try assertTimeSensitiveNotificationEntitlement(monitorEntitlements)
+        try assertTimeSensitiveNotificationEntitlement(shieldActionEntitlements)
+        XCTAssertNil(shieldConfigurationEntitlements["com.apple.developer.usernotifications.time-sensitive"])
     }
 
     private func readRepoFile(_ relativePath: String) throws -> String {
@@ -330,6 +341,14 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertEqual(entitlements["com.apple.developer.family-controls"] as? Bool, true, file: file, line: line)
         let appGroups = try XCTUnwrap(entitlements["com.apple.security.application-groups"] as? [String], file: file, line: line)
         XCTAssertTrue(appGroups.contains("group.com.childlock.shared"), file: file, line: line)
+    }
+
+    private func assertTimeSensitiveNotificationEntitlement(
+        _ entitlements: [String: Any],
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) throws {
+        XCTAssertEqual(entitlements["com.apple.developer.usernotifications.time-sensitive"] as? Bool, true, file: file, line: line)
     }
 
     private func pngPixelSize(_ relativePath: String) throws -> (width: UInt32, height: UInt32) {

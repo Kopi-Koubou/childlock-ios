@@ -163,6 +163,9 @@ scripts/check-public-release-links.sh
 3. Ensure the app and extensions all include:
    - Family Controls entitlement
    - App Group `group.com.childlock.shared`
+   - Time Sensitive Notifications for Childlock, DeviceActivityMonitorExtension,
+     and ShieldActionExtension. The shield configuration extension does not post
+     notifications and does not need this entitlement.
 
 4. Fill app-facing production values in `Config/AppSecrets.local.xcconfig`.
    The checked-in `Config/AppSecrets.xcconfig` should stay as the safe base
