@@ -96,7 +96,7 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(dashboard.contains("--childlock-qa-seed-settings-notifications-denied"))
         XCTAssertTrue(dashboard.contains("return .denied"))
         XCTAssertTrue(dashboard.contains("scrollToDebugSettingsNotificationSectionIfNeeded"))
-        XCTAssertTrue(dashboard.contains("scrollProxy.scrollTo(settingsNotificationsAnchorID, anchor: .top)"))
+        XCTAssertTrue(dashboard.contains("scrollProxy.scrollTo(settingsNotificationsAnchorID, anchor: .center)"))
         XCTAssertTrue(checklist.contains("Settings notification-denied seed shows iOS notification permission as `Off`"))
         XCTAssertTrue(checklist.contains("offers `Open Notification Settings`"))
         XCTAssertTrue(dashboard.contains("UIApplication.openNotificationSettingsURLString"))

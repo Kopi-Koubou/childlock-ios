@@ -1524,7 +1524,7 @@ public struct ParentDashboardView: View {
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            scrollProxy.scrollTo(settingsNotificationsAnchorID, anchor: .top)
+            scrollProxy.scrollTo(settingsNotificationsAnchorID, anchor: .center)
         }
         #endif
     }
