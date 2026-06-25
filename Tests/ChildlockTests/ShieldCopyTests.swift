@@ -54,9 +54,10 @@ final class ShieldCopyTests: XCTestCase {
 
         for contents in files {
             XCTAssertTrue(contents.contains("Brain Break"))
-            XCTAssertTrue(contents.contains("Tap Start. Then tap the alert."))
+            XCTAssertTrue(contents.contains("Tap Start. Open Childlock."))
             XCTAssertTrue(contents.contains("text: \"Start\""))
             XCTAssertTrue(contents.contains("text: \"Parent\""))
+            XCTAssertFalse(contents.contains("Tap Start. Then tap the alert."))
             XCTAssertFalse(contents.contains("Tap Start, then open Childlock from the alert or Home."))
             XCTAssertFalse(contents.contains("Start Brain Break"))
             XCTAssertFalse(contents.contains("Ask Parent"))

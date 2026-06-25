@@ -221,7 +221,7 @@ public final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
                 color: UIColor(hex: ChildlockColorHex.shieldInk)
             ),
             subtitle: ShieldConfiguration.Label(
-                text: "Tap Start. Then tap the alert.",
+                text: "Tap Start. Open Childlock.",
                 color: UIColor(hex: ChildlockColorHex.shieldInk)
             ),
             primaryButtonLabel: ShieldConfiguration.Label(

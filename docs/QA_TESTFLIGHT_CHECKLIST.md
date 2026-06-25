@@ -247,7 +247,7 @@ as sufficient for launch.
     being consumed.
 14. Selected content shields only after the threshold is reached. Record the
     shield timestamp and compare it with the configured interval.
-15. Shield copy says `Brain Break`.
+15. Shield copy says `Brain Break` and `Tap Start. Open Childlock.`.
 16. Primary shield action says `Start`, closes the blocked app, and
     leaves a Childlock alert/Home path back to the pending challenge.
 17. Opening Childlock presents the pending challenge.

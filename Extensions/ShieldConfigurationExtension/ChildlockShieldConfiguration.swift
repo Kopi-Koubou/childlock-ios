@@ -52,7 +52,7 @@ final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
                 color: shieldInk
             ),
             subtitle: ShieldConfiguration.Label(
-                text: "Tap Start. Then tap the alert.",
+                text: "Tap Start. Open Childlock.",
                 color: shieldInk.withAlphaComponent(0.7)
             ),
             primaryButtonLabel: ShieldConfiguration.Label(
