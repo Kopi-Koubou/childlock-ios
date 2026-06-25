@@ -61,6 +61,9 @@ final class ReleaseDocsTests: XCTestCase {
     func testSupportAndLegalLinksMatchAppStoreMetadata() throws {
         let metadata = try readRepoFile("docs/APP_STORE_CONNECT_METADATA.md")
         let appReview = try readRepoFile("docs/APP_REVIEW_NOTES.md")
+        let production = try readRepoFile("docs/PRODUCTION.md")
+        let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")
+        let linkChecker = try readRepoFile("scripts/check-public-release-links.sh")
         let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
         let paywall = try readRepoFile("Sources/Childlock/Views/Paywall/PaywallView.swift")
 
@@ -68,11 +71,16 @@ final class ReleaseDocsTests: XCTestCase {
         let privacyURL = "https://kouboulabs.com/childlock/privacy"
         let termsURL = "https://kouboulabs.com/childlock/terms"
 
-        for contents in [metadata, appReview, dashboard] {
+        for contents in [metadata, appReview, dashboard, linkChecker] {
             XCTAssertTrue(contents.contains(supportURL))
             XCTAssertTrue(contents.contains(privacyURL))
             XCTAssertTrue(contents.contains(termsURL))
         }
+
+        XCTAssertTrue(production.contains("scripts/check-public-release-links.sh"))
+        XCTAssertTrue(checklist.contains("scripts/check-public-release-links.sh"))
+        XCTAssertTrue(linkChecker.contains("curl -LsS"))
+        XCTAssertTrue(linkChecker.contains("text/html"))
 
         XCTAssertTrue(dashboard.contains("Help Center"))
         XCTAssertTrue(dashboard.contains("Privacy Policy"))

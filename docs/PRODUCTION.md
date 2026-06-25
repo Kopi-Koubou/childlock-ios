@@ -134,6 +134,13 @@ The App Store support, privacy, and terms links live in the separate
 
 Deploy that repo after changing the static pages under `public/childlock/`.
 
+Before App Review, verify the live URLs used by App Store Connect and in-app
+settings:
+
+```sh
+scripts/check-public-release-links.sh
+```
+
 ## Xcode Release
 
 1. Install full Xcode and select it:
