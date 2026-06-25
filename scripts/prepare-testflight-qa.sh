@@ -57,11 +57,13 @@ Test order:
    Parent sets up on the shared iPhone, locks the parent dashboard, hands the
    phone over, child consumes selected content, shield appears after threshold,
    child solves the brain break, sees Back, returns to unlocked content,
-   and the dashboard stays PIN-gated.
+   and the dashboard stays PIN-gated. This proves shared-iPhone use because
+   the configured child-used device is the same iPhone.
 
 2. Run child-iPad if iPad support remains in launch copy.
    Install/configure Childlock on the child iPad itself. A parent-only iPhone
-   install is not remote iPad control for this launch.
+   install is not remote iPad control for this launch. This proves child-iPad
+   use only when the iPad is the configured child-used device.
 
 3. Run one denied-notification pass.
    After Start, press Home and open Childlock. The pending

@@ -310,6 +310,8 @@ hardware_record_completion_status() {
     local required_fields=(
         "Device model"
         "iOS version"
+        "Child-used device configured"
+        "Parent iPhone role"
         "Parent sign-in tested"
         "Notification state tested"
         "Monitored selection"
@@ -332,7 +334,7 @@ hardware_record_completion_status() {
         fi
     done
 
-    if grep -Eq '\|[[:space:]]*(Pass / Fail|Pass / Fail / N/A|Apple / Google / N/A|Allowed / Denied|App / Category / Website|Configured / Missing or placeholder)[[:space:]]*\|' "$file"; then
+    if grep -Eq '\|[[:space:]]*(Pass / Fail|Pass / Fail / N/A|Apple / Google / N/A|Allowed / Denied|App / Category / Website|Same iPhone / Child iPad / Child iPhone|Same device / Login smoke only / N/A|Configured / Missing or placeholder)[[:space:]]*\|' "$file"; then
         echo "incomplete checklist"
         return
     fi

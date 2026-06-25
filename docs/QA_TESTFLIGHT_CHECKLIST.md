@@ -155,6 +155,8 @@ gallery and contact-sheet paths.
 | Device model |  |
 | iOS version |  |
 | Scenario | Same phone / Child iPad / Child iPhone |
+| Child-used device configured | Same iPhone / Child iPad / Child iPhone |
+| Parent iPhone role | Same device / Login smoke only / N/A |
 | Latest simulator QA summary |  |
 | Latest simulator QA gallery |  |
 | Latest simulator QA contact sheet |  |
@@ -227,47 +229,49 @@ as sufficient for launch.
 6. If Google OAuth is configured and `Continue with Google` is visible, sign in
    with Google and complete setup again. If the Google button is not visible,
    record Google as N/A for this build and keep App Review notes Apple-first.
-7. Parent grants Screen Time access on the child-used device.
-8. Parent selects at least one real app, category, or website.
+7. Confirm the record names the physical child-used device: the shared iPhone
+   for same-phone testing, or the child iPad for iPad testing.
+8. Parent grants Screen Time access on the child-used device.
+9. Parent selects at least one real app, category, or website.
    - In the Childlock setup screen, tap `Choose apps, categories, or websites`,
      select at least one item in Apple's Screen Time picker, then tap `Done`.
      The setup `Continue` button stays disabled until the picker returns a real
      selection summary.
-9. Parent chooses the shortest brain-break interval.
-10. Parent enables notifications when prompted. Also test a denied-notification
+10. Parent chooses the shortest brain-break interval.
+11. Parent enables notifications when prompted. Also test a denied-notification
    pass: after tapping `Start`, press Home and open Childlock.
-11. Open the selected app/category/site and start real child-like content,
+12. Open the selected app/category/site and start real child-like content,
     such as a video, game session, social feed, or website. Record the content
     app/activity and start time in the hardware QA record.
-12. First interval starts without immediately shielding while the content is
+13. First interval starts without immediately shielding while the content is
     being consumed.
-13. Selected content shields only after the threshold is reached. Record the
+14. Selected content shields only after the threshold is reached. Record the
     shield timestamp and compare it with the configured interval.
-14. Shield copy says `Brain Break`.
-15. Primary shield action says `Start`, closes the blocked app, and
+15. Shield copy says `Brain Break`.
+16. Primary shield action says `Start`, closes the blocked app, and
     leaves a Childlock alert/Home path back to the pending challenge.
-16. Opening Childlock presents the pending challenge.
-17. Completing the challenge clears shields.
-18. Monitoring re-arms for another full interval.
-19. Child sees the `Back` hand-back guidance, uses Home or the
+17. Opening Childlock presents the pending challenge.
+18. Completing the challenge clears shields.
+19. Monitoring re-arms for another full interval.
+20. Child sees the `Back` hand-back guidance, uses Home or the
     app switcher to return to the now-unshielded content app/site, and
     cannot enter the dashboard without the parent PIN.
-20. `Parent` creates a parent-visible more-time request and does not open
+21. `Parent` creates a parent-visible more-time request and does not open
     a pending child challenge before the parent responds.
-21. `Allow <interval>` grants another full interval and then re-arms enforcement.
-22. `Keep blocked` clears the parent request while keeping the child blocked
+22. `Allow <interval>` grants another full interval and then re-arms enforcement.
+23. `Keep blocked` clears the parent request while keeping the child blocked
     until they start and complete the brain break.
-23. Restarting enforcement clears stale child challenge and more-time request state.
-24. If multiple child profiles exist, the pending challenge uses the monitored
+24. Restarting enforcement clears stale child challenge and more-time request state.
+25. If multiple child profiles exist, the pending challenge uses the monitored
     child's age/profile.
-25. Support, Privacy, and Terms links open correctly from App Store metadata.
-26. If subscriptions are attached to this App Store version, open the paywall
+26. Support, Privacy, and Terms links open correctly from App Store metadata.
+27. If subscriptions are attached to this App Store version, open the paywall
     and confirm RevenueCat loads monthly and annual products.
-27. Complete a sandbox purchase and confirm the Settings row changes from
+28. Complete a sandbox purchase and confirm the Settings row changes from
     `Upgrade` to `Active`.
-28. Delete/reinstall or reset as needed, tap `Restore purchases`, and confirm
+29. Delete/reinstall or reset as needed, tap `Restore purchases`, and confirm
     Premium becomes active again.
-29. Force quit and relaunch Childlock, then confirm Premium is still active and
+30. Force quit and relaunch Childlock, then confirm Premium is still active and
     weekly/all-time Children reports remain available.
 
 ## Fresh Setup Reset
@@ -286,18 +290,20 @@ Use this when the parent and child share the same iPhone.
 
 1. Install Childlock on the shared iPhone.
 2. Parent signs in and completes setup on that iPhone.
-3. Parent selects apps/categories used by the child on that same iPhone.
-4. If multiple child profiles exist, parent opens Children and taps
+3. Record `Child-used device configured` as `Same iPhone` and `Parent iPhone
+   role` as `Same device`.
+4. Parent selects apps/categories used by the child on that same iPhone.
+5. If multiple child profiles exist, parent opens Children and taps
    `Make active` on the child who is about to use the shared phone.
    Only one active child monitor runs on a configured device at a time.
    Switching the active child replaces the previous local monitor.
-5. Parent sets the PIN, taps `Lock Parent Dashboard` or leaves Childlock to
+6. Parent sets the PIN, taps `Lock Parent Dashboard` or leaves Childlock to
    let it auto-lock, and hands the phone to the child.
-6. Child continuously uses selected content until the threshold is reached.
-7. Child solves the challenge, sees `Back`, then uses Home or
+7. Child continuously uses selected content until the threshold is reached.
+8. Child solves the challenge, sees `Back`, then uses Home or
    the app switcher to return to the now-unshielded app/site.
-8. Child taps `Parent` or tries to enter the dashboard.
-9. Expected: dashboard remains gated by the parent PIN.
+9. Child taps `Parent` or tries to enter the dashboard.
+10. Expected: dashboard remains gated by the parent PIN.
 
 Pass means Childlock can be marketed as supporting same-phone parent/child use.
 
@@ -307,12 +313,15 @@ Use this when the parent owns an iPhone and the child uses an iPad.
 
 1. Install Childlock from TestFlight on the child iPad.
 2. Sign in with the same parent account on the child iPad.
-3. Complete Screen Time authorization, app selection, interval setup, and PIN
+3. Record `Child-used device configured` as `Child iPad`.
+4. If Childlock is also installed on the parent iPhone, record `Parent iPhone
+   role` as `Login smoke only`; do not use it as proof of remote iPad control.
+5. Complete Screen Time authorization, app selection, interval setup, and PIN
    setup on the iPad.
-4. Use the selected iPad app or website continuously until the threshold is
+6. Use the selected iPad app or website continuously until the threshold is
    reached.
-5. Complete the shield -> Childlock -> challenge -> hand-back loop on the iPad.
-6. Optional: install Childlock on the parent iPhone only for account/login smoke
+7. Complete the shield -> Childlock -> challenge -> hand-back loop on the iPad.
+8. Optional: install Childlock on the parent iPhone only for account/login smoke
    testing, not as a remote controller.
 
 Pass means Childlock can be marketed as supporting child iPad use when the app

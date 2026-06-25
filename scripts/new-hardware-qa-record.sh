@@ -117,15 +117,23 @@ google_oauth_status="$(google_oauth_build_status)"
 case "$safe_scenario" in
     same-phone)
         scenario_label="Same phone"
+        child_used_device="Same iPhone"
+        parent_iphone_role="Same device"
         ;;
     child-ipad)
         scenario_label="Child iPad"
+        child_used_device="Child iPad"
+        parent_iphone_role="Login smoke only"
         ;;
     child-iphone)
         scenario_label="Child iPhone"
+        child_used_device="Child iPhone"
+        parent_iphone_role="Login smoke only"
         ;;
     *)
         scenario_label="$scenario"
+        child_used_device=""
+        parent_iphone_role=""
         ;;
 esac
 
@@ -211,6 +219,8 @@ replace_row "Git commit" "$git_commit"
 replace_row "Tester" "$tester_name"
 replace_row "Date" "$record_date"
 replace_row "Scenario" "$scenario_label"
+replace_row "Child-used device configured" "$child_used_device"
+replace_row "Parent iPhone role" "$parent_iphone_role"
 replace_row "Latest simulator QA summary" "$latest_simulator_summary"
 replace_row "Latest simulator QA gallery" "$latest_simulator_gallery"
 replace_row "Latest simulator QA contact sheet" "$latest_simulator_contact_sheet"

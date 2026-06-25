@@ -16,6 +16,8 @@ shielding, extension actions, purchases, and real hand-back behavior.
 | Device model |  |
 | iOS version |  |
 | Scenario | Same phone / Child iPad / Child iPhone |
+| Child-used device configured | Same iPhone / Child iPad / Child iPhone |
+| Parent iPhone role | Same device / Login smoke only / N/A |
 | Latest simulator QA summary |  |
 | Latest simulator QA gallery |  |
 | Latest simulator QA contact sheet |  |
@@ -40,6 +42,7 @@ shielding, extension actions, purchases, and real hand-back behavior.
 | --- | --- | --- |
 | Fresh install or reset starts at onboarding | Pass / Fail |  |
 | Parent sign-in completes | Pass / Fail |  |
+| Setup is completed on the physical device the child will use | Pass / Fail |  |
 | Screen Time authorization completes on the child-used device | Pass / Fail |  |
 | App/category/website selection is non-empty before setup can continue | Pass / Fail |  |
 | Child continuously consumes selected content during the interval | Pass / Fail |  |
@@ -67,6 +70,7 @@ Use this when the parent and child share the same iPhone.
 | --- | --- | --- |
 | Parent installs Childlock on the shared iPhone | Pass / Fail / N/A |  |
 | Parent completes setup on that same iPhone | Pass / Fail / N/A |  |
+| Shared iPhone is recorded as the child-used configured device | Pass / Fail / N/A |  |
 | Parent selects apps/categories used by the child on that same iPhone | Pass / Fail / N/A |  |
 | If multiple child profiles exist, parent taps `Make active` for the child before handoff | Pass / Fail / N/A |  |
 | Parent sets the PIN, taps `Lock Parent Dashboard` or leaves Childlock to auto-lock, then hands the phone to the child | Pass / Fail / N/A |  |
@@ -82,10 +86,12 @@ Use this when the parent owns an iPhone and the child uses an iPad.
 | --- | --- | --- |
 | Parent installs Childlock from TestFlight on the child iPad | Pass / Fail / N/A |  |
 | Parent signs in with the same parent account on the child iPad | Pass / Fail / N/A |  |
+| Child iPad is recorded as the child-used configured device | Pass / Fail / N/A |  |
 | Parent completes Screen Time authorization on the iPad | Pass / Fail / N/A |  |
 | Parent selects iPad apps/categories/websites on the iPad | Pass / Fail / N/A |  |
 | Child continuously uses selected iPad content until threshold is reached | Pass / Fail / N/A |  |
 | Child completes the shield -> Childlock -> challenge -> hand-back loop on the iPad | Pass / Fail / N/A |  |
+| Parent iPhone, if installed, is used for login/account smoke only | Pass / Fail / N/A |  |
 | Parent-only iPhone install is not treated as remote iPad control | Pass / Fail / N/A |  |
 
 ## Launch Decision
