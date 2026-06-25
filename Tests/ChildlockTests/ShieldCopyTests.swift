@@ -119,6 +119,20 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(extensionEntrypoints.contains("?? true"))
     }
 
+    func testNotificationPermissionRequestsTimeSensitiveShieldAlerts() throws {
+        let notificationService = try readRepoFile("Sources/Childlock/Services/NotificationService.swift")
+        let monitor = try readRepoFile("Extensions/DeviceActivityMonitorExtension/ChildlockMonitor.swift")
+        let shieldAction = try readRepoFile("Extensions/ShieldActionExtension/ChildlockShieldAction.swift")
+        let extensionEntrypoints = try readRepoFile("Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift")
+
+        XCTAssertTrue(notificationService.contains("let options: UNAuthorizationOptions = [.alert, .badge, .sound, .timeSensitive]"))
+        XCTAssertTrue(notificationService.contains("requestAuthorization(options: options)"))
+
+        for contents in [monitor, shieldAction, extensionEntrypoints] {
+            XCTAssertTrue(contents.contains("content.interruptionLevel = .timeSensitive"))
+        }
+    }
+
     func testMonitorOnlyMarksChallengePendingAfterSelectionIsShielded() throws {
         let files = try [
             "Extensions/DeviceActivityMonitorExtension/ChildlockMonitor.swift",
