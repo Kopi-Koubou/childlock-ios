@@ -454,7 +454,7 @@ echo "- REVENUECAT_WEBHOOK_SECRET: $(status_for_server_key "REVENUECAT_WEBHOOK_S
 if server_secret_next_steps_needed; then
     echo "  Fill Config/production.env from Config/production.env.example."
     echo "  Keep these server-only; do not paste them into app xcconfig files."
-    echo "  Deploy after filling: source Config/production.env && supabase link --project-ref \"\$SUPABASE_PROJECT_REF\" && supabase db push && supabase functions deploy revenuecat-webhook && supabase secrets set REVENUECAT_WEBHOOK_SECRET=\"\$REVENUECAT_WEBHOOK_SECRET\""
+    echo "  Deploy after filling: scripts/deploy-production-backend.sh"
     echo "  RevenueCat webhook URL: https://jkncpveupvozsmbbkvgq.supabase.co/functions/v1/revenuecat-webhook"
 fi
 echo
@@ -473,6 +473,7 @@ echo
 echo "Useful commands"
 echo "- ./build-validation.sh"
 echo "- REQUIRE_GOOGLE_OAUTH=1 ./build-validation.sh"
+echo "- scripts/deploy-production-backend.sh"
 echo "- scripts/launch-readiness-status.sh --strict"
 echo "- scripts/prepare-testflight-qa.sh <testflight-build>"
 echo "- scripts/new-hardware-qa-record.sh same-phone <testflight-build>"

@@ -27,9 +27,11 @@ final class BuildConfigTests: XCTestCase {
     func testBuildScriptsAreRepoRelativeAndSafeForUnsignedPreflight() throws {
         let buildScript = try readRepoFile("build.sh")
         let validationScript = try readRepoFile("build-validation.sh")
+        let backendDeployScript = try readRepoFile("scripts/deploy-production-backend.sh")
         let readinessScript = try readRepoFile("scripts/launch-readiness-status.sh")
         let testFlightQAPacketScript = try readRepoFile("scripts/prepare-testflight-qa.sh")
         let production = try readRepoFile("docs/PRODUCTION.md")
+        let supabaseReadme = try readRepoFile("supabase/README.md")
         let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")
         let normalizedProduction = production.replacingOccurrences(
             of: #"\s+"#,
@@ -37,7 +39,7 @@ final class BuildConfigTests: XCTestCase {
             options: .regularExpression
         )
 
-        for contents in [buildScript, validationScript, readinessScript] {
+        for contents in [buildScript, validationScript, backendDeployScript, readinessScript] {
             XCTAssertTrue(contents.contains("$(dirname \"$0\")"))
             XCTAssertFalse(contents.contains("/Users/devl/clawd/projects/childlock"))
             XCTAssertFalse(contents.contains("/Users/xav/Projects/Kopi-Koubou/childlock-ios"))
@@ -84,6 +86,11 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(production.contains("scripts/launch-readiness-status.sh"))
         XCTAssertTrue(production.contains("scripts/launch-readiness-status.sh --strict"))
         XCTAssertTrue(production.contains("Strict mode exits nonzero"))
+        XCTAssertTrue(production.contains("scripts/deploy-production-backend.sh"))
+        XCTAssertTrue(production.contains("SUPABASE_SERVICE_ROLE_KEY`, and"))
+        XCTAssertTrue(normalizedProduction.contains("Do not compile any service-role value into the iOS app."))
+        XCTAssertTrue(supabaseReadme.contains("scripts/deploy-production-backend.sh"))
+        XCTAssertTrue(supabaseReadme.contains("scripts/deploy-production-backend.sh --skip-db-push"))
         XCTAssertTrue(normalizedProduction.contains("flags simulator summaries and hardware records that"))
         XCTAssertTrue(production.contains("Google OAuth values may all be blank for an Apple-first build"))
         XCTAssertTrue(production.contains("REQUIRE_GOOGLE_OAUTH=1"))
@@ -110,8 +117,22 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(readinessScript.contains("REVENUECAT_WEBHOOK_SECRET"))
         XCTAssertTrue(readinessScript.contains("Fill Config/production.env from Config/production.env.example."))
         XCTAssertTrue(readinessScript.contains("Keep these server-only; do not paste them into app xcconfig files."))
-        XCTAssertTrue(readinessScript.contains("supabase functions deploy revenuecat-webhook"))
-        XCTAssertTrue(readinessScript.contains("supabase secrets set REVENUECAT_WEBHOOK_SECRET"))
+        XCTAssertTrue(readinessScript.contains("scripts/deploy-production-backend.sh"))
+        XCTAssertTrue(backendDeployScript.contains("Config/production.env"))
+        XCTAssertTrue(backendDeployScript.contains("SUPABASE_ACCESS_TOKEN"))
+        XCTAssertTrue(backendDeployScript.contains("SUPABASE_SERVICE_ROLE_KEY"))
+        XCTAssertTrue(backendDeployScript.contains("REVENUECAT_WEBHOOK_SECRET"))
+        XCTAssertTrue(backendDeployScript.contains("command -v supabase"))
+        XCTAssertTrue(backendDeployScript.contains("export SUPABASE_ACCESS_TOKEN"))
+        XCTAssertTrue(backendDeployScript.contains("supabase link --project-ref \"$SUPABASE_PROJECT_REF\""))
+        XCTAssertTrue(backendDeployScript.contains("supabase db push"))
+        XCTAssertTrue(backendDeployScript.contains("FUNCTION_NAME=\"revenuecat-webhook\""))
+        XCTAssertTrue(backendDeployScript.contains("supabase functions deploy \"$FUNCTION_NAME\""))
+        XCTAssertTrue(backendDeployScript.contains("supabase secrets set"))
+        XCTAssertTrue(backendDeployScript.contains("SUPABASE_URL=\"$SUPABASE_URL\""))
+        XCTAssertTrue(backendDeployScript.contains("SUPABASE_SERVICE_ROLE_KEY=\"$SUPABASE_SERVICE_ROLE_KEY\""))
+        XCTAssertTrue(backendDeployScript.contains("REVENUECAT_WEBHOOK_SECRET=\"$REVENUECAT_WEBHOOK_SECRET\""))
+        XCTAssertTrue(backendDeployScript.contains("Use the same REVENUECAT_WEBHOOK_SECRET value"))
         XCTAssertTrue(readinessScript.contains("https://jkncpveupvozsmbbkvgq.supabase.co/functions/v1/revenuecat-webhook"))
         XCTAssertTrue(readinessScript.contains("Usage: scripts/launch-readiness-status.sh [--strict]"))
         XCTAssertTrue(readinessScript.contains("Strict launch gate"))

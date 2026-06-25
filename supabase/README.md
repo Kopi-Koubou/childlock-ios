@@ -18,24 +18,28 @@ https://jkncpveupvozsmbbkvgq.supabase.co
 2. In Supabase Auth, enable Apple and Google as external providers. Add the
    Supabase callback URL to Google Cloud and add `childlock://login-callback` to
    Supabase URL Configuration for the native app redirect.
-3. Run the SQL migration in the Supabase SQL editor, or with the Supabase CLI once installed:
+3. Fill `Config/production.env` from `Config/production.env.example`.
+
+4. Run the production deploy script from the repo root:
 
    ```sh
-   supabase link --project-ref <project-ref>
-   supabase db push
+   scripts/deploy-production-backend.sh
    ```
 
-4. Deploy the RevenueCat webhook:
+   The script uses the Supabase CLI to link the production project, run
+   `supabase db push`, deploy `revenuecat-webhook`, and set the Edge Function
+   runtime secrets.
+
+5. For a function-only redeploy after migrations are already applied:
 
    ```sh
-   supabase functions deploy revenuecat-webhook
-   supabase secrets set REVENUECAT_WEBHOOK_SECRET=<long-random-secret>
+   scripts/deploy-production-backend.sh --skip-db-push
    ```
 
-   Supabase provides `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` to Edge
-   Functions at runtime. Do not put the service-role key in iOS build settings.
+   Do not put `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ACCESS_TOKEN`, or
+   `REVENUECAT_WEBHOOK_SECRET` in iOS build settings.
 
-5. In RevenueCat, add a webhook pointing to:
+6. In RevenueCat, add a webhook pointing to:
 
    ```text
    https://jkncpveupvozsmbbkvgq.supabase.co/functions/v1/revenuecat-webhook

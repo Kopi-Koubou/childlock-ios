@@ -74,17 +74,15 @@ is not part of the launch build. See `docs/DEVICE_MODEL.md`.
 From the repo root:
 
 ```sh
-source Config/production.env
-supabase login
-supabase link --project-ref "$SUPABASE_PROJECT_REF"
-supabase db push
-supabase functions deploy revenuecat-webhook
-supabase secrets set REVENUECAT_WEBHOOK_SECRET="$REVENUECAT_WEBHOOK_SECRET"
+scripts/deploy-production-backend.sh
 ```
 
-Supabase Edge Functions automatically expose `SUPABASE_URL` and
-`SUPABASE_SERVICE_ROLE_KEY` at runtime. Do not compile either service-role
-value into the iOS app.
+The script requires the Supabase CLI and loads `Config/production.env` without
+printing secret values. It links the production project, runs `supabase db push`,
+deploys `revenuecat-webhook`, and sets the Edge Function runtime secrets:
+`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and
+`REVENUECAT_WEBHOOK_SECRET`. Do not compile any service-role value into the iOS
+app.
 
 Apple auth setup is tracked in `docs/SUPABASE_APPLE_AUTH.md`. Google auth setup
 is tracked in `docs/SUPABASE_GOOGLE_AUTH.md`. Do not submit a production build
