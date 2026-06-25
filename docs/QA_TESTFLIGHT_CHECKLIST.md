@@ -83,8 +83,8 @@ Simulator pass criteria:
 - Math and memory challenge seeds both render child-appropriate challenge UI;
   memory pairs are deterministic in this Debug seed for repeatable simulator QA.
 - Correct challenge answer records activity and moves to the hand-back screen.
-- Hand-back seed tells the child to return to the unlocked app and exposes only
-  `Parent`.
+- Hand-back seed gives the child only `Done`, the back-arrow cue, and a small
+  parent lock icon.
 - Parent PIN unlock remounts the dashboard.
 - More-time seed shows the parent request banner with `Allow 5 min` and
   `Keep blocked`.
@@ -302,7 +302,7 @@ Use this when the parent and child share the same iPhone.
 7. Child continuously uses selected content until the threshold is reached.
 8. Child solves the challenge, sees `Done` plus the back-arrow cue, then uses Home or
    the app switcher to return to the now-unshielded app/site.
-9. Child taps `Parent` or tries to enter the dashboard.
+9. Child taps the parent lock icon or tries to enter the dashboard.
 10. Expected: dashboard remains gated by the parent PIN.
 
 Pass means Childlock can be marketed as supporting same-phone parent/child use.

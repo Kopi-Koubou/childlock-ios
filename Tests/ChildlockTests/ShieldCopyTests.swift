@@ -337,7 +337,7 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(checklist.contains("`--childlock-qa-seed-handback`"))
         XCTAssertTrue(checklist.contains("`--childlock-qa-seed-locked-more-time-request`"))
         XCTAssertTrue(checklist.contains("memory pairs are deterministic in this Debug seed"))
-        XCTAssertTrue(checklist.contains("Hand-back seed tells the child to return to the unlocked app"))
+        XCTAssertTrue(checklist.contains("Hand-back seed gives the child only `Done`, the back-arrow cue, and a small\n  parent lock icon."))
         XCTAssertTrue(checklist.contains("Locked more-time seed keeps the dashboard hidden"))
     }
 
