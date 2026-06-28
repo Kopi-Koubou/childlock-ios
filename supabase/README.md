@@ -2,7 +2,7 @@
 
 This directory contains the production Supabase backend for the iOS app:
 
-- `migrations/20260521000000_initial_childlock_backend.sql` creates the database schema, indexes, triggers, grants, and Row Level Security policies.
+- `migrations/20260612100816_initial_childlock_backend.sql` creates the database schema, indexes, triggers, grants, and Row Level Security policies.
 - `functions/revenuecat-webhook` mirrors RevenueCat subscription events into `subscription_status`.
 
 ## Project Setup
@@ -27,8 +27,9 @@ https://jkncpveupvozsmbbkvgq.supabase.co
    ```
 
    The script uses the Supabase CLI to link the production project, run
-   `supabase db push`, deploy `revenuecat-webhook`, and set the Edge Function
-   runtime secrets.
+   `supabase db push`, deploy `revenuecat-webhook`, and set Childlock's custom
+   `REVENUECAT_WEBHOOK_SECRET`. Hosted Supabase Edge Functions provide
+   `SUPABASE_URL` and `SUPABASE_SECRET_KEYS`.
 
 5. For a function-only redeploy after migrations are already applied:
 

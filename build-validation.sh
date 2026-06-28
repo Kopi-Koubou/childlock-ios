@@ -233,7 +233,6 @@ else
 
     require_config_value "Config/production.env" "SUPABASE_PROJECT_REF" || config_failed=1
     require_config_value "Config/production.env" "SUPABASE_ACCESS_TOKEN" || config_failed=1
-    require_config_value "Config/production.env" "SUPABASE_SERVICE_ROLE_KEY" || config_failed=1
     require_config_value "Config/production.env" "REVENUECAT_WEBHOOK_SECRET" || config_failed=1
 
     if [[ "$config_failed" == "1" ]]; then

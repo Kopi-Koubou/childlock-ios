@@ -20,7 +20,8 @@ Paste local deployment/server secrets into `Config/production.env`:
 
 - `SUPABASE_PROJECT_REF` = `jkncpveupvozsmbbkvgq`
 - `SUPABASE_ACCESS_TOKEN`
-- `SUPABASE_SERVICE_ROLE_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY` optional local fallback; hosted Supabase Edge
+  Functions provide `SUPABASE_SECRET_KEYS` automatically
 - `REVENUECAT_WEBHOOK_SECRET`
 
 RevenueCat/App Store product IDs expected by the app:

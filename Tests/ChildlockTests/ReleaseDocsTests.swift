@@ -424,12 +424,16 @@ final class ReleaseDocsTests: XCTestCase {
 
     func testScreenTimeSelectionTokensStayOutOfBackendSync() throws {
         let dataSync = try readRepoFile("Sources/Childlock/Services/DataSyncService.swift")
-        let migration = try readRepoFile("supabase/migrations/20260521000000_initial_childlock_backend.sql")
+        let migration = try readRepoFile("supabase/migrations/20260612100816_initial_childlock_backend.sql")
+        let webhook = try readRepoFile("supabase/functions/revenuecat-webhook/index.ts")
         let appReview = try readRepoFile("docs/APP_REVIEW_NOTES.md")
         let deviceModel = try readRepoFile("docs/DEVICE_MODEL.md")
 
         XCTAssertTrue(normalizeWhitespace(appReview).contains("Opaque app selection tokens remain local/on-device."))
         XCTAssertTrue(deviceModel.contains("Do not store or sync raw Screen Time selection token payloads."))
+        XCTAssertTrue(webhook.contains("Deno.env.get(\"SUPABASE_SECRET_KEYS\")"))
+        XCTAssertTrue(webhook.contains("Deno.env.get(\"SUPABASE_SERVICE_ROLE_KEY\")"))
+        XCTAssertTrue(webhook.contains("Supabase environment is not configured"))
 
         for forbidden in [
             "monitoredActivitiesData",
@@ -460,7 +464,7 @@ final class ReleaseDocsTests: XCTestCase {
 
     func testSupabaseMigrationExplicitlyGrantsAuthenticatedAndServiceRoleAccess() throws {
         let migration = normalizeWhitespace(
-            try readRepoFile("supabase/migrations/20260521000000_initial_childlock_backend.sql")
+            try readRepoFile("supabase/migrations/20260612100816_initial_childlock_backend.sql")
         )
         let tables = """
         public.parent_profiles, public.child_profiles, public.app_settings, \

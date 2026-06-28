@@ -79,10 +79,10 @@ scripts/deploy-production-backend.sh
 
 The script requires the Supabase CLI and loads `Config/production.env` without
 printing secret values. It links the production project, runs `supabase db push`,
-deploys `revenuecat-webhook`, and sets the Edge Function runtime secrets:
-`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and
-`REVENUECAT_WEBHOOK_SECRET`. Do not compile any service-role value into the iOS
-app.
+deploys `revenuecat-webhook`, and sets Childlock's custom Edge Function secret:
+`REVENUECAT_WEBHOOK_SECRET`. Hosted Supabase Edge Functions provide
+`SUPABASE_URL` and `SUPABASE_SECRET_KEYS`; do not compile any service-role value
+into the iOS app.
 
 Apple auth setup is tracked in `docs/SUPABASE_APPLE_AUTH.md`. Google auth setup
 is tracked in `docs/SUPABASE_GOOGLE_AUTH.md`. Do not submit a production build

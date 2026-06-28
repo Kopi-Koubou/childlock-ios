@@ -125,7 +125,6 @@ status_for_server_key() {
 
 server_secret_next_steps_needed() {
     [[ "$(status_for_server_key "SUPABASE_ACCESS_TOKEN")" == "missing-or-placeholder" ]] \
-        || [[ "$(status_for_server_key "SUPABASE_SERVICE_ROLE_KEY")" == "missing-or-placeholder" ]] \
         || [[ "$(status_for_server_key "REVENUECAT_WEBHOOK_SECRET")" == "missing-or-placeholder" ]]
 }
 
@@ -452,7 +451,7 @@ collect_strict_blockers() {
         append_strict_blocker "Google OAuth build settings are $google_status; fill all three values or leave all three blank."
     fi
 
-    for key in SUPABASE_PROJECT_REF SUPABASE_ACCESS_TOKEN SUPABASE_SERVICE_ROLE_KEY REVENUECAT_WEBHOOK_SECRET; do
+    for key in SUPABASE_PROJECT_REF SUPABASE_ACCESS_TOKEN REVENUECAT_WEBHOOK_SECRET; do
         if [[ "$(status_for_server_key "$key")" != "set" ]]; then
             append_strict_blocker "Server/deploy secret $key is missing or placeholder in Config/production.env."
         fi
@@ -517,7 +516,7 @@ echo
 echo "Server/deploy secrets"
 echo "- SUPABASE_PROJECT_REF: $(status_for_server_key "SUPABASE_PROJECT_REF")"
 echo "- SUPABASE_ACCESS_TOKEN: $(status_for_server_key "SUPABASE_ACCESS_TOKEN")"
-echo "- SUPABASE_SERVICE_ROLE_KEY: $(status_for_server_key "SUPABASE_SERVICE_ROLE_KEY")"
+echo "- SUPABASE_SERVICE_ROLE_KEY (optional local fallback): $(status_for_server_key "SUPABASE_SERVICE_ROLE_KEY")"
 echo "- REVENUECAT_WEBHOOK_SECRET: $(status_for_server_key "REVENUECAT_WEBHOOK_SECRET")"
 if server_secret_next_steps_needed; then
     echo "  Fill Config/production.env from Config/production.env.example."

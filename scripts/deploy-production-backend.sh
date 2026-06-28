@@ -64,7 +64,6 @@ set +a
 
 require_env_value "SUPABASE_PROJECT_REF"
 require_env_value "SUPABASE_ACCESS_TOKEN"
-require_env_value "SUPABASE_SERVICE_ROLE_KEY"
 require_env_value "REVENUECAT_WEBHOOK_SECRET"
 
 if ! command -v supabase >/dev/null 2>&1; then
@@ -74,7 +73,6 @@ if ! command -v supabase >/dev/null 2>&1; then
 fi
 
 export SUPABASE_ACCESS_TOKEN
-SUPABASE_URL="${SUPABASE_URL:-https://${SUPABASE_PROJECT_REF}.supabase.co}"
 
 echo "Linking Supabase project $SUPABASE_PROJECT_REF..."
 supabase link --project-ref "$SUPABASE_PROJECT_REF"
@@ -91,8 +89,6 @@ supabase functions deploy "$FUNCTION_NAME"
 
 echo "Setting Edge Function runtime secrets..."
 supabase secrets set \
-    SUPABASE_URL="$SUPABASE_URL" \
-    SUPABASE_SERVICE_ROLE_KEY="$SUPABASE_SERVICE_ROLE_KEY" \
     REVENUECAT_WEBHOOK_SECRET="$REVENUECAT_WEBHOOK_SECRET"
 
 cat <<EOF
@@ -104,4 +100,7 @@ https://${SUPABASE_PROJECT_REF}.supabase.co/functions/v1/${FUNCTION_NAME}
 
 RevenueCat Authorization bearer token:
 Use the same REVENUECAT_WEBHOOK_SECRET value from Config/production.env.
+
+Supabase provides SUPABASE_URL and SUPABASE_SECRET_KEYS to hosted Edge Functions;
+the deploy script only sets Childlock's custom RevenueCat webhook secret.
 EOF

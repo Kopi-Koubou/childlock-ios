@@ -12,6 +12,7 @@ xcuserdata/
 build/
 Config/AppSecrets.local.xcconfig
 Config/production.env
+supabase/.temp/
 .env
 .env.*
 !.env.example

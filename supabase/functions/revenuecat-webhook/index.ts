@@ -15,12 +15,31 @@ type RevenueCatEvent = {
 };
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
-const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+const serviceRoleKey = serviceRoleKeyFromEnvironment();
 const webhookSecret = Deno.env.get("REVENUECAT_WEBHOOK_SECRET") ?? "";
 
 const supabase = createClient(supabaseUrl, serviceRoleKey, {
   auth: { persistSession: false },
 });
+
+function serviceRoleKeyFromEnvironment(): string {
+  const legacyServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (legacyServiceRoleKey) {
+    return legacyServiceRoleKey;
+  }
+
+  const secretKeysPayload = Deno.env.get("SUPABASE_SECRET_KEYS");
+  if (!secretKeysPayload) {
+    return "";
+  }
+
+  try {
+    const secretKeys = JSON.parse(secretKeysPayload) as Record<string, string | undefined>;
+    return secretKeys.default ?? "";
+  } catch {
+    return "";
+  }
+}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -35,6 +54,10 @@ Deno.serve(async (req) => {
   const token = authorization.replace(/^Bearer\s+/i, "");
   if (!webhookSecret || token !== webhookSecret) {
     return Response.json({ error: "Unauthorized" }, { status: 401, headers: corsHeaders });
+  }
+
+  if (!supabaseUrl || !serviceRoleKey) {
+    return Response.json({ error: "Supabase environment is not configured" }, { status: 500, headers: corsHeaders });
   }
 
   const payload = (await req.json()) as RevenueCatEvent;
