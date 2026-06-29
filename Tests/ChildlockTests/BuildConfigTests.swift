@@ -257,11 +257,11 @@ final class BuildConfigTests: XCTestCase {
         )
         try assertExtensionPoint(
             "Extensions/ShieldActionExtension/Info.plist",
-            equals: "com.apple.family-controls.shield-action-extension"
+            equals: "com.apple.ManagedSettings.shield-action-service"
         )
         try assertExtensionPoint(
             "Extensions/ShieldConfigurationExtension/Info.plist",
-            equals: "com.apple.family-controls.shield-configuration-extension"
+            equals: "com.apple.ManagedSettingsUI.shield-configuration-service"
         )
     }
 

@@ -295,8 +295,8 @@ done
 Expected identifiers:
 
 - `com.apple.deviceactivity.monitor-extension`
-- `com.apple.family-controls.shield-action-extension`
-- `com.apple.family-controls.shield-configuration-extension`
+- `com.apple.ManagedSettings.shield-action-service`
+- `com.apple.ManagedSettingsUI.shield-configuration-service`
 
 Verify the app and each extension bundle includes the privacy manifest:
 
