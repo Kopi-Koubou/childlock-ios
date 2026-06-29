@@ -81,7 +81,6 @@ final class ChildlockShieldAction: ShieldActionDelegate {
         content.title = "Brain break ready"
         content.body = "Tap to solve."
         content.sound = .default
-        content.interruptionLevel = .timeSensitive
 
         let center = UNUserNotificationCenter.current()
         let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]
@@ -116,7 +115,6 @@ final class ChildlockShieldAction: ShieldActionDelegate {
         content.title = "More time requested"
         content.body = "Give this to your parent."
         content.sound = .default
-        content.interruptionLevel = .timeSensitive
 
         let center = UNUserNotificationCenter.current()
         let identifiers = [SharedDefaults.NotificationIdentifier.moreTimeRequest]

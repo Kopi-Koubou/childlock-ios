@@ -70,7 +70,6 @@ final class ChildlockMonitor: DeviceActivityMonitor {
         content.title = "Brain break time!"
         content.body = "Tap to solve."
         content.sound = .default
-        content.interruptionLevel = .timeSensitive
 
         let center = UNUserNotificationCenter.current()
         let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]

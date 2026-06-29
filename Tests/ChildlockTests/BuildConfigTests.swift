@@ -100,9 +100,9 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertTrue(normalizedProduction.contains("flags simulator summaries and hardware records that"))
         XCTAssertTrue(production.contains("Google OAuth values may all be blank for an Apple-first build"))
         XCTAssertTrue(production.contains("REQUIRE_GOOGLE_OAUTH=1"))
-        XCTAssertTrue(production.contains("Time Sensitive Notifications for Childlock, DeviceActivityMonitorExtension,"))
-        XCTAssertTrue(production.contains("ShieldActionExtension"))
-        XCTAssertTrue(production.contains("shield configuration extension does not post"))
+        XCTAssertFalse(production.contains("Time Sensitive Notifications for Childlock, DeviceActivityMonitorExtension,"))
+        XCTAssertTrue(production.contains("Do not add the Time Sensitive Notifications entitlement"))
+        XCTAssertTrue(production.contains("regular local notifications"))
         XCTAssertTrue(checklist.contains("scripts/launch-readiness-status.sh"))
         XCTAssertTrue(checklist.contains("scripts/launch-readiness-status.sh --strict"))
         XCTAssertTrue(checklist.contains("Strict mode must pass before submission."))
@@ -202,10 +202,12 @@ final class BuildConfigTests: XCTestCase {
         let production = try readRepoFile("docs/PRODUCTION.md")
         let privacyManifest = try readPropertyList("Sources/Childlock/PrivacyInfo.xcprivacy")
 
-        XCTAssertTrue(project.contains("APP_PRIVACY_MANIFEST /* PrivacyInfo.xcprivacy in Resources */"))
-        XCTAssertTrue(project.contains("MONITOR_PRIVACY_MANIFEST /* PrivacyInfo.xcprivacy in Resources */"))
-        XCTAssertTrue(project.contains("SHIELD_ACTION_PRIVACY_MANIFEST /* PrivacyInfo.xcprivacy in Resources */"))
-        XCTAssertTrue(project.contains("SHIELD_CONFIG_PRIVACY_MANIFEST /* PrivacyInfo.xcprivacy in Resources */"))
+        XCTAssertTrue(project.contains("APP_PRIVACY_MANIFEST /*"))
+        XCTAssertTrue(project.contains("MONITOR_PRIVACY_MANIFEST /*"))
+        XCTAssertTrue(project.contains("SHIELD_ACTION_PRIVACY_MANIFEST /*"))
+        XCTAssertTrue(project.contains("SHIELD_CONFIG_PRIVACY_MANIFEST /*"))
+        XCTAssertTrue(project.contains("PRIVACY_MANIFEST_FILE /*"))
+        XCTAssertTrue(project.contains("path = Sources/Childlock/PrivacyInfo.xcprivacy;"))
 
         XCTAssertTrue(production.contains("Childlock.app/PrivacyInfo.xcprivacy"))
         XCTAssertTrue(production.contains("Childlock.app/PlugIns/ChildlockMonitor.appex/PrivacyInfo.xcprivacy"))
@@ -267,7 +269,6 @@ final class BuildConfigTests: XCTestCase {
         let appEntitlements = try readPropertyList("childlock.entitlements")
         XCTAssertEqual(appEntitlements["com.apple.developer.applesignin"] as? [String], ["Default"])
         try assertFamilyControlsEntitlements(appEntitlements)
-        try assertTimeSensitiveNotificationEntitlement(appEntitlements)
 
         let monitorEntitlements = try readPropertyList("DeviceActivityMonitorExtension.entitlements")
         let shieldActionEntitlements = try readPropertyList("Extensions/ShieldActionExtension/ShieldActionExtension.entitlements")
@@ -276,8 +277,9 @@ final class BuildConfigTests: XCTestCase {
         try assertFamilyControlsEntitlements(monitorEntitlements)
         try assertFamilyControlsEntitlements(shieldActionEntitlements)
         try assertFamilyControlsEntitlements(shieldConfigurationEntitlements)
-        try assertTimeSensitiveNotificationEntitlement(monitorEntitlements)
-        try assertTimeSensitiveNotificationEntitlement(shieldActionEntitlements)
+        XCTAssertNil(appEntitlements["com.apple.developer.usernotifications.time-sensitive"])
+        XCTAssertNil(monitorEntitlements["com.apple.developer.usernotifications.time-sensitive"])
+        XCTAssertNil(shieldActionEntitlements["com.apple.developer.usernotifications.time-sensitive"])
         XCTAssertNil(shieldConfigurationEntitlements["com.apple.developer.usernotifications.time-sensitive"])
     }
 
@@ -346,14 +348,6 @@ final class BuildConfigTests: XCTestCase {
         XCTAssertEqual(entitlements["com.apple.developer.family-controls"] as? Bool, true, file: file, line: line)
         let appGroups = try XCTUnwrap(entitlements["com.apple.security.application-groups"] as? [String], file: file, line: line)
         XCTAssertTrue(appGroups.contains("group.com.childlock.shared"), file: file, line: line)
-    }
-
-    private func assertTimeSensitiveNotificationEntitlement(
-        _ entitlements: [String: Any],
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) throws {
-        XCTAssertEqual(entitlements["com.apple.developer.usernotifications.time-sensitive"] as? Bool, true, file: file, line: line)
     }
 
     private func pngPixelSize(_ relativePath: String) throws -> (width: UInt32, height: UInt32) {
