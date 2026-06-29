@@ -35,6 +35,8 @@ final class ShieldCopyTests: XCTestCase {
         let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")
         let deviceModel = try readRepoFile("docs/DEVICE_MODEL.md")
 
+        XCTAssertTrue(screenTime.contains("requestAuthorization(for: .individual)"))
+        XCTAssertFalse(screenTime.contains("requestAuthorization(for: .child)"))
         XCTAssertTrue(screenTime.contains("private let activeActivityName = DeviceActivityName(\"childlock.active\")"))
         XCTAssertTrue(screenTime.contains("one active child per configured device"))
         XCTAssertTrue(screenTime.contains("center.stopMonitoring([activeActivityName])"))

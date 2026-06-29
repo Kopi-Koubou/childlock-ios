@@ -68,7 +68,7 @@ public final class ScreenTimeManager: ScreenTimeManaging {
 
     public func requestAuthorization() async throws {
         do {
-            try await AuthorizationCenter.shared.requestAuthorization(for: .child)
+            try await AuthorizationCenter.shared.requestAuthorization(for: .individual)
             refreshAuthorizationStatus()
 
             guard isAuthorized else {

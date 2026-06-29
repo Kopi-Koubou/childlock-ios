@@ -302,7 +302,7 @@ public struct OnboardingFlowView: View {
         }
     }
 
-    // MARK: - Family Sharing (Step 2)
+    // MARK: - Screen Time Access (Step 2)
 
     private var familySharingStep: some View {
         Group {

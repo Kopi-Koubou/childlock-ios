@@ -99,7 +99,7 @@ final class OnboardingViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.canContinue)
         XCTAssertEqual(
             viewModel.authorizationStatusText,
-            "Screen Time controls are unavailable here. Install Childlock on the child-used iPhone or iPad and try again."
+            "Screen Time controls are unavailable here. Install Childlock on the iPhone or iPad your child will use and try again."
         )
     }
 

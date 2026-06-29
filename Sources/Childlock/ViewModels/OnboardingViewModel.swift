@@ -176,7 +176,7 @@ public final class OnboardingViewModel {
         case .authorized:
             return "Screen Time access granted."
         case .unavailable:
-            return "Screen Time controls are unavailable here. Install Childlock on the child-used iPhone or iPad and try again."
+            return "Screen Time controls are unavailable here. Install Childlock on the iPhone or iPad your child will use and try again."
         case .failed(let message):
             return message
         }
