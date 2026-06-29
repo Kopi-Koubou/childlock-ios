@@ -176,21 +176,23 @@ public struct ParentDashboardView: View {
                 }
             }
 
-            VStack(spacing: ChildlockSpacing.sm) {
-                SecureField("Parent PIN", text: $enteredPIN)
-                    .pinInputBehavior()
-                    .font(ChildlockTypography.body)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, ChildlockSpacing.sm)
-                    .frame(height: 48)
-                    .background(ChildlockColor.surface)
-                    .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.control))
+            VStack(spacing: ChildlockSpacing.md) {
+                VStack(spacing: ChildlockSpacing.xs) {
+                    Text("Enter Parent PIN")
+                        .font(ChildlockTypography.bodyBold)
+                        .foregroundStyle(ChildlockColor.textPrimary)
+
+                    pinDotRow(count: enteredPIN.count, size: 18)
+                        .padding(.top, 2)
+                }
 
                 if let pinErrorText {
                     Text(pinErrorText)
                         .font(ChildlockTypography.caption)
                         .foregroundStyle(ChildlockColor.warning)
                 }
+
+                dashboardNumberPad
 
                 Button("Unlock Dashboard") {
                     unlockParentDashboard()
@@ -201,7 +203,7 @@ public struct ParentDashboardView: View {
             }
             .childlockCard()
 
-            Text("Brain breaks still open from the alert or Home.")
+            Text("Brain breaks still open for your child.")
                 .font(ChildlockTypography.caption)
                 .foregroundStyle(ChildlockColor.textMuted)
                 .multilineTextAlignment(.center)
@@ -275,6 +277,81 @@ public struct ParentDashboardView: View {
         if enteredPIN != sanitized {
             enteredPIN = sanitized
         }
+    }
+
+    private var dashboardNumberPad: some View {
+        let keys: [[DashboardPINKey]] = [
+            [.digit(1), .digit(2), .digit(3)],
+            [.digit(4), .digit(5), .digit(6)],
+            [.digit(7), .digit(8), .digit(9)],
+            [.blank, .digit(0), .backspace],
+        ]
+
+        return VStack(spacing: ChildlockSpacing.xs) {
+            ForEach(0..<keys.count, id: \.self) { row in
+                HStack(spacing: ChildlockSpacing.xs) {
+                    ForEach(0..<keys[row].count, id: \.self) { col in
+                        dashboardNumberPadButton(keys[row][col])
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func dashboardNumberPadButton(_ key: DashboardPINKey) -> some View {
+        switch key {
+        case .digit(let digit):
+            Button {
+                guard enteredPIN.count < 4 else { return }
+                enteredPIN.append(String(digit))
+            } label: {
+                Text("\(digit)")
+                    .font(ChildlockTypography.childBody)
+                    .foregroundStyle(ChildlockColor.textPrimary)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 48)
+                    .background(
+                        RoundedRectangle(cornerRadius: ChildlockRadius.control)
+                            .fill(ChildlockColor.surfaceMuted.opacity(0.45))
+                    )
+            }
+            .buttonStyle(.plain)
+
+        case .backspace:
+            Button {
+                if !enteredPIN.isEmpty {
+                    enteredPIN.removeLast()
+                }
+            } label: {
+                Image(systemName: "delete.left")
+                    .font(.system(size: 19, weight: .medium))
+                    .foregroundStyle(ChildlockColor.textPrimary)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 48)
+            }
+            .buttonStyle(.plain)
+
+        case .blank:
+            Color.clear
+                .frame(maxWidth: .infinity)
+                .frame(height: 48)
+        }
+    }
+
+    private func pinDotRow(count: Int, size: CGFloat = 16) -> some View {
+        HStack(spacing: ChildlockSpacing.sm) {
+            ForEach(0..<4, id: \.self) { index in
+                Circle()
+                    .fill(index < count ? ChildlockColor.primary : ChildlockColor.surfaceMuted)
+                    .frame(width: size, height: size)
+                    .overlay(
+                        Circle()
+                            .stroke(ChildlockColor.primary.opacity(0.35), lineWidth: 1)
+                    )
+            }
+        }
+        .accessibilityLabel("\(min(count, 4)) of 4 PIN digits entered")
     }
 
     private func refreshSharedDashboardState() {
@@ -416,7 +493,7 @@ public struct ParentDashboardView: View {
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(ChildlockColor.textPrimary)
 
-                Text("Lock parent settings. Brain breaks still open for your child.")
+                Text("Lock this app before you pass it to your child.")
                     .font(ChildlockTypography.caption)
                     .foregroundStyle(ChildlockColor.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -738,7 +815,10 @@ public struct ParentDashboardView: View {
                         childrenReportControls
 
                         ForEach(appState.profiles) { profile in
-                            childrenTabProfileCard(profile: profile)
+                            NavigationLink(value: profile.id) {
+                                childrenTabProfileCard(profile: profile)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
 
@@ -769,6 +849,9 @@ public struct ParentDashboardView: View {
             .background(ChildlockColor.background.ignoresSafeArea())
             .sheet(isPresented: $isAddChildSheetPresented) {
                 addChildSheet
+            }
+            .navigationDestination(for: UUID.self) { profileID in
+                childProfileSettingsView(profileID: profileID)
             }
         }
     }
@@ -806,30 +889,17 @@ public struct ParentDashboardView: View {
 
                 Spacer()
 
-                if isActive {
-                    Text("Active")
-                        .font(ChildlockTypography.label)
-                        .foregroundStyle(ChildlockColor.primaryDeep)
-                        .padding(.horizontal, ChildlockSpacing.xs)
-                        .padding(.vertical, 6)
-                        .background(ChildlockColor.primarySoft)
-                        .clipShape(Capsule())
-                } else {
-                    Button {
-                        makeProfileActive(profile)
-                    } label: {
-                        Text("Make active")
-                            .font(.system(size: 12, weight: .semibold))
-                    }
-                    .foregroundStyle(ChildlockColor.primaryDeep)
+                Text(isActive ? "Active" : "Tap to edit")
+                    .font(ChildlockTypography.label)
+                    .foregroundStyle(isActive ? ChildlockColor.primaryDeep : ChildlockColor.textSecondary)
                     .padding(.horizontal, ChildlockSpacing.xs)
-                    .padding(.vertical, 7)
-                    .background(ChildlockColor.surfaceMuted.opacity(0.7))
+                    .padding(.vertical, 6)
+                    .background(isActive ? ChildlockColor.primarySoft : ChildlockColor.surfaceMuted.opacity(0.65))
                     .clipShape(Capsule())
-                    .buttonStyle(.plain)
-                    .accessibilityIdentifier("make_active_child_\(profile.id.uuidString)")
-                    .accessibilityLabel("Make \(profile.name) active on this device")
-                }
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(ChildlockColor.textFaint)
             }
 
             if !profile.monitoredAppDisplayNames.isEmpty {
@@ -857,6 +927,224 @@ public struct ParentDashboardView: View {
         appState.setActiveProfile(id: profile.id)
         syncAppsSelectionStateFromActiveProfile()
         refreshMonitoringIfRunning(for: profile)
+    }
+
+    @ViewBuilder
+    private func childProfileSettingsView(profileID: UUID) -> some View {
+        if let profile = appState.profiles.first(where: { $0.id == profileID }) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: ChildlockSpacing.md) {
+                    childProfileSettingsHeader(profile: profile)
+
+                    childProfileSettingsSection(title: "Profile") {
+                        VStack(spacing: 0) {
+                            childStepperRow(
+                                title: "Age",
+                                value: "\(profile.age)",
+                                canDecrease: profile.age > 3,
+                                canIncrease: profile.age < 12,
+                                onDecrease: {
+                                    updateChildProfile(profile.id) { child in
+                                        child.age = max(3, child.age - 1)
+                                    }
+                                },
+                                onIncrease: {
+                                    updateChildProfile(profile.id) { child in
+                                        child.age = min(12, child.age + 1)
+                                    }
+                                }
+                            )
+                        }
+                    }
+
+                    childProfileSettingsSection(title: "Brain breaks") {
+                        VStack(alignment: .leading, spacing: ChildlockSpacing.sm) {
+                            Text("Every \(profile.intervalMinutes) minutes")
+                                .font(ChildlockTypography.bodyBold)
+                                .foregroundStyle(ChildlockColor.textPrimary)
+
+                            HStack(spacing: ChildlockSpacing.xs) {
+                                ForEach([5, 10, 15, 20, 30], id: \.self) { interval in
+                                    Button {
+                                        updateChildProfile(profile.id) { child in
+                                            child.intervalMinutes = interval
+                                        }
+                                    } label: {
+                                        Text("\(interval)m")
+                                            .font(ChildlockTypography.bodyBold)
+                                            .foregroundStyle(profile.intervalMinutes == interval ? .white : ChildlockColor.textPrimary)
+                                            .frame(maxWidth: .infinity)
+                                            .frame(height: 40)
+                                            .background(
+                                                Capsule()
+                                                    .fill(profile.intervalMinutes == interval ? ChildlockColor.primary : ChildlockColor.surfaceMuted)
+                                            )
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                        }
+                        .padding(ChildlockSpacing.md)
+                    }
+
+                    childProfileSettingsSection(title: "Apps") {
+                        VStack(alignment: .leading, spacing: ChildlockSpacing.sm) {
+                            HStack(spacing: ChildlockSpacing.xs) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundStyle(ChildlockColor.primary)
+                                Text(monitoredSummaryText(for: profile))
+                                    .font(ChildlockTypography.bodyBold)
+                                    .foregroundStyle(ChildlockColor.textPrimary)
+                            }
+
+                            Text("To change apps, make \(profile.name) active and use the Apps tab.")
+                                .font(ChildlockTypography.caption)
+                                .foregroundStyle(ChildlockColor.textSecondary)
+                                .fixedSize(horizontal: false, vertical: true)
+
+                            Button {
+                                makeProfileActive(profile)
+                                appState.currentTab = .apps
+                            } label: {
+                                Label("Edit apps", systemImage: "square.grid.2x2")
+                            }
+                            .buttonStyle(ChildlockSecondaryButtonStyle())
+                        }
+                        .padding(ChildlockSpacing.md)
+                    }
+                }
+                .padding(ChildlockSpacing.lg)
+                .padding(.bottom, dashboardScrollBottomPadding)
+                .frame(maxWidth: dashboardContentMaxWidth, alignment: .leading)
+                .frame(maxWidth: .infinity)
+            }
+            .background(ChildlockColor.background.ignoresSafeArea())
+            .navigationTitle(profile.name)
+        } else {
+            VStack(spacing: ChildlockSpacing.sm) {
+                Text("Child not found")
+                    .font(ChildlockTypography.subtitle)
+                    .foregroundStyle(ChildlockColor.textPrimary)
+                Text("Go back and choose another child.")
+                    .font(ChildlockTypography.body)
+                    .foregroundStyle(ChildlockColor.textSecondary)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(ChildlockColor.background.ignoresSafeArea())
+        }
+    }
+
+    private func childProfileSettingsHeader(profile: ChildProfile) -> some View {
+        let avatarColorIndex = appState.profiles.firstIndex(where: { $0.id == profile.id }) ?? 0
+        let avatarColor = ChildlockAvatarColor.all[avatarColorIndex % ChildlockAvatarColor.all.count]
+        let isActive = appState.activeProfile?.id == profile.id
+
+        return VStack(alignment: .leading, spacing: ChildlockSpacing.sm) {
+            HStack(spacing: ChildlockSpacing.sm) {
+                Text(String(profile.name.prefix(1)).uppercased())
+                    .font(.system(size: 24, weight: .bold))
+                    .foregroundStyle(.white)
+                    .frame(width: 64, height: 64)
+                    .background(avatarColor)
+                    .clipShape(Circle())
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(profile.name)
+                        .font(ChildlockTypography.title)
+                        .foregroundStyle(ChildlockColor.textPrimary)
+                    Text("Age \(profile.age) \u{00B7} every \(profile.intervalMinutes)m")
+                        .font(ChildlockTypography.caption)
+                        .foregroundStyle(ChildlockColor.textMuted)
+                }
+            }
+
+            if isActive {
+                Label("Active on this device", systemImage: "checkmark.circle.fill")
+                    .font(ChildlockTypography.bodyBold)
+                    .foregroundStyle(ChildlockColor.primaryDeep)
+            } else {
+                Button {
+                    makeProfileActive(profile)
+                } label: {
+                    Label("Make active on this device", systemImage: "checkmark.circle")
+                }
+                .buttonStyle(ChildlockSecondaryButtonStyle())
+                .accessibilityIdentifier("make_active_child_\(profile.id.uuidString)")
+                .accessibilityLabel("Make \(profile.name) active on this device")
+            }
+        }
+        .padding(ChildlockSpacing.md)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(ChildlockColor.surface)
+        .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.card))
+        .childlockShadow(ChildlockShadow.sm)
+    }
+
+    private func childProfileSettingsSection<Content: View>(
+        title: String,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(alignment: .leading, spacing: ChildlockSpacing.xs) {
+            Text(title.uppercased())
+                .font(ChildlockTypography.label)
+                .foregroundStyle(ChildlockColor.textMuted)
+
+            content()
+                .background(ChildlockColor.surface)
+                .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.card))
+                .childlockShadow(ChildlockShadow.sm)
+        }
+    }
+
+    private func childStepperRow(
+        title: String,
+        value: String,
+        canDecrease: Bool,
+        canIncrease: Bool,
+        onDecrease: @escaping () -> Void,
+        onIncrease: @escaping () -> Void
+    ) -> some View {
+        HStack(spacing: ChildlockSpacing.md) {
+            Text(title)
+                .font(ChildlockTypography.body)
+                .foregroundStyle(ChildlockColor.textPrimary)
+
+            Spacer()
+
+            Button(action: onDecrease) {
+                Image(systemName: "minus.circle.fill")
+                    .font(.system(size: 28))
+                    .foregroundStyle(canDecrease ? ChildlockColor.primary : ChildlockColor.textFaint)
+            }
+            .disabled(!canDecrease)
+
+            Text(value)
+                .font(ChildlockTypography.subtitle)
+                .foregroundStyle(ChildlockColor.textPrimary)
+                .frame(minWidth: 34)
+
+            Button(action: onIncrease) {
+                Image(systemName: "plus.circle.fill")
+                    .font(.system(size: 28))
+                    .foregroundStyle(canIncrease ? ChildlockColor.primary : ChildlockColor.textFaint)
+            }
+            .disabled(!canIncrease)
+        }
+        .padding(ChildlockSpacing.md)
+    }
+
+    private func updateChildProfile(
+        _ profileID: UUID,
+        mutate: (inout ChildProfile) -> Void
+    ) {
+        guard var profile = appState.profiles.first(where: { $0.id == profileID }) else { return }
+        mutate(&profile)
+        profile.updatedAt = Date()
+        appState.updateProfile(profile)
+
+        if appState.activeProfile?.id == profile.id {
+            refreshMonitoringIfRunning(for: profile)
+        }
     }
 
     @ViewBuilder
@@ -1400,17 +1688,12 @@ public struct ParentDashboardView: View {
                         // Security section
                         settingsSection(title: "SECURITY") {
                             VStack(spacing: 0) {
-                                settingsRow(title: "Screen Time Enforcement", value: monitoringStatusLabel, showChevron: false)
-
-                                Text("Locks this device only. Child iPad setup happens on the iPad.")
-                                    .font(ChildlockTypography.caption)
-                                    .foregroundStyle(ChildlockColor.textSecondary)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.horizontal, ChildlockSpacing.md)
-                                    .padding(.bottom, ChildlockSpacing.sm)
-
-                                screenTimeEnforcementGuidance
+                                settingsStatusToggleRow(
+                                    title: "Screen Time Enforcement",
+                                    status: monitoringStatusLabel,
+                                    subtitle: "Locks this device only. For a child iPad, install Childlock on the iPad and follow setup there.",
+                                    binding: screenTimeEnforcementBinding
+                                )
 
                                 if let monitoringErrorText {
                                     Text(monitoringErrorText)
@@ -1420,41 +1703,24 @@ public struct ParentDashboardView: View {
                                         .padding(.bottom, ChildlockSpacing.sm)
                                 }
 
-                                if shouldShowStartLockEnforcementAction {
-                                    Divider().background(ChildlockColor.surfaceMuted)
-
-                                    Button {
-                                        Task { await startScreenTimeEnforcement() }
-                                    } label: {
-                                        settingsRowContent(title: "Start Screen Time Enforcement", value: "", showChevron: true)
-                                    }
-                                    .buttonStyle(.plain)
-                                    .disabled(!canStartScreenTimeEnforcement)
-                                    .opacity(canStartScreenTimeEnforcement ? 1 : 0.45)
+                                if !isScreenTimeEnforcementOn && !canStartScreenTimeEnforcement {
+                                    Text("Choose real apps, categories, or websites in Apps before starting enforcement.")
+                                        .font(ChildlockTypography.caption)
+                                        .foregroundStyle(ChildlockColor.textMuted)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.horizontal, ChildlockSpacing.md)
+                                        .padding(.bottom, ChildlockSpacing.sm)
                                 }
 
-                                if shouldShowStopLockEnforcementAction {
-                                    Divider().background(ChildlockColor.surfaceMuted)
+                                Divider().background(ChildlockColor.surfaceMuted)
 
-                                    Button {
-                                        stopScreenTimeEnforcement()
-                                    } label: {
-                                        settingsRowContent(title: "Stop Screen Time Enforcement", value: "", showChevron: true)
-                                    }
-                                    .buttonStyle(.plain)
-                                    .disabled(monitoringProfile == nil)
-                                }
-
-                                if shouldShowStopLockEnforcementAction {
-                                    Divider().background(ChildlockColor.surfaceMuted)
-
-                                    Button {
-                                        appState.lockSettings(pinService: pinService)
-                                    } label: {
-                                        settingsRowContent(title: "Lock Parent Dashboard", value: "", showChevron: true)
-                                    }
-                                    .buttonStyle(.plain)
-                                }
+                                settingsStatusToggleRow(
+                                    title: "Parent Dashboard Lock",
+                                    status: appState.isPINLocked ? "Locked" : "Unlocked",
+                                    subtitle: "Lock this app before you pass it to your child.",
+                                    binding: parentDashboardLockBinding
+                                )
                             }
                         }
 
@@ -1771,6 +2037,69 @@ public struct ParentDashboardView: View {
         }
         .padding(.horizontal, ChildlockSpacing.md)
         .padding(.vertical, ChildlockSpacing.sm)
+    }
+
+    private func settingsStatusToggleRow(
+        title: String,
+        status: String,
+        subtitle: String,
+        binding: Binding<Bool>
+    ) -> some View {
+        Toggle(isOn: binding) {
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: ChildlockSpacing.xs) {
+                    Text(title)
+                        .font(.system(size: 15))
+                        .foregroundStyle(ChildlockColor.textPrimary)
+
+                    Text(status)
+                        .font(ChildlockTypography.label)
+                        .foregroundStyle(binding.wrappedValue ? ChildlockColor.primaryDeep : ChildlockColor.textMuted)
+                        .padding(.horizontal, ChildlockSpacing.xs)
+                        .padding(.vertical, 4)
+                        .background(binding.wrappedValue ? ChildlockColor.primarySoft : ChildlockColor.surfaceMuted.opacity(0.65))
+                        .clipShape(Capsule())
+                }
+
+                Text(subtitle)
+                    .font(ChildlockTypography.caption)
+                    .foregroundStyle(ChildlockColor.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .tint(ChildlockColor.primary)
+        .padding(.horizontal, ChildlockSpacing.md)
+        .padding(.vertical, ChildlockSpacing.sm)
+        .accessibilityLabel(title)
+        .accessibilityValue(binding.wrappedValue ? "On" : "Off")
+    }
+
+    private var screenTimeEnforcementBinding: Binding<Bool> {
+        Binding(
+            get: { isScreenTimeEnforcementOn },
+            set: { isEnabled in
+                if isEnabled {
+                    guard canStartScreenTimeEnforcement else {
+                        monitoringErrorText = "Choose real apps, categories, or websites in Apps before starting enforcement."
+                        return
+                    }
+
+                    Task { await startScreenTimeEnforcement() }
+                } else {
+                    stopScreenTimeEnforcement()
+                }
+            }
+        )
+    }
+
+    private var parentDashboardLockBinding: Binding<Bool> {
+        Binding(
+            get: { appState.isPINLocked },
+            set: { shouldLock in
+                guard shouldLock else { return }
+                appState.lockSettings(pinService: pinService)
+            }
+        )
     }
 
     private var notificationSettingsFootnote: some View {
@@ -2269,6 +2598,15 @@ public struct ParentDashboardView: View {
         }
     }
 
+    private var isScreenTimeEnforcementOn: Bool {
+        switch monitoringStatus {
+        case .running, .intervalStarted, .thresholdReached, .challengeRequested, .moreTimeRequested:
+            return true
+        case .notStarted, .intervalEnded, .stopped, .denied, .failed, .none:
+            return false
+        }
+    }
+
     private var monitoringStatus: ChildlockMonitoringStatus? {
         ChildlockMonitoringStatus(storedValue: monitoringStatusText)
     }
@@ -2352,6 +2690,12 @@ public struct ParentDashboardView: View {
         monitoringStatusText = SharedDefaults.shared.string(forKey: SharedDefaults.Key.monitoringStatus) ?? "stopped"
         monitoringErrorText = nil
     }
+}
+
+private enum DashboardPINKey {
+    case digit(Int)
+    case backspace
+    case blank
 }
 
 private struct PaywallNavigationDestination: View {

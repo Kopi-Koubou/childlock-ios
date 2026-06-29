@@ -56,12 +56,11 @@ final class ShieldCopyTests: XCTestCase {
 
         for contents in files {
             XCTAssertTrue(contents.contains("Brain Break"))
-            XCTAssertTrue(contents.contains("Tap Start. Open Childlock."))
-            XCTAssertTrue(contents.contains("text: \"Start\""))
-            XCTAssertTrue(contents.contains("text: \"Parent\""))
+            XCTAssertTrue(contents.contains("Start, then open Childlock."))
+            XCTAssertTrue(contents.contains("text: \"Start Brain Break\""))
+            XCTAssertFalse(contents.contains("text: \"Parent\""))
             XCTAssertFalse(contents.contains("Tap Start. Then tap the alert."))
             XCTAssertFalse(contents.contains("Tap Start, then open Childlock from the alert or Home."))
-            XCTAssertFalse(contents.contains("Start Brain Break"))
             XCTAssertFalse(contents.contains("Ask Parent"))
             XCTAssertFalse(contents.contains("text: \"Open Childlock\""))
             XCTAssertFalse(contents.contains("This app is paused. Open Childlock to unlock it."))
@@ -77,12 +76,12 @@ final class ShieldCopyTests: XCTestCase {
             XCTAssertFalse(contents.contains("Your child asked for more screen time. Open Childlock to respond."))
         }
 
-        XCTAssertTrue(notificationFiles[0].contains("Tap to solve."))
-        XCTAssertTrue(notificationFiles[2].contains("Tap to solve."))
+        XCTAssertTrue(notificationFiles[0].contains("Open Childlock to solve."))
+        XCTAssertTrue(notificationFiles[2].contains("Open Childlock to solve."))
         XCTAssertTrue(notificationFiles[1].contains("Brain break ready"))
-        XCTAssertTrue(notificationFiles[1].contains("Tap to solve."))
+        XCTAssertTrue(notificationFiles[1].contains("Open Childlock to solve."))
         XCTAssertTrue(notificationFiles[2].contains("Brain break ready"))
-        XCTAssertTrue(notificationFiles[2].contains("Tap to solve."))
+        XCTAssertTrue(notificationFiles[2].contains("Open Childlock to solve."))
         XCTAssertTrue(notificationFiles[1].contains("Give this to your parent."))
         XCTAssertTrue(notificationFiles[2].contains("Give this to your parent."))
     }
@@ -249,7 +248,8 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertFalse(stopBlock.contains("guard let profile = appState.activeProfile"))
         XCTAssertTrue(stopBlock.contains("No monitored child profile available."))
         XCTAssertTrue(stopBlock.contains("ScreenTimeManager.shared.stopMonitoring(profile: profile)"))
-        XCTAssertTrue(dashboard.contains(".disabled(monitoringProfile == nil)"))
+        XCTAssertTrue(dashboard.contains("screenTimeEnforcementBinding"))
+        XCTAssertTrue(dashboard.contains("stopScreenTimeEnforcement()"))
     }
 
     func testStartBrainBreakRefreshesTappableBrainBreakNotification() throws {
@@ -269,7 +269,7 @@ final class ShieldCopyTests: XCTestCase {
 
             XCTAssertTrue(startsChallengeAndRefreshesAlert)
             XCTAssertTrue(contents.contains("content.title = \"Brain break ready\""))
-            XCTAssertTrue(contents.contains("content.body = \"Tap to solve.\""))
+            XCTAssertTrue(contents.contains("content.body = \"Open Childlock to solve.\""))
             XCTAssertTrue(contents.contains("let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]"))
             XCTAssertTrue(contents.contains("removePendingNotificationRequests(withIdentifiers: identifiers)"))
             XCTAssertTrue(contents.contains("removeDeliveredNotifications(withIdentifiers: identifiers)"))

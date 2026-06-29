@@ -10,8 +10,9 @@ public struct OnboardingFlowView: View {
     @Bindable private var viewModel: OnboardingViewModel
     @State private var signInErrorText: String?
     @State private var isGoogleSignInInProgress = false
-    #if os(iOS) && canImport(FamilyControls)
     @State private var isFamilyActivityPickerPresented = false
+    @FocusState private var focusedSetupField: SetupFocusField?
+    #if os(iOS) && canImport(FamilyControls)
     @State private var familyActivitySelection = FamilyActivitySelection()
     #endif
 
@@ -70,6 +71,7 @@ public struct OnboardingFlowView: View {
                 .frame(maxWidth: onboardingContentMaxWidth, alignment: .leading)
                 .frame(maxWidth: .infinity)
             }
+            .scrollDismissesKeyboard(.immediately)
         }
     }
 
@@ -89,6 +91,7 @@ public struct OnboardingFlowView: View {
                 .frame(maxWidth: onboardingContentMaxWidth, alignment: .leading)
                 .frame(maxWidth: .infinity)
             }
+            .scrollDismissesKeyboard(.immediately)
 
             footer()
                 .padding(.horizontal, ChildlockSpacing.lg)
@@ -338,7 +341,13 @@ public struct OnboardingFlowView: View {
                 .foregroundStyle(viewModel.shouldShowAuthorizationHelp ? ChildlockColor.warning : ChildlockColor.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
 
-            VStack(spacing: ChildlockSpacing.sm) {
+            if viewModel.familyAuthorizationState == .authorized {
+                Button("Continue") {
+                    viewModel.goNext()
+                }
+                .buttonStyle(ChildlockPrimaryButtonStyle())
+                .accessibilityIdentifier("screen_time_access_continue")
+            } else {
                 Button(screenTimeAccessButtonTitle) {
                     Task {
                         await viewModel.requestFamilyAuthorization()
@@ -346,13 +355,7 @@ public struct OnboardingFlowView: View {
                 }
                 .buttonStyle(ChildlockPrimaryButtonStyle())
                 .disabled(viewModel.familyAuthorizationState == .requesting)
-            }
-
-            if viewModel.canContinue, viewModel.familyAuthorizationState != .notRequested {
-                Button("Continue") {
-                    viewModel.goNext()
-                }
-                .buttonStyle(ChildlockSecondaryButtonStyle())
+                .accessibilityIdentifier("screen_time_access_request")
             }
         }
     }
@@ -416,7 +419,7 @@ public struct OnboardingFlowView: View {
     // MARK: - Setup (Step 4 - combined profile + apps + interval)
 
     private var setupStep: some View {
-        Group {
+        VStack(alignment: .leading, spacing: ChildlockSpacing.lg) {
             VStack(alignment: .leading, spacing: ChildlockSpacing.xs) {
                 Text(viewModel.step.title)
                     .font(ChildlockTypography.title)
@@ -441,6 +444,8 @@ public struct OnboardingFlowView: View {
 
                     TextField("Type your child's name", text: $viewModel.childName)
                         .font(ChildlockTypography.body)
+                        .foregroundStyle(ChildlockColor.textPrimary)
+                        .tint(ChildlockColor.primary)
                         .padding(.horizontal, ChildlockSpacing.sm)
                         .frame(height: 44)
                         .background(ChildlockColor.surface)
@@ -448,6 +453,10 @@ public struct OnboardingFlowView: View {
                             RoundedRectangle(cornerRadius: ChildlockRadius.control)
                                 .stroke(ChildlockColor.border, lineWidth: 1)
                         )
+                        .focused($focusedSetupField, equals: .childName)
+                        .onSubmit {
+                            focusedSetupField = nil
+                        }
                 }
 
                 // Age stepper
@@ -460,6 +469,7 @@ public struct OnboardingFlowView: View {
 
                     HStack(spacing: ChildlockSpacing.md) {
                         Button {
+                            focusedSetupField = nil
                             if viewModel.childAge > 3 {
                                 viewModel.childAge -= 1
                             }
@@ -477,6 +487,7 @@ public struct OnboardingFlowView: View {
                             .multilineTextAlignment(.center)
 
                         Button {
+                            focusedSetupField = nil
                             if viewModel.childAge < 12 {
                                 viewModel.childAge += 1
                             }
@@ -512,6 +523,7 @@ public struct OnboardingFlowView: View {
                                         .frame(width: 42, height: 42)
                                 )
                                 .onTapGesture {
+                                    focusedSetupField = nil
                                     viewModel.selectedAvatar = avatarName
                                 }
                                 .accessibilityIdentifier("avatar_\(avatarName)")
@@ -532,27 +544,9 @@ public struct OnboardingFlowView: View {
                     #if os(iOS) && canImport(FamilyControls)
                     VStack(alignment: .leading, spacing: ChildlockSpacing.xs) {
                         if viewModel.selectedMonitoredApps.isEmpty {
-                            HStack(alignment: .top, spacing: ChildlockSpacing.xs) {
-                                Image(systemName: "checklist")
-                                    .font(.system(size: 16, weight: .semibold))
-                                    .foregroundStyle(ChildlockColor.primary)
-                                Text("No Screen Time items selected yet. Use the button below to choose real apps, categories, or websites.")
-                                    .font(ChildlockTypography.caption)
-                                    .foregroundStyle(ChildlockColor.textSecondary)
-                                    .fixedSize(horizontal: false, vertical: true)
-                            }
+                            screenTimeEmptySelectionSummary
                         } else {
-                            Button {
-                                isFamilyActivityPickerPresented = true
-                            } label: {
-                                Label("Change apps, categories, or websites", systemImage: "checklist")
-                            }
-                            .buttonStyle(ChildlockSecondaryButtonStyle())
-
-                            Text("Selection saved from Apple's Screen Time picker.")
-                                .font(ChildlockTypography.caption)
-                                .foregroundStyle(ChildlockColor.textSecondary)
-                                .fixedSize(horizontal: false, vertical: true)
+                            screenTimeSavedSelectionSummary
                         }
                     }
                     .familyActivityPicker(
@@ -562,21 +556,8 @@ public struct OnboardingFlowView: View {
                     .onChange(of: familyActivitySelection) { _, selection in
                         viewModel.updateFamilyActivitySelection(selection)
                     }
-
-                    if !viewModel.selectedMonitoredApps.isEmpty {
-                        VStack(alignment: .leading, spacing: ChildlockSpacing.xxs) {
-                            ForEach(viewModel.selectedMonitoredApps.sorted(), id: \.self) { summary in
-                                HStack(spacing: ChildlockSpacing.xs) {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .font(.system(size: 14))
-                                        .foregroundStyle(ChildlockColor.primary)
-                                    Text(summary)
-                                        .font(ChildlockTypography.caption)
-                                        .foregroundStyle(ChildlockColor.textSecondary)
-                                }
-                            }
-                        }
-                    }
+                    #else
+                    EmptyView()
                     #endif
                 } else {
                     fallbackAppChoices
@@ -593,6 +574,7 @@ public struct OnboardingFlowView: View {
                 HStack(spacing: ChildlockSpacing.xs) {
                     ForEach([5, 10, 15, 20, 30], id: \.self) { interval in
                         Button {
+                            focusedSetupField = nil
                             viewModel.selectedInterval = interval
                         } label: {
                             Text("\(interval)m")
@@ -616,7 +598,6 @@ public struct OnboardingFlowView: View {
                     .foregroundStyle(ChildlockColor.textSecondary)
             }
             .childlockCard()
-
         }
     }
 
@@ -642,6 +623,7 @@ public struct OnboardingFlowView: View {
 
             if shouldShowScreenTimePickerFooterAction {
                 Button {
+                    focusedSetupField = nil
                     #if os(iOS) && canImport(FamilyControls)
                     isFamilyActivityPickerPresented = true
                     #endif
@@ -654,12 +636,13 @@ public struct OnboardingFlowView: View {
             }
 
             Button("Continue") {
+                focusedSetupField = nil
                 viewModel.goNext()
             }
             .buttonStyle(ChildlockPrimaryButtonStyle())
             .disabled(!viewModel.canContinue)
             .opacity(viewModel.canContinue ? 1 : 0.45)
-            .accessibilityHint(viewModel.setupBlockingReason ?? "Continue to parent PIN setup.")
+            .accessibilityHint(viewModel.setupBlockingReason ?? "Continue to Parent PIN setup.")
         }
     }
 
@@ -691,7 +674,7 @@ public struct OnboardingFlowView: View {
 
             // PIN section
             VStack(spacing: ChildlockSpacing.md) {
-                Text("Last step \u{00B7} parent PIN")
+                Text("Create Parent PIN")
                     .font(ChildlockTypography.bodyBold)
                     .foregroundStyle(ChildlockColor.textPrimary)
 
@@ -708,11 +691,9 @@ public struct OnboardingFlowView: View {
                     }
                 }
 
-                if !viewModel.pin.isEmpty && viewModel.pin.count == 4 && viewModel.pinConfirmation.isEmpty {
-                    Text("Confirm your PIN")
-                        .font(ChildlockTypography.caption)
-                        .foregroundStyle(ChildlockColor.textSecondary)
-                }
+                Text(parentPINPrompt)
+                    .font(ChildlockTypography.caption)
+                    .foregroundStyle(ChildlockColor.textSecondary)
 
                 if viewModel.pin.count == 4 && !viewModel.pinConfirmation.isEmpty && viewModel.pinConfirmation != viewModel.pin && viewModel.pinConfirmation.count == 4 {
                     Text("PINs don't match. Try again.")
@@ -806,6 +787,10 @@ public struct OnboardingFlowView: View {
         viewModel.pin.count < 4 ? viewModel.pin : viewModel.pinConfirmation
     }
 
+    private var parentPINPrompt: String {
+        viewModel.pin.count < 4 ? "Enter your PIN" : "Confirm your PIN"
+    }
+
     private var isConfirmingPin: Bool {
         viewModel.pin.count == 4
     }
@@ -851,6 +836,66 @@ public struct OnboardingFlowView: View {
         #else
         return false
         #endif
+    }
+
+    private var screenTimeEmptySelectionSummary: some View {
+        HStack(alignment: .top, spacing: ChildlockSpacing.sm) {
+            Image(systemName: "app.badge.checkmark")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(ChildlockColor.primary)
+                .frame(width: 32, height: 32)
+                .background(ChildlockColor.primarySoft)
+                .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.sm))
+
+            Text("Choose at least one app, category, or website.")
+                .font(ChildlockTypography.caption)
+                .foregroundStyle(ChildlockColor.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private var screenTimeSavedSelectionSummary: some View {
+        HStack(alignment: .center, spacing: ChildlockSpacing.sm) {
+            Image(systemName: "checkmark.circle.fill")
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundStyle(ChildlockColor.primary)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(monitoredSelectionCountText)
+                    .font(ChildlockTypography.bodyBold)
+                    .foregroundStyle(ChildlockColor.textPrimary)
+                Text(viewModel.selectedMonitoredApps.sorted().joined(separator: " \u{00B7} "))
+                    .font(ChildlockTypography.caption)
+                    .foregroundStyle(ChildlockColor.textSecondary)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Spacer(minLength: ChildlockSpacing.xs)
+
+            Button {
+                focusedSetupField = nil
+                isFamilyActivityPickerPresented = true
+            } label: {
+                Text("Change")
+                    .font(ChildlockTypography.bodyBold)
+                    .foregroundStyle(ChildlockColor.primaryDeep)
+                    .padding(.horizontal, ChildlockSpacing.sm)
+                    .padding(.vertical, 8)
+                    .background(ChildlockColor.primarySoft)
+                    .clipShape(Capsule())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Change apps, categories, or websites")
+        }
+        .padding(ChildlockSpacing.sm)
+        .background(ChildlockColor.primarySoft.opacity(0.35))
+        .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.md))
+    }
+
+    private var monitoredSelectionCountText: String {
+        let count = viewModel.selectedMonitoredApps.count
+        return "\(count) selected"
     }
 
     private var fallbackAppChoices: some View {
@@ -1007,4 +1052,8 @@ private enum NumberPadKey {
     case digit(Int)
     case backspace
     case blank
+}
+
+private enum SetupFocusField: Hashable {
+    case childName
 }

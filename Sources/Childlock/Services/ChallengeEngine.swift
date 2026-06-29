@@ -296,8 +296,8 @@ public final class PatternChallengeGenerator: ChallengeGenerator {
         return PatternChallenge(
             ageBand: .young,
             difficulty: difficulty,
-            instruction: "What comes next?",
-            voicePrompt: "What comes next in the pattern?",
+            instruction: "Tap the next one",
+            voicePrompt: "Tap the next one.",
             hintText: "Say the pattern out loud and listen for the repeat.",
             sequence: sequence,
             correctAnswer: correct,

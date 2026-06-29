@@ -74,7 +74,7 @@ final class ChallengeViewModelTests: XCTestCase {
 
         XCTAssertEqual(viewModel.attempts, 1)
         XCTAssertEqual(viewModel.results.count, 1)
-        XCTAssertEqual(viewModel.state, .correct)
+        XCTAssertEqual(viewModel.state, .completed)
         XCTAssertEqual(scheduledActions.count, 1)
     }
 
@@ -110,7 +110,7 @@ final class ChallengeViewModelTests: XCTestCase {
 
         XCTAssertEqual(viewModel.attempts, 2)
         XCTAssertEqual(viewModel.results.count, 1)
-        XCTAssertEqual(viewModel.state, .correct)
+        XCTAssertEqual(viewModel.state, .completed)
     }
 
     func testDuplicateMemoryCompletionDuringTransitionIsIgnored() {
@@ -130,7 +130,7 @@ final class ChallengeViewModelTests: XCTestCase {
 
         XCTAssertEqual(viewModel.attempts, 1)
         XCTAssertEqual(viewModel.results.count, 1)
-        XCTAssertEqual(viewModel.state, .correct)
+        XCTAssertEqual(viewModel.state, .completed)
         XCTAssertEqual(scheduledActions.count, 1)
     }
 

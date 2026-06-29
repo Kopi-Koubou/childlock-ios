@@ -98,13 +98,8 @@ public final class ChallengeViewModel {
         guard acceptsChallengeInput else { return }
 
         attempts += 1
-        feedbackText = "Awesome!"
-        state = .correct
         _ = recordResult(completed: true)
-
-        scheduler(celebrationDuration) { [weak self] in
-            self?.unlockAndDismiss()
-        }
+        completeChallenge()
     }
 
     public func clearChallenge() {
@@ -135,13 +130,8 @@ public final class ChallengeViewModel {
         attempts += 1
 
         if selected == correct {
-            feedbackText = "Awesome!"
-            state = .correct
             _ = recordResult(completed: true)
-
-            scheduler(celebrationDuration) { [weak self] in
-                self?.unlockAndDismiss()
-            }
+            completeChallenge()
         } else {
             feedbackText = "Almost! Try again!"
             state = .incorrect
@@ -161,14 +151,15 @@ public final class ChallengeViewModel {
         state == .presenting
     }
 
-    private func unlockAndDismiss() {
+    private func completeChallenge() {
         state = .completed
+        feedbackText = nil
         screenTime.removeShields()
         SharedDefaults.shared.set(false, forKey: SharedDefaults.Key.challengePending)
         NotificationService.clearBrainBreakAlerts()
         rearmMonitoringIfNeeded()
 
-        scheduler(0.35) { [weak self] in
+        scheduler(celebrationDuration) { [weak self] in
             guard let self, self.challenge != nil else { return }
             self.state = .handback
         }

@@ -52,18 +52,14 @@ final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
                 color: shieldInk
             ),
             subtitle: ShieldConfiguration.Label(
-                text: "Tap Start. Open Childlock.",
+                text: "Start, then open Childlock.",
                 color: shieldInk.withAlphaComponent(0.7)
             ),
             primaryButtonLabel: ShieldConfiguration.Label(
-                text: "Start",
+                text: "Start Brain Break",
                 color: .white
             ),
-            primaryButtonBackgroundColor: forestSage,
-            secondaryButtonLabel: ShieldConfiguration.Label(
-                text: "Parent",
-                color: shieldInk
-            )
+            primaryButtonBackgroundColor: forestSage
         )
     }
 }

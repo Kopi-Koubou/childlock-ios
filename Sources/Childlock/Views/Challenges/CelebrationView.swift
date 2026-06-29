@@ -53,9 +53,10 @@ public struct CelebrationView: View {
                             .foregroundStyle(ChildlockColor.accent)
                     }
 
-                    Text("Nailed it!")
+                    Text("Brain break complete")
                         .font(.system(size: 36, weight: .bold, design: .rounded))
                         .foregroundStyle(ChildlockColor.textPrimary)
+                        .multilineTextAlignment(.center)
 
                     Text(solveTimeText)
                         .font(ChildlockTypography.body)
@@ -70,9 +71,9 @@ public struct CelebrationView: View {
 
     private var solveTimeText: String {
         guard let solveTimeSeconds, solveTimeSeconds >= 1 else {
-            return "Great thinking!"
+            return "Great job."
         }
-        return "Solved in \(Int(solveTimeSeconds.rounded())) second\(Int(solveTimeSeconds.rounded()) == 1 ? "" : "s")."
+        return "\(Int(solveTimeSeconds.rounded())) second\(Int(solveTimeSeconds.rounded()) == 1 ? "" : "s")."
     }
 
     @ViewBuilder

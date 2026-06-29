@@ -57,7 +57,7 @@ public final class ChildlockDeviceActivityMonitor: DeviceActivityMonitor {
 
         let content = UNMutableNotificationContent()
         content.title = "Brain break time!"
-        content.body = "Tap to solve."
+        content.body = "Open Childlock to solve."
         content.sound = .default
 
         let center = UNUserNotificationCenter.current()
@@ -145,7 +145,7 @@ public final class ChildlockShieldAction: ShieldActionDelegate {
 
         let content = UNMutableNotificationContent()
         content.title = "Brain break ready"
-        content.body = "Tap to solve."
+        content.body = "Open Childlock to solve."
         content.sound = .default
 
         let center = UNUserNotificationCenter.current()
@@ -218,18 +218,14 @@ public final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
                 color: UIColor(hex: ChildlockColorHex.shieldInk)
             ),
             subtitle: ShieldConfiguration.Label(
-                text: "Tap Start. Open Childlock.",
+                text: "Start, then open Childlock.",
                 color: UIColor(hex: ChildlockColorHex.shieldInk)
             ),
             primaryButtonLabel: ShieldConfiguration.Label(
-                text: "Start",
+                text: "Start Brain Break",
                 color: UIColor(hex: ChildlockColorHex.white)
             ),
-            primaryButtonBackgroundColor: UIColor(hex: ChildlockColorHex.forestSage),
-            secondaryButtonLabel: ShieldConfiguration.Label(
-                text: "Parent",
-                color: UIColor(hex: ChildlockColorHex.shieldInk)
-            )
+            primaryButtonBackgroundColor: UIColor(hex: ChildlockColorHex.forestSage)
         )
     }
 }

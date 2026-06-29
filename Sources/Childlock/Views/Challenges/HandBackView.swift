@@ -12,7 +12,7 @@ public struct HandBackView: View {
 
     @State private var enteredPIN = ""
     @State private var pinErrorText: String?
-    @State private var isParentSectionVisible = false
+    @State private var isParentUnlockPresented = false
     private let handBackContentMaxWidth: CGFloat = 560
 
     public init(
@@ -40,63 +40,84 @@ public struct HandBackView: View {
 
             Spacer()
 
-            if isParentSectionVisible {
-                VStack(spacing: ChildlockSpacing.sm) {
-                    SecureField("Parent PIN", text: $enteredPIN)
-                        .pinInputBehavior()
-                        .font(ChildlockTypography.body)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, ChildlockSpacing.sm)
-                        .frame(height: 44)
-                        .background(ChildlockColor.surface)
-                        .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.control))
-
-                    if let pinErrorText {
-                        Text(pinErrorText)
-                            .font(ChildlockTypography.caption)
-                            .foregroundStyle(ChildlockColor.warning)
-                    }
-
-                    Button("Unlock Dashboard") {
-                        if pinService.verify(enteredPIN) {
-                            pinErrorText = nil
-                            onParentUnlock()
-                        } else {
-                            pinErrorText = "Incorrect PIN. Try again."
-                            enteredPIN = ""
-                        }
-                    }
-                    .buttonStyle(ChildlockPrimaryButtonStyle())
-                    .disabled(enteredPIN.count < 4)
-                    .opacity(enteredPIN.count < 4 ? 0.5 : 1)
-                }
-            } else {
-                Button {
-                    isParentSectionVisible = true
-                } label: {
-                    Image(systemName: "lock.fill")
-                        .font(ChildlockTypography.caption)
-                        .foregroundStyle(ChildlockColor.textSecondary)
-                        .frame(width: 44, height: 40)
-                        .background(ChildlockColor.surface)
-                        .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.control))
-                        .childlockShadow(ChildlockShadow.sm)
-                }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier("parent_unlock_entry")
-                .accessibilityLabel("Parent unlock")
+            Button {
+                isParentUnlockPresented = true
+            } label: {
+                Image(systemName: "lock.fill")
+                    .font(ChildlockTypography.caption)
+                    .foregroundStyle(ChildlockColor.textSecondary)
+                    .frame(width: 44, height: 40)
+                    .background(ChildlockColor.surface)
+                    .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.control))
+                    .childlockShadow(ChildlockShadow.sm)
             }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("parent_unlock_entry")
+            .accessibilityLabel("Parent unlock")
         }
         .frame(maxWidth: handBackContentMaxWidth)
         .padding(ChildlockSpacing.lg)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(ChildlockColor.background.ignoresSafeArea())
+        .sheet(isPresented: $isParentUnlockPresented) {
+            parentUnlockSheet
+                .presentationDetents([.height(260)])
+                .presentationDragIndicator(.visible)
+        }
         .onChange(of: enteredPIN) { _, _ in
             sanitizeEnteredPIN()
             if !enteredPIN.isEmpty {
                 pinErrorText = nil
             }
         }
+    }
+
+    private var parentUnlockSheet: some View {
+        VStack(spacing: ChildlockSpacing.md) {
+            Text("Parent PIN")
+                .font(ChildlockTypography.subtitle)
+                .foregroundStyle(ChildlockColor.textPrimary)
+
+            SecureField("Parent PIN", text: $enteredPIN)
+                .pinInputBehavior()
+                .textFieldStyle(.plain)
+                .font(ChildlockTypography.body)
+                .foregroundStyle(ChildlockColor.textPrimary)
+                .tint(ChildlockColor.primary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, ChildlockSpacing.sm)
+                .frame(height: 48)
+                .background(ChildlockColor.surface)
+                .overlay(
+                    RoundedRectangle(cornerRadius: ChildlockRadius.control)
+                        .stroke(ChildlockColor.border, lineWidth: 1)
+                )
+                .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.control))
+
+            if let pinErrorText {
+                Text(pinErrorText)
+                    .font(ChildlockTypography.caption)
+                    .foregroundStyle(ChildlockColor.warning)
+            }
+
+            Button("Unlock Dashboard") {
+                if pinService.verify(enteredPIN) {
+                    pinErrorText = nil
+                    isParentUnlockPresented = false
+                    onParentUnlock()
+                } else {
+                    pinErrorText = "Incorrect PIN. Try again."
+                    enteredPIN = ""
+                }
+            }
+            .buttonStyle(ChildlockPrimaryButtonStyle())
+            .disabled(enteredPIN.count < 4)
+            .opacity(enteredPIN.count < 4 ? 0.5 : 1)
+        }
+        .padding(ChildlockSpacing.lg)
+        .frame(maxWidth: handBackContentMaxWidth)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(ChildlockColor.background.ignoresSafeArea())
     }
 
     private func sanitizeEnteredPIN() {

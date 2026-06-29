@@ -44,10 +44,8 @@ public struct ChallengeContainerView: View {
                             onAnswer: viewModel.submitMathAnswer
                         )
                     } else if let patternChallenge = viewModel.challenge as? PatternChallenge {
-                        MultipleChoiceTextChallengeView(
-                            instruction: patternChallenge.instruction,
-                            prompt: patternChallenge.sequence.joined(separator: "  ") + "  ?",
-                            answers: patternChallenge.allAnswers,
+                        PatternChallengeView(
+                            challenge: patternChallenge,
                             hint: viewModel.hintVisible ? patternChallenge.hintText : nil,
                             onSelect: viewModel.submitPatternAnswer
                         )
@@ -147,6 +145,63 @@ private struct MultipleChoiceTextChallengeView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(ChildlockColor.warnSoft)
                 .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.card))
+            }
+        }
+        .childlockCard()
+    }
+}
+
+private struct PatternChallengeView: View {
+    let challenge: PatternChallenge
+    let hint: String?
+    let onSelect: (String) -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: ChildlockSpacing.md) {
+            Text("Tap the next one")
+                .font(ChildlockTypography.childTitle)
+                .foregroundStyle(ChildlockColor.textPrimary)
+
+            HStack(spacing: ChildlockSpacing.xs) {
+                ForEach(Array(challenge.sequence.enumerated()), id: \.offset) { _, symbol in
+                    Text(symbol)
+                        .font(ChildlockTypography.childBody)
+                        .frame(maxWidth: .infinity)
+                        .minimumScaleFactor(0.7)
+                }
+
+                Text("?")
+                    .font(ChildlockTypography.childBody)
+                    .foregroundStyle(ChildlockColor.textSecondary)
+                    .frame(maxWidth: .infinity)
+            }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Pattern \(challenge.sequence.joined(separator: ", ")), question mark")
+
+            VStack(spacing: ChildlockSpacing.xs) {
+                ForEach(challenge.allAnswers, id: \.self) { answer in
+                    Button {
+                        onSelect(answer)
+                    } label: {
+                        Text(answer)
+                            .font(ChildlockTypography.childBody)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 64)
+                    }
+                    .buttonStyle(ChildlockSecondaryButtonStyle())
+                    .accessibilityIdentifier("answer_\(answer)")
+                    .accessibilityLabel("Answer \(answer)")
+                }
+            }
+
+            if let hint {
+                Text(hint)
+                    .font(ChildlockTypography.caption)
+                    .foregroundStyle(Color(hex: "7A5A1A"))
+                    .padding(ChildlockSpacing.sm)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(ChildlockColor.warnSoft)
+                    .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.md))
             }
         }
         .childlockCard()

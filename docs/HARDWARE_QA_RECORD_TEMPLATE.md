@@ -48,7 +48,7 @@ shielding, extension actions, purchases, and real hand-back behavior.
 | Child continuously consumes selected content during the interval | Pass / Fail |  |
 | First interval starts without immediately shielding | Pass / Fail |  |
 | Selected content shields only after the threshold | Pass / Fail |  |
-| Shield copy says `Brain Break` and `Tap Start. Open Childlock.` | Pass / Fail |  |
+| Shield copy says `Brain Break` and `Start, then open Childlock.` | Pass / Fail |  |
 | `Start` closes the selected app | Pass / Fail |  |
 | Childlock opens the pending challenge from alert or Home | Pass / Fail |  |
 | Denied-notification fallback opens the pending challenge from Home | Pass / Fail / N/A |  |
