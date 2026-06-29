@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		ANALYTICS_SERVICE_SOURCE /* Sources/Childlock/Services/AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ANALYTICS_SERVICE_FILE /* Sources/Childlock/Services/AnalyticsService.swift */; };
+		APP_ASSETS /* Sources/Childlock/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = APP_ASSETS_FILE /* Sources/Childlock/Assets.xcassets */; };
 		APP_EMBED_MONITOR_EXT /* ChildlockMonitor.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = PRODUCT_MONITOR_EXT /* ChildlockMonitor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		APP_EMBED_SHIELD_ACTION_EXT /* ChildlockShieldAction.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = PRODUCT_SHIELD_ACTION_EXT /* ChildlockShieldAction.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		APP_EMBED_SHIELD_CONFIG_EXT /* ChildlockShieldConfiguration.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = PRODUCT_SHIELD_CONFIG_EXT /* ChildlockShieldConfiguration.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		APP_ENTRY /* ChildlockApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = APP_ENTRY_FILE /* ChildlockApp.swift */; };
-		APP_ASSETS /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = APP_ASSETS_FILE /* Assets.xcassets */; };
-		APP_PRIVACY_MANIFEST /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = PRIVACY_MANIFEST_FILE /* PrivacyInfo.xcprivacy */; };
+		APP_PRIVACY_MANIFEST /* Sources/Childlock/PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = PRIVACY_MANIFEST_FILE /* Sources/Childlock/PrivacyInfo.xcprivacy */; };
 		APP_SETTINGS_SOURCE /* Sources/Childlock/Models/AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = APP_SETTINGS_FILE /* Sources/Childlock/Models/AppSettings.swift */; };
 		APP_STATE_STORE_SOURCE /* Sources/Childlock/Services/AppStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = APP_STATE_STORE_FILE /* Sources/Childlock/Services/AppStateStore.swift */; };
 		APP_STATE_VM_SOURCE /* Sources/Childlock/ViewModels/AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = APP_STATE_VM_FILE /* Sources/Childlock/ViewModels/AppState.swift */; };
@@ -25,17 +25,18 @@
 		CHALLENGE_SESSION_SOURCE /* Sources/Childlock/Models/ChallengeSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CHALLENGE_SESSION_FILE /* Sources/Childlock/Models/ChallengeSession.swift */; };
 		CHALLENGE_SPEAKER_SOURCE /* Sources/Childlock/Services/ChallengeSpeaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CHALLENGE_SPEAKER_FILE /* Sources/Childlock/Services/ChallengeSpeaker.swift */; };
 		CHALLENGE_VM_SOURCE /* Sources/Childlock/ViewModels/ChallengeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CHALLENGE_VM_FILE /* Sources/Childlock/ViewModels/ChallengeViewModel.swift */; };
-		CHILD_PROFILE_SOURCE /* Sources/Childlock/Models/ChildProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CHILD_PROFILE_FILE /* Sources/Childlock/Models/ChildProfile.swift */; };
 		CHILDLOCK_MONITORING_STATUS_SOURCE /* Sources/Childlock/Models/ChildlockMonitoringStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = CHILDLOCK_MONITORING_STATUS_FILE /* Sources/Childlock/Models/ChildlockMonitoringStatus.swift */; };
+		CHILD_PROFILE_SOURCE /* Sources/Childlock/Models/ChildProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CHILD_PROFILE_FILE /* Sources/Childlock/Models/ChildProfile.swift */; };
 		DATA_SYNC_SERVICE_SOURCE /* Sources/Childlock/Services/DataSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DATA_SYNC_SERVICE_FILE /* Sources/Childlock/Services/DataSyncService.swift */; };
 		DESIGN_TOKENS_SOURCE /* Sources/Childlock/Views/Shared/DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = DESIGN_TOKENS_FILE /* Sources/Childlock/Views/Shared/DesignTokens.swift */; };
 		EXT_ENTRYPOINTS_SOURCE /* Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = EXT_ENTRYPOINTS_FILE /* Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift */; };
 		FAMILY_ACTIVITY_STORE_SOURCE /* Sources/Childlock/Services/FamilyActivitySelectionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAMILY_ACTIVITY_STORE_FILE /* Sources/Childlock/Services/FamilyActivitySelectionStore.swift */; };
+		GOOGLE_SIGNIN_PACKAGE /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = GOOGLE_SIGNIN_PRODUCT /* GoogleSignIn */; };
 		HANDBACK_VIEW_SOURCE /* Sources/Childlock/Views/Challenges/HandBackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = HANDBACK_VIEW_FILE /* Sources/Childlock/Views/Challenges/HandBackView.swift */; };
 		MATH_CHALLENGE_VIEW_SOURCE /* Sources/Childlock/Views/Challenges/MathChallengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = MATH_CHALLENGE_VIEW_FILE /* Sources/Childlock/Views/Challenges/MathChallengeView.swift */; };
 		MEMORY_MATCH_VIEW_SOURCE /* Sources/Childlock/Views/Challenges/MemoryMatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = MEMORY_MATCH_VIEW_FILE /* Sources/Childlock/Views/Challenges/MemoryMatchView.swift */; };
 		MONITOR_EXT /* ChildlockMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = MONITOR_EXT_FILE /* ChildlockMonitor.swift */; };
-		MONITOR_PRIVACY_MANIFEST /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = PRIVACY_MANIFEST_FILE /* PrivacyInfo.xcprivacy */; };
+		MONITOR_PRIVACY_MANIFEST /* Sources/Childlock/PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = PRIVACY_MANIFEST_FILE /* Sources/Childlock/PrivacyInfo.xcprivacy */; };
 		NOTIFICATION_SERVICE_SOURCE /* Sources/Childlock/Services/NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NOTIFICATION_SERVICE_FILE /* Sources/Childlock/Services/NotificationService.swift */; };
 		ONBOARDING_FLOW_VIEW_SOURCE /* Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ONBOARDING_FLOW_VIEW_FILE /* Sources/Childlock/Views/Onboarding/OnboardingFlowView.swift */; };
 		ONBOARDING_VM_SOURCE /* Sources/Childlock/ViewModels/OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ONBOARDING_VM_FILE /* Sources/Childlock/ViewModels/OnboardingViewModel.swift */; };
@@ -43,8 +44,6 @@
 		PAYWALL_VIEW_SOURCE /* Sources/Childlock/Views/Paywall/PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PAYWALL_VIEW_FILE /* Sources/Childlock/Views/Paywall/PaywallView.swift */; };
 		PIN_INPUT_BEHAVIOR_SOURCE /* Sources/Childlock/Views/Shared/PINInputBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = PIN_INPUT_BEHAVIOR_FILE /* Sources/Childlock/Views/Shared/PINInputBehavior.swift */; };
 		PIN_SERVICE_SOURCE /* Sources/Childlock/Services/PINService.swift in Sources */ = {isa = PBXBuildFile; fileRef = PIN_SERVICE_FILE /* Sources/Childlock/Services/PINService.swift */; };
-		SHIELD_ACTION_PRIVACY_MANIFEST /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = PRIVACY_MANIFEST_FILE /* PrivacyInfo.xcprivacy */; };
-		SHIELD_CONFIG_PRIVACY_MANIFEST /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = PRIVACY_MANIFEST_FILE /* PrivacyInfo.xcprivacy */; };
 		POSTHOG_PACKAGE /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = POSTHOG_PRODUCT /* PostHog */; };
 		REVENUECAT_PACKAGE /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = REVENUECAT_PRODUCT /* RevenueCat */; };
 		ROOT_VIEW_SOURCE /* Sources/Childlock/App/ChildlockRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ROOT_VIEW_FILE /* Sources/Childlock/App/ChildlockRootView.swift */; };
@@ -54,11 +53,12 @@
 		SHARED_DEFAULTS_SHIELD_ACTION_SOURCE /* Sources/Childlock/Services/SharedDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = SHARED_DEFAULTS_FILE /* Sources/Childlock/Services/SharedDefaults.swift */; };
 		SHARED_DEFAULTS_SOURCE /* Sources/Childlock/Services/SharedDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = SHARED_DEFAULTS_FILE /* Sources/Childlock/Services/SharedDefaults.swift */; };
 		SHIELD_ACTION_EXT /* ChildlockShieldAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = SHIELD_ACTION_EXT_FILE /* ChildlockShieldAction.swift */; };
+		SHIELD_ACTION_PRIVACY_MANIFEST /* Sources/Childlock/PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = PRIVACY_MANIFEST_FILE /* Sources/Childlock/PrivacyInfo.xcprivacy */; };
 		SHIELD_CONFIG_EXT /* ChildlockShieldConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = SHIELD_CONFIG_EXT_FILE /* ChildlockShieldConfiguration.swift */; };
+		SHIELD_CONFIG_PRIVACY_MANIFEST /* Sources/Childlock/PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = PRIVACY_MANIFEST_FILE /* Sources/Childlock/PrivacyInfo.xcprivacy */; };
 		SIGN_IN_APPLE_VIEW_SOURCE /* Sources/Childlock/Views/Onboarding/SignInWithAppleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SIGN_IN_APPLE_VIEW_FILE /* Sources/Childlock/Views/Onboarding/SignInWithAppleView.swift */; };
 		SUBSCRIPTION_SERVICE_SOURCE /* Sources/Childlock/Services/SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = SUBSCRIPTION_SERVICE_FILE /* Sources/Childlock/Services/SubscriptionService.swift */; };
 		SUPABASE_CLIENT_PROVIDER_SOURCE /* Sources/Childlock/Services/SupabaseClientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = SUPABASE_CLIENT_PROVIDER_FILE /* Sources/Childlock/Services/SupabaseClientProvider.swift */; };
-		GOOGLE_SIGNIN_PACKAGE /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = GOOGLE_SIGNIN_PRODUCT /* GoogleSignIn */; };
 		SUPABASE_PACKAGE /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = SUPABASE_PRODUCT /* Supabase */; };
 /* End PBXBuildFile section */
 
@@ -104,7 +104,7 @@
 
 /* Begin PBXFileReference section */
 		ANALYTICS_SERVICE_FILE /* Sources/Childlock/Services/AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Services/AnalyticsService.swift; sourceTree = SOURCE_ROOT; };
-		APP_ASSETS_FILE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Sources/Childlock/Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		APP_ASSETS_FILE /* Sources/Childlock/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Sources/Childlock/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		APP_ENTITLEMENTS /* childlock.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = childlock.entitlements; sourceTree = "<group>"; };
 		APP_ENTRY_FILE /* ChildlockApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildlockApp.swift; sourceTree = "<group>"; };
 		APP_SECRETS_XCCONFIG /* AppSecrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppSecrets.xcconfig; sourceTree = "<group>"; };
@@ -119,8 +119,8 @@
 		CHALLENGE_SESSION_FILE /* Sources/Childlock/Models/ChallengeSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Models/ChallengeSession.swift; sourceTree = SOURCE_ROOT; };
 		CHALLENGE_SPEAKER_FILE /* Sources/Childlock/Services/ChallengeSpeaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Services/ChallengeSpeaker.swift; sourceTree = SOURCE_ROOT; };
 		CHALLENGE_VM_FILE /* Sources/Childlock/ViewModels/ChallengeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/ViewModels/ChallengeViewModel.swift; sourceTree = SOURCE_ROOT; };
-		CHILD_PROFILE_FILE /* Sources/Childlock/Models/ChildProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Models/ChildProfile.swift; sourceTree = SOURCE_ROOT; };
 		CHILDLOCK_MONITORING_STATUS_FILE /* Sources/Childlock/Models/ChildlockMonitoringStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Models/ChildlockMonitoringStatus.swift; sourceTree = SOURCE_ROOT; };
+		CHILD_PROFILE_FILE /* Sources/Childlock/Models/ChildProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Models/ChildProfile.swift; sourceTree = SOURCE_ROOT; };
 		DATA_SYNC_SERVICE_FILE /* Sources/Childlock/Services/DataSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Services/DataSyncService.swift; sourceTree = SOURCE_ROOT; };
 		DESIGN_TOKENS_FILE /* Sources/Childlock/Views/Shared/DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Views/Shared/DesignTokens.swift; sourceTree = SOURCE_ROOT; };
 		EXT_ENTRYPOINTS_FILE /* Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift; sourceTree = SOURCE_ROOT; };
@@ -137,7 +137,7 @@
 		PAYWALL_VIEW_FILE /* Sources/Childlock/Views/Paywall/PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Views/Paywall/PaywallView.swift; sourceTree = SOURCE_ROOT; };
 		PIN_INPUT_BEHAVIOR_FILE /* Sources/Childlock/Views/Shared/PINInputBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Views/Shared/PINInputBehavior.swift; sourceTree = SOURCE_ROOT; };
 		PIN_SERVICE_FILE /* Sources/Childlock/Services/PINService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Services/PINService.swift; sourceTree = SOURCE_ROOT; };
-		PRIVACY_MANIFEST_FILE /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Sources/Childlock/PrivacyInfo.xcprivacy; sourceTree = SOURCE_ROOT; };
+		PRIVACY_MANIFEST_FILE /* Sources/Childlock/PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Sources/Childlock/PrivacyInfo.xcprivacy; sourceTree = SOURCE_ROOT; };
 		PRODUCT_APP /* Childlock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Childlock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		PRODUCT_MONITOR_EXT /* ChildlockMonitor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ChildlockMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		PRODUCT_SHIELD_ACTION_EXT /* ChildlockShieldAction.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ChildlockShieldAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -261,8 +261,8 @@
 			isa = PBXGroup;
 			children = (
 				APP_ENTRY_FILE /* ChildlockApp.swift */,
-				APP_ASSETS_FILE /* Assets.xcassets */,
-				PRIVACY_MANIFEST_FILE /* PrivacyInfo.xcprivacy */,
+				APP_ASSETS_FILE /* Sources/Childlock/Assets.xcassets */,
+				PRIVACY_MANIFEST_FILE /* Sources/Childlock/PrivacyInfo.xcprivacy */,
 				ROOT_VIEW_FILE /* Sources/Childlock/App/ChildlockRootView.swift */,
 				EXT_ENTRYPOINTS_FILE /* Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift */,
 				BACKEND_CONFIG_FILE /* Sources/Childlock/Config/BackendConfig.swift */,
@@ -440,8 +440,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				APP_ASSETS /* Assets.xcassets in Resources */,
-				APP_PRIVACY_MANIFEST /* PrivacyInfo.xcprivacy in Resources */,
+				APP_ASSETS /* Sources/Childlock/Assets.xcassets in Resources */,
+				APP_PRIVACY_MANIFEST /* Sources/Childlock/PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,7 +449,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				MONITOR_PRIVACY_MANIFEST /* PrivacyInfo.xcprivacy in Resources */,
+				MONITOR_PRIVACY_MANIFEST /* Sources/Childlock/PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,7 +457,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				SHIELD_ACTION_PRIVACY_MANIFEST /* PrivacyInfo.xcprivacy in Resources */,
+				SHIELD_ACTION_PRIVACY_MANIFEST /* Sources/Childlock/PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -465,7 +465,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				SHIELD_CONFIG_PRIVACY_MANIFEST /* PrivacyInfo.xcprivacy in Resources */,
+				SHIELD_CONFIG_PRIVACY_MANIFEST /* Sources/Childlock/PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -573,7 +573,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = M42QAK8JZ9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -602,7 +602,7 @@
 				CODE_SIGN_ENTITLEMENTS = DeviceActivityMonitorExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = M42QAK8JZ9;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Extensions/DeviceActivityMonitorExtension/Info.plist;
@@ -633,7 +633,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Extensions/ShieldActionExtension/ShieldActionExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = M42QAK8JZ9;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Extensions/ShieldActionExtension/Info.plist;
@@ -664,7 +664,7 @@
 				CODE_SIGN_ENTITLEMENTS = Extensions/ShieldConfigurationExtension/ShieldConfigurationExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = M42QAK8JZ9;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Extensions/ShieldConfigurationExtension/Info.plist;
@@ -810,7 +810,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = M42QAK8JZ9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -839,7 +839,7 @@
 				CODE_SIGN_ENTITLEMENTS = DeviceActivityMonitorExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = M42QAK8JZ9;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Extensions/DeviceActivityMonitorExtension/Info.plist;
@@ -870,7 +870,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Extensions/ShieldActionExtension/ShieldActionExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = M42QAK8JZ9;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Extensions/ShieldActionExtension/Info.plist;
@@ -901,7 +901,7 @@
 				CODE_SIGN_ENTITLEMENTS = Extensions/ShieldConfigurationExtension/ShieldConfigurationExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = M42QAK8JZ9;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Extensions/ShieldConfigurationExtension/Info.plist;
@@ -976,20 +976,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		POSTHOG_PACKAGE_REF /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/PostHog/posthog-ios";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-			};
 		GOOGLE_SIGNIN_PACKAGE_REF /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 9.0.0;
+			};
+		};
+		POSTHOG_PACKAGE_REF /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PostHog/posthog-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
 			};
 		};
 		REVENUECAT_PACKAGE_REF /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
@@ -1011,6 +1011,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		GOOGLE_SIGNIN_PRODUCT /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = GOOGLE_SIGNIN_PACKAGE_REF /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
 		POSTHOG_PRODUCT /* PostHog */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = POSTHOG_PACKAGE_REF /* XCRemoteSwiftPackageReference "posthog-ios" */;
@@ -1020,11 +1025,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = REVENUECAT_PACKAGE_REF /* XCRemoteSwiftPackageReference "purchases-ios" */;
 			productName = RevenueCat;
-		};
-		GOOGLE_SIGNIN_PRODUCT /* GoogleSignIn */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = GOOGLE_SIGNIN_PACKAGE_REF /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
-			productName = GoogleSignIn;
 		};
 		SUPABASE_PRODUCT /* Supabase */ = {
 			isa = XCSwiftPackageProductDependency;
