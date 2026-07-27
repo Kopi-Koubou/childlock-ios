@@ -12,6 +12,7 @@ public struct OnboardingFlowView: View {
     @State private var isGoogleSignInInProgress = false
     @State private var isFamilyActivityPickerPresented = false
     @FocusState private var focusedSetupField: SetupFocusField?
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     #if os(iOS) && canImport(FamilyControls)
     @State private var familyActivitySelection = FamilyActivitySelection()
     #endif
@@ -23,26 +24,31 @@ public struct OnboardingFlowView: View {
     }
 
     public var body: some View {
-        VStack(spacing: 0) {
-            switch viewModel.step {
-            case .welcome:
-                welcomeStep
-            case .familySharing:
-                innerStep { familySharingStep }
-            case .devices:
-                innerStep { devicesStep }
-            case .setup:
-                innerStepWithPinnedFooter {
-                    setupStep
-                } footer: {
-                    setupFooter
+        ZStack {
+            Group {
+                switch viewModel.step {
+                case .welcome:
+                    welcomeStep
+                case .familySharing:
+                    innerStep { familySharingStep }
+                case .devices:
+                    innerStep { devicesStep }
+                case .setup:
+                    innerStepWithPinnedFooter {
+                        setupStep
+                    } footer: {
+                        setupFooter
+                    }
+                case .pinAndDone:
+                    innerStep { pinAndDoneStep }
                 }
-            case .pinAndDone:
-                innerStep { pinAndDoneStep }
             }
+            .id(viewModel.step)
+            .transition(reduceMotion ? .opacity : .opacity.combined(with: .scale(scale: 0.995)))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(ChildlockColor.background.ignoresSafeArea())
+        .animation(reduceMotion ? nil : .easeOut(duration: 0.18), value: viewModel.step)
         .onAppear {
             #if os(iOS) && canImport(FamilyControls)
             familyActivitySelection = viewModel.hydrateFamilyActivitySelection()

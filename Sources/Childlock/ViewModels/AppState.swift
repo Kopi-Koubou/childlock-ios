@@ -73,9 +73,9 @@ public final class AppState {
     public var hasCompletedOnboarding = false {
         didSet { persistIfNeeded() }
     }
-    public var currentTab: Tab = .home {
-        didSet { persistIfNeeded() }
-    }
+    // Navigation is transient and intentionally resets to Home on launch.
+    // Avoid rewriting the full App Group snapshot on every tab tap.
+    public var currentTab: Tab = .home
     public var isPINLocked = true {
         didSet { persistIfNeeded() }
     }

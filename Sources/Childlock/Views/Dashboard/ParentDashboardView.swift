@@ -10,6 +10,7 @@ public struct ParentDashboardView: View {
     @Bindable private var appState: AppState
     @State private var subscriptionService = SubscriptionService.shared
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let onTriggerChallenge: (() -> Void)?
     private let pinService: PINService
@@ -130,7 +131,7 @@ public struct ParentDashboardView: View {
     private var dashboardTabs: some View {
         VStack(spacing: 0) {
             // Content area
-            Group {
+            ZStack {
                 switch appState.currentTab {
                 case .home:
                     homeTab
@@ -142,6 +143,9 @@ public struct ParentDashboardView: View {
                     settingsTab
                 }
             }
+            .id(appState.currentTab)
+            .transition(.opacity)
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.14), value: appState.currentTab)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
 
             // Custom tab bar
@@ -247,7 +251,10 @@ public struct ParentDashboardView: View {
 
     private func tabBarButton(tab: AppState.Tab, icon: String, label: String) -> some View {
         Button {
-            appState.currentTab = tab
+            guard appState.currentTab != tab else { return }
+            withAnimation(reduceMotion ? nil : .easeOut(duration: 0.14)) {
+                appState.currentTab = tab
+            }
         } label: {
             VStack(spacing: 4) {
                 Image(systemName: appState.currentTab == tab ? "\(icon).fill" : icon)

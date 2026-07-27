@@ -60,7 +60,7 @@ final class AppStatePersistenceTests: XCTestCase {
         XCTAssertTrue(saved.settings.hasCompletedOnboarding)
     }
 
-    func testSettingsAndTabMutationsPersist() {
+    func testSettingsPersistWithoutWritingTransientTabNavigation() {
         let store = InMemoryAppStateStore()
         let appState = AppState(store: store)
 
@@ -77,7 +77,8 @@ final class AppStatePersistenceTests: XCTestCase {
 
         XCTAssertFalse(saved.settings.voicePromptsEnabled)
         XCTAssertFalse(saved.settings.dailySummaryNotification)
-        XCTAssertEqual(saved.currentTab, .settings)
+        XCTAssertEqual(appState.currentTab, .settings)
+        XCTAssertEqual(saved.currentTab, .home)
     }
 
     func testAppGroupFileStoreRoundTrip() {

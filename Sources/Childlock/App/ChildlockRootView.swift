@@ -10,6 +10,7 @@ public struct ChildlockRootView: View {
     @State private var didApplyDebugLaunchSeed = false
     #endif
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     public init() {}
 
@@ -129,13 +130,17 @@ public struct ChildlockRootView: View {
     @ViewBuilder
     public var body: some View {
         ZStack {
+            rootContent
+                .allowsHitTesting(!isChallengePresented)
+                .accessibilityHidden(isChallengePresented)
+
             if isChallengePresented {
                 challengeOverlay
+                    .transition(reduceMotion ? .opacity : .opacity.combined(with: .scale(scale: 0.99)))
                     .zIndex(1)
-            } else {
-                rootContent
             }
         }
+        .animation(reduceMotion ? nil : .easeOut(duration: 0.18), value: isChallengePresented)
     }
 
     private func completeOnboardingIfNeeded() {

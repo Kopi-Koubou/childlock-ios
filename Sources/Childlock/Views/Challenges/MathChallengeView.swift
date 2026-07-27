@@ -87,7 +87,7 @@ private struct AnswerButtonStyle: ButtonStyle {
                     .fill(ChildlockColor.surface)
                     .childlockShadow(ChildlockShadow.sm)
             )
-            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
-            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: configuration.isPressed)
+            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
     }
 }

@@ -40,7 +40,7 @@ public final class ChallengeViewModel {
     public init(
         engine: ChallengeEngine? = nil,
         screenTime: ScreenTimeManaging? = nil,
-        celebrationDuration: TimeInterval = 2.0,
+        celebrationDuration: TimeInterval = 1.2,
         scheduler: @escaping @MainActor (TimeInterval, @escaping @MainActor () -> Void) -> Void = {
             delay, action in
             if delay <= 0 {
