@@ -56,7 +56,7 @@ Test order:
 1. Run same-phone first.
    Parent sets up on the shared iPhone, locks the parent dashboard, hands the
    phone over, child consumes selected content, shield appears after threshold,
-   child solves the brain break, sees Done plus the back-arrow cue, returns to unlocked content,
+   child solves the brain break, sees Great job plus the Swipe back cue, returns directly to unlocked content,
    and the dashboard stays PIN-gated. This proves shared-iPhone use because
    the configured child-used device is the same iPhone.
 

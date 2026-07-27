@@ -51,6 +51,7 @@
 		SECURE_STORE_SOURCE /* Sources/Childlock/Services/SecureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = SECURE_STORE_FILE /* Sources/Childlock/Services/SecureStore.swift */; };
 		SHARED_DEFAULTS_MONITOR_SOURCE /* Sources/Childlock/Services/SharedDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = SHARED_DEFAULTS_FILE /* Sources/Childlock/Services/SharedDefaults.swift */; };
 		SHARED_DEFAULTS_SHIELD_ACTION_SOURCE /* Sources/Childlock/Services/SharedDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = SHARED_DEFAULTS_FILE /* Sources/Childlock/Services/SharedDefaults.swift */; };
+		SHARED_DEFAULTS_SHIELD_CONFIG_SOURCE /* Sources/Childlock/Services/SharedDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = SHARED_DEFAULTS_FILE /* Sources/Childlock/Services/SharedDefaults.swift */; };
 		SHARED_DEFAULTS_SOURCE /* Sources/Childlock/Services/SharedDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = SHARED_DEFAULTS_FILE /* Sources/Childlock/Services/SharedDefaults.swift */; };
 		SHIELD_ACTION_EXT /* ChildlockShieldAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = SHIELD_ACTION_EXT_FILE /* ChildlockShieldAction.swift */; };
 		SHIELD_ACTION_PRIVACY_MANIFEST /* Sources/Childlock/PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = PRIVACY_MANIFEST_FILE /* Sources/Childlock/PrivacyInfo.xcprivacy */; };
@@ -538,6 +539,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				SHIELD_CONFIG_EXT /* ChildlockShieldConfiguration.swift in Sources */,
+				SHARED_DEFAULTS_SHIELD_CONFIG_SOURCE /* Sources/Childlock/Services/SharedDefaults.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -573,7 +575,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = M42QAK8JZ9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -602,7 +604,7 @@
 				CODE_SIGN_ENTITLEMENTS = DeviceActivityMonitorExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = M42QAK8JZ9;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Extensions/DeviceActivityMonitorExtension/Info.plist;
@@ -633,7 +635,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Extensions/ShieldActionExtension/ShieldActionExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = M42QAK8JZ9;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Extensions/ShieldActionExtension/Info.plist;
@@ -664,7 +666,7 @@
 				CODE_SIGN_ENTITLEMENTS = Extensions/ShieldConfigurationExtension/ShieldConfigurationExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = M42QAK8JZ9;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Extensions/ShieldConfigurationExtension/Info.plist;
@@ -810,7 +812,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = M42QAK8JZ9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -839,7 +841,7 @@
 				CODE_SIGN_ENTITLEMENTS = DeviceActivityMonitorExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = M42QAK8JZ9;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Extensions/DeviceActivityMonitorExtension/Info.plist;
@@ -870,7 +872,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Extensions/ShieldActionExtension/ShieldActionExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = M42QAK8JZ9;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Extensions/ShieldActionExtension/Info.plist;
@@ -901,7 +903,7 @@
 				CODE_SIGN_ENTITLEMENTS = Extensions/ShieldConfigurationExtension/ShieldConfigurationExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = M42QAK8JZ9;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Extensions/ShieldConfigurationExtension/Info.plist;

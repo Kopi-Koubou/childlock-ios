@@ -85,8 +85,8 @@ Simulator pass criteria:
 - Math and memory challenge seeds both render child-appropriate challenge UI;
   memory pairs are deterministic in this Debug seed for repeatable simulator QA.
 - Correct challenge answer records activity and moves to the hand-back screen.
-- Hand-back seed gives the child only `Done`, the back-arrow cue, and a small
-  parent lock icon.
+- Hand-back seed gives the child `Great job!`, `Swipe back`, a right-arrow gesture cue,
+  and a small parent lock icon.
 - Parent PIN unlock remounts the dashboard.
 - More-time seed shows the parent request banner with `Allow 5 min` and
   `Keep blocked`.
@@ -177,11 +177,11 @@ gallery and contact-sheet paths.
 | Content started at |  |
 | Shield appeared at |  |
 | Shield appeared only after threshold | Pass / Fail |
-| `Start` closed selected app | Pass / Fail |
-| Childlock opened pending challenge from alert or Home | Pass / Fail |
+| `Start` kept the selected app in place behind its shield | Pass / Fail |
+| Childlock opened pending challenge from the alert | Pass / Fail |
 | Challenge completion cleared shield | Pass / Fail |
 | Monitoring re-armed for a new interval | Pass / Fail |
-| Child saw `Done` plus the back-arrow cue and returned to the now-unshielded content app/site | Pass / Fail |
+| Child saw `Great job!` and used the bottom-edge `Swipe back` cue to return directly to the now-unshielded previous app/site | Pass / Fail |
 | Parent dashboard stayed PIN-gated after hand-back | Pass / Fail |
 | RevenueCat paywall/offering behaved as expected | Pass / Fail / Not tested |
 | RevenueCat offering loaded monthly and annual packages | Pass / Fail / Not tested |
@@ -256,15 +256,16 @@ as sufficient for launch.
     being consumed.
 14. Selected content shields only after the threshold is reached. Record the
     shield timestamp and compare it with the configured interval.
-15. Shield copy says `Brain Break` and `Start, then open Childlock.`.
-16. Primary shield action says `Start`, closes the blocked app, and
-    leaves a Childlock alert/Home path back to the pending challenge.
+15. Shield copy says `Brain Break`, `Tap Start.`, and `Start`.
+16. Primary shield action keeps the blocked app in place and refreshes the
+    Childlock alert. The shield then says `Ready!` and `Tap the Childlock alert.`.
 17. Opening Childlock presents the pending challenge.
 18. Completing the challenge clears shields.
 19. Monitoring re-arms for another full interval.
-20. Child sees `Done` plus the back-arrow hand-back cue, uses Home or the
-    app switcher to return to the now-unshielded content app/site, and
-    cannot enter the dashboard without the parent PIN.
+20. Child sees `Great job!` and `Swipe back`, then swipes right along the
+    bottom edge to return directly to the now-unshielded previous app/site.
+    Confirm the original activity is still in place and the child cannot enter
+    the dashboard without the parent PIN.
 21. `Parent` creates a parent-visible more-time request and does not open
     a pending child challenge before the parent responds.
 22. `Allow <interval>` grants another full interval and then re-arms enforcement.
@@ -312,8 +313,8 @@ Use this when the parent and child share the same iPhone.
 6. Parent sets the PIN, taps `Lock Parent Dashboard` or leaves Childlock to
    let it auto-lock, and hands the phone to the child.
 7. Child continuously uses selected content until the threshold is reached.
-8. Child solves the challenge, sees `Done` plus the back-arrow cue, then uses Home or
-   the app switcher to return to the now-unshielded app/site.
+8. Child solves the challenge, sees `Great job!` and `Swipe back`, then swipes
+   right along the bottom edge to return directly to the now-unshielded app/site.
 9. Child taps the parent lock icon or tries to enter the dashboard.
 10. Expected: dashboard remains gated by the parent PIN.
 

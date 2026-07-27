@@ -71,9 +71,10 @@ launch matrix.
    from Home.
 9. Solve the pending challenge.
 10. Confirm shielding clears and monitoring re-arms.
-11. Confirm the child sees `Done` plus the back-arrow cue, uses Home or the app
-    switcher to return to the now-unshielded app/content. iOS does
-    not let Childlock automatically return to another app.
+11. Confirm the child sees `Great job!` and `Swipe back`, then swipes right
+    along the bottom edge to return directly to the now-unshielded previous
+    app/content. iOS does not let Childlock perform this app switch
+    programmatically.
 12. Confirm the hand-back screen blocks the dashboard until the parent PIN is
     entered.
 13. Repeat on a child iPad if iPad support is part of the first launch promise.

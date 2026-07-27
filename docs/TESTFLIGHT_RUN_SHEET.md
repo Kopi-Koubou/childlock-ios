@@ -35,10 +35,12 @@ This proves a parent and child can share one iPhone.
 11. Confirm nothing shields immediately.
 12. Wait for the threshold, then write down the shield time.
 13. On the shield, tap `Start`.
-14. Open Childlock from the alert or Home.
+14. Tap the Childlock alert. Confirm the original app stayed in place behind
+    its shield.
 15. Complete the challenge.
-16. Confirm shields clear and the child sees `Done` plus the back-arrow cue.
-17. Return to the now-unshielded content app/site using Home or app switcher.
+16. Confirm shields clear and the child sees `Great job!` and `Swipe back`.
+17. Swipe right along the bottom edge. Confirm it returns directly to the
+    now-unshielded previous app/site with the activity still in place.
 18. Confirm the parent dashboard still needs the PIN.
 19. Run one second full interval and confirm it shields again.
 20. Run one denied-notification pass: after `Start`, press Home and open
@@ -61,7 +63,7 @@ child-used device.
 7. Start enforcement on the iPad.
 8. Start real content on the iPad and write down the start time.
 9. Confirm the shield appears only after the threshold.
-10. Complete the shield -> Childlock -> challenge -> `Done` hand-back loop.
+10. Complete the shield -> Childlock -> challenge -> `Swipe back` hand-back loop.
 11. Confirm monitoring re-arms for a second full interval.
 12. If Childlock is also installed on the parent iPhone, use it only for
     login/account smoke testing. Do not mark it as remote iPad control.

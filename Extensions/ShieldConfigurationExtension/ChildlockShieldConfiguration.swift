@@ -42,21 +42,23 @@ final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
         let shieldBg = UIColor(red: 0.106, green: 0.141, blue: 0.125, alpha: 1.0) // #1B2420
         let shieldInk = UIColor(red: 0.949, green: 0.945, blue: 0.925, alpha: 1.0) // #F2F1EC
         let forestSage = UIColor(red: 0.247, green: 0.420, blue: 0.345, alpha: 1.0) // #3F6B58
+        let challengeRequested =
+            SharedDefaults.shared.string(forKey: SharedDefaults.Key.monitoringStatus) == "challenge_requested"
 
         return ShieldConfiguration(
             backgroundBlurStyle: .systemMaterial,
             backgroundColor: shieldBg,
             icon: UIImage(systemName: "brain.head.profile"),
             title: ShieldConfiguration.Label(
-                text: "Brain Break",
+                text: challengeRequested ? "Ready!" : "Brain Break",
                 color: shieldInk
             ),
             subtitle: ShieldConfiguration.Label(
-                text: "Start, then open Childlock.",
+                text: challengeRequested ? "Tap the Childlock alert." : "Tap Start.",
                 color: shieldInk.withAlphaComponent(0.7)
             ),
             primaryButtonLabel: ShieldConfiguration.Label(
-                text: "Start Brain Break",
+                text: challengeRequested ? "Try Again" : "Start",
                 color: .white
             ),
             primaryButtonBackgroundColor: forestSage

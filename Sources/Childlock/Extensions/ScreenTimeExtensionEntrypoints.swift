@@ -123,7 +123,7 @@ public final class ChildlockShieldAction: ShieldActionDelegate {
             defaults.set(true, forKey: SharedDefaults.Key.challengePending)
             defaults.set("challenge_requested", forKey: SharedDefaults.Key.monitoringStatus)
             postBrainBreakNotification()
-            completionHandler(.close)
+            completionHandler(.defer)
         case .secondaryButtonPressed:
             let requestCount = defaults.integer(forKey: SharedDefaults.Key.moreTimeRequestCount)
             defaults.set(false, forKey: SharedDefaults.Key.challengePending)
@@ -145,7 +145,7 @@ public final class ChildlockShieldAction: ShieldActionDelegate {
 
         let content = UNMutableNotificationContent()
         content.title = "Brain break ready"
-        content.body = "Open Childlock to solve."
+        content.body = "Tap to solve."
         content.sound = .default
 
         let center = UNUserNotificationCenter.current()
@@ -209,20 +209,23 @@ public final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
     }
 
     private var childlockConfiguration: ShieldConfiguration {
-        ShieldConfiguration(
+        let challengeRequested =
+            SharedDefaults.shared.string(forKey: SharedDefaults.Key.monitoringStatus) == "challenge_requested"
+
+        return ShieldConfiguration(
             backgroundBlurStyle: .systemMaterial,
             backgroundColor: UIColor(hex: ChildlockColorHex.shieldBg),
             icon: UIImage(systemName: "brain.head.profile"),
             title: ShieldConfiguration.Label(
-                text: "Brain Break",
+                text: challengeRequested ? "Ready!" : "Brain Break",
                 color: UIColor(hex: ChildlockColorHex.shieldInk)
             ),
             subtitle: ShieldConfiguration.Label(
-                text: "Start, then open Childlock.",
+                text: challengeRequested ? "Tap the Childlock alert." : "Tap Start.",
                 color: UIColor(hex: ChildlockColorHex.shieldInk)
             ),
             primaryButtonLabel: ShieldConfiguration.Label(
-                text: "Start Brain Break",
+                text: challengeRequested ? "Try Again" : "Start",
                 color: UIColor(hex: ChildlockColorHex.white)
             ),
             primaryButtonBackgroundColor: UIColor(hex: ChildlockColorHex.forestSage)

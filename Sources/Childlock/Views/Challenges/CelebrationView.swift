@@ -1,11 +1,7 @@
 import SwiftUI
 
 public struct CelebrationView: View {
-    private let solveTimeSeconds: Double?
-
-    public init(solveTimeSeconds: Double? = nil) {
-        self.solveTimeSeconds = solveTimeSeconds
-    }
+    public init() {}
 
     private let confettiItems: [(x: CGFloat, y: CGFloat, size: CGFloat, rotation: Double, isCircle: Bool, colorIndex: Int)] = {
         var items: [(CGFloat, CGFloat, CGFloat, Double, Bool, Int)] = []
@@ -53,27 +49,16 @@ public struct CelebrationView: View {
                             .foregroundStyle(ChildlockColor.accent)
                     }
 
-                    Text("Brain break complete")
+                    Text("Great job!")
                         .font(.system(size: 36, weight: .bold, design: .rounded))
                         .foregroundStyle(ChildlockColor.textPrimary)
                         .multilineTextAlignment(.center)
-
-                    Text(solveTimeText)
-                        .font(ChildlockTypography.body)
-                        .foregroundStyle(ChildlockColor.textMuted)
 
                     Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-    }
-
-    private var solveTimeText: String {
-        guard let solveTimeSeconds, solveTimeSeconds >= 1 else {
-            return "Great job."
-        }
-        return "\(Int(solveTimeSeconds.rounded())) second\(Int(solveTimeSeconds.rounded()) == 1 ? "" : "s")."
     }
 
     @ViewBuilder

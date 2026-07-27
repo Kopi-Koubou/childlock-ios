@@ -92,9 +92,10 @@ Reviewer flow:
 8. Tap Start, then tap the Childlock notification or open Childlock
    from Home and solve the pending challenge.
 9. Completing the challenge removes the shield and re-arms monitoring.
-10. The child hand-back screen says `Done` with a single back-arrow cue, guides
-    the child back through Home or the app switcher, and requires the parent
-    PIN before entering the parent dashboard.
+10. The child hand-back screen says `Great job!` and `Swipe back` with a
+    right-arrow gesture cue. Swiping right along the bottom edge returns to the
+    preserved previous app. The parent PIN is still required before entering
+    the parent dashboard.
 
 Sign-in uses Apple's native Sign in with Apple flow and, when configured for the
 submitted build, native Google Sign-In backed by Supabase Auth. Builds without

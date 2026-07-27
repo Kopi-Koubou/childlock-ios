@@ -53,11 +53,14 @@ final class ShieldCopyTests: XCTestCase {
             "Extensions/ShieldConfigurationExtension/ChildlockShieldConfiguration.swift",
             "Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift",
         ].map(readRepoFile)
+        let project = try readRepoFile("Childlock.xcodeproj/project.pbxproj")
 
         for contents in files {
             XCTAssertTrue(contents.contains("Brain Break"))
-            XCTAssertTrue(contents.contains("Start, then open Childlock."))
-            XCTAssertTrue(contents.contains("text: \"Start Brain Break\""))
+            XCTAssertTrue(contents.contains("challengeRequested"))
+            XCTAssertTrue(contents.contains("SharedDefaults.Key.monitoringStatus) == \"challenge_requested\""))
+            XCTAssertTrue(contents.contains("\"Tap the Childlock alert.\" : \"Tap Start.\""))
+            XCTAssertTrue(contents.contains("\"Try Again\" : \"Start\""))
             XCTAssertFalse(contents.contains("text: \"Parent\""))
             XCTAssertFalse(contents.contains("Tap Start. Then tap the alert."))
             XCTAssertFalse(contents.contains("Tap Start, then open Childlock from the alert or Home."))
@@ -65,6 +68,7 @@ final class ShieldCopyTests: XCTestCase {
             XCTAssertFalse(contents.contains("text: \"Open Childlock\""))
             XCTAssertFalse(contents.contains("This app is paused. Open Childlock to unlock it."))
         }
+        XCTAssertTrue(project.contains("SHARED_DEFAULTS_SHIELD_CONFIG_SOURCE"))
 
         let notificationFiles = try [
             "Extensions/DeviceActivityMonitorExtension/ChildlockMonitor.swift",
@@ -79,9 +83,9 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(notificationFiles[0].contains("Open Childlock to solve."))
         XCTAssertTrue(notificationFiles[2].contains("Open Childlock to solve."))
         XCTAssertTrue(notificationFiles[1].contains("Brain break ready"))
-        XCTAssertTrue(notificationFiles[1].contains("Open Childlock to solve."))
+        XCTAssertTrue(notificationFiles[1].contains("Tap to solve."))
         XCTAssertTrue(notificationFiles[2].contains("Brain break ready"))
-        XCTAssertTrue(notificationFiles[2].contains("Open Childlock to solve."))
+        XCTAssertTrue(notificationFiles[2].contains("Tap to solve."))
         XCTAssertTrue(notificationFiles[1].contains("Give this to your parent."))
         XCTAssertTrue(notificationFiles[2].contains("Give this to your parent."))
     }
@@ -101,7 +105,7 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(checklist.contains("Settings notification-denied seed shows iOS notification permission as `Off`"))
         XCTAssertTrue(checklist.contains("offers `Open Notification Settings`"))
         XCTAssertTrue(dashboard.contains("UIApplication.openNotificationSettingsURLString"))
-        XCTAssertTrue(reviewNotes.contains("pressing\n  Home and opening Childlock presents the same pending challenge"))
+        XCTAssertTrue(reviewNotes.contains("pressing Home and opening Childlock\n  presents the same pending challenge"))
         XCTAssertTrue(checklist.contains("denied-notification"))
     }
 
@@ -268,8 +272,9 @@ final class ShieldCopyTests: XCTestCase {
                     && contents.contains("postBrainBreakNotification()"))
 
             XCTAssertTrue(startsChallengeAndRefreshesAlert)
+            XCTAssertTrue(primaryBlock.contains("completionHandler(.defer)"))
             XCTAssertTrue(contents.contains("content.title = \"Brain break ready\""))
-            XCTAssertTrue(contents.contains("content.body = \"Open Childlock to solve.\""))
+            XCTAssertTrue(contents.contains("content.body = \"Tap to solve.\""))
             XCTAssertTrue(contents.contains("let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]"))
             XCTAssertTrue(contents.contains("removePendingNotificationRequests(withIdentifiers: identifiers)"))
             XCTAssertTrue(contents.contains("removeDeliveredNotifications(withIdentifiers: identifiers)"))
@@ -355,7 +360,7 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(checklist.contains("`--childlock-qa-seed-handback`"))
         XCTAssertTrue(checklist.contains("`--childlock-qa-seed-locked-more-time-request`"))
         XCTAssertTrue(checklist.contains("memory pairs are deterministic in this Debug seed"))
-        XCTAssertTrue(checklist.contains("Hand-back seed gives the child only `Done`, the back-arrow cue, and a small\n  parent lock icon."))
+        XCTAssertTrue(checklist.contains("Hand-back seed gives the child `Great job!`, `Swipe back`, a right-arrow gesture cue,\n  and a small parent lock icon."))
         XCTAssertTrue(checklist.contains("Locked more-time seed keeps the dashboard hidden"))
     }
 

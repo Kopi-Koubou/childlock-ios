@@ -48,14 +48,14 @@ shielding, extension actions, purchases, and real hand-back behavior.
 | Child continuously consumes selected content during the interval | Pass / Fail |  |
 | First interval starts without immediately shielding | Pass / Fail |  |
 | Selected content shields only after the threshold | Pass / Fail |  |
-| Shield copy says `Brain Break` and `Start, then open Childlock.` | Pass / Fail |  |
-| `Start` closes the selected app | Pass / Fail |  |
-| Childlock opens the pending challenge from alert or Home | Pass / Fail |  |
+| Shield copy says `Brain Break`, `Tap Start.`, and `Start` | Pass / Fail |  |
+| `Start` keeps the selected app in place behind its shield | Pass / Fail |  |
+| Shield changes to `Ready!` and Childlock opens the pending challenge from the alert | Pass / Fail |  |
 | Denied-notification fallback opens the pending challenge from Home | Pass / Fail / N/A |  |
 | Challenge completion clears the shield | Pass / Fail |  |
 | Monitoring re-arms for another full interval | Pass / Fail |  |
 | Second full interval shields again | Pass / Fail |  |
-| Child sees `Done` plus the back-arrow cue and returns to the now-unshielded content app/site | Pass / Fail |  |
+| Child sees `Great job!` and `Swipe back`, then swipes right along the bottom edge to return directly to the now-unshielded previous app/site | Pass / Fail |  |
 | Parent dashboard stays PIN-gated after hand-back | Pass / Fail |  |
 | `Parent` creates a parent-visible request only | Pass / Fail |  |
 | `Allow <interval>` grants time and re-arms enforcement | Pass / Fail |  |
@@ -75,7 +75,7 @@ Use this when the parent and child share the same iPhone.
 | If multiple child profiles exist, parent taps `Make active` for the child before handoff | Pass / Fail / N/A |  |
 | Parent sets the PIN, taps `Lock Parent Dashboard` or leaves Childlock to auto-lock, then hands the phone to the child | Pass / Fail / N/A |  |
 | Child continuously uses selected content until threshold is reached | Pass / Fail / N/A |  |
-| Child solves the challenge, sees `Done` plus the back-arrow cue, and returns to the unlocked app/site | Pass / Fail / N/A |  |
+| Child solves the challenge, sees `Great job!` and `Swipe back`, then returns directly to the unlocked previous app/site with the bottom-edge gesture | Pass / Fail / N/A |  |
 | Child cannot reach parent dashboard without the PIN | Pass / Fail / N/A |  |
 
 ## Child iPad Scenario

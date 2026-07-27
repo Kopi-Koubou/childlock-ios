@@ -48,10 +48,10 @@ final class ChildlockShieldAction: ShieldActionDelegate {
         switch action {
         case .primaryButtonPressed:
             handleStartChallenge()
-            // .close exits the blocked app to the home screen. The shield
-            // can't launch Childlock, so the refreshed notification and Home
-            // icon are the child's supported paths into the challenge.
-            completionHandler(.close)
+            // Keep the content app in place while the Childlock notification
+            // opens the challenge. Once the shield clears, the child can use
+            // the system's bottom-edge app-switch gesture to resume it.
+            completionHandler(.defer)
         case .secondaryButtonPressed:
             handleRequestMoreTime()
             completionHandler(.close)
@@ -79,7 +79,7 @@ final class ChildlockShieldAction: ShieldActionDelegate {
 
         let content = UNMutableNotificationContent()
         content.title = "Brain break ready"
-        content.body = "Open Childlock to solve."
+        content.body = "Tap to solve."
         content.sound = .default
 
         let center = UNUserNotificationCenter.current()

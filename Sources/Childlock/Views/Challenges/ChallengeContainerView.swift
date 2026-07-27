@@ -19,7 +19,7 @@ public struct ChallengeContainerView: View {
                     viewModel.clearChallenge()
                 }
             } else if viewModel.state == .completed {
-                CelebrationView(solveTimeSeconds: viewModel.lastSolveTimeSeconds)
+                CelebrationView()
             } else {
                 VStack(spacing: ChildlockSpacing.md) {
                     // Brain Break pill

@@ -351,9 +351,10 @@ same-phone, child-iPad, denied-notification, second-loop, and purchase passes.
 - If notifications are denied or missed, Home -> Childlock still reaches the
   pending challenge.
 - Challenge completion removes shields.
-- The hand-back screen says `Done` with a back-arrow cue, and the child returns to
-  the now-unshielded app/content. iOS does not let Childlock automatically
-  return to another app or restore media state.
+- The hand-back screen says `Great job!` and `Swipe back` with a right-arrow
+  gesture cue. The child swipes right along the bottom edge to return directly
+  to the preserved, now-unshielded previous app/content. iOS does not let
+  Childlock perform this app switch programmatically or restore media state.
 - Monitoring re-arms for another full interval.
 - Parent PIN is required to leave the child hand-back screen for dashboard.
 - Parent creates a parent-visible request, does not open a child challenge

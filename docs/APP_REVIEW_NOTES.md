@@ -16,14 +16,14 @@ Reviewer flow:
 7. Open selected app/category/site content and use it continuously until the
    interval threshold is reached.
 8. The selected content is shielded with Childlock's "Brain Break" shield.
-9. Tap "Start", then tap the Childlock notification or open
-   Childlock from Home and solve the pending challenge.
+9. Tap "Start", then tap the Childlock notification and solve the pending
+   challenge. The original app stays in place behind its shield.
 10. Completing the challenge removes the shield and re-arms monitoring for the
     next interval.
-11. After the celebration, the child sees a concise hand-back screen with
-    `Done` and a single back-arrow cue. A parent PIN is required before
-    entering the parent dashboard. To resume the original app, the child uses
-    Home or the app switcher to return to the now-unshielded app/content.
+11. After the brief celebration, the child sees `Great job!`, `Swipe back`,
+    and a right-arrow gesture cue. On devices with a Home indicator, swiping
+    right along the bottom edge returns directly to the now-unshielded previous
+    app. A parent PIN is required before entering the parent dashboard.
 
 Notes:
 
@@ -37,16 +37,18 @@ Notes:
   supported because the parent dashboard remains PIN-protected. Childlock is
   not presented as a parent-phone remote controller for a separate child iPad in
   this launch build.
-- In this build, the shield action closes the blocked app and Childlock also
-  posts a local notification to guide the child back to the challenge when
-  notifications are enabled. If notifications are denied or missed, pressing
-  Home and opening Childlock presents the same pending challenge. Once Childlock
-  is foregrounded, it automatically opens the pending brain break.
+- In this build, the shield action keeps the blocked app in place and Childlock
+  posts a local notification to open the challenge when notifications are
+  enabled. This preserves the original activity as the previous app. If
+  notifications are denied or missed, pressing Home and opening Childlock
+  presents the same pending challenge. Once Childlock is foregrounded, it
+  automatically opens the pending brain break.
 - Childlock does not automatically return the child to another app after the
   challenge. iOS does not provide a public Screen Time API to reopen arbitrary
-  apps or restore media state, so the hand-back screen stays very brief:
-  `Done` plus a back-arrow cue. The child uses Home or the app switcher to
-  return.
+  apps or restore media state, so the hand-back screen stays very brief and
+  teaches the system gesture: `Great job!`, `Swipe back`, and a right-arrow cue.
+  Swiping right along the bottom edge returns to the preserved previous app on
+  devices with a Home indicator.
 - App selections are handled through Apple's FamilyControls picker. Opaque app
   selection tokens remain local/on-device.
 - Support: https://kouboulabs.com/childlock/support
