@@ -78,7 +78,7 @@ final class ChallengeViewModelTests: XCTestCase {
         XCTAssertEqual(scheduledActions.count, 1)
     }
 
-    func testDefaultSuccessPauseMovesQuicklyToHandBack() {
+    func testDefaultSuccessAnimationAutomaticallyClearsChallenge() {
         let screenTime = MockScreenTimeManager()
         var scheduledDelay: TimeInterval?
         var scheduledAction: (@MainActor () -> Void)?
@@ -100,12 +100,14 @@ final class ChallengeViewModelTests: XCTestCase {
 
         viewModel.submitMathAnswer(challenge.correctAnswer)
 
-        XCTAssertEqual(scheduledDelay, 0.6)
+        XCTAssertEqual(scheduledDelay, 1.2)
         XCTAssertEqual(viewModel.state, .completed)
 
         scheduledAction?()
 
-        XCTAssertEqual(viewModel.state, .handback)
+        XCTAssertNil(viewModel.challenge)
+        XCTAssertNil(viewModel.activeProfile)
+        XCTAssertEqual(viewModel.state, .presenting)
     }
 
     func testAnswersDuringIncorrectFeedbackAreIgnoredUntilChallengeResets() {

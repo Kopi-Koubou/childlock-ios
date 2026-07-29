@@ -9,7 +9,6 @@ public final class ChallengeViewModel {
         case correct
         case incorrect
         case completed
-        case handback
     }
 
     public private(set) var challenge: (any Challenge)?
@@ -40,7 +39,7 @@ public final class ChallengeViewModel {
     public init(
         engine: ChallengeEngine? = nil,
         screenTime: ScreenTimeManaging? = nil,
-        celebrationDuration: TimeInterval = 0.6,
+        celebrationDuration: TimeInterval = 1.2,
         scheduler: @escaping @MainActor (TimeInterval, @escaping @MainActor () -> Void) -> Void = {
             delay, action in
             if delay <= 0 {
@@ -113,10 +112,10 @@ public final class ChallengeViewModel {
     }
 
     #if DEBUG
-    public func debugPresentHandBack(for profile: ChildProfile) {
+    public func debugPresentCelebration(for profile: ChildProfile) {
         activeProfile = profile
         challenge = engine.generateChallenge(type: .math, for: profile)
-        state = .handback
+        state = .completed
         attempts = 1
         hintVisible = false
         feedbackText = nil
@@ -161,7 +160,7 @@ public final class ChallengeViewModel {
 
         scheduler(celebrationDuration) { [weak self] in
             guard let self, self.challenge != nil else { return }
-            self.state = .handback
+            self.clearChallenge()
         }
     }
 

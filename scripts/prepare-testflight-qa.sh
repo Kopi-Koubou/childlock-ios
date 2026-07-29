@@ -56,7 +56,8 @@ Test order:
 1. Run same-phone first.
    Parent sets up on the shared iPhone, locks the parent dashboard, hands the
    phone over, child consumes selected content, shield appears after threshold,
-   child solves the brain break, sees Great job plus the Swipe back cue, returns directly to unlocked content,
+   child solves the shield brain break, sees Great job briefly, and returns
+   automatically to the same unlocked content with no post-answer action,
    and the dashboard stays PIN-gated. This proves shared-iPhone use because
    the configured child-used device is the same iPhone.
 
@@ -66,8 +67,8 @@ Test order:
    use only when the iPad is the configured child-used device.
 
 3. Run one denied-notification pass.
-   After Start, press Home and open Childlock. The pending
-   challenge should still appear.
+   The shield brain break must still present and return to content automatically;
+   only notification-dependent summaries or parent updates should be absent.
 
 4. Run one second full shield loop on the same device.
    This proves monitoring re-arms after challenge completion.

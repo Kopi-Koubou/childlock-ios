@@ -2,23 +2,16 @@ import SwiftUI
 
 public struct ChallengeContainerView: View {
     @Bindable private var viewModel: ChallengeViewModel
-    private let onParentUnlock: () -> Void
 
-    public init(viewModel: ChallengeViewModel, onParentUnlock: @escaping () -> Void = {}) {
+    public init(viewModel: ChallengeViewModel) {
         self.viewModel = viewModel
-        self.onParentUnlock = onParentUnlock
     }
 
     public var body: some View {
         ZStack {
             ChildlockColor.background.ignoresSafeArea()
 
-            if viewModel.state == .handback {
-                HandBackView(childName: viewModel.activeProfile?.name) {
-                    onParentUnlock()
-                    viewModel.clearChallenge()
-                }
-            } else if viewModel.state == .completed {
+            if viewModel.state == .completed {
                 CelebrationView()
             } else {
                 VStack(spacing: ChildlockSpacing.md) {
@@ -87,7 +80,7 @@ public struct ChallengeContainerView: View {
         }
         .onAppear { speakPromptIfNeeded() }
         .onChange(of: viewModel.state) { _, state in
-            if state == .completed || state == .handback {
+            if state == .completed {
                 ChallengeSpeaker.shared.stop()
             }
         }

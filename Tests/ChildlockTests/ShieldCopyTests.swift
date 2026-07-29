@@ -48,7 +48,7 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(deviceModel.contains("One active child monitor runs per configured device at a time."))
     }
 
-    func testShieldAndNotificationCopyMatchesPlatformBehavior() throws {
+    func testShieldPresentsQuestionAndTouchFreeSuccessState() throws {
         let files = try [
             "Extensions/ShieldConfigurationExtension/ChildlockShieldConfiguration.swift",
             "Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift",
@@ -57,46 +57,51 @@ final class ShieldCopyTests: XCTestCase {
 
         for contents in files {
             XCTAssertTrue(contents.contains("Brain Break"))
-            XCTAssertTrue(contents.contains("challengeRequested"))
-            XCTAssertTrue(contents.contains("SharedDefaults.Key.monitoringStatus) == \"challenge_requested\""))
-            XCTAssertTrue(contents.contains("\"Tap the Childlock alert.\" : \"Tap Start.\""))
-            XCTAssertTrue(contents.contains("\"Try Again\" : \"Start\""))
+            XCTAssertTrue(contents.contains("SharedDefaults.shieldBrainBreak()"))
+            XCTAssertTrue(contents.contains("brainBreak.prompt"))
+            XCTAssertTrue(contents.contains("brainBreak.primaryAnswer"))
+            XCTAssertTrue(contents.contains("brainBreak.secondaryAnswer"))
+            XCTAssertTrue(contents.contains("Great job!"))
+            XCTAssertTrue(contents.contains("Going back to your app…"))
             XCTAssertFalse(contents.contains("text: \"Parent\""))
-            XCTAssertFalse(contents.contains("Tap Start. Then tap the alert."))
-            XCTAssertFalse(contents.contains("Tap Start, then open Childlock from the alert or Home."))
             XCTAssertFalse(contents.contains("Ask Parent"))
             XCTAssertFalse(contents.contains("text: \"Open Childlock\""))
-            XCTAssertFalse(contents.contains("This app is paused. Open Childlock to unlock it."))
         }
         XCTAssertTrue(project.contains("SHARED_DEFAULTS_SHIELD_CONFIG_SOURCE"))
 
-        let notificationFiles = try [
+        let flowFiles = try [
             "Extensions/DeviceActivityMonitorExtension/ChildlockMonitor.swift",
             "Extensions/ShieldActionExtension/ChildlockShieldAction.swift",
             "Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift",
         ].map(readRepoFile)
 
-        for contents in notificationFiles {
-            XCTAssertFalse(contents.contains("Your child asked for more screen time. Open Childlock to respond."))
-        }
+        XCTAssertTrue(flowFiles[0].contains("ShieldBrainBreakState.make("))
+        XCTAssertTrue(flowFiles[0].contains("SharedDefaults.saveShieldBrainBreak"))
+        XCTAssertFalse(flowFiles[0].contains("Open Childlock to solve."))
 
-        XCTAssertTrue(notificationFiles[0].contains("Open Childlock to solve."))
-        XCTAssertTrue(notificationFiles[2].contains("Open Childlock to solve."))
-        XCTAssertTrue(notificationFiles[1].contains("Brain break ready"))
-        XCTAssertTrue(notificationFiles[1].contains("Tap to solve."))
-        XCTAssertTrue(notificationFiles[2].contains("Brain break ready"))
-        XCTAssertTrue(notificationFiles[2].contains("Tap to solve."))
-        XCTAssertTrue(notificationFiles[1].contains("Give this to your parent."))
-        XCTAssertTrue(notificationFiles[2].contains("Give this to your parent."))
+        for contents in [flowFiles[1], flowFiles[2]] {
+            XCTAssertTrue(contents.contains("submitAnswer(at: 0"))
+            XCTAssertTrue(contents.contains("submitAnswer(at: 1"))
+            XCTAssertTrue(contents.contains("finishSuccessfulBrainBreak(id: brainBreakID)"))
+            XCTAssertTrue(contents.contains("store.shield.applications = nil"))
+            XCTAssertTrue(contents.contains("store.shield.webDomains = nil"))
+            XCTAssertTrue(contents.contains("rearmMonitoring()"))
+            XCTAssertTrue(contents.contains("ProcessInfo.processInfo.performExpiringActivity("))
+            XCTAssertTrue(contents.contains("return expired ? .none : .defer"))
+            XCTAssertFalse(contents.contains("DispatchQueue.main.asyncAfter"))
+            XCTAssertFalse(contents.contains("Brain break ready"))
+            XCTAssertFalse(contents.contains("Tap to solve."))
+        }
     }
 
-    func testNotificationSettingsExplainHomeFallbackWhenAlertsAreDenied() throws {
+    func testNotificationSettingsExplainShieldChallengesDoNotNeedAlerts() throws {
         let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
-        let reviewNotes = try readRepoFile("docs/APP_REVIEW_NOTES.md")
         let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")
 
         XCTAssertTrue(dashboard.contains("iOS notification permission"))
-        XCTAssertTrue(dashboard.contains("The child can still tap Start, press Home, and open Childlock to continue."))
+        XCTAssertFalse(dashboard.contains("settingsToggleRow(title: \"Challenge alerts\""))
+        XCTAssertTrue(dashboard.contains("Shield brain breaks still work"))
+        XCTAssertTrue(dashboard.contains("Shield brain breaks work without alerts."))
         XCTAssertTrue(dashboard.contains("debugNotificationAuthorizationStatus"))
         XCTAssertTrue(dashboard.contains("--childlock-qa-seed-settings-notifications-denied"))
         XCTAssertTrue(dashboard.contains("return .denied"))
@@ -105,11 +110,10 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(checklist.contains("Settings notification-denied seed shows iOS notification permission as `Off`"))
         XCTAssertTrue(checklist.contains("offers `Open Notification Settings`"))
         XCTAssertTrue(dashboard.contains("UIApplication.openNotificationSettingsURLString"))
-        XCTAssertTrue(reviewNotes.contains("pressing Home and opening Childlock\n  presents the same pending challenge"))
-        XCTAssertTrue(checklist.contains("denied-notification"))
+        XCTAssertTrue(normalizeWhitespace(checklist).contains("shield brain break still works without notification permission"))
     }
 
-    func testChallengeAlertPreferenceIsVisibleToScreenTimeExtension() throws {
+    func testLegacyChallengeAlertPreferenceDoesNotGateShieldBrainBreaks() throws {
         let sharedDefaults = try readRepoFile("Sources/Childlock/Services/SharedDefaults.swift")
         let appState = try readRepoFile("Sources/Childlock/ViewModels/AppState.swift")
         let monitor = try readRepoFile("Extensions/DeviceActivityMonitorExtension/ChildlockMonitor.swift")
@@ -118,13 +122,11 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(sharedDefaults.contains("challengeAlertsEnabled"))
         XCTAssertTrue(appState.contains("mirrorNotificationSettingsToSharedDefaults"))
         XCTAssertTrue(appState.contains("settings.challengeAlertNotification"))
-        XCTAssertTrue(monitor.contains("SharedDefaults.Key.challengeAlertsEnabled"))
-        XCTAssertTrue(extensionEntrypoints.contains("SharedDefaults.Key.challengeAlertsEnabled"))
-        XCTAssertTrue(monitor.contains("?? true"))
-        XCTAssertTrue(extensionEntrypoints.contains("?? true"))
+        XCTAssertFalse(monitor.contains("SharedDefaults.Key.challengeAlertsEnabled"))
+        XCTAssertFalse(extensionEntrypoints.contains("SharedDefaults.Key.challengeAlertsEnabled"))
     }
 
-    func testShieldAlertsUseRegularNotificationsForPortableSigning() throws {
+    func testShieldBrainBreakDoesNotRequireNotificationDelivery() throws {
         let notificationService = try readRepoFile("Sources/Childlock/Services/NotificationService.swift")
         let monitor = try readRepoFile("Extensions/DeviceActivityMonitorExtension/ChildlockMonitor.swift")
         let shieldAction = try readRepoFile("Extensions/ShieldActionExtension/ChildlockShieldAction.swift")
@@ -136,11 +138,11 @@ final class ShieldCopyTests: XCTestCase {
 
         for contents in [monitor, shieldAction, extensionEntrypoints] {
             XCTAssertFalse(contents.contains("content.interruptionLevel = .timeSensitive"))
-            XCTAssertTrue(contents.contains("content.sound = .default"))
+            XCTAssertFalse(contents.contains("UNMutableNotificationContent()"))
         }
     }
 
-    func testMonitorOnlyMarksChallengePendingAfterSelectionIsShielded() throws {
+    func testMonitorSavesShieldQuestionBeforeSelectionIsShielded() throws {
         let files = try [
             "Extensions/DeviceActivityMonitorExtension/ChildlockMonitor.swift",
             "Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift",
@@ -153,59 +155,33 @@ final class ShieldCopyTests: XCTestCase {
             let shieldRange = try XCTUnwrap(
                 contents.range(of: "store.shield.applications = selection.applicationTokens")
             )
-            let pendingRange = try XCTUnwrap(
-                contents.range(of: "defaults.set(true, forKey: SharedDefaults.Key.challengePending)")
+            let questionRange = try XCTUnwrap(
+                contents.range(of: "SharedDefaults.saveShieldBrainBreak(brainBreak, defaults: defaults)")
             )
             let statusRange = try XCTUnwrap(
                 contents.range(of: "defaults.set(\"threshold_reached\", forKey: SharedDefaults.Key.monitoringStatus)")
             )
 
-            XCTAssertLessThan(decodeRange.lowerBound, pendingRange.lowerBound)
-            XCTAssertLessThan(shieldRange.lowerBound, pendingRange.lowerBound)
-            XCTAssertLessThan(pendingRange.lowerBound, statusRange.lowerBound)
+            XCTAssertLessThan(decodeRange.lowerBound, questionRange.lowerBound)
+            XCTAssertLessThan(questionRange.lowerBound, shieldRange.lowerBound)
+            XCTAssertLessThan(shieldRange.lowerBound, statusRange.lowerBound)
             XCTAssertTrue(contents.contains("defaults.set(false, forKey: SharedDefaults.Key.challengePending)"))
             XCTAssertTrue(contents.contains("defaults.set(\"failed\", forKey: SharedDefaults.Key.monitoringStatus)"))
         }
     }
 
-    func testAskParentDoesNotOpenPendingChildChallenge() throws {
+    func testShieldButtonsOnlySubmitAnswersAndNeverOpenChildlock() throws {
         let shieldAction = try readRepoFile("Extensions/ShieldActionExtension/ChildlockShieldAction.swift")
         let extensionEntrypoints = try readRepoFile("Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift")
-        let rootView = try readRepoFile("Sources/Childlock/App/ChildlockRootView.swift")
-        let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
 
         for contents in [shieldAction, extensionEntrypoints] {
+            XCTAssertTrue(contents.contains("submitAnswer(at: 0"))
+            XCTAssertTrue(contents.contains("submitAnswer(at: 1"))
             XCTAssertTrue(contents.contains("defaults.set(false, forKey: SharedDefaults.Key.challengePending)"))
-            XCTAssertTrue(contents.contains("defaults.set(\"more_time_requested\", forKey: SharedDefaults.Key.monitoringStatus)"))
+            XCTAssertFalse(contents.contains("more_time_requested"))
+            XCTAssertFalse(contents.contains("postBrainBreakNotification"))
+            XCTAssertFalse(contents.contains("UIApplication.shared"))
         }
-
-        XCTAssertTrue(rootView.contains("guard !hasActiveMoreTimeRequest else { return }"))
-        XCTAssertTrue(rootView.contains("SharedDefaults.shared.integer(forKey: SharedDefaults.Key.moreTimeRequestCount) > 0"))
-        XCTAssertTrue(dashboard.contains("private var monitoringProfile: ChildProfile?"))
-        XCTAssertTrue(dashboard.contains("SharedDefaults.shared.string(forKey: SharedDefaults.Key.activeMonitoringProfileID)"))
-        XCTAssertTrue(dashboard.contains("return appState.activeProfile"))
-        XCTAssertTrue(dashboard.contains("private var moreTimeRequestProfileName: String"))
-        XCTAssertTrue(dashboard.contains("return \"\\(moreTimeRequestProfileName) asked for more time. Enter your PIN to respond.\""))
-        XCTAssertTrue(dashboard.contains("Text(\"\\(moreTimeRequestProfileName) asked for more time\")"))
-        XCTAssertFalse(dashboard.contains("Text(\"\\(appState.activeProfile?.name ?? \"Your child\") asked for more time\")"))
-        XCTAssertTrue(dashboard.contains("asked for more time. Enter your PIN to respond."))
-        XCTAssertTrue(dashboard.contains("private var moreTimeGrantButtonTitle: String"))
-        XCTAssertTrue(dashboard.contains("return \"Allow \\(minutes) min\""))
-        XCTAssertTrue(dashboard.contains("private var moreTimeGrantAccessibilityLabel: String"))
-        XCTAssertTrue(dashboard.contains("return \"Allow \\(minutes) minute\\(minutes == 1 ? \"\" : \"s\")\""))
-        XCTAssertFalse(dashboard.contains("Give one more block"))
-        XCTAssertTrue(dashboard.contains("SharedDefaults.shared.set(false, forKey: SharedDefaults.Key.challengePending)"))
-        XCTAssertTrue(dashboard.contains("Button(\"Keep blocked\")"))
-        XCTAssertFalse(dashboard.contains("Button(\"Dismiss\")"))
-        XCTAssertTrue(dashboard.contains("private func denyMoreTimeRequest()"))
-        XCTAssertTrue(dashboard.contains("SharedDefaults.shared.set(\"threshold_reached\", forKey: SharedDefaults.Key.monitoringStatus)"))
-        XCTAssertTrue(dashboard.contains("monitoringStatusText = \"threshold_reached\""))
-
-        let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")
-        XCTAssertTrue(checklist.contains("does not open\n    a pending child challenge before the parent responds"))
-        XCTAssertTrue(checklist.contains("`Keep blocked` clears the parent request while keeping the child blocked"))
-        XCTAssertTrue(checklist.contains("`Allow 5 min`"))
-        XCTAssertFalse(checklist.contains("Give one more block"))
     }
 
     func testGrantMoreTimeOnlyClearsRequestAfterMonitoringRestarts() throws {
@@ -256,29 +232,28 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(dashboard.contains("stopScreenTimeEnforcement()"))
     }
 
-    func testStartBrainBreakRefreshesTappableBrainBreakNotification() throws {
+    func testCorrectShieldAnswerShowsSuccessThenClearsShield() throws {
         let files = try [
             "Extensions/ShieldActionExtension/ChildlockShieldAction.swift",
             "Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift",
         ].map(readRepoFile)
 
         for contents in files {
-            let primaryRange = try XCTUnwrap(contents.range(of: "case .primaryButtonPressed:"))
-            let secondaryRange = try XCTUnwrap(contents.range(of: "case .secondaryButtonPressed:"))
-            let primaryBlock = contents[primaryRange.lowerBound..<secondaryRange.lowerBound]
-            let startsChallengeAndRefreshesAlert = primaryBlock.contains("postBrainBreakNotification()")
-                || (primaryBlock.contains("handleStartChallenge()")
-                    && contents.contains("private func handleStartChallenge()")
-                    && contents.contains("postBrainBreakNotification()"))
-
-            XCTAssertTrue(startsChallengeAndRefreshesAlert)
-            XCTAssertTrue(primaryBlock.contains("completionHandler(.defer)"))
-            XCTAssertTrue(contents.contains("content.title = \"Brain break ready\""))
-            XCTAssertTrue(contents.contains("content.body = \"Tap to solve.\""))
+            XCTAssertTrue(contents.contains("brainBreak.submit(answerIndex: answerIndex)"))
+            XCTAssertTrue(contents.contains("ShieldBrainBreakCompletion(state: brainBreak)"))
+            XCTAssertTrue(contents.contains("completionHandler(.defer)"))
+            XCTAssertTrue(contents.contains("successDisplayDuration"))
+            XCTAssertTrue(contents.contains("ProcessInfo.processInfo.performExpiringActivity("))
+            XCTAssertTrue(contents.contains("Thread.sleep(forTimeInterval: successDisplayDuration)"))
+            XCTAssertTrue(contents.contains("return expired ? .none : .defer"))
+            XCTAssertTrue(contents.contains("finishSuccessfulBrainBreak(id: brainBreakID)"))
+            XCTAssertTrue(contents.contains("store.shield.applications = nil"))
+            XCTAssertTrue(contents.contains("rearmMonitoring()"))
             XCTAssertTrue(contents.contains("let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]"))
             XCTAssertTrue(contents.contains("removePendingNotificationRequests(withIdentifiers: identifiers)"))
             XCTAssertTrue(contents.contains("removeDeliveredNotifications(withIdentifiers: identifiers)"))
-            XCTAssertTrue(contents.contains("UNNotificationRequest("))
+            XCTAssertFalse(contents.contains("DispatchQueue.main.asyncAfter"))
+            XCTAssertFalse(contents.contains("UNNotificationRequest("))
         }
     }
 
@@ -295,7 +270,7 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(notificationService.contains("cancelDailySummary"))
     }
 
-    func testShieldFlowNotificationsUseStableIdentifiersAndAreCleared() throws {
+    func testLegacyBrainBreakNotificationsAreClearedFromShieldFlow() throws {
         let sharedDefaults = try readRepoFile("Sources/Childlock/Services/SharedDefaults.swift")
         let monitor = try readRepoFile("Extensions/DeviceActivityMonitorExtension/ChildlockMonitor.swift")
         let shieldAction = try readRepoFile("Extensions/ShieldActionExtension/ChildlockShieldAction.swift")
@@ -308,18 +283,12 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(sharedDefaults.contains("public static let brainBreak = \"childlock_brain_break\""))
         XCTAssertTrue(sharedDefaults.contains("public static let moreTimeRequest = \"childlock_more_time_request\""))
 
-        for contents in [monitor, extensionEntrypoints] {
+        for contents in [monitor, shieldAction, extensionEntrypoints] {
             XCTAssertTrue(contents.contains("SharedDefaults.NotificationIdentifier.brainBreak"))
             XCTAssertTrue(contents.contains("removePendingNotificationRequests(withIdentifiers: identifiers)"))
             XCTAssertTrue(contents.contains("removeDeliveredNotifications(withIdentifiers: identifiers)"))
             XCTAssertFalse(contents.contains("brain_break_\\(UUID().uuidString)"))
-        }
-
-        for contents in [shieldAction, extensionEntrypoints] {
-            XCTAssertTrue(contents.contains("SharedDefaults.NotificationIdentifier.moreTimeRequest"))
-            XCTAssertTrue(contents.contains("removePendingNotificationRequests(withIdentifiers: identifiers)"))
-            XCTAssertTrue(contents.contains("removeDeliveredNotifications(withIdentifiers: identifiers)"))
-            XCTAssertFalse(contents.contains("more_time_\\(UUID().uuidString)"))
+            XCTAssertFalse(contents.contains("UNNotificationRequest("))
         }
 
         XCTAssertTrue(notificationService.contains("clearBrainBreakAlerts()"))
@@ -330,7 +299,7 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(dashboard.contains("NotificationService.clearMoreTimeRequestAlerts()"))
     }
 
-    func testSimulatorSeedsCoverChallengeAndHandBackScreens() throws {
+    func testSimulatorSeedsCoverChallengeAndCelebrationScreens() throws {
         let rootView = try readRepoFile("Sources/Childlock/App/ChildlockRootView.swift")
         let challengeViewModel = try readRepoFile("Sources/Childlock/ViewModels/ChallengeViewModel.swift")
         let memoryMatchView = try readRepoFile("Sources/Childlock/Views/Challenges/MemoryMatchView.swift")
@@ -338,7 +307,7 @@ final class ShieldCopyTests: XCTestCase {
 
         XCTAssertTrue(rootView.contains("--childlock-qa-seed-pending-math-challenge"))
         XCTAssertTrue(rootView.contains("--childlock-qa-seed-pending-memory-challenge"))
-        XCTAssertTrue(rootView.contains("--childlock-qa-seed-handback"))
+        XCTAssertTrue(rootView.contains("--childlock-qa-seed-celebration"))
         XCTAssertTrue(rootView.contains("--childlock-qa-seed-locked-more-time-request"))
         XCTAssertTrue(rootView.contains("locked: arguments.contains(DebugLaunchArgument.lockedDashboard)\n                    || arguments.contains(DebugLaunchArgument.lockedMoreTimeRequest)"))
         XCTAssertTrue(rootView.contains("moreTimeRequest: arguments.contains(DebugLaunchArgument.moreTimeRequest)\n                    || arguments.contains(DebugLaunchArgument.lockedMoreTimeRequest)"))
@@ -346,28 +315,28 @@ final class ShieldCopyTests: XCTestCase {
         XCTAssertTrue(rootView.contains("--childlock-qa-seed-settings-notifications-denied"))
         XCTAssertTrue(rootView.contains("return .math"))
         XCTAssertTrue(rootView.contains("return .memory"))
-        XCTAssertTrue(rootView.contains("challengeViewModel.debugPresentHandBack(for: profile)"))
+        XCTAssertTrue(rootView.contains("challengeViewModel.debugPresentCelebration(for: profile)"))
 
         XCTAssertTrue(challengeViewModel.contains("#if DEBUG"))
-        XCTAssertTrue(challengeViewModel.contains("public func debugPresentHandBack(for profile: ChildProfile)"))
-        XCTAssertTrue(challengeViewModel.contains("state = .handback"))
+        XCTAssertTrue(challengeViewModel.contains("public func debugPresentCelebration(for profile: ChildProfile)"))
+        XCTAssertTrue(challengeViewModel.contains("state = .completed"))
 
         XCTAssertTrue(memoryMatchView.contains("#if DEBUG"))
         XCTAssertTrue(memoryMatchView.contains("ProcessInfo.processInfo.arguments.contains(\"--childlock-qa-seed-pending-memory-challenge\")"))
         XCTAssertTrue(memoryMatchView.contains(".shuffled()"))
 
         XCTAssertTrue(checklist.contains("`--childlock-qa-seed-pending-memory-challenge`"))
-        XCTAssertTrue(checklist.contains("`--childlock-qa-seed-handback`"))
+        XCTAssertTrue(checklist.contains("`--childlock-qa-seed-celebration`"))
         XCTAssertTrue(checklist.contains("`--childlock-qa-seed-locked-more-time-request`"))
         XCTAssertTrue(checklist.contains("memory pairs are deterministic in this Debug seed"))
-        XCTAssertTrue(checklist.contains("Hand-back seed gives the child `Great job!`, `Swipe back`, a right-arrow gesture cue,\n  and a small parent lock icon."))
+        XCTAssertTrue(checklist.contains("Celebration seed shows the animated `Great job!` state with no child action."))
         XCTAssertTrue(checklist.contains("Locked more-time seed keeps the dashboard hidden"))
     }
 
     func testHardwareChecklistCoversMultiChildShieldProfileRouting() throws {
         let checklist = try readRepoFile("docs/QA_TESTFLIGHT_CHECKLIST.md")
 
-        XCTAssertTrue(normalizeWhitespace(checklist).contains("If multiple child profiles exist, the pending challenge uses the monitored child's age/profile."))
+        XCTAssertTrue(normalizeWhitespace(checklist).contains("If multiple child profiles exist, the shield question uses the monitored child's age/difficulty."))
     }
 
     func testMonitoringStartAndStopClearStaleShieldState() throws {
@@ -386,8 +355,9 @@ final class ShieldCopyTests: XCTestCase {
         ] {
             XCTAssertTrue(screenTimeManager.contains("SharedDefaults.Key.\(key)"))
         }
+        XCTAssertTrue(screenTimeManager.contains("SharedDefaults.clearShieldBrainBreak(defaults: defaults)"))
 
-        XCTAssertTrue(checklist.contains("Restarting enforcement clears stale child challenge and more-time request state."))
+        XCTAssertTrue(checklist.contains("Restarting enforcement clears stale shield-challenge state."))
     }
 
     private func readRepoFile(_ relativePath: String) throws -> String {

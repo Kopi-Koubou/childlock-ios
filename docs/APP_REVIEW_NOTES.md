@@ -16,14 +16,12 @@ Reviewer flow:
 7. Open selected app/category/site content and use it continuously until the
    interval threshold is reached.
 8. The selected content is shielded with Childlock's "Brain Break" shield.
-9. Tap "Start", then tap the Childlock notification and solve the pending
-   challenge. The original app stays in place behind its shield.
-10. Completing the challenge removes the shield and re-arms monitoring for the
-    next interval.
-11. After the brief celebration, the child sees `Great job!`, `Swipe back`,
-    and a right-arrow gesture cue. On devices with a Home indicator, swiping
-    right along the bottom edge returns directly to the now-unshielded previous
-    app. A parent PIN is required before entering the parent dashboard.
+9. Answer the two-choice math question directly on the Brain Break shield.
+10. A correct answer redraws the shield as `Great job!` for about one second,
+    then clears the shield with no further child action and reveals the same
+    content underneath.
+11. Monitoring re-arms for the next full interval. A parent PIN is still
+    required before entering the Childlock dashboard.
 
 Notes:
 
@@ -37,18 +35,12 @@ Notes:
   supported because the parent dashboard remains PIN-protected. Childlock is
   not presented as a parent-phone remote controller for a separate child iPad in
   this launch build.
-- In this build, the shield action keeps the blocked app in place and Childlock
-  posts a local notification to open the challenge when notifications are
-  enabled. This preserves the original activity as the previous app. If
-  notifications are denied or missed, pressing Home and opening Childlock
-  presents the same pending challenge. Once Childlock is foregrounded, it
-  automatically opens the pending brain break.
-- Childlock does not automatically return the child to another app after the
-  challenge. iOS does not provide a public Screen Time API to reopen arbitrary
-  apps or restore media state, so the hand-back screen stays very brief and
-  teaches the system gesture: `Great job!`, `Swipe back`, and a right-arrow cue.
-  Swiping right along the bottom edge returns to the preserved previous app on
-  devices with a Home indicator.
+- In this build, the two-answer brain break is part of the system Screen Time
+  shield. The protected app or website remains onscreen underneath; Childlock
+  does not need to launch and notification permission is not required.
+- On success, Childlock briefly reconfigures the shield with a checkmark and
+  `Great job!`, then removes the shield. This reveals the already-open content;
+  it does not relaunch another app or claim to restore media state.
 - App selections are handled through Apple's FamilyControls picker. Opaque app
   selection tokens remain local/on-device.
 - Support: https://kouboulabs.com/childlock/support

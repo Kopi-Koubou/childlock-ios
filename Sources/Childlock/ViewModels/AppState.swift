@@ -337,6 +337,7 @@ public final class AppState {
 
     public func recordChallengeResult(_ result: ChallengeResult, for profileID: UUID) {
         guard let profile = profiles.first(where: { $0.id == profileID }) else { return }
+        guard !sessions.flatMap(\.results).contains(where: { $0.id == result.id }) else { return }
 
         let dayStart = Calendar.current.startOfDay(for: result.presentedAt)
         let sessionIndex = sessions.firstIndex {

@@ -44,49 +44,42 @@ final class ChildlockMonitor: DeviceActivityMonitor {
             return
         }
         
+        let profileID = defaults
+            .string(forKey: SharedDefaults.Key.activeMonitoringProfileID)
+            .flatMap(UUID.init(uuidString:))
+        let age = max(defaults.integer(forKey: SharedDefaults.Key.activeMonitoringProfileAge), 3)
+        let difficulty = max(defaults.integer(forKey: SharedDefaults.Key.activeMonitoringDifficultyLevel), 1)
+        let brainBreak = ShieldBrainBreakState.make(
+            profileID: profileID,
+            age: age,
+            difficultyLevel: difficulty
+        )
+        SharedDefaults.saveShieldBrainBreak(brainBreak, defaults: defaults)
+
+        // Save the question before applying ManagedSettings so the first
+        // shield configuration already has both answer buttons available.
         store.shield.applications = selection.applicationTokens
         store.shield.applicationCategories = selection.categoryTokens.isEmpty ? nil : .specific(selection.categoryTokens)
         store.shield.webDomains = selection.webDomainTokens
         store.shield.webDomainCategories = selection.categoryTokens.isEmpty ? nil : .specific(selection.categoryTokens)
-        defaults.set(true, forKey: SharedDefaults.Key.challengePending)
+
+        // The question now lives directly on the system shield. Childlock no
+        // longer needs to launch a foreground challenge or ask the child to
+        // switch apps again after solving it.
+        defaults.set(false, forKey: SharedDefaults.Key.challengePending)
         defaults.set("threshold_reached", forKey: SharedDefaults.Key.monitoringStatus)
         logger.info(
             "Shield activated for \(selection.applicationTokens.count) apps and \(selection.webDomainTokens.count) web domains"
         )
 
-        postBrainBreakNotification()
+        clearLegacyBrainBreakNotification()
     }
 
-    /// The shield itself can't launch Childlock, so the alert plus the Home
-    /// fallback are the child's supported paths into the challenge.
-    private func postBrainBreakNotification() {
-        let alertsEnabled = SharedDefaults.shared.object(forKey: SharedDefaults.Key.challengeAlertsEnabled) as? Bool ?? true
-        guard alertsEnabled else {
-            logger.info("Skipping brain break notification because challenge alerts are disabled")
-            return
-        }
-
-        let content = UNMutableNotificationContent()
-        content.title = "Brain break time!"
-        content.body = "Open Childlock to solve."
-        content.sound = .default
-
+    private func clearLegacyBrainBreakNotification() {
         let center = UNUserNotificationCenter.current()
         let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]
         center.removePendingNotificationRequests(withIdentifiers: identifiers)
         center.removeDeliveredNotifications(withIdentifiers: identifiers)
-
-        let request = UNNotificationRequest(
-            identifier: SharedDefaults.NotificationIdentifier.brainBreak,
-            content: content,
-            trigger: nil
-        )
-
-        center.add(request) { [logger] error in
-            if let error {
-                logger.error("Failed to post brain break notification: \(error.localizedDescription)")
-            }
-        }
     }
     
     override func intervalDidEnd(for activity: DeviceActivityName) {
@@ -96,5 +89,7 @@ final class ChildlockMonitor: DeviceActivityMonitor {
         store.shield.applicationCategories = nil
         store.shield.webDomains = nil
         store.shield.webDomainCategories = nil
+        SharedDefaults.shared.set(false, forKey: SharedDefaults.Key.challengePending)
+        SharedDefaults.clearShieldBrainBreak()
     }
 }

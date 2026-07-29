@@ -3,7 +3,7 @@
 Use this record for each physical TestFlight device before public App Review.
 Simulator screenshots are useful background evidence, but this record is the
 launch gate for Family Controls, DeviceActivity thresholds, ManagedSettings
-shielding, extension actions, purchases, and real hand-back behavior.
+shielding, extension actions, purchases, and touch-free content return behavior.
 
 ## Run Metadata
 
@@ -48,19 +48,16 @@ shielding, extension actions, purchases, and real hand-back behavior.
 | Child continuously consumes selected content during the interval | Pass / Fail |  |
 | First interval starts without immediately shielding | Pass / Fail |  |
 | Selected content shields only after the threshold | Pass / Fail |  |
-| Shield copy says `Brain Break`, `Tap Start.`, and `Start` | Pass / Fail |  |
-| `Start` keeps the selected app in place behind its shield | Pass / Fail |  |
-| Shield changes to `Ready!` and Childlock opens the pending challenge from the alert | Pass / Fail |  |
-| Denied-notification fallback opens the pending challenge from Home | Pass / Fail / N/A |  |
-| Challenge completion clears the shield | Pass / Fail |  |
+| Shield says `Brain Break` and shows one question with two answer choices | Pass / Fail |  |
+| Wrong answer shows `Almost! Try again` and keeps content shielded | Pass / Fail |  |
+| Correct answer briefly shows `Great job!` without answer buttons | Pass / Fail |  |
+| Shield brain break still works when notifications are denied | Pass / Fail / N/A |  |
+| Correct answer clears the shield without another child action | Pass / Fail |  |
 | Monitoring re-arms for another full interval | Pass / Fail |  |
 | Second full interval shields again | Pass / Fail |  |
-| Child sees `Great job!` and `Swipe back`, then swipes right along the bottom edge to return directly to the now-unshielded previous app/site | Pass / Fail |  |
-| Parent dashboard stays PIN-gated after hand-back | Pass / Fail |  |
-| `Parent` creates a parent-visible request only | Pass / Fail |  |
-| `Allow <interval>` grants time and re-arms enforcement | Pass / Fail |  |
-| `Keep blocked` clears the parent request and leaves the child blocked | Pass / Fail |  |
-| Restarting enforcement clears stale child challenge/request state | Pass / Fail |  |
+| Same content is visible in place after automatic shield removal | Pass / Fail |  |
+| Parent dashboard stays PIN-gated after child use | Pass / Fail |  |
+| Restarting enforcement clears stale shield-challenge state | Pass / Fail |  |
 
 ## Same Phone Scenario
 
@@ -75,7 +72,7 @@ Use this when the parent and child share the same iPhone.
 | If multiple child profiles exist, parent taps `Make active` for the child before handoff | Pass / Fail / N/A |  |
 | Parent sets the PIN, taps `Lock Parent Dashboard` or leaves Childlock to auto-lock, then hands the phone to the child | Pass / Fail / N/A |  |
 | Child continuously uses selected content until threshold is reached | Pass / Fail / N/A |  |
-| Child solves the challenge, sees `Great job!` and `Swipe back`, then returns directly to the unlocked previous app/site with the bottom-edge gesture | Pass / Fail / N/A |  |
+| Child answers on the shield, sees `Great job!`, then returns automatically to the same content with no post-answer action | Pass / Fail / N/A |  |
 | Child cannot reach parent dashboard without the PIN | Pass / Fail / N/A |  |
 
 ## Child iPad Scenario
@@ -90,7 +87,7 @@ Use this when the parent owns an iPhone and the child uses an iPad.
 | Parent completes Screen Time authorization on the iPad | Pass / Fail / N/A |  |
 | Parent selects iPad apps/categories/websites on the iPad | Pass / Fail / N/A |  |
 | Child continuously uses selected iPad content until threshold is reached | Pass / Fail / N/A |  |
-| Child completes the shield -> Childlock -> challenge -> hand-back loop on the iPad | Pass / Fail / N/A |  |
+| Child completes the shield-native challenge and returns automatically to the same iPad content | Pass / Fail / N/A |  |
 | Parent iPhone, if installed, is used for login/account smoke only | Pass / Fail / N/A |  |
 | Parent-only iPhone install is not treated as remote iPad control | Pass / Fail / N/A |  |
 

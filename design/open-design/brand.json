@@ -1,0 +1,204 @@
+{
+  "name": "Childlock",
+  "tagline": "Turn screen time into brain time.",
+  "description": "A calm, local-first family tool that turns interruptions to a child's screen time into short brain breaks while keeping parent controls protected.",
+  "sourceUrl": "https://github.com/Kopi-Koubou/childlock-ios/blob/main/DESIGN.md",
+  "logo": {
+    "primary": "logos/childlock-app-icon.png",
+    "alternates": [],
+    "notes": "Use the production app icon. Preserve the sage field, bone shield, and forest lock. Do not add a wordmark or decorative effects."
+  },
+  "colors": [
+    {
+      "role": "background",
+      "hex": "#f2f1ec",
+      "oklch": "oklch(95.75% 0.0067 97.35)",
+      "name": "Bone",
+      "usage": "Primary app and child-challenge canvas."
+    },
+    {
+      "role": "surface",
+      "hex": "#ffffff",
+      "oklch": "oklch(100.00% 0.0000 89.88)",
+      "name": "White",
+      "usage": "Cards, sheets, inputs, keypads, and grouped controls."
+    },
+    {
+      "role": "foreground",
+      "hex": "#1f2421",
+      "oklch": "oklch(25.41% 0.0092 159.38)",
+      "name": "Ink",
+      "usage": "Primary text, headings, and high-confidence information."
+    },
+    {
+      "role": "muted",
+      "hex": "#8a8f88",
+      "oklch": "oklch(64.38% 0.0118 136.58)",
+      "name": "Ink Mute",
+      "usage": "Captions, timestamps, inactive navigation, and supporting metadata."
+    },
+    {
+      "role": "border",
+      "hex": "#e8e6df",
+      "oklch": "oklch(92.45% 0.0096 93.57)",
+      "name": "Warm Stone",
+      "usage": "Dividers, subtle outlines, muted controls, and disabled surfaces."
+    },
+    {
+      "role": "accent",
+      "hex": "#3f6b58",
+      "oklch": "oklch(48.98% 0.0582 164.84)",
+      "name": "Forest Sage",
+      "usage": "Primary actions, active navigation, success, and trusted status."
+    },
+    {
+      "role": "accent-secondary",
+      "hex": "#c97e5c",
+      "oklch": "oklch(66.47% 0.1050 44.88)",
+      "name": "Terracotta",
+      "usage": "Requests, attention, secondary emphasis, and small human accents."
+    }
+  ],
+  "typography": {
+    "display": {
+      "family": "SF Pro",
+      "fallbacks": [
+        "-apple-system",
+        "BlinkMacSystemFont",
+        "system-ui",
+        "sans-serif"
+      ],
+      "weights": [
+        600,
+        700
+      ]
+    },
+    "body": {
+      "family": "SF Pro",
+      "fallbacks": [
+        "-apple-system",
+        "BlinkMacSystemFont",
+        "system-ui",
+        "sans-serif"
+      ],
+      "weights": [
+        400,
+        600
+      ]
+    },
+    "mono": {
+      "family": "SF Mono",
+      "fallbacks": [
+        "ui-monospace",
+        "Menlo",
+        "monospace"
+      ],
+      "weights": [
+        400,
+        600
+      ]
+    }
+  },
+  "voice": {
+    "adjectives": [
+      "calm",
+      "warm",
+      "direct",
+      "encouraging",
+      "trustworthy"
+    ],
+    "tone": "Clear and operational for parents; short, warm, and age-neutral for children. Explain platform limits before users encounter them.",
+    "messagingPillars": [
+      "Turn screen time into brain time.",
+      "Calmer transitions, quick learning, fewer battles.",
+      "Set up Childlock on the device your child uses.",
+      "Brain breaks and Screen Time enforcement stay available without Premium."
+    ],
+    "vocabulary": {
+      "use": [
+        "Brain Break",
+        "Great job!",
+        "Almost! Try again.",
+        "Lock Parent Dashboard",
+        "Choose apps, categories, or websites"
+      ],
+      "avoid": [
+        "addiction",
+        "surveillance",
+        "take control",
+        "failed",
+        "punishment",
+        "remote monitoring",
+        "skip challenge"
+      ]
+    }
+  },
+  "imagery": {
+    "style": "Native iOS product imagery with warm bone fields, forest-sage controls, simple rounded illustration, and large readable child interactions.",
+    "subjects": [
+      "current iPhone and iPad product screens",
+      "simple age-neutral family illustration",
+      "brain-break challenges",
+      "touch-free shield completion"
+    ],
+    "treatment": "Prefer real simulator captures and sparse vector-like illustration. Use soft solid fields and restrained depth; never glossy stock photography.",
+    "avoid": [
+      "generic blue SaaS dashboards",
+      "neon gamification",
+      "glassmorphism",
+      "heavy gradients",
+      "fear-based family imagery",
+      "busy reward systems"
+    ],
+    "samples": [
+      {
+        "file": "imagery/iphone-welcome.png",
+        "kind": "product",
+        "caption": "Current iPhone welcome and Sign in with Apple surface."
+      },
+      {
+        "file": "imagery/iphone-dashboard.png",
+        "kind": "product",
+        "caption": "Current iPhone parent dashboard."
+      },
+      {
+        "file": "imagery/iphone-apps.png",
+        "kind": "product",
+        "caption": "Current iPhone apps and Screen Time selection surface."
+      },
+      {
+        "file": "imagery/iphone-onboarding-device.png",
+        "kind": "product",
+        "caption": "Current same-device and child-iPad onboarding explanation."
+      },
+      {
+        "file": "imagery/iphone-math-challenge.png",
+        "kind": "product",
+        "caption": "Current child-facing math brain break."
+      },
+      {
+        "file": "imagery/iphone-celebration.png",
+        "kind": "product",
+        "caption": "Current animated Great job state with no child action."
+      },
+      {
+        "file": "imagery/ipad-dashboard.png",
+        "kind": "product",
+        "caption": "Current iPad A16 parent dashboard layout."
+      }
+    ]
+  },
+  "layout": {
+    "radius": "8, 14, 20, and 28pt plus full pills",
+    "borderWeight": "1 to 1.5pt",
+    "spacing": "4, 8, 12, 16, 24, 32, and 48pt",
+    "postureRules": [
+      "Use generous phone margins and readable maximum widths on iPad.",
+      "Keep parent screens compact and card-led without nesting cards.",
+      "Keep child challenge screens sparse, centered, and free of parent navigation.",
+      "Use a 54pt full-width pill for the primary flow action.",
+      "Reserve 60pt or larger touch targets for child answers.",
+      "Respect native safe areas and avoid drawing fake iOS chrome."
+    ]
+  }
+}

@@ -173,6 +173,12 @@ public final class ScreenTimeManager: ScreenTimeManaging {
         clearTransientShieldState()
         defaults.set(profile.id.uuidString, forKey: SharedDefaults.Key.activeMonitoringProfileID)
         defaults.set(profile.monitoredSelectionTokenData, forKey: SharedDefaults.Key.activeMonitoringSelectionData)
+        defaults.set(profile.intervalMinutes, forKey: SharedDefaults.Key.activeMonitoringIntervalMinutes)
+        defaults.set(profile.age, forKey: SharedDefaults.Key.activeMonitoringProfileAge)
+        defaults.set(
+            ChallengeEngine.shared.effectiveDifficulty(for: profile),
+            forKey: SharedDefaults.Key.activeMonitoringDifficultyLevel
+        )
         defaults.set(Date().timeIntervalSince1970, forKey: SharedDefaults.Key.monitoringLastStartedAt)
         defaults.removeObject(forKey: SharedDefaults.Key.monitoringLastError)
         defaults.set("running", forKey: SharedDefaults.Key.monitoringStatus)
@@ -185,6 +191,9 @@ public final class ScreenTimeManager: ScreenTimeManaging {
 
         defaults.removeObject(forKey: SharedDefaults.Key.activeMonitoringProfileID)
         defaults.removeObject(forKey: SharedDefaults.Key.activeMonitoringSelectionData)
+        defaults.removeObject(forKey: SharedDefaults.Key.activeMonitoringIntervalMinutes)
+        defaults.removeObject(forKey: SharedDefaults.Key.activeMonitoringProfileAge)
+        defaults.removeObject(forKey: SharedDefaults.Key.activeMonitoringDifficultyLevel)
         defaults.set("stopped", forKey: SharedDefaults.Key.monitoringStatus)
     }
 
@@ -193,6 +202,7 @@ public final class ScreenTimeManager: ScreenTimeManaging {
         defaults.set(0, forKey: SharedDefaults.Key.moreTimeRequestCount)
         defaults.removeObject(forKey: SharedDefaults.Key.lastMoreTimeRequestDate)
         defaults.removeObject(forKey: SharedDefaults.Key.dailyLimitReachedAt)
+        SharedDefaults.clearShieldBrainBreak(defaults: defaults)
         NotificationService.clearShieldFlowAlerts()
     }
 

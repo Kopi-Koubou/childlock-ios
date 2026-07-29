@@ -163,9 +163,9 @@ scripts/check-public-release-links.sh
 3. Ensure the app and extensions all include:
    - Family Controls entitlement
    - App Group `group.com.childlock.shared`
-   - Do not add the Time Sensitive Notifications entitlement. The Screen Time
-     extensions use regular local notifications plus the Home fallback path so
-     automatic signing does not require extra notification capabilities.
+   - Do not add the Time Sensitive Notifications entitlement. Shield brain
+     breaks do not depend on notifications; regular local notifications are
+     only for parent-facing summaries and updates.
 
 4. Fill app-facing production values in `Config/AppSecrets.local.xcconfig`.
    The checked-in `Config/AppSecrets.xcconfig` should stay as the safe base
@@ -346,17 +346,13 @@ same-phone, child-iPad, denied-notification, second-loop, and purchase passes.
 - First interval does not shield immediately.
 - Threshold shields selected content; record the shield timestamp and compare it
   with the configured interval.
-- "Start" shield path reaches a pending challenge after the child
-  taps the Childlock alert or opens Childlock from Home.
-- If notifications are denied or missed, Home -> Childlock still reaches the
-  pending challenge.
-- Challenge completion removes shields.
-- The hand-back screen says `Great job!` and `Swipe back` with a right-arrow
-  gesture cue. The child swipes right along the bottom edge to return directly
-  to the preserved, now-unshielded previous app/content. iOS does not let
-  Childlock perform this app switch programmatically or restore media state.
+- The Brain Break shield itself shows one math prompt with two answer choices.
+- Shield brain breaks work when notification permission is denied.
+- A wrong answer keeps the shield in place and redraws `Almost! Try again`.
+- A correct answer briefly redraws `Great job!`, then removes the shield and
+  reveals the already-open content with no post-answer child action.
 - Monitoring re-arms for another full interval.
-- Parent PIN is required to leave the child hand-back screen for dashboard.
+- Parent PIN remains required to open the dashboard after child use.
 - Parent creates a parent-visible request, does not open a child challenge
   before the parent responds, can allow another full interval, and can explicitly keep
   the child blocked.

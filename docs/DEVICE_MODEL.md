@@ -67,14 +67,9 @@ launch matrix.
 6. Open selected app/category/site content and use it continuously until the
    threshold is reached.
 7. Confirm the Childlock shield appears after the configured interval.
-8. Tap the shield action, then tap the Childlock notification or open Childlock
-   from Home.
-9. Solve the pending challenge.
-10. Confirm shielding clears and monitoring re-arms.
-11. Confirm the child sees `Great job!` and `Swipe back`, then swipes right
-    along the bottom edge to return directly to the now-unshielded previous
-    app/content. iOS does not let Childlock perform this app switch
-    programmatically.
-12. Confirm the hand-back screen blocks the dashboard until the parent PIN is
-    entered.
-13. Repeat on a child iPad if iPad support is part of the first launch promise.
+8. Answer the two-choice question directly on the Brain Break shield.
+9. Confirm a correct answer briefly shows `Great job!`, then clears the shield
+   and reveals the same content without another child action.
+10. Confirm monitoring re-arms for a full new interval.
+11. Confirm opening Childlock still presents the parent PIN gate.
+12. Repeat on a child iPad if iPad support is part of the first launch promise.

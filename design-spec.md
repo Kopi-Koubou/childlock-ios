@@ -3,8 +3,14 @@
 **Version:** 1.0
 **Date:** 2026-03-13
 **Author:** Kato (AI Chief of Staff)
-**Status:** Draft — pending Xavier review
+**Status:** Product and interaction reference
 **PRD Reference:** `prd.md` v1.0
+
+> [!IMPORTANT]
+> The historical orange visual direction in this document is superseded by the
+> current Soft Sage contract in `DESIGN.md` and the production tokens in
+> `Sources/Childlock/Views/Shared/DesignTokens.swift`. Use this document for
+> product rationale, flows, content, accessibility, and interaction constraints.
 
 ---
 

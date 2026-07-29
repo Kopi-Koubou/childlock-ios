@@ -42,26 +42,53 @@ final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
         let shieldBg = UIColor(red: 0.106, green: 0.141, blue: 0.125, alpha: 1.0) // #1B2420
         let shieldInk = UIColor(red: 0.949, green: 0.945, blue: 0.925, alpha: 1.0) // #F2F1EC
         let forestSage = UIColor(red: 0.247, green: 0.420, blue: 0.345, alpha: 1.0) // #3F6B58
-        let challengeRequested =
-            SharedDefaults.shared.string(forKey: SharedDefaults.Key.monitoringStatus) == "challenge_requested"
+
+        guard let brainBreak = SharedDefaults.shieldBrainBreak() else {
+            return ShieldConfiguration(
+                backgroundBlurStyle: .systemMaterial,
+                backgroundColor: shieldBg,
+                icon: UIImage(systemName: "brain.head.profile"),
+                title: ShieldConfiguration.Label(text: "Brain Break", color: shieldInk),
+                subtitle: ShieldConfiguration.Label(text: "One moment…", color: shieldInk.withAlphaComponent(0.7))
+            )
+        }
+
+        if brainBreak.phase == .success {
+            return ShieldConfiguration(
+                backgroundBlurStyle: .systemMaterial,
+                backgroundColor: shieldBg,
+                icon: UIImage(systemName: "checkmark.circle.fill"),
+                title: ShieldConfiguration.Label(text: "Great job!", color: shieldInk),
+                subtitle: ShieldConfiguration.Label(
+                    text: "Going back to your app…",
+                    color: shieldInk.withAlphaComponent(0.7)
+                )
+            )
+        }
+
+        let title = brainBreak.phase == .retry ? "Almost! Try again" : "Brain Break"
 
         return ShieldConfiguration(
             backgroundBlurStyle: .systemMaterial,
             backgroundColor: shieldBg,
             icon: UIImage(systemName: "brain.head.profile"),
             title: ShieldConfiguration.Label(
-                text: challengeRequested ? "Ready!" : "Brain Break",
+                text: title,
                 color: shieldInk
             ),
             subtitle: ShieldConfiguration.Label(
-                text: challengeRequested ? "Tap the Childlock alert." : "Tap Start.",
+                text: brainBreak.prompt,
                 color: shieldInk.withAlphaComponent(0.7)
             ),
             primaryButtonLabel: ShieldConfiguration.Label(
-                text: challengeRequested ? "Try Again" : "Start",
+                text: brainBreak.primaryAnswer,
                 color: .white
             ),
-            primaryButtonBackgroundColor: forestSage
+            primaryButtonBackgroundColor: forestSage,
+            secondaryButtonLabel: ShieldConfiguration.Label(
+                text: brainBreak.secondaryAnswer,
+                color: shieldInk
+            )
         )
     }
 }

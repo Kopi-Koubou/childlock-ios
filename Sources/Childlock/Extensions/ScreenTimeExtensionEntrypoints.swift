@@ -1,6 +1,7 @@
 #if os(iOS) && canImport(DeviceActivity) && canImport(ManagedSettings) && canImport(FamilyControls) && canImport(ManagedSettingsUI)
 import DeviceActivity
 import FamilyControls
+import Foundation
 import ManagedSettings
 import ManagedSettingsUI
 import UIKit
@@ -39,39 +40,34 @@ public final class ChildlockDeviceActivityMonitor: DeviceActivityMonitor {
             return
         }
 
+        let profileID = defaults
+            .string(forKey: SharedDefaults.Key.activeMonitoringProfileID)
+            .flatMap(UUID.init(uuidString:))
+        let age = max(defaults.integer(forKey: SharedDefaults.Key.activeMonitoringProfileAge), 3)
+        let difficulty = max(defaults.integer(forKey: SharedDefaults.Key.activeMonitoringDifficultyLevel), 1)
+        let brainBreak = ShieldBrainBreakState.make(
+            profileID: profileID,
+            age: age,
+            difficultyLevel: difficulty
+        )
+        SharedDefaults.saveShieldBrainBreak(brainBreak, defaults: defaults)
+
         store.shield.applications = selection.applicationTokens
         store.shield.applicationCategories = selection.categoryTokens.isEmpty ? nil : .specific(selection.categoryTokens)
         store.shield.webDomains = selection.webDomainTokens
         store.shield.webDomainCategories = selection.categoryTokens.isEmpty ? nil : .specific(selection.categoryTokens)
-        defaults.set(true, forKey: SharedDefaults.Key.challengePending)
+
+        defaults.set(false, forKey: SharedDefaults.Key.challengePending)
         defaults.set("threshold_reached", forKey: SharedDefaults.Key.monitoringStatus)
 
-        postBrainBreakNotification()
+        clearLegacyBrainBreakNotification()
     }
 
-    private func postBrainBreakNotification() {
-        let alertsEnabled = defaults.object(forKey: SharedDefaults.Key.challengeAlertsEnabled) as? Bool ?? true
-        guard alertsEnabled else {
-            return
-        }
-
-        let content = UNMutableNotificationContent()
-        content.title = "Brain break time!"
-        content.body = "Open Childlock to solve."
-        content.sound = .default
-
+    private func clearLegacyBrainBreakNotification() {
         let center = UNUserNotificationCenter.current()
         let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]
         center.removePendingNotificationRequests(withIdentifiers: identifiers)
         center.removeDeliveredNotifications(withIdentifiers: identifiers)
-
-        let request = UNNotificationRequest(
-            identifier: SharedDefaults.NotificationIdentifier.brainBreak,
-            content: content,
-            trigger: nil
-        )
-
-        center.add(request)
     }
 
     public override func intervalDidEnd(for activity: DeviceActivityName) {
@@ -80,11 +76,21 @@ public final class ChildlockDeviceActivityMonitor: DeviceActivityMonitor {
         store.shield.applicationCategories = nil
         store.shield.webDomains = nil
         store.shield.webDomainCategories = nil
+        defaults.set(false, forKey: SharedDefaults.Key.challengePending)
+        SharedDefaults.clearShieldBrainBreak(defaults: defaults)
     }
 }
 
 public final class ChildlockShieldAction: ShieldActionDelegate {
+    private let store = ManagedSettingsStore()
+    private let center = DeviceActivityCenter()
     private let defaults = SharedDefaults.shared
+    private let activeActivityName = DeviceActivityName("childlock.active")
+    private let thresholdEventName = DeviceActivityEvent.Name("interval_reached")
+    private let successDisplayDuration: TimeInterval = 1.0
+    private let completionLock = NSLock()
+    private var respondedBrainBreakIDs = Set<UUID>()
+    private var finishedBrainBreakIDs = Set<UUID>()
 
     public override init() {
         super.init()
@@ -120,64 +126,145 @@ public final class ChildlockShieldAction: ShieldActionDelegate {
     ) {
         switch action {
         case .primaryButtonPressed:
-            defaults.set(true, forKey: SharedDefaults.Key.challengePending)
-            defaults.set("challenge_requested", forKey: SharedDefaults.Key.monitoringStatus)
-            postBrainBreakNotification()
-            completionHandler(.defer)
+            submitAnswer(at: 0, completionHandler: completionHandler)
         case .secondaryButtonPressed:
-            let requestCount = defaults.integer(forKey: SharedDefaults.Key.moreTimeRequestCount)
-            defaults.set(false, forKey: SharedDefaults.Key.challengePending)
-            defaults.set(requestCount + 1, forKey: SharedDefaults.Key.moreTimeRequestCount)
-            defaults.set(Date(), forKey: SharedDefaults.Key.lastMoreTimeRequestDate)
-            defaults.set("more_time_requested", forKey: SharedDefaults.Key.monitoringStatus)
-            postMoreTimeNotification()
-            completionHandler(.close)
+            submitAnswer(at: 1, completionHandler: completionHandler)
         @unknown default:
-            completionHandler(.close)
+            completionHandler(.none)
         }
     }
 
-    private func postBrainBreakNotification() {
-        let alertsEnabled = defaults.object(forKey: SharedDefaults.Key.challengeAlertsEnabled) as? Bool ?? true
-        guard alertsEnabled else {
+    private func submitAnswer(
+        at answerIndex: Int,
+        completionHandler: @escaping (ShieldActionResponse) -> Void
+    ) {
+        guard var brainBreak = SharedDefaults.shieldBrainBreak(defaults: defaults) else {
+            completionHandler(.defer)
             return
         }
 
-        let content = UNMutableNotificationContent()
-        content.title = "Brain break ready"
-        content.body = "Tap to solve."
-        content.sound = .default
+        guard brainBreak.phase != .success else {
+            completionHandler(.defer)
+            return
+        }
 
-        let center = UNUserNotificationCenter.current()
-        let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]
-        center.removePendingNotificationRequests(withIdentifiers: identifiers)
-        center.removeDeliveredNotifications(withIdentifiers: identifiers)
+        let isCorrect = brainBreak.submit(answerIndex: answerIndex)
+        SharedDefaults.saveShieldBrainBreak(brainBreak, defaults: defaults)
 
-        let request = UNNotificationRequest(
-            identifier: SharedDefaults.NotificationIdentifier.brainBreak,
-            content: content,
-            trigger: nil
+        guard isCorrect else {
+            completionHandler(.defer)
+            return
+        }
+
+        SharedDefaults.appendShieldBrainBreakCompletion(
+            ShieldBrainBreakCompletion(state: brainBreak),
+            defaults: defaults
         )
-        center.add(request)
+        defaults.set(false, forKey: SharedDefaults.Key.challengePending)
+        clearLegacyBrainBreakNotification()
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
+
+        beginAutomaticReturn(
+            for: brainBreak.id,
+            completionHandler: completionHandler
+        )
     }
 
-    private func postMoreTimeNotification() {
-        let content = UNMutableNotificationContent()
-        content.title = "More time requested"
-        content.body = "Give this to your parent."
-        content.sound = .default
+    private func beginAutomaticReturn(
+        for brainBreakID: UUID,
+        completionHandler: @escaping (ShieldActionResponse) -> Void
+    ) {
+        ProcessInfo.processInfo.performExpiringActivity(
+            withReason: "Dismiss completed Childlock brain break"
+        ) { [self] expired in
+            if let response = claimResponse(for: brainBreakID, expired: expired) {
+                completionHandler(response)
+            }
 
-        let center = UNUserNotificationCenter.current()
-        let identifiers = [SharedDefaults.NotificationIdentifier.moreTimeRequest]
-        center.removePendingNotificationRequests(withIdentifiers: identifiers)
-        center.removeDeliveredNotifications(withIdentifiers: identifiers)
+            if expired {
+                finishSuccessfulBrainBreak(id: brainBreakID)
+                return
+            }
 
-        let request = UNNotificationRequest(
-            identifier: SharedDefaults.NotificationIdentifier.moreTimeRequest,
-            content: content,
-            trigger: nil
+            Thread.sleep(forTimeInterval: successDisplayDuration)
+            finishSuccessfulBrainBreak(id: brainBreakID)
+        }
+    }
+
+    private func claimResponse(
+        for brainBreakID: UUID,
+        expired: Bool
+    ) -> ShieldActionResponse? {
+        completionLock.lock()
+        defer { completionLock.unlock() }
+
+        guard respondedBrainBreakIDs.insert(brainBreakID).inserted else {
+            return nil
+        }
+        return expired ? .none : .defer
+    }
+
+    private func finishSuccessfulBrainBreak(id brainBreakID: UUID) {
+        completionLock.lock()
+        let shouldFinish = finishedBrainBreakIDs.insert(brainBreakID).inserted
+        completionLock.unlock()
+        guard shouldFinish else { return }
+
+        store.shield.applications = nil
+        store.shield.applicationCategories = nil
+        store.shield.webDomains = nil
+        store.shield.webDomainCategories = nil
+        SharedDefaults.clearShieldBrainBreak(defaults: defaults)
+        rearmMonitoring()
+    }
+
+    private func rearmMonitoring() {
+        guard
+            let data = defaults.data(forKey: SharedDefaults.Key.activeMonitoringSelectionData),
+            let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data)
+        else {
+            defaults.set("The monitored app selection payload is invalid.", forKey: SharedDefaults.Key.monitoringLastError)
+            defaults.set("failed", forKey: SharedDefaults.Key.monitoringStatus)
+            return
+        }
+
+        let intervalMinutes = max(
+            defaults.integer(forKey: SharedDefaults.Key.activeMonitoringIntervalMinutes),
+            1
         )
-        center.add(request)
+        let schedule = DeviceActivitySchedule(
+            intervalStart: DateComponents(hour: 0, minute: 0),
+            intervalEnd: DateComponents(hour: 23, minute: 59),
+            repeats: true
+        )
+        let event = DeviceActivityEvent(
+            applications: selection.applicationTokens,
+            categories: selection.categoryTokens,
+            webDomains: selection.webDomainTokens,
+            threshold: DateComponents(minute: intervalMinutes)
+        )
+
+        center.stopMonitoring([activeActivityName])
+        do {
+            try center.startMonitoring(
+                activeActivityName,
+                during: schedule,
+                events: [thresholdEventName: event]
+            )
+            defaults.removeObject(forKey: SharedDefaults.Key.monitoringLastError)
+            defaults.set(Date().timeIntervalSince1970, forKey: SharedDefaults.Key.monitoringLastStartedAt)
+            defaults.set("running", forKey: SharedDefaults.Key.monitoringStatus)
+        } catch {
+            defaults.set(error.localizedDescription, forKey: SharedDefaults.Key.monitoringLastError)
+            defaults.set("failed", forKey: SharedDefaults.Key.monitoringStatus)
+        }
+    }
+
+    private func clearLegacyBrainBreakNotification() {
+        let notificationCenter = UNUserNotificationCenter.current()
+        let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]
+        notificationCenter.removePendingNotificationRequests(withIdentifiers: identifiers)
+        notificationCenter.removeDeliveredNotifications(withIdentifiers: identifiers)
     }
 }
 
@@ -209,26 +296,58 @@ public final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
     }
 
     private var childlockConfiguration: ShieldConfiguration {
-        let challengeRequested =
-            SharedDefaults.shared.string(forKey: SharedDefaults.Key.monitoringStatus) == "challenge_requested"
+        let shieldBackground = UIColor(hex: ChildlockColorHex.shieldBg)
+        let shieldForeground = UIColor(hex: ChildlockColorHex.shieldInk)
+
+        guard let brainBreak = SharedDefaults.shieldBrainBreak() else {
+            return ShieldConfiguration(
+                backgroundBlurStyle: .systemMaterial,
+                backgroundColor: shieldBackground,
+                icon: UIImage(systemName: "brain.head.profile"),
+                title: ShieldConfiguration.Label(text: "Brain Break", color: shieldForeground),
+                subtitle: ShieldConfiguration.Label(
+                    text: "One moment…",
+                    color: shieldForeground.withAlphaComponent(0.7)
+                )
+            )
+        }
+
+        if brainBreak.phase == .success {
+            return ShieldConfiguration(
+                backgroundBlurStyle: .systemMaterial,
+                backgroundColor: shieldBackground,
+                icon: UIImage(systemName: "checkmark.circle.fill"),
+                title: ShieldConfiguration.Label(text: "Great job!", color: shieldForeground),
+                subtitle: ShieldConfiguration.Label(
+                    text: "Going back to your app…",
+                    color: shieldForeground.withAlphaComponent(0.7)
+                )
+            )
+        }
+
+        let title = brainBreak.phase == .retry ? "Almost! Try again" : "Brain Break"
 
         return ShieldConfiguration(
             backgroundBlurStyle: .systemMaterial,
-            backgroundColor: UIColor(hex: ChildlockColorHex.shieldBg),
+            backgroundColor: shieldBackground,
             icon: UIImage(systemName: "brain.head.profile"),
             title: ShieldConfiguration.Label(
-                text: challengeRequested ? "Ready!" : "Brain Break",
-                color: UIColor(hex: ChildlockColorHex.shieldInk)
+                text: title,
+                color: shieldForeground
             ),
             subtitle: ShieldConfiguration.Label(
-                text: challengeRequested ? "Tap the Childlock alert." : "Tap Start.",
-                color: UIColor(hex: ChildlockColorHex.shieldInk)
+                text: brainBreak.prompt,
+                color: shieldForeground.withAlphaComponent(0.7)
             ),
             primaryButtonLabel: ShieldConfiguration.Label(
-                text: challengeRequested ? "Try Again" : "Start",
+                text: brainBreak.primaryAnswer,
                 color: UIColor(hex: ChildlockColorHex.white)
             ),
-            primaryButtonBackgroundColor: UIColor(hex: ChildlockColorHex.forestSage)
+            primaryButtonBackgroundColor: UIColor(hex: ChildlockColorHex.forestSage),
+            secondaryButtonLabel: ShieldConfiguration.Label(
+                text: brainBreak.secondaryAnswer,
+                color: shieldForeground
+            )
         )
     }
 }

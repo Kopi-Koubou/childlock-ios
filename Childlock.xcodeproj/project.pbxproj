@@ -32,7 +32,6 @@
 		EXT_ENTRYPOINTS_SOURCE /* Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = EXT_ENTRYPOINTS_FILE /* Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift */; };
 		FAMILY_ACTIVITY_STORE_SOURCE /* Sources/Childlock/Services/FamilyActivitySelectionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAMILY_ACTIVITY_STORE_FILE /* Sources/Childlock/Services/FamilyActivitySelectionStore.swift */; };
 		GOOGLE_SIGNIN_PACKAGE /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = GOOGLE_SIGNIN_PRODUCT /* GoogleSignIn */; };
-		HANDBACK_VIEW_SOURCE /* Sources/Childlock/Views/Challenges/HandBackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = HANDBACK_VIEW_FILE /* Sources/Childlock/Views/Challenges/HandBackView.swift */; };
 		MATH_CHALLENGE_VIEW_SOURCE /* Sources/Childlock/Views/Challenges/MathChallengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = MATH_CHALLENGE_VIEW_FILE /* Sources/Childlock/Views/Challenges/MathChallengeView.swift */; };
 		MEMORY_MATCH_VIEW_SOURCE /* Sources/Childlock/Views/Challenges/MemoryMatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = MEMORY_MATCH_VIEW_FILE /* Sources/Childlock/Views/Challenges/MemoryMatchView.swift */; };
 		MONITOR_EXT /* ChildlockMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = MONITOR_EXT_FILE /* ChildlockMonitor.swift */; };
@@ -126,7 +125,6 @@
 		DESIGN_TOKENS_FILE /* Sources/Childlock/Views/Shared/DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Views/Shared/DesignTokens.swift; sourceTree = SOURCE_ROOT; };
 		EXT_ENTRYPOINTS_FILE /* Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift; sourceTree = SOURCE_ROOT; };
 		FAMILY_ACTIVITY_STORE_FILE /* Sources/Childlock/Services/FamilyActivitySelectionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Services/FamilyActivitySelectionStore.swift; sourceTree = SOURCE_ROOT; };
-		HANDBACK_VIEW_FILE /* Sources/Childlock/Views/Challenges/HandBackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Views/Challenges/HandBackView.swift; sourceTree = SOURCE_ROOT; };
 		MATH_CHALLENGE_VIEW_FILE /* Sources/Childlock/Views/Challenges/MathChallengeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Views/Challenges/MathChallengeView.swift; sourceTree = SOURCE_ROOT; };
 		MEMORY_MATCH_VIEW_FILE /* Sources/Childlock/Views/Challenges/MemoryMatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Childlock/Views/Challenges/MemoryMatchView.swift; sourceTree = SOURCE_ROOT; };
 		MONITOR_ENTITLEMENTS /* DeviceActivityMonitorExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DeviceActivityMonitorExtension.entitlements; sourceTree = "<group>"; };
@@ -290,7 +288,6 @@
 				CELEBRATION_VIEW_FILE /* Sources/Childlock/Views/Challenges/CelebrationView.swift */,
 				CHALLENGE_CONTAINER_VIEW_FILE /* Sources/Childlock/Views/Challenges/ChallengeContainerView.swift */,
 				CHALLENGE_SPEAKER_FILE /* Sources/Childlock/Services/ChallengeSpeaker.swift */,
-				HANDBACK_VIEW_FILE /* Sources/Childlock/Views/Challenges/HandBackView.swift */,
 				MEMORY_MATCH_VIEW_FILE /* Sources/Childlock/Views/Challenges/MemoryMatchView.swift */,
 				MATH_CHALLENGE_VIEW_FILE /* Sources/Childlock/Views/Challenges/MathChallengeView.swift */,
 				PARENT_DASHBOARD_VIEW_FILE /* Sources/Childlock/Views/Dashboard/ParentDashboardView.swift */,
@@ -504,7 +501,6 @@
 				CELEBRATION_VIEW_SOURCE /* Sources/Childlock/Views/Challenges/CelebrationView.swift in Sources */,
 				CHALLENGE_CONTAINER_VIEW_SOURCE /* Sources/Childlock/Views/Challenges/ChallengeContainerView.swift in Sources */,
 				CHALLENGE_SPEAKER_SOURCE /* Sources/Childlock/Services/ChallengeSpeaker.swift in Sources */,
-				HANDBACK_VIEW_SOURCE /* Sources/Childlock/Views/Challenges/HandBackView.swift in Sources */,
 				MEMORY_MATCH_VIEW_SOURCE /* Sources/Childlock/Views/Challenges/MemoryMatchView.swift in Sources */,
 				MATH_CHALLENGE_VIEW_SOURCE /* Sources/Childlock/Views/Challenges/MathChallengeView.swift in Sources */,
 				PARENT_DASHBOARD_VIEW_SOURCE /* Sources/Childlock/Views/Dashboard/ParentDashboardView.swift in Sources */,

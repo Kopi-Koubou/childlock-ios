@@ -89,13 +89,11 @@ Reviewer flow:
 5. Set a short brain-break interval.
 6. Open selected app/category/site content until the interval threshold is reached.
 7. The selected content is shielded with Childlock's Brain Break shield.
-8. Tap Start, then tap the Childlock notification or open Childlock
-   from Home and solve the pending challenge.
-9. Completing the challenge removes the shield and re-arms monitoring.
-10. The child hand-back screen says `Great job!` and `Swipe back` with a
-    right-arrow gesture cue. Swiping right along the bottom edge returns to the
-    preserved previous app. The parent PIN is still required before entering
-    the parent dashboard.
+8. Answer the two-choice math question directly on the Brain Break shield.
+9. A correct answer briefly shows `Great job!`, then clears the shield and
+   reveals the same content automatically with no post-answer child action.
+10. Monitoring re-arms for the next full interval. The parent PIN is still
+    required before entering the Childlock dashboard.
 
 Sign-in uses Apple's native Sign in with Apple flow and, when configured for the
 submitted build, native Google Sign-In backed by Supabase Auth. Builds without

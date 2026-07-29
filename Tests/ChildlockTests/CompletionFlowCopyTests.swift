@@ -1,55 +1,46 @@
 import XCTest
 
-final class HandBackCopyTests: XCTestCase {
-    func testHandBackKeepsChildInstructionPrimaryAndParentEntryVisible() throws {
-        let contents = try readRepoFile("Sources/Childlock/Views/Challenges/HandBackView.swift")
+final class CompletionFlowCopyTests: XCTestCase {
+    func testCorrectAnswerHasNoPostAnswerTouchpoint() throws {
+        let challengeViewModel = try readRepoFile("Sources/Childlock/ViewModels/ChallengeViewModel.swift")
+        let challengeContainer = try readRepoFile("Sources/Childlock/Views/Challenges/ChallengeContainerView.swift")
+        let celebration = try readRepoFile("Sources/Childlock/Views/Challenges/CelebrationView.swift")
+        let shieldAction = try readRepoFile("Extensions/ShieldActionExtension/ChildlockShieldAction.swift")
+        let shieldConfiguration = try readRepoFile("Extensions/ShieldConfigurationExtension/ChildlockShieldConfiguration.swift")
+        let project = try readRepoFile("Childlock.xcodeproj/project.pbxproj")
+        let completionFlow = [
+            challengeViewModel,
+            challengeContainer,
+            celebration,
+            shieldAction,
+            shieldConfiguration,
+            project,
+        ].joined(separator: "\n")
 
-        XCTAssertTrue(contents.contains("Great job!"))
-        XCTAssertTrue(contents.contains("Swipe back"))
-        XCTAssertFalse(contents.contains("Text(\"Done\")"))
-        XCTAssertFalse(contents.contains("All done"))
-        XCTAssertFalse(contents.contains("You can go back now."))
-        XCTAssertFalse(contents.contains("HandBackStepRow("))
-        XCTAssertFalse(contents.contains("Content unlocked"))
-        XCTAssertFalse(contents.contains("The shield is cleared and your content can open again."))
-        XCTAssertTrue(contents.contains("HandBackReturnCue(iconName: \"arrow.right\")"))
-        XCTAssertFalse(contents.contains("Text(title)"))
-        XCTAssertFalse(contents.contains("title: \"Back\""))
-        XCTAssertFalse(contents.contains("Back to app"))
-        XCTAssertFalse(contents.contains("Go back"))
-        XCTAssertFalse(contents.contains("Resume activity"))
-        XCTAssertFalse(contents.contains("Open your app."))
-        XCTAssertFalse(contents.contains("Swipe up"))
-        XCTAssertFalse(contents.contains("Swipe up to resume"))
-        XCTAssertFalse(contents.contains("Your video, game, app, or site is unblocked. Use Home or the app switcher to return."))
-        XCTAssertFalse(contents.contains("Childlock cannot switch apps automatically on iOS."))
-        XCTAssertFalse(contents.contains("Tap here when you are ready for the last step."))
-        XCTAssertFalse(contents.contains("UIApplication.shared"))
-        XCTAssertFalse(contents.contains("didShowResumeStep"))
-        XCTAssertTrue(contents.contains("accessibilityIdentifier(\"handback_resume_guidance\")"))
-        XCTAssertTrue(contents.contains("accessibilityLabel(\"Swipe back to your app.\")"))
-        XCTAssertTrue(contents.contains("accessibilityHint(\"Swipe right along the bottom edge to return to the app you were using.\")"))
-        XCTAssertFalse(contents.contains("accessibilityIdentifier(\"handback_steps\")"))
-        XCTAssertTrue(contents.contains(".font(.system(size: 48, weight: .bold))"))
-        XCTAssertTrue(contents.contains(".frame(width: 96, height: 96)"))
-        XCTAssertTrue(contents.contains("@Environment(\\.accessibilityReduceMotion)"))
-        XCTAssertTrue(contents.contains(".repeatForever(autoreverses: true)"))
-        XCTAssertFalse(contents.contains(".background(ChildlockColor.primarySoft)\n        .clipShape(RoundedRectangle(cornerRadius: ChildlockRadius.control))"))
-        XCTAssertTrue(contents.contains("private let handBackContentMaxWidth: CGFloat = 560"))
-        XCTAssertTrue(contents.contains(".frame(maxWidth: handBackContentMaxWidth)"))
-        XCTAssertFalse(contents.localizedCaseInsensitiveContains("unpaused"))
-        XCTAssertTrue(contents.contains("iOS does not let Screen Time apps automatically reopen arbitrary"))
-        XCTAssertTrue(contents.contains("Image(systemName: \"lock.fill\")"))
-        XCTAssertFalse(contents.contains("Label(\"I'm a parent\", systemImage: \"lock.fill\")"))
-        XCTAssertFalse(contents.contains("Label(\"Parent\", systemImage: \"lock.fill\")"))
-        XCTAssertTrue(contents.contains("accessibilityIdentifier(\"parent_unlock_entry\")"))
-        XCTAssertTrue(contents.contains("accessibilityLabel(\"Parent unlock\")"))
-        XCTAssertTrue(contents.contains(".sheet(isPresented: $isParentUnlockPresented)"))
-        XCTAssertTrue(contents.contains("SecureField(\"Parent PIN\""))
-        XCTAssertTrue(contents.contains("Unlock Dashboard"))
-        XCTAssertTrue(contents.contains("sanitizeEnteredPIN()"))
-        XCTAssertTrue(contents.contains("prefix(4)"))
-        XCTAssertTrue(contents.contains("if !enteredPIN.isEmpty {\n                pinErrorText = nil\n            }"))
+        XCTAssertFalse(completionFlow.localizedCaseInsensitiveContains("swipe" + " back"))
+        XCTAssertFalse(project.contains("Hand" + "BackView.swift"))
+        XCTAssertFalse(challengeViewModel.contains("case hand" + "back"))
+        XCTAssertFalse(challengeContainer.contains("Hand" + "BackView"))
+
+        XCTAssertTrue(shieldConfiguration.contains("brainBreak.primaryAnswer"))
+        XCTAssertTrue(shieldConfiguration.contains("brainBreak.secondaryAnswer"))
+        XCTAssertTrue(shieldConfiguration.contains("checkmark.circle.fill"))
+        XCTAssertTrue(shieldConfiguration.contains("Going back to your app…"))
+        XCTAssertTrue(shieldAction.contains("successDisplayDuration: TimeInterval = 1.0"))
+        XCTAssertTrue(shieldAction.contains("completionHandler(.defer)"))
+        XCTAssertTrue(shieldAction.contains("ProcessInfo.processInfo.performExpiringActivity("))
+        XCTAssertTrue(shieldAction.contains("return expired ? .none : .defer"))
+        XCTAssertTrue(shieldAction.contains("finishSuccessfulBrainBreak(id: brainBreakID)"))
+        XCTAssertTrue(shieldAction.contains("store.shield.applications = nil"))
+        XCTAssertTrue(shieldAction.contains("store.shield.webDomains = nil"))
+        XCTAssertFalse(shieldAction.contains("DispatchQueue.main.asyncAfter"))
+        XCTAssertFalse(shieldAction.contains("UIApplication.shared"))
+
+        XCTAssertTrue(challengeViewModel.contains("celebrationDuration: TimeInterval = 1.2"))
+        XCTAssertTrue(challengeViewModel.contains("self.clearChallenge()"))
+        XCTAssertTrue(celebration.contains("@Environment(\\.accessibilityReduceMotion)"))
+        XCTAssertTrue(celebration.contains(".spring(response: 0.48, dampingFraction: 0.68)"))
+        XCTAssertTrue(celebration.contains("accessibilityLabel(\"Correct. Great job.\")"))
     }
 
     func testParentDashboardPINEntryIsBoundedAndClearsAfterFailure() throws {
@@ -103,7 +94,6 @@ final class HandBackCopyTests: XCTestCase {
         let challenge = try readRepoFile("Sources/Childlock/Views/Challenges/ChallengeContainerView.swift")
         let math = try readRepoFile("Sources/Childlock/Views/Challenges/MathChallengeView.swift")
         let memory = try readRepoFile("Sources/Childlock/Views/Challenges/MemoryMatchView.swift")
-        let handBack = try readRepoFile("Sources/Childlock/Views/Challenges/HandBackView.swift")
 
         XCTAssertTrue(onboarding.contains("accessibilityIdentifier(\"monitor_\\(app)\")"))
         XCTAssertTrue(onboarding.contains("\"Add \\(app) to monitored apps\""))
@@ -131,11 +121,6 @@ final class HandBackCopyTests: XCTestCase {
         XCTAssertTrue(memory.contains("Memory card \\(position), hidden"))
         XCTAssertFalse(memory.contains("accessibilityLabel(\"memory_card_"))
 
-        XCTAssertTrue(handBack.contains("accessibilityIdentifier(\"handback_resume_guidance\")"))
-        XCTAssertTrue(handBack.contains("accessibilityLabel(\"Swipe back to your app.\")"))
-        XCTAssertTrue(handBack.contains("accessibilityIdentifier(\"parent_unlock_entry\")"))
-        XCTAssertTrue(handBack.contains("accessibilityLabel(\"Parent unlock\")"))
-        XCTAssertFalse(handBack.contains("accessibilityLabel(\"parent_unlock_entry\")"))
     }
 
     func testWelcomeCopyAvoidsAbsoluteBehaviorClaims() throws {

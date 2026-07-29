@@ -1736,8 +1736,6 @@ public struct ParentDashboardView: View {
                             VStack(spacing: 0) {
                                 settingsToggleRow(title: "Daily summary", binding: dailySummaryBinding)
                                 Divider().background(ChildlockColor.surfaceMuted)
-                                settingsToggleRow(title: "Challenge alerts", binding: challengeAlertBinding)
-                                Divider().background(ChildlockColor.surfaceMuted)
                                 settingsRow(
                                     title: "iOS notification permission",
                                     value: notificationAuthorizationLabel,
@@ -1849,8 +1847,8 @@ public struct ParentDashboardView: View {
             ]
         case .thresholdReached, .challengeRequested:
             return [
-                "Brain Break is pending.",
-                "Open Childlock from Home or the notification.",
+                "Answer the two choices on the Brain Break shield.",
+                "A correct answer returns to the content automatically.",
                 "Complete the challenge, then confirm monitoring re-arms.",
             ]
         case .moreTimeRequested:
@@ -2314,27 +2312,6 @@ public struct ParentDashboardView: View {
         )
     }
 
-    private var challengeAlertBinding: Binding<Bool> {
-        Binding(
-            get: { appState.settings.challengeAlertNotification },
-            set: { isEnabled in
-                var updated = appState.settings
-                updated.challengeAlertNotification = isEnabled
-                appState.settings = updated
-                SharedDefaults.shared.set(isEnabled, forKey: SharedDefaults.Key.challengeAlertsEnabled)
-
-                if isEnabled {
-                    Task {
-                        _ = await NotificationService.requestPermission()
-                        await MainActor.run {
-                            refreshNotificationAuthorizationStatus()
-                        }
-                    }
-                }
-            }
-        )
-    }
-
     private var notificationAuthorizationLabel: String {
         switch notificationAuthorizationStatus {
         case .authorized, .provisional, .ephemeral:
@@ -2354,14 +2331,14 @@ public struct ParentDashboardView: View {
 
     private var notificationGuidanceText: String {
         if notificationAuthorizationStatus == .denied {
-            return "Challenge alerts are off. The child can still tap Start, press Home, and open Childlock to continue."
+            return "Notifications are off. Shield brain breaks still work; daily summaries and parent updates will not appear."
         }
 
         if notificationAuthorizationStatus.allowsDelivery {
-            return "Challenge alerts guide the child back from the shield. If an alert is missed, press Home and open Childlock."
+            return "Notifications support daily summaries and parent updates. Shield brain breaks work without alerts."
         }
 
-        return "Enable alerts so shielded children get a cue back to Childlock. Home to Childlock still works if alerts are skipped."
+        return "Enable notifications for daily summaries and parent updates. Shield brain breaks do not require them."
     }
 
     private func refreshNotificationAuthorizationStatus() {

@@ -2,7 +2,7 @@
 
 This checklist separates simulator confidence from real Screen Time proof. The
 simulator can validate onboarding state, parent dashboard gating, challenge UI,
-and hand-back behavior. A TestFlight build on physical hardware is still
+and touch-free shield return behavior. A TestFlight build on physical hardware is still
 required to prove Family Controls, DeviceActivity thresholds, ManagedSettings
 shielding, and extension actions.
 
@@ -31,17 +31,17 @@ contact sheet for a quick all-states scan.
 | `--childlock-qa-seed-onboarding-setup` | Signed-in setup with Screen Time authorized and no picker selection returned yet | none |
 | `--childlock-qa-seed-dashboard` | Unlocked parent dashboard for child `Mia` | `1234` if locked later |
 | `--childlock-qa-seed-locked-dashboard` | Parent dashboard lock screen | `1234` |
-| `--childlock-qa-seed-pending-challenge` | Child brain-break challenge | `1234` after hand-back |
-| `--childlock-qa-seed-pending-math-challenge` | Child math brain-break challenge | `1234` after hand-back |
-| `--childlock-qa-seed-pending-memory-challenge` | Child memory brain-break challenge with deterministic card pairs | `1234` after hand-back |
-| `--childlock-qa-seed-handback` | Completed child hand-back screen after a solved challenge | `1234` |
+| `--childlock-qa-seed-pending-challenge` | In-app practice brain-break challenge | none |
+| `--childlock-qa-seed-pending-math-challenge` | In-app practice math brain break | none |
+| `--childlock-qa-seed-pending-memory-challenge` | In-app practice memory brain break with deterministic card pairs | none |
+| `--childlock-qa-seed-celebration` | Animated success state after a solved practice challenge | none |
 | `--childlock-qa-seed-more-time-request` | Parent dashboard with a more-time request banner | `1234` if locked later |
 | `--childlock-qa-seed-locked-more-time-request` | Parent PIN gate after the child asks for more time on a shared device | `1234` |
 | `--childlock-qa-seed-children-tab` | Parent Children tab with profile card and reports controls | `1234` if locked later |
 | `--childlock-qa-seed-add-child-sheet` | Parent add-child sheet with a save-ready draft profile | `1234` if locked later |
 | `--childlock-qa-seed-apps-tab` | Parent Apps tab with Screen Time selection and planning labels | `1234` if locked later |
 | `--childlock-qa-seed-settings-tab` | Parent Settings tab with Premium, notifications, account, reset, and enforcement rows | `1234` if locked later |
-| `--childlock-qa-seed-settings-notifications-denied` | Parent Settings tab when iOS notifications are denied, showing the Home -> Childlock fallback | `1234` if locked later |
+| `--childlock-qa-seed-settings-notifications-denied` | Parent Settings tab when iOS notifications are denied, explaining shield independence | `1234` if locked later |
 | `--childlock-qa-seed-paywall` | Premium paywall fallback with reports-only upgrade positioning | `1234` if locked later |
 
 Simulator pass criteria:
@@ -74,8 +74,8 @@ Simulator pass criteria:
   Time Enforcement` must be disabled until a real Screen Time picker selection
   exists.
 - Settings notification-denied seed shows iOS notification permission as `Off`,
-  offers `Open Notification Settings`, and explains that the child can still
-  press Home and open Childlock after tapping `Start`.
+  offers `Open Notification Settings`, and explains that the shield brain break
+  still works without notification permission.
 - Paywall seed keeps the upgrade framed around deeper reports, shows that
   Screen Time enforcement remains included, and renders product-unavailable
   fallback copy without overlap on iPhone and iPad.
@@ -84,10 +84,10 @@ Simulator pass criteria:
   controls underneath.
 - Math and memory challenge seeds both render child-appropriate challenge UI;
   memory pairs are deterministic in this Debug seed for repeatable simulator QA.
-- Correct challenge answer records activity and moves to the hand-back screen.
-- Hand-back seed gives the child `Great job!`, `Swipe back`, a right-arrow gesture cue,
-  and a small parent lock icon.
-- Parent PIN unlock remounts the dashboard.
+- Correct in-app practice answer records activity, animates success, and
+  dismisses automatically without a child action.
+- Celebration seed shows the animated `Great job!` state with no child action.
+- Parent PIN still protects the dashboard independently of the child flow.
 - More-time seed shows the parent request banner with `Allow 5 min` and
   `Keep blocked`.
 - Locked more-time seed keeps the dashboard hidden, shows the request in the
@@ -113,7 +113,7 @@ Simulator evidence handoff:
 - The latest generated simulator sweep should capture every seeded state across
   iPhone 17 and iPad (A16), covering onboarding, device-model copy,
   setup-disabled state, parent dashboard, locked dashboard, child math/memory
-  challenges, hand-back, more-time request, Children, Apps, Settings,
+  challenges, celebration, more-time request, Children, Apps, Settings,
   notification-denied fallback, add-child, and paywall fallback surfaces. Run
   `scripts/launch-readiness-status.sh` to confirm the newest simulator summary,
   gallery, and contact sheet were generated for the current git commit.
@@ -177,12 +177,12 @@ gallery and contact-sheet paths.
 | Content started at |  |
 | Shield appeared at |  |
 | Shield appeared only after threshold | Pass / Fail |
-| `Start` kept the selected app in place behind its shield | Pass / Fail |
-| Childlock opened pending challenge from the alert | Pass / Fail |
-| Challenge completion cleared shield | Pass / Fail |
+| Shield showed one question with two answer choices | Pass / Fail |
+| Wrong answer showed `Almost! Try again` and kept content shielded | Pass / Fail |
+| Correct answer briefly showed `Great job!` and cleared the shield | Pass / Fail |
 | Monitoring re-armed for a new interval | Pass / Fail |
-| Child saw `Great job!` and used the bottom-edge `Swipe back` cue to return directly to the now-unshielded previous app/site | Pass / Fail |
-| Parent dashboard stayed PIN-gated after hand-back | Pass / Fail |
+| Same content returned automatically with no post-answer child action | Pass / Fail |
+| Parent dashboard remained PIN-gated after child use | Pass / Fail |
 | RevenueCat paywall/offering behaved as expected | Pass / Fail / Not tested |
 | RevenueCat offering loaded monthly and annual packages | Pass / Fail / Not tested |
 | Purchase activates Childlock Premium entitlement | Pass / Fail / Not tested |
@@ -198,8 +198,8 @@ Minimum evidence before launch:
 - If the build does not have Google OAuth configured, record Google as N/A,
   confirm the button is hidden, and keep App Review notes Apple-first.
 - One completed child-iPad record if iPad support remains in App Store copy.
-- One denied-notification pass proving Home -> Childlock still opens the
-  pending challenge.
+- One denied-notification pass proving the shield brain break still works
+  without notification permission.
 - One second full shield loop on the same device proving monitoring re-arms.
 - If subscriptions remain attached to the App Store version, one purchase and
   restore pass proving RevenueCat returns monthly/annual packages, activates
@@ -247,8 +247,8 @@ as sufficient for launch.
      The setup `Continue` button stays disabled until the picker returns a real
      selection summary.
 10. Parent chooses the shortest brain-break interval.
-11. Parent enables notifications when prompted. Also test a denied-notification
-   pass: after tapping `Start`, press Home and open Childlock.
+11. Parent may enable notifications for summaries and parent updates. Also test
+    a denied-notification pass; the shield brain break must still work.
 12. Open the selected app/category/site and start real child-like content,
     such as a video, game session, social feed, or website. Record the content
     app/activity and start time in the hardware QA record.
@@ -256,35 +256,30 @@ as sufficient for launch.
     being consumed.
 14. Selected content shields only after the threshold is reached. Record the
     shield timestamp and compare it with the configured interval.
-15. Shield copy says `Brain Break`, `Tap Start.`, and `Start`.
-16. Primary shield action keeps the blocked app in place and refreshes the
-    Childlock alert. The shield then says `Ready!` and `Tap the Childlock alert.`.
-17. Opening Childlock presents the pending challenge.
-18. Completing the challenge clears shields.
-19. Monitoring re-arms for another full interval.
-20. Child sees `Great job!` and `Swipe back`, then swipes right along the
-    bottom edge to return directly to the now-unshielded previous app/site.
-    Confirm the original activity is still in place and the child cannot enter
-    the dashboard without the parent PIN.
-21. `Parent` creates a parent-visible more-time request and does not open
-    a pending child challenge before the parent responds.
-22. `Allow <interval>` grants another full interval and then re-arms enforcement.
-23. `Keep blocked` clears the parent request while keeping the child blocked
-    until they start and complete the brain break.
-24. Restarting enforcement clears stale child challenge and more-time request state.
-25. If multiple child profiles exist, the pending challenge uses the monitored
-    child's age/profile.
-26. Support, Privacy, and Terms links open correctly from App Store metadata.
+15. Shield copy says `Brain Break`, shows one math question, and presents two
+    answer choices.
+16. Choose one wrong answer and confirm the shield redraws `Almost! Try again`
+    while the original content stays blocked underneath.
+17. Choose the correct answer.
+18. Confirm the shield briefly redraws `Great job!` without answer buttons.
+19. Without another touch, confirm the shield clears and the same content is
+    visible in place.
+20. Confirm monitoring re-arms for another full interval.
+21. Confirm the child cannot enter the dashboard without the parent PIN.
+22. Restarting enforcement clears stale shield-challenge state.
+23. If multiple child profiles exist, the shield question uses the monitored
+    child's age/difficulty.
+24. Support, Privacy, and Terms links open correctly from App Store metadata.
     Run `scripts/check-app-store-submission-copy.sh` before App Review to catch
     paste limits, product IDs, review notes, and entitlement drift. Then run
     `scripts/check-public-release-links.sh` to verify the public pages are live.
-27. If subscriptions are attached to this App Store version, open the paywall
+25. If subscriptions are attached to this App Store version, open the paywall
     and confirm RevenueCat loads monthly and annual products.
-28. Complete a sandbox purchase and confirm the Settings row changes from
+26. Complete a sandbox purchase and confirm the Settings row changes from
     `Upgrade` to `Active`.
-29. Delete/reinstall or reset as needed, tap `Restore purchases`, and confirm
+27. Delete/reinstall or reset as needed, tap `Restore purchases`, and confirm
     Premium becomes active again.
-30. Force quit and relaunch Childlock, then confirm Premium is still active and
+28. Force quit and relaunch Childlock, then confirm Premium is still active and
     weekly/all-time Children reports remain available.
 
 ## Fresh Setup Reset
@@ -313,9 +308,9 @@ Use this when the parent and child share the same iPhone.
 6. Parent sets the PIN, taps `Lock Parent Dashboard` or leaves Childlock to
    let it auto-lock, and hands the phone to the child.
 7. Child continuously uses selected content until the threshold is reached.
-8. Child solves the challenge, sees `Great job!` and `Swipe back`, then swipes
-   right along the bottom edge to return directly to the now-unshielded app/site.
-9. Child taps the parent lock icon or tries to enter the dashboard.
+8. Child answers directly on the shield, sees `Great job!` briefly, and returns
+   automatically to the same app/site with no post-answer action.
+9. Parent later opens Childlock.
 10. Expected: dashboard remains gated by the parent PIN.
 
 Pass means Childlock can be marketed as supporting same-phone parent/child use.
@@ -333,7 +328,8 @@ Use this when the parent owns an iPhone and the child uses an iPad.
    setup on the iPad.
 6. Use the selected iPad app or website continuously until the threshold is
    reached.
-7. Complete the shield -> Childlock -> challenge -> hand-back loop on the iPad.
+7. Complete the shield-native challenge and confirm touch-free return to the
+   same iPad content.
 8. Optional: install Childlock on the parent iPhone only for account/login smoke
    testing, not as a remote controller.
 

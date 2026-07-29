@@ -19,9 +19,7 @@ public struct ChildlockRootView: View {
     }
 
     private var challengeOverlay: some View {
-        ChallengeContainerView(viewModel: challengeViewModel) {
-            appState.isPINLocked = false
-        }
+        ChallengeContainerView(viewModel: challengeViewModel)
             .interactiveDismissDisabled(true)
     }
 
@@ -55,6 +53,7 @@ public struct ChildlockRootView: View {
             #endif
 
             syncAuthState()
+            recordCompletedShieldBrainBreaksIfNeeded()
 
             challengeViewModel.onCompletedResult = { result in
                 guard let profileID = appState.activeProfileID ?? appState.activeProfile?.id else {
@@ -83,9 +82,10 @@ public struct ChildlockRootView: View {
         }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
-                // The shield can't open this app directly: the child taps the shield,
-                // lands on the home screen, and opens Childlock — so the pending
-                // challenge must be picked up on every foreground, not just launch.
+                recordCompletedShieldBrainBreaksIfNeeded()
+                // Pick up any legacy or Debug-seeded foreground challenge when
+                // Childlock becomes active. Enforced brain breaks now complete
+                // directly on the shield and do not open the app.
                 presentPendingChallengeIfNeeded()
             } else {
                 lockParentDashboardIfNeeded()
@@ -115,6 +115,44 @@ public struct ChildlockRootView: View {
         guard !hasActiveMoreTimeRequest else { return }
         guard SharedDefaults.shared.bool(forKey: SharedDefaults.Key.challengePending) else { return }
         triggerPendingChallenge()
+    }
+
+    private func recordCompletedShieldBrainBreaksIfNeeded() {
+        let completions = SharedDefaults.pendingShieldBrainBreakCompletions()
+        guard !completions.isEmpty else { return }
+
+        var recordedIDs = Set<UUID>()
+        for completion in completions {
+            guard
+                let profileID = completion.profileID ?? appState.activeProfileID,
+                appState.profiles.contains(where: { $0.id == profileID })
+            else {
+                continue
+            }
+
+            appState.recordChallengeResult(
+                ChallengeResult(
+                    id: completion.id,
+                    type: .math,
+                    difficultyLevel: completion.difficultyLevel,
+                    presentedAt: completion.presentedAt,
+                    completedAt: completion.completedAt,
+                    attempts: completion.attempts,
+                    completed: true,
+                    hintUsed: false,
+                    solveTimeSeconds: completion.completedAt.timeIntervalSince(completion.presentedAt)
+                ),
+                for: profileID
+            )
+            recordedIDs.insert(completion.id)
+        }
+
+        SharedDefaults.removeShieldBrainBreakCompletions(ids: recordedIDs)
+        guard !recordedIDs.isEmpty else { return }
+
+        Task {
+            try? await DataSyncService.shared.sync(appState: appState)
+        }
     }
 
     private var hasActiveMoreTimeRequest: Bool {
@@ -160,8 +198,9 @@ public struct ChildlockRootView: View {
         )
         onboardingViewModel.clearPersistedSelection()
 
-        // The monitor extension announces brain breaks via local notification —
-        // without this permission the child gets no cue to open Childlock.
+        // Notifications remain useful for parent-facing summaries and request
+        // alerts, but enforced brain breaks render directly on the system
+        // shield and do not depend on notification delivery.
         Task {
             _ = await NotificationService.requestPermission()
         }
@@ -305,7 +344,7 @@ public struct ChildlockRootView: View {
         static let pendingChallenge = "--childlock-qa-seed-pending-challenge"
         static let pendingMathChallenge = "--childlock-qa-seed-pending-math-challenge"
         static let pendingMemoryChallenge = "--childlock-qa-seed-pending-memory-challenge"
-        static let handBack = "--childlock-qa-seed-handback"
+        static let celebration = "--childlock-qa-seed-celebration"
         static let moreTimeRequest = "--childlock-qa-seed-more-time-request"
         static let lockedMoreTimeRequest = "--childlock-qa-seed-locked-more-time-request"
         static let childrenTab = "--childlock-qa-seed-children-tab"
@@ -342,7 +381,7 @@ public struct ChildlockRootView: View {
             || arguments.contains(DebugLaunchArgument.pendingChallenge)
             || arguments.contains(DebugLaunchArgument.pendingMathChallenge)
             || arguments.contains(DebugLaunchArgument.pendingMemoryChallenge)
-            || arguments.contains(DebugLaunchArgument.handBack)
+            || arguments.contains(DebugLaunchArgument.celebration)
             || arguments.contains(DebugLaunchArgument.moreTimeRequest)
             || arguments.contains(DebugLaunchArgument.lockedMoreTimeRequest)
             || arguments.contains(DebugLaunchArgument.childrenTab)
@@ -372,7 +411,7 @@ public struct ChildlockRootView: View {
             || arguments.contains(DebugLaunchArgument.pendingChallenge)
             || arguments.contains(DebugLaunchArgument.pendingMathChallenge)
             || arguments.contains(DebugLaunchArgument.pendingMemoryChallenge)
-            || arguments.contains(DebugLaunchArgument.handBack)
+            || arguments.contains(DebugLaunchArgument.celebration)
             || arguments.contains(DebugLaunchArgument.moreTimeRequest)
             || arguments.contains(DebugLaunchArgument.lockedMoreTimeRequest)
             || arguments.contains(DebugLaunchArgument.childrenTab)
@@ -402,9 +441,9 @@ public struct ChildlockRootView: View {
                     || arguments.contains(DebugLaunchArgument.settingsNotificationsDenied) ? "not_started" : "running"
             )
 
-            if arguments.contains(DebugLaunchArgument.handBack),
+            if arguments.contains(DebugLaunchArgument.celebration),
                let profile = appState.activeProfile {
-                challengeViewModel.debugPresentHandBack(for: profile)
+                challengeViewModel.debugPresentCelebration(for: profile)
             }
         }
     }

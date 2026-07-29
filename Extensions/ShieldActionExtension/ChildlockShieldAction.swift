@@ -4,11 +4,21 @@ import FamilyControls
 import ManagedSettings
 import ManagedSettingsUI
 import os
+import UIKit
 import UserNotifications
 
 @available(iOS 17.0, *)
 final class ChildlockShieldAction: ShieldActionDelegate {
     private let logger = Logger(subsystem: "com.kopikoubou.childlock.shield-action", category: "ShieldAction")
+    private let store = ManagedSettingsStore()
+    private let center = DeviceActivityCenter()
+    private let defaults = SharedDefaults.shared
+    private let activeActivityName = DeviceActivityName("childlock.active")
+    private let thresholdEventName = DeviceActivityEvent.Name("interval_reached")
+    private let successDisplayDuration: TimeInterval = 1.0
+    private let completionLock = NSLock()
+    private var respondedBrainBreakIDs = Set<UUID>()
+    private var finishedBrainBreakIDs = Set<UUID>()
 
     override init() {
         super.init()
@@ -47,85 +57,158 @@ final class ChildlockShieldAction: ShieldActionDelegate {
 
         switch action {
         case .primaryButtonPressed:
-            handleStartChallenge()
-            // Keep the content app in place while the Childlock notification
-            // opens the challenge. Once the shield clears, the child can use
-            // the system's bottom-edge app-switch gesture to resume it.
-            completionHandler(.defer)
+            submitAnswer(at: 0, completionHandler: completionHandler)
         case .secondaryButtonPressed:
-            handleRequestMoreTime()
-            completionHandler(.close)
+            submitAnswer(at: 1, completionHandler: completionHandler)
         @unknown default:
             logger.warning("Unknown shield action: \(action.rawValue)")
-            completionHandler(.close)
+            completionHandler(.none)
         }
     }
 
-    private func handleStartChallenge() {
-        logger.info("User started challenge")
-
-        let defaults = SharedDefaults.shared
-        defaults.set(true, forKey: SharedDefaults.Key.challengePending)
-        defaults.set("challenge_requested", forKey: SharedDefaults.Key.monitoringStatus)
-        postBrainBreakNotification()
-    }
-
-    private func postBrainBreakNotification() {
-        let alertsEnabled = SharedDefaults.shared.object(forKey: SharedDefaults.Key.challengeAlertsEnabled) as? Bool ?? true
-        guard alertsEnabled else {
-            logger.info("Skipping brain break notification because challenge alerts are disabled")
+    private func submitAnswer(
+        at answerIndex: Int,
+        completionHandler: @escaping (ShieldActionResponse) -> Void
+    ) {
+        guard var brainBreak = SharedDefaults.shieldBrainBreak(defaults: defaults) else {
+            logger.error("Shield answer arrived without an active brain break")
+            completionHandler(.defer)
             return
         }
 
-        let content = UNMutableNotificationContent()
-        content.title = "Brain break ready"
-        content.body = "Tap to solve."
-        content.sound = .default
+        guard brainBreak.phase != .success else {
+            completionHandler(.defer)
+            return
+        }
 
+        let isCorrect = brainBreak.submit(answerIndex: answerIndex)
+        SharedDefaults.saveShieldBrainBreak(brainBreak, defaults: defaults)
+
+        guard isCorrect else {
+            logger.info("Shield brain break answer was incorrect")
+            completionHandler(.defer)
+            return
+        }
+
+        logger.info("Shield brain break completed; showing success before automatic return")
+        SharedDefaults.appendShieldBrainBreakCompletion(
+            ShieldBrainBreakCompletion(state: brainBreak),
+            defaults: defaults
+        )
+        defaults.set(false, forKey: SharedDefaults.Key.challengePending)
+        clearLegacyBrainBreakNotification()
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
+
+        // `.defer` asks the system to redraw the shield from the newly saved
+        // success state. An expiring activity is the extension-safe way to
+        // request enough execution time to clear ManagedSettings one second
+        // later. If iOS cannot grant or later expires that assertion, clear
+        // immediately so the child is never stranded on the success shield.
+        beginAutomaticReturn(
+            for: brainBreak.id,
+            completionHandler: completionHandler
+        )
+    }
+
+    private func beginAutomaticReturn(
+        for brainBreakID: UUID,
+        completionHandler: @escaping (ShieldActionResponse) -> Void
+    ) {
+        ProcessInfo.processInfo.performExpiringActivity(
+            withReason: "Dismiss completed Childlock brain break"
+        ) { [self] expired in
+            if let response = claimResponse(for: brainBreakID, expired: expired) {
+                completionHandler(response)
+            }
+
+            if expired {
+                logger.warning("Success display activity expired; clearing shield immediately")
+                finishSuccessfulBrainBreak(id: brainBreakID)
+                return
+            }
+
+            Thread.sleep(forTimeInterval: successDisplayDuration)
+            finishSuccessfulBrainBreak(id: brainBreakID)
+        }
+    }
+
+    private func claimResponse(
+        for brainBreakID: UUID,
+        expired: Bool
+    ) -> ShieldActionResponse? {
+        completionLock.lock()
+        defer { completionLock.unlock() }
+
+        guard respondedBrainBreakIDs.insert(brainBreakID).inserted else {
+            return nil
+        }
+        return expired ? .none : .defer
+    }
+
+    private func finishSuccessfulBrainBreak(id brainBreakID: UUID) {
+        completionLock.lock()
+        let shouldFinish = finishedBrainBreakIDs.insert(brainBreakID).inserted
+        completionLock.unlock()
+        guard shouldFinish else { return }
+
+        store.shield.applications = nil
+        store.shield.applicationCategories = nil
+        store.shield.webDomains = nil
+        store.shield.webDomainCategories = nil
+        SharedDefaults.clearShieldBrainBreak(defaults: defaults)
+
+        rearmMonitoring()
+    }
+
+    private func rearmMonitoring() {
+        guard
+            let data = defaults.data(forKey: SharedDefaults.Key.activeMonitoringSelectionData),
+            let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data)
+        else {
+            defaults.set("The monitored app selection payload is invalid.", forKey: SharedDefaults.Key.monitoringLastError)
+            defaults.set("failed", forKey: SharedDefaults.Key.monitoringStatus)
+            logger.error("Could not re-arm monitoring after shield brain break")
+            return
+        }
+
+        let intervalMinutes = max(
+            defaults.integer(forKey: SharedDefaults.Key.activeMonitoringIntervalMinutes),
+            1
+        )
+        let schedule = DeviceActivitySchedule(
+            intervalStart: DateComponents(hour: 0, minute: 0),
+            intervalEnd: DateComponents(hour: 23, minute: 59),
+            repeats: true
+        )
+        let event = DeviceActivityEvent(
+            applications: selection.applicationTokens,
+            categories: selection.categoryTokens,
+            webDomains: selection.webDomainTokens,
+            threshold: DateComponents(minute: intervalMinutes)
+        )
+
+        center.stopMonitoring([activeActivityName])
+        do {
+            try center.startMonitoring(
+                activeActivityName,
+                during: schedule,
+                events: [thresholdEventName: event]
+            )
+            defaults.removeObject(forKey: SharedDefaults.Key.monitoringLastError)
+            defaults.set(Date().timeIntervalSince1970, forKey: SharedDefaults.Key.monitoringLastStartedAt)
+            defaults.set("running", forKey: SharedDefaults.Key.monitoringStatus)
+            logger.info("Monitoring re-armed after shield brain break")
+        } catch {
+            defaults.set(error.localizedDescription, forKey: SharedDefaults.Key.monitoringLastError)
+            defaults.set("failed", forKey: SharedDefaults.Key.monitoringStatus)
+            logger.error("Failed to re-arm monitoring: \(error.localizedDescription)")
+        }
+    }
+
+    private func clearLegacyBrainBreakNotification() {
         let center = UNUserNotificationCenter.current()
         let identifiers = [SharedDefaults.NotificationIdentifier.brainBreak]
         center.removePendingNotificationRequests(withIdentifiers: identifiers)
         center.removeDeliveredNotifications(withIdentifiers: identifiers)
-
-        let request = UNNotificationRequest(
-            identifier: SharedDefaults.NotificationIdentifier.brainBreak,
-            content: content,
-            trigger: nil
-        )
-        center.add(request) { [logger] error in
-            if let error {
-                logger.error("Failed to post brain break notification: \(error.localizedDescription)")
-            }
-        }
-    }
-
-    private func handleRequestMoreTime() {
-        logger.info("User requested more time")
-
-        let defaults = SharedDefaults.shared
-        let requestCount = defaults.integer(forKey: SharedDefaults.Key.moreTimeRequestCount)
-        defaults.set(false, forKey: SharedDefaults.Key.challengePending)
-        defaults.set(requestCount + 1, forKey: SharedDefaults.Key.moreTimeRequestCount)
-        defaults.set(Date(), forKey: SharedDefaults.Key.lastMoreTimeRequestDate)
-        defaults.set("more_time_requested", forKey: SharedDefaults.Key.monitoringStatus)
-
-        logger.info("More time request recorded (count: \(requestCount + 1))")
-
-        let content = UNMutableNotificationContent()
-        content.title = "More time requested"
-        content.body = "Give this to your parent."
-        content.sound = .default
-
-        let center = UNUserNotificationCenter.current()
-        let identifiers = [SharedDefaults.NotificationIdentifier.moreTimeRequest]
-        center.removePendingNotificationRequests(withIdentifiers: identifiers)
-        center.removeDeliveredNotifications(withIdentifiers: identifiers)
-
-        let request = UNNotificationRequest(
-            identifier: SharedDefaults.NotificationIdentifier.moreTimeRequest,
-            content: content,
-            trigger: nil
-        )
-        center.add(request)
     }
 }

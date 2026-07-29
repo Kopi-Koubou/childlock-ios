@@ -1,6 +1,9 @@
 import SwiftUI
 
 public struct CelebrationView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var isCelebrating = false
+
     public init() {}
 
     private let confettiItems: [(x: CGFloat, y: CGFloat, size: CGFloat, rotation: Double, isCircle: Bool, colorIndex: Int)] = {
@@ -29,9 +32,19 @@ public struct CelebrationView: View {
                 ForEach(0..<confettiItems.count, id: \.self) { i in
                     let item = confettiItems[i]
                     confettiShape(item: item)
+                        .scaleEffect(isCelebrating ? 1 : 0.1)
+                        .opacity(isCelebrating ? 1 : 0)
+                        .rotationEffect(.degrees(isCelebrating ? item.rotation : item.rotation - 50))
                         .position(
                             x: geo.size.width * item.x,
                             y: geo.size.height * item.y
+                        )
+                        .animation(
+                            reduceMotion
+                                ? nil
+                                : .spring(response: 0.48, dampingFraction: 0.68)
+                                    .delay(Double(i) * 0.025),
+                            value: isCelebrating
                         )
                 }
 
@@ -48,16 +61,33 @@ public struct CelebrationView: View {
                             .font(.system(size: 40, weight: .bold))
                             .foregroundStyle(ChildlockColor.accent)
                     }
+                    .scaleEffect(isCelebrating ? 1 : 0.55)
+                    .opacity(isCelebrating ? 1 : 0)
+                    .animation(
+                        reduceMotion ? nil : .spring(response: 0.42, dampingFraction: 0.62),
+                        value: isCelebrating
+                    )
 
                     Text("Great job!")
                         .font(.system(size: 36, weight: .bold, design: .rounded))
                         .foregroundStyle(ChildlockColor.textPrimary)
                         .multilineTextAlignment(.center)
+                        .offset(y: isCelebrating ? 0 : 10)
+                        .opacity(isCelebrating ? 1 : 0)
+                        .animation(
+                            reduceMotion ? nil : .easeOut(duration: 0.3).delay(0.16),
+                            value: isCelebrating
+                        )
 
                     Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Correct. Great job.")
+        .onAppear {
+            isCelebrating = true
         }
     }
 
@@ -68,12 +98,10 @@ public struct CelebrationView: View {
             Circle()
                 .fill(color)
                 .frame(width: item.size, height: item.size)
-                .rotationEffect(.degrees(item.rotation))
         } else {
             RoundedRectangle(cornerRadius: 2)
                 .fill(color)
                 .frame(width: item.size, height: item.size * 0.6)
-                .rotationEffect(.degrees(item.rotation))
         }
     }
 
