@@ -1,5 +1,41 @@
 import Foundation
 
+public enum ChildlockRapidTesting {
+    public static let buildFlagKey = "ChildlockRapidTestingEnabled"
+    public static let intervalSeconds = 10
+
+    public static var isBuildEnabled: Bool {
+        isEnabled(infoDictionaryValue: Bundle.main.object(forInfoDictionaryKey: buildFlagKey))
+    }
+
+    public static func isEnabled(infoDictionaryValue: Any?) -> Bool {
+        if let value = infoDictionaryValue as? Bool {
+            return value
+        }
+
+        guard let value = infoDictionaryValue as? String else {
+            return false
+        }
+
+        return ["1", "true", "yes"].contains(value.trimmingCharacters(in: .whitespacesAndNewlines).lowercased())
+    }
+
+    public static func sanitizedIntervalSeconds(_ value: Int?) -> Int? {
+        value == intervalSeconds ? intervalSeconds : nil
+    }
+
+    public static func threshold(
+        intervalMinutes: Int,
+        rapidTestIntervalSeconds: Int?
+    ) -> DateComponents {
+        if let seconds = sanitizedIntervalSeconds(rapidTestIntervalSeconds) {
+            return DateComponents(second: seconds)
+        }
+
+        return DateComponents(minute: max(intervalMinutes, 1))
+    }
+}
+
 public struct ShieldBrainBreakState: Codable, Equatable, Sendable {
     public enum Phase: String, Codable, Sendable {
         case question
@@ -136,8 +172,10 @@ public enum SharedDefaults {
         public static let activeMonitoringProfileID = "activeMonitoringProfileID"
         public static let activeMonitoringSelectionData = "activeMonitoringSelectionData"
         public static let activeMonitoringIntervalMinutes = "activeMonitoringIntervalMinutes"
+        public static let activeMonitoringIntervalSeconds = "activeMonitoringIntervalSeconds"
         public static let activeMonitoringProfileAge = "activeMonitoringProfileAge"
         public static let activeMonitoringDifficultyLevel = "activeMonitoringDifficultyLevel"
+        public static let rapidTestIntervalSeconds = "rapidTestIntervalSeconds"
         public static let monitoringStatus = "monitoringStatus"
         public static let monitoringLastError = "monitoringLastError"
         public static let monitoringLastStartedAt = "monitoringLastStartedAt"
@@ -165,8 +203,10 @@ public enum SharedDefaults {
         Key.activeMonitoringProfileID,
         Key.activeMonitoringSelectionData,
         Key.activeMonitoringIntervalMinutes,
+        Key.activeMonitoringIntervalSeconds,
         Key.activeMonitoringProfileAge,
         Key.activeMonitoringDifficultyLevel,
+        Key.rapidTestIntervalSeconds,
         Key.monitoringStatus,
         Key.monitoringLastError,
         Key.monitoringLastStartedAt,

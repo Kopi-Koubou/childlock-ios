@@ -8,6 +8,7 @@ public struct AppSettings: Codable, Equatable, Sendable {
     public var freeChallengesUsedToday: Int
     public var freeChallengesResetDate: String
     public var localOwnerUserID: String?
+    public var rapidTestIntervalSeconds: Int?
 
     public init(
         hasCompletedOnboarding: Bool = false,
@@ -16,7 +17,8 @@ public struct AppSettings: Codable, Equatable, Sendable {
         challengeAlertNotification: Bool = true,
         freeChallengesUsedToday: Int = 0,
         freeChallengesResetDate: String = "",
-        localOwnerUserID: String? = nil
+        localOwnerUserID: String? = nil,
+        rapidTestIntervalSeconds: Int? = nil
     ) {
         self.hasCompletedOnboarding = hasCompletedOnboarding
         self.voicePromptsEnabled = voicePromptsEnabled
@@ -25,6 +27,7 @@ public struct AppSettings: Codable, Equatable, Sendable {
         self.freeChallengesUsedToday = freeChallengesUsedToday
         self.freeChallengesResetDate = freeChallengesResetDate
         self.localOwnerUserID = localOwnerUserID
+        self.rapidTestIntervalSeconds = rapidTestIntervalSeconds
     }
 
     public static let `default` = AppSettings()

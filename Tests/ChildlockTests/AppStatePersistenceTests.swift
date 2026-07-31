@@ -3,6 +3,27 @@ import XCTest
 
 @MainActor
 final class AppStatePersistenceTests: XCTestCase {
+    func testAppSettingsDecodesExistingInstallWithoutRapidTestingField() throws {
+        let data = Data(
+            """
+            {
+              "hasCompletedOnboarding": true,
+              "voicePromptsEnabled": true,
+              "dailySummaryNotification": true,
+              "challengeAlertNotification": true,
+              "freeChallengesUsedToday": 0,
+              "freeChallengesResetDate": "",
+              "localOwnerUserID": "parent-1"
+            }
+            """.utf8
+        )
+
+        let settings = try JSONDecoder().decode(AppSettings.self, from: data)
+
+        XCTAssertNil(settings.rapidTestIntervalSeconds)
+        XCTAssertEqual(settings.localOwnerUserID, "parent-1")
+    }
+
     func testInitLoadsSnapshotFromStore() {
         let profile = ChildProfile(name: "Nia", age: 8, avatarName: "owl", intervalMinutes: 15)
         let session = ChallengeSession(

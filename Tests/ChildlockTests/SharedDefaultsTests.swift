@@ -2,6 +2,32 @@ import XCTest
 @testable import Childlock
 
 final class SharedDefaultsTests: XCTestCase {
+    func testRapidTestingBuildFlagParsesXcodeValues() {
+        XCTAssertTrue(ChildlockRapidTesting.isEnabled(infoDictionaryValue: true))
+        XCTAssertTrue(ChildlockRapidTesting.isEnabled(infoDictionaryValue: "YES"))
+        XCTAssertTrue(ChildlockRapidTesting.isEnabled(infoDictionaryValue: "true"))
+        XCTAssertFalse(ChildlockRapidTesting.isEnabled(infoDictionaryValue: "NO"))
+        XCTAssertFalse(ChildlockRapidTesting.isEnabled(infoDictionaryValue: nil))
+    }
+
+    func testRapidTestingThresholdUsesTenSecondsOnlyForSupportedOverride() {
+        XCTAssertEqual(
+            ChildlockRapidTesting.threshold(
+                intervalMinutes: 5,
+                rapidTestIntervalSeconds: ChildlockRapidTesting.intervalSeconds
+            ),
+            DateComponents(second: 10)
+        )
+        XCTAssertEqual(
+            ChildlockRapidTesting.threshold(intervalMinutes: 5, rapidTestIntervalSeconds: 5),
+            DateComponents(minute: 5)
+        )
+        XCTAssertEqual(
+            ChildlockRapidTesting.threshold(intervalMinutes: 0, rapidTestIntervalSeconds: nil),
+            DateComponents(minute: 1)
+        )
+    }
+
     func testClearLocalSetupStateRemovesScreenTimeAndSetupKeys() {
         let suiteName = "childlock-shared-defaults-tests-\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName)!

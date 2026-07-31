@@ -232,6 +232,9 @@ public final class ChildlockShieldAction: ShieldActionDelegate {
             defaults.integer(forKey: SharedDefaults.Key.activeMonitoringIntervalMinutes),
             1
         )
+        let rapidTestIntervalSeconds = ChildlockRapidTesting.sanitizedIntervalSeconds(
+            defaults.object(forKey: SharedDefaults.Key.activeMonitoringIntervalSeconds) as? Int
+        )
         let schedule = DeviceActivitySchedule(
             intervalStart: DateComponents(hour: 0, minute: 0),
             intervalEnd: DateComponents(hour: 23, minute: 59),
@@ -241,7 +244,10 @@ public final class ChildlockShieldAction: ShieldActionDelegate {
             applications: selection.applicationTokens,
             categories: selection.categoryTokens,
             webDomains: selection.webDomainTokens,
-            threshold: DateComponents(minute: intervalMinutes)
+            threshold: ChildlockRapidTesting.threshold(
+                intervalMinutes: intervalMinutes,
+                rapidTestIntervalSeconds: rapidTestIntervalSeconds
+            )
         )
 
         center.stopMonitoring([activeActivityName])

@@ -1692,6 +1692,25 @@ public struct ParentDashboardView: View {
                             }
                         }
 
+                        if ChildlockRapidTesting.isBuildEnabled && !appState.isPINLocked {
+                            settingsSection(title: "TESTFLIGHT TESTING") {
+                                VStack(alignment: .leading, spacing: 0) {
+                                    settingsToggleRow(
+                                        title: "10-second brain breaks",
+                                        binding: rapidTestingBinding
+                                    )
+
+                                    Divider().background(ChildlockColor.surfaceMuted)
+
+                                    Text("Requests a Brain Break after about 10 seconds of active use, then re-arms the same short interval. This control is available only in the dedicated internal test build.")
+                                        .font(ChildlockTypography.caption)
+                                        .foregroundStyle(ChildlockColor.textSecondary)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .padding(ChildlockSpacing.md)
+                                }
+                            }
+                        }
+
                         // Security section
                         settingsSection(title: "SECURITY") {
                             VStack(spacing: 0) {
@@ -2281,6 +2300,27 @@ public struct ParentDashboardView: View {
                 var updated = appState.settings
                 updated.voicePromptsEnabled = isEnabled
                 appState.settings = updated
+            }
+        )
+    }
+
+    private var rapidTestingBinding: Binding<Bool> {
+        Binding(
+            get: {
+                ChildlockRapidTesting.sanitizedIntervalSeconds(
+                    appState.settings.rapidTestIntervalSeconds
+                ) != nil
+            },
+            set: { isEnabled in
+                var updated = appState.settings
+                updated.rapidTestIntervalSeconds = isEnabled
+                    ? ChildlockRapidTesting.intervalSeconds
+                    : nil
+                appState.settings = updated
+
+                if let activeProfile = appState.activeProfile {
+                    refreshMonitoringIfRunning(for: activeProfile)
+                }
             }
         )
     }

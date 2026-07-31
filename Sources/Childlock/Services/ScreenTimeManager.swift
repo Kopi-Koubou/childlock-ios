@@ -148,11 +148,17 @@ public final class ScreenTimeManager: ScreenTimeManaging {
             repeats: true
         )
 
+        let rapidTestIntervalSeconds = ChildlockRapidTesting.sanitizedIntervalSeconds(
+            defaults.object(forKey: SharedDefaults.Key.rapidTestIntervalSeconds) as? Int
+        )
         let event = DeviceActivityEvent(
             applications: selection.applicationTokens,
             categories: selection.categoryTokens,
             webDomains: selection.webDomainTokens,
-            threshold: DateComponents(minute: max(profile.intervalMinutes, 1))
+            threshold: ChildlockRapidTesting.threshold(
+                intervalMinutes: profile.intervalMinutes,
+                rapidTestIntervalSeconds: rapidTestIntervalSeconds
+            )
         )
 
         do {
@@ -174,6 +180,14 @@ public final class ScreenTimeManager: ScreenTimeManaging {
         defaults.set(profile.id.uuidString, forKey: SharedDefaults.Key.activeMonitoringProfileID)
         defaults.set(profile.monitoredSelectionTokenData, forKey: SharedDefaults.Key.activeMonitoringSelectionData)
         defaults.set(profile.intervalMinutes, forKey: SharedDefaults.Key.activeMonitoringIntervalMinutes)
+        if let rapidTestIntervalSeconds {
+            defaults.set(
+                rapidTestIntervalSeconds,
+                forKey: SharedDefaults.Key.activeMonitoringIntervalSeconds
+            )
+        } else {
+            defaults.removeObject(forKey: SharedDefaults.Key.activeMonitoringIntervalSeconds)
+        }
         defaults.set(profile.age, forKey: SharedDefaults.Key.activeMonitoringProfileAge)
         defaults.set(
             ChallengeEngine.shared.effectiveDifficulty(for: profile),
@@ -192,6 +206,7 @@ public final class ScreenTimeManager: ScreenTimeManaging {
         defaults.removeObject(forKey: SharedDefaults.Key.activeMonitoringProfileID)
         defaults.removeObject(forKey: SharedDefaults.Key.activeMonitoringSelectionData)
         defaults.removeObject(forKey: SharedDefaults.Key.activeMonitoringIntervalMinutes)
+        defaults.removeObject(forKey: SharedDefaults.Key.activeMonitoringIntervalSeconds)
         defaults.removeObject(forKey: SharedDefaults.Key.activeMonitoringProfileAge)
         defaults.removeObject(forKey: SharedDefaults.Key.activeMonitoringDifficultyLevel)
         defaults.set("stopped", forKey: SharedDefaults.Key.monitoringStatus)

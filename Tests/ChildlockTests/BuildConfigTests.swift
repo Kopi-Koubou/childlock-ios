@@ -1,6 +1,17 @@
 import XCTest
 
 final class BuildConfigTests: XCTestCase {
+    func testRapidTestingIsOptInAtArchiveTime() throws {
+        let appSecrets = try readRepoFile("Config/AppSecrets.xcconfig")
+        XCTAssertTrue(appSecrets.contains("CHILDLOCK_RAPID_TESTING = NO"))
+
+        let infoPlist = try readPropertyList("Sources/Childlock/Info.plist")
+        XCTAssertEqual(
+            infoPlist["ChildlockRapidTestingEnabled"] as? String,
+            "$(CHILDLOCK_RAPID_TESTING)"
+        )
+    }
+
     func testCheckedInAppSecretsConfigIncludesIgnoredLocalOverride() throws {
         let appSecrets = try readRepoFile("Config/AppSecrets.xcconfig")
         let gitignore = try readRepoFile(".gitignore")

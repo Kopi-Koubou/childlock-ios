@@ -462,6 +462,18 @@ public final class AppState {
             settings.challengeAlertNotification,
             forKey: SharedDefaults.Key.challengeAlertsEnabled
         )
+
+        let rapidIntervalSeconds = ChildlockRapidTesting.sanitizedIntervalSeconds(
+            settings.rapidTestIntervalSeconds
+        )
+        if ChildlockRapidTesting.isBuildEnabled, let rapidIntervalSeconds {
+            SharedDefaults.shared.set(
+                rapidIntervalSeconds,
+                forKey: SharedDefaults.Key.rapidTestIntervalSeconds
+            )
+        } else {
+            SharedDefaults.shared.removeObject(forKey: SharedDefaults.Key.rapidTestIntervalSeconds)
+        }
     }
 
     private func scheduleDailySummaryIfNeeded() {
