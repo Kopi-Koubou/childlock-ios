@@ -66,18 +66,21 @@ final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
             )
         }
 
-        let title = brainBreak.phase == .retry ? "Almost! Try again" : "Brain Break"
+        let statusText = brainBreak.phase == .retry ? "Almost! Try again" : "Brain Break"
+        let isIPad = UIDevice.current.userInterfaceIdiom == .pad
+        let titleText = isIPad ? brainBreak.prompt : statusText
+        let subtitleText = isIPad ? statusText : brainBreak.prompt
 
         return ShieldConfiguration(
             backgroundBlurStyle: .systemMaterial,
             backgroundColor: shieldBg,
             icon: UIImage(systemName: "brain.head.profile"),
             title: ShieldConfiguration.Label(
-                text: title,
+                text: titleText,
                 color: shieldInk
             ),
             subtitle: ShieldConfiguration.Label(
-                text: brainBreak.prompt,
+                text: subtitleText,
                 color: shieldInk.withAlphaComponent(0.7)
             ),
             primaryButtonLabel: ShieldConfiguration.Label(
