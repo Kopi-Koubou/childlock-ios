@@ -170,16 +170,19 @@ gallery and contact-sheet paths.
 | Latest simulator QA contact sheet |  |
 | Google OAuth build settings | Configured / Missing or placeholder |
 | Parent sign-in tested | Apple / Google / N/A |
-| Notification state tested | Allowed / Denied |
+| Notification state tested | Loop 1: Allowed / Denied; Loop 2: Denied |
 | Monitored selection | App / Category / Website |
 | Content app/activity tested |  |
 | Brain-break interval |  |
 | Content started at |  |
 | Shield appeared at |  |
+| Second-loop content started at |  |
+| Second-loop shield appeared at |  |
 | Shield appeared only after threshold | Pass / Fail |
-| Shield showed one question with two answer choices | Pass / Fail |
-| Wrong answer showed `Almost! Try again` and kept content shielded | Pass / Fail |
-| Correct answer briefly showed `Great job!` and cleared the shield | Pass / Fail |
+| Shield showed question progress and two answer choices | Pass / Fail |
+| Wrong answer was replaced by a fresh question and kept content shielded | Pass / Fail |
+| First correct answer showed a different final question | Pass / Fail |
+| Second correct answer briefly showed `Great job!` and cleared the shield | Pass / Fail |
 | Monitoring re-armed for a new interval | Pass / Fail |
 | Same content returned automatically with no post-answer child action | Pass / Fail |
 | Parent dashboard remained PIN-gated after child use | Pass / Fail |
@@ -256,30 +259,39 @@ as sufficient for launch.
     being consumed.
 14. Selected content shields only after the threshold is reached. Record the
     shield timestamp and compare it with the configured interval.
-15. Shield copy says `Brain Break`, shows one math question, and presents two
-    answer choices.
-16. Choose one wrong answer and confirm the shield redraws `Almost! Try again`
-    while the original content stays blocked underneath.
-17. Choose the correct answer.
-18. Confirm the shield briefly redraws `Great job!` without answer buttons.
-19. Without another touch, confirm the shield clears and the same content is
+15. Shield copy says `Brain Break · 1 of 2`, shows one age-calibrated prompt,
+    and presents two answer choices.
+16. Choose one wrong answer and confirm a different question replaces it with
+    `Almost! Try this one` while the original content stays blocked underneath.
+17. Choose the fresh question's correct answer and confirm a different final
+    question appears with `Nice! One more · 2 of 2`.
+18. Choose the final correct answer.
+19. Confirm the shield briefly redraws `Great job!` without answer buttons.
+20. Without another touch, confirm the shield clears and the same content is
     visible in place.
-20. Confirm monitoring re-arms for another full interval.
-21. Confirm the child cannot enter the dashboard without the parent PIN.
-22. Restarting enforcement clears stale shield-challenge state.
-23. If multiple child profiles exist, the shield question uses the monitored
+21. Deny notifications, return to the same selected content, and record a new
+    content start time. Confirm it does not shield immediately.
+22. Wait for another full production threshold and record the second shield
+    time; this proves monitoring re-armed.
+23. Complete both fresh questions with notifications denied. Confirm the second
+    `Great job!` state has no buttons, clears without another touch or opening
+    Childlock, and leaves the same already-open content visible in place.
+24. Confirm the child cannot enter the dashboard without the parent PIN. Do not
+    mark two-loop QA passed if only the second shield appearance was observed.
+25. Restarting enforcement clears stale shield-challenge state.
+26. If multiple child profiles exist, the shield question uses the monitored
     child's age/difficulty.
-24. Support, Privacy, and Terms links open correctly from App Store metadata.
+27. Support, Privacy, and Terms links open correctly from App Store metadata.
     Run `scripts/check-app-store-submission-copy.sh` before App Review to catch
     paste limits, product IDs, review notes, and entitlement drift. Then run
     `scripts/check-public-release-links.sh` to verify the public pages are live.
-25. If subscriptions are attached to this App Store version, open the paywall
+28. If subscriptions are attached to this App Store version, open the paywall
     and confirm RevenueCat loads monthly and annual products.
-26. Complete a sandbox purchase and confirm the Settings row changes from
+29. Complete a sandbox purchase and confirm the Settings row changes from
     `Upgrade` to `Active`.
-27. Delete/reinstall or reset as needed, tap `Restore purchases`, and confirm
+30. Delete/reinstall or reset as needed, tap `Restore purchases`, and confirm
     Premium becomes active again.
-28. Force quit and relaunch Childlock, then confirm Premium is still active and
+31. Force quit and relaunch Childlock, then confirm Premium is still active and
     weekly/all-time Children reports remain available.
 
 ## Fresh Setup Reset
@@ -308,7 +320,8 @@ Use this when the parent and child share the same iPhone.
 6. Parent sets the PIN, taps `Lock Parent Dashboard` or leaves Childlock to
    let it auto-lock, and hands the phone to the child.
 7. Child continuously uses selected content until the threshold is reached.
-8. Child answers directly on the shield, sees `Great job!` briefly, and returns
+8. Child completes both questions directly on the shield, sees `Great job!`
+   briefly, and returns
    automatically to the same app/site with no post-answer action.
 9. Parent later opens Childlock.
 10. Expected: dashboard remains gated by the parent PIN.
@@ -328,9 +341,12 @@ Use this when the parent owns an iPhone and the child uses an iPad.
    setup on the iPad.
 6. Use the selected iPad app or website continuously until the threshold is
    reached.
-7. Complete the shield-native challenge and confirm touch-free return to the
-   same iPad content.
-8. Optional: install Childlock on the parent iPhone only for account/login smoke
+7. Confirm the iPad question dominates the panel, supporting progress copy and
+   answer labels are legible, and both system buttons are easy to tap in portrait
+   and landscape at default and larger Dynamic Type.
+8. Complete both shield questions and confirm touch-free return to the
+    same iPad content.
+9. Optional: install Childlock on the parent iPhone only for account/login smoke
    testing, not as a remote controller.
 
 Pass means Childlock can be marketed as supporting child iPad use when the app

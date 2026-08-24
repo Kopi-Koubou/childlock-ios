@@ -184,6 +184,11 @@ relative_latest_path() {
     local name="$2"
     local latest
 
+    if [[ ! -d "$root" ]]; then
+        echo ""
+        return
+    fi
+
     latest="$(find "$root" -name "$name" -type f -print 2>/dev/null | sort | tail -n 1)"
     if [[ -n "$latest" ]]; then
         echo "$latest"
@@ -195,6 +200,11 @@ relative_latest_path() {
 relative_latest_record() {
     local scenario="$1"
     local latest
+
+    if [[ ! -d "$ROOT_DIR/.build/hardware-qa-records" ]]; then
+        echo ""
+        return
+    fi
 
     latest="$(find "$ROOT_DIR/.build/hardware-qa-records" -name "${scenario}_*.md" -type f -print 2>/dev/null | sort | tail -n 1)"
     if [[ -n "$latest" ]]; then

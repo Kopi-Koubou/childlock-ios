@@ -16,8 +16,10 @@ Reviewer flow:
 7. Open selected app/category/site content and use it continuously until the
    interval threshold is reached.
 8. The selected content is shielded with Childlock's "Brain Break" shield.
-9. Answer the two-choice math question directly on the Brain Break shield.
-10. A correct answer redraws the shield as `Great job!` for about one second,
+9. Complete the two short, two-choice math questions directly on the Brain Break
+   shield. A miss is replaced by a fresh question instead of revealing the other
+   answer.
+10. After the second correct answer, the shield redraws as `Great job!` for about one second,
     then clears the shield with no further child action and reveals the same
     content underneath.
 11. Monitoring re-arms for the next full interval. A parent PIN is still
@@ -35,7 +37,7 @@ Notes:
   supported because the parent dashboard remains PIN-protected. Childlock is
   not presented as a parent-phone remote controller for a separate child iPad in
   this launch build.
-- In this build, the two-answer brain break is part of the system Screen Time
+- In this build, the two-question brain break is part of the system Screen Time
   shield. The protected app or website remains onscreen underneath; Childlock
   does not need to launch and notification permission is not required.
 - On success, Childlock briefly reconfigures the shield with a checkmark and

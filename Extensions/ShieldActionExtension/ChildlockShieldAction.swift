@@ -81,11 +81,15 @@ final class ChildlockShieldAction: ShieldActionDelegate {
             return
         }
 
-        let isCorrect = brainBreak.submit(answerIndex: answerIndex)
+        let outcome = brainBreak.submit(answerIndex: answerIndex)
         SharedDefaults.saveShieldBrainBreak(brainBreak, defaults: defaults)
 
-        guard isCorrect else {
-            logger.info("Shield brain break answer was incorrect")
+        guard outcome == .success else {
+            if outcome == .retry {
+                logger.info("Shield brain break answer was incorrect; presenting a fresh question")
+            } else {
+                logger.info("Shield brain break checkpoint passed; presenting the final question")
+            }
             completionHandler(.defer)
             return
         }
@@ -175,6 +179,9 @@ final class ChildlockShieldAction: ShieldActionDelegate {
             defaults.integer(forKey: SharedDefaults.Key.activeMonitoringIntervalMinutes),
             1
         )
+        let rapidTestIntervalSeconds = ChildlockRapidTesting.sanitizedIntervalSeconds(
+            defaults.object(forKey: SharedDefaults.Key.activeMonitoringIntervalSeconds) as? Int
+        )
         let schedule = DeviceActivitySchedule(
             intervalStart: DateComponents(hour: 0, minute: 0),
             intervalEnd: DateComponents(hour: 23, minute: 59),
@@ -184,7 +191,10 @@ final class ChildlockShieldAction: ShieldActionDelegate {
             applications: selection.applicationTokens,
             categories: selection.categoryTokens,
             webDomains: selection.webDomainTokens,
-            threshold: DateComponents(minute: intervalMinutes)
+            threshold: ChildlockRapidTesting.threshold(
+                intervalMinutes: intervalMinutes,
+                rapidTestIntervalSeconds: rapidTestIntervalSeconds
+            )
         )
 
         center.stopMonitoring([activeActivityName])

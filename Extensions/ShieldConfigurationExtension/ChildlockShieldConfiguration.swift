@@ -43,11 +43,20 @@ final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
         let shieldInk = UIColor(red: 0.949, green: 0.945, blue: 0.925, alpha: 1.0) // #F2F1EC
         let forestSage = UIColor(red: 0.247, green: 0.420, blue: 0.345, alpha: 1.0) // #3F6B58
 
+        let isIPad = UIDevice.current.userInterfaceIdiom == .pad
+        let symbolConfiguration = UIImage.SymbolConfiguration(
+            pointSize: isIPad ? 72 : 48,
+            weight: .semibold
+        )
+
         guard let brainBreak = SharedDefaults.shieldBrainBreak() else {
             return ShieldConfiguration(
                 backgroundBlurStyle: .systemMaterial,
                 backgroundColor: shieldBg,
-                icon: UIImage(systemName: "brain.head.profile"),
+                icon: UIImage(
+                    systemName: "brain.head.profile",
+                    withConfiguration: symbolConfiguration
+                ),
                 title: ShieldConfiguration.Label(text: "Brain Break", color: shieldInk),
                 subtitle: ShieldConfiguration.Label(text: "One moment…", color: shieldInk.withAlphaComponent(0.7))
             )
@@ -57,7 +66,10 @@ final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
             return ShieldConfiguration(
                 backgroundBlurStyle: .systemMaterial,
                 backgroundColor: shieldBg,
-                icon: UIImage(systemName: "checkmark.circle.fill"),
+                icon: UIImage(
+                    systemName: "checkmark.circle.fill",
+                    withConfiguration: symbolConfiguration
+                ),
                 title: ShieldConfiguration.Label(text: "Great job!", color: shieldInk),
                 subtitle: ShieldConfiguration.Label(
                     text: "Going back to your app…",
@@ -66,15 +78,16 @@ final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
             )
         }
 
-        let statusText = brainBreak.phase == .retry ? "Almost! Try again" : "Brain Break"
-        let isIPad = UIDevice.current.userInterfaceIdiom == .pad
-        let titleText = isIPad ? brainBreak.prompt : statusText
-        let subtitleText = isIPad ? statusText : brainBreak.prompt
+        let titleText = isIPad ? brainBreak.prompt : brainBreak.guidanceText
+        let subtitleText = isIPad ? brainBreak.guidanceText : brainBreak.prompt
 
         return ShieldConfiguration(
             backgroundBlurStyle: .systemMaterial,
             backgroundColor: shieldBg,
-            icon: UIImage(systemName: "brain.head.profile"),
+            icon: UIImage(
+                systemName: "brain.head.profile",
+                withConfiguration: symbolConfiguration
+            ),
             title: ShieldConfiguration.Label(
                 text: titleText,
                 color: shieldInk

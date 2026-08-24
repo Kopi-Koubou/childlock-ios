@@ -127,11 +127,20 @@ public final class AppState {
     private static let supportedIntervals = [5, 10, 15, 20, 30]
 
     private let store: AppStateStoring
+    private let sharedDefaults: UserDefaults
+    private let rapidTestingBuildEnabled: Bool
     private var isHydratingSnapshot = false
 
-    public init(store: AppStateStoring = AppGroupFileAppStateStore()) {
+    public init(
+        store: AppStateStoring = AppGroupFileAppStateStore(),
+        sharedDefaults: UserDefaults = SharedDefaults.shared,
+        rapidTestingBuildEnabled: Bool = ChildlockRapidTesting.isBuildEnabled
+    ) {
         self.store = store
+        self.sharedDefaults = sharedDefaults
+        self.rapidTestingBuildEnabled = rapidTestingBuildEnabled
         hydrateFromStore()
+        disableRapidTestingForNormalBuildIfNeeded()
         mirrorNotificationSettingsToSharedDefaults()
     }
 
@@ -457,8 +466,18 @@ public final class AppState {
         )
     }
 
+    private func disableRapidTestingForNormalBuildIfNeeded() {
+        guard !rapidTestingBuildEnabled, settings.rapidTestIntervalSeconds != nil else {
+            return
+        }
+
+        var updatedSettings = settings
+        updatedSettings.rapidTestIntervalSeconds = nil
+        settings = updatedSettings
+    }
+
     private func mirrorNotificationSettingsToSharedDefaults() {
-        SharedDefaults.shared.set(
+        sharedDefaults.set(
             settings.challengeAlertNotification,
             forKey: SharedDefaults.Key.challengeAlertsEnabled
         )
@@ -466,13 +485,17 @@ public final class AppState {
         let rapidIntervalSeconds = ChildlockRapidTesting.sanitizedIntervalSeconds(
             settings.rapidTestIntervalSeconds
         )
-        if ChildlockRapidTesting.isBuildEnabled, let rapidIntervalSeconds {
-            SharedDefaults.shared.set(
+        if rapidTestingBuildEnabled, let rapidIntervalSeconds {
+            sharedDefaults.set(
                 rapidIntervalSeconds,
                 forKey: SharedDefaults.Key.rapidTestIntervalSeconds
             )
         } else {
-            SharedDefaults.shared.removeObject(forKey: SharedDefaults.Key.rapidTestIntervalSeconds)
+            // A normal feedback/App Store build must not inherit a 10-second
+            // extension re-arm from an earlier internal build. Clearing both
+            // keys makes the next Shield Action re-arm use profile minutes.
+            sharedDefaults.removeObject(forKey: SharedDefaults.Key.rapidTestIntervalSeconds)
+            sharedDefaults.removeObject(forKey: SharedDefaults.Key.activeMonitoringIntervalSeconds)
         }
     }
 

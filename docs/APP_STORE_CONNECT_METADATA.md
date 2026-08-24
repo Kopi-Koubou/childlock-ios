@@ -89,8 +89,8 @@ Reviewer flow:
 5. Set a short brain-break interval.
 6. Open selected app/category/site content until the interval threshold is reached.
 7. The selected content is shielded with Childlock's Brain Break shield.
-8. Answer the two-choice math question directly on the Brain Break shield.
-9. A correct answer briefly shows `Great job!`, then clears the shield and
+8. Complete the two short, two-choice math questions directly on the Brain Break shield.
+9. After the second correct answer, `Great job!` briefly appears, then the shield clears and
    reveals the same content automatically with no post-answer child action.
 10. Monitoring re-arms for the next full interval. The parent PIN is still
     required before entering the Childlock dashboard.

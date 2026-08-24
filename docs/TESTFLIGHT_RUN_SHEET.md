@@ -17,6 +17,8 @@ short field guide.
 4. Keep the child-iPad record open while testing the child iPad.
 5. If Google is hidden, write `N/A` for Google sign-in. Do not chase Google
    during this build unless `Continue with Google` is visible.
+6. For the normal feedback candidate, confirm Settings does not show
+   `10-second brain breaks`. Stop if it does; that is the wrong build.
 
 ## Pass 1: Same Phone
 
@@ -31,20 +33,35 @@ This proves a parent and child can share one iPhone.
 7. Start enforcement.
 8. Lock the parent dashboard or leave Childlock to auto-lock.
 9. Hand the iPhone to the child.
-10. Start real content in the selected app/site and write down the start time.
-11. Confirm nothing shields immediately.
-12. Wait for the threshold, then write down the shield time.
-13. Answer the two-choice question directly on the shield.
-14. For one wrong-answer pass, confirm `Almost! Try again` appears and the
-    content stays shielded.
-15. Answer correctly.
-16. Confirm `Great job!` appears briefly and the shield clears automatically.
-17. Without touching the screen again, confirm the same content is visible and
-    still in place.
+10. Loop 1: start real content in the selected app/site and write down the start
+    time.
+11. Confirm Loop 1 does not shield immediately.
+12. Wait for the full production threshold, then write down the shield time.
+13. For the anti-guessing pass, choose one wrong answer and confirm a different
+    question replaces it with
+    `Almost! Try this one` and the content stays shielded.
+14. Answer the fresh question correctly; confirm `Nice! One more` appears with
+    a different final question and the content remains shielded.
+15. Answer the final question correctly.
+16. Confirm `Great job!` appears briefly with no buttons.
+17. Without touching the screen again, confirm the shield clears and the same
+    already-open content is still visible in place.
 18. Confirm the parent dashboard still needs the PIN.
-19. Run one additional full interval and confirm it shields again.
-20. Run one denied-notification pass and confirm the shield brain break still
-    works without opening Childlock.
+19. Deny Childlock notification permission before Loop 2, then lock the parent
+    dashboard again.
+20. Loop 2: return to the same selected content, record a new content start
+    time, and confirm it does not shield immediately.
+21. Wait for another full production threshold and record the second shield
+    time. This is the monitoring re-arm proof.
+22. With notifications still denied, answer the first question correctly,
+    confirm a different final question with `Nice! One more`, then answer the
+    final question correctly.
+23. Confirm `Great job!` briefly appears with no buttons and the shield clears
+    without opening Childlock or requiring another touch.
+24. Confirm the same already-open content is visible in place after Loop 2.
+25. Confirm the parent dashboard still needs the PIN and record both completed
+    loops as `Pass`. A second shield appearance without completing steps 22–24
+    is not a two-loop pass.
 
 Pass means the shared iPhone can be marketed as a same-phone parent/child use
 case.
@@ -63,14 +80,30 @@ child-used device.
 7. Start enforcement on the iPad.
 8. Start real content on the iPad and write down the start time.
 9. Confirm the shield appears only after the threshold.
-10. Complete the shield-native challenge and confirm automatic return to the
+10. Confirm the iPad question is the dominant title, progress/supporting text is
+    readable, both answer labels are legible, and both system buttons are easy
+    to tap in portrait and landscape with default and larger Dynamic Type.
+11. Complete both shield questions and confirm automatic return to the
     same iPad content with no post-answer action.
-11. Confirm monitoring re-arms for a second full interval.
-12. If Childlock is also installed on the parent iPhone, use it only for
+12. Confirm monitoring re-arms for a second full interval.
+13. If Childlock is also installed on the parent iPhone, use it only for
     login/account smoke testing. Do not mark it as remote iPad control.
 
 Pass means Childlock can be marketed as supporting child iPad use when the app
 is installed and configured on the iPad.
+
+## Optional Internal 10-Second Pass
+
+Run this only when the dedicated internal build shows `10-second brain breaks`
+in Settings. The control is deliberately absent from normal archives.
+
+1. Start Screen Time enforcement and wait until its status says `Timing app use`.
+2. Turn on `10-second brain breaks`; this must restart the active monitor.
+3. Use selected content continuously and record the shield time. Treat roughly
+   10 seconds as a test target, not a real-time guarantee from Screen Time.
+4. Complete both questions and return to the same content.
+5. Continue using the content and confirm a second shield arrives on the same
+   short test interval; this proves the extension re-arm retained test mode.
 
 ## Purchase Pass
 

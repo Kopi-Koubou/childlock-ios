@@ -317,6 +317,25 @@ Supabase account/profile data, RevenueCat purchase state, PostHog analytics,
 and any diagnostic data reported by bundled SDK manifests.
 Use `docs/APP_PRIVACY_LABELS.md` as the paste-ready baseline.
 
+Before treating any Release build as a feedback candidate, verify the resolved
+build setting rather than only reading the checked-in xcconfig:
+
+```sh
+scripts/check-feedback-candidate.sh --configuration Release
+```
+
+After the unsigned device build, verify its compiled Info.plist too:
+
+```sh
+scripts/check-feedback-candidate.sh \
+  --configuration Release \
+  --built-app .build/xcode-preflight/Build/Products/Release-iphoneos/Childlock.app
+```
+
+Both checks must report rapid testing `NO`. A local xcconfig override can opt a
+dedicated internal build into 10-second testing, so source text alone is not a
+feedback-candidate gate.
+
 For a command-line archive after signing is configured:
 
 ```sh
@@ -346,10 +365,13 @@ same-phone, child-iPad, denied-notification, second-loop, and purchase passes.
 - First interval does not shield immediately.
 - Threshold shields selected content; record the shield timestamp and compare it
   with the configured interval.
-- The Brain Break shield itself shows one math prompt with two answer choices.
+- The Brain Break shield runs a two-question checkpoint with two answer choices
+  per age-calibrated prompt.
 - Shield brain breaks work when notification permission is denied.
-- A wrong answer keeps the shield in place and redraws `Almost! Try again`.
-- A correct answer briefly redraws `Great job!`, then removes the shield and
+- A wrong answer keeps the shield in place, resets checkpoint progress, and
+  replaces the prompt so the remaining button is not a revealed answer.
+- The first correct answer presents a different final prompt. The second briefly
+  redraws `Great job!`, then removes the shield and
   reveals the already-open content with no post-answer child action.
 - Monitoring re-arms for another full interval.
 - Parent PIN remains required to open the dashboard after child use.

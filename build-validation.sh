@@ -249,9 +249,21 @@ echo "✅ Production configuration check complete"
 echo ""
 
 # ============================================
-# Step 2: Swift package tests
+# Step 2: Feedback candidate mode
 # ============================================
-echo "Step 2: Running Swift package tests..."
+echo "Step 2: Confirming the resolved Release candidate has rapid testing OFF..."
+echo ""
+
+scripts/check-feedback-candidate.sh --configuration Release
+
+echo ""
+echo "✅ Feedback candidate mode check complete"
+echo ""
+
+# ============================================
+# Step 3: Swift package tests
+# ============================================
+echo "Step 3: Running Swift package tests..."
 echo ""
 
 swift test
@@ -261,9 +273,9 @@ echo "✅ Swift tests complete"
 echo ""
 
 # ============================================
-# Step 3: Diff hygiene
+# Step 4: Diff hygiene
 # ============================================
-echo "Step 3: Checking whitespace in tracked changes..."
+echo "Step 4: Checking whitespace in tracked changes..."
 echo ""
 
 git diff --check -- ':!.build'
@@ -273,9 +285,9 @@ echo "✅ Diff hygiene check complete"
 echo ""
 
 # ============================================
-# Step 4: Simulator Build (compile check)
+# Step 5: Simulator Build (compile check)
 # ============================================
-echo "Step 4: Building Release for iOS Simulator..."
+echo "Step 5: Building Release for iOS Simulator..."
 echo ""
 
 run_logged_command "Simulator Release build" "xcodebuild-simulator-release.log" \
@@ -292,9 +304,9 @@ echo ""
 echo ""
 
 # ============================================
-# Step 5: Generic Device Build (archive-shape compile check)
+# Step 6: Generic Device Build (archive-shape compile check)
 # ============================================
-echo "Step 5: Building Release for generic iOS device without signing..."
+echo "Step 6: Building Release for generic iOS device without signing..."
 echo ""
 
 run_logged_command "Generic iOS Release build" "xcodebuild-generic-ios-release.log" \
@@ -308,10 +320,16 @@ run_logged_command "Generic iOS Release build" "xcodebuild-generic-ios-release.l
     clean build
 
 echo ""
+
+scripts/check-feedback-candidate.sh \
+    --configuration Release \
+    --built-app "$DERIVED_DATA_PATH/Build/Products/Release-iphoneos/Childlock.app"
+
+echo ""
 echo ""
 
 # ============================================
-# Step 6: Manual Validation Checklist
+# Step 7: Manual Validation Checklist
 # ============================================
 echo "=== Manual Validation Required ==="
 echo ""
@@ -323,9 +341,10 @@ echo "3. Grant Screen Time access to Childlock."
 echo "4. Select a real app/category/web domain and the shortest interval."
 echo "5. Start real child-like content in the selected app/site and record the start time."
 echo "6. Verify: selected content shields only after the threshold; record the shield timestamp."
-echo "7. Verify: the Brain Break shield shows one question with two answer choices over the selected content."
-echo "8. Verify: a correct answer shows Great job briefly, clears the shield with no further child action, reveals the same content, and re-arms monitoring."
-echo "9. Verify: a wrong answer keeps the shield in place for another try and the parent dashboard remains behind the PIN."
+echo "7. Verify: the Brain Break shield shows progress and two answer choices over the selected content."
+echo "8. Verify: a wrong answer is replaced by a fresh question; the first correct answer shows a different final question."
+echo "9. Verify: the second correct answer briefly shows Great job, clears the shield with no further child action, reveals the same content, and re-arms monitoring."
+echo "10. Verify: the parent dashboard remains behind the PIN."
 echo ""
 echo "Use docs/TESTFLIGHT_RUN_SHEET.md while testing on device."
 echo "Use docs/QA_TESTFLIGHT_CHECKLIST.md for the full same-phone and child-iPad matrix."

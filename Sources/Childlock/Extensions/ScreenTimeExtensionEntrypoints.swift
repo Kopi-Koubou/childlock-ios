@@ -148,10 +148,10 @@ public final class ChildlockShieldAction: ShieldActionDelegate {
             return
         }
 
-        let isCorrect = brainBreak.submit(answerIndex: answerIndex)
+        let outcome = brainBreak.submit(answerIndex: answerIndex)
         SharedDefaults.saveShieldBrainBreak(brainBreak, defaults: defaults)
 
-        guard isCorrect else {
+        guard outcome == .success else {
             completionHandler(.defer)
             return
         }
@@ -305,11 +305,20 @@ public final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
         let shieldBackground = UIColor(hex: ChildlockColorHex.shieldBg)
         let shieldForeground = UIColor(hex: ChildlockColorHex.shieldInk)
 
+        let isIPad = UIDevice.current.userInterfaceIdiom == .pad
+        let symbolConfiguration = UIImage.SymbolConfiguration(
+            pointSize: isIPad ? 72 : 48,
+            weight: .semibold
+        )
+
         guard let brainBreak = SharedDefaults.shieldBrainBreak() else {
             return ShieldConfiguration(
                 backgroundBlurStyle: .systemMaterial,
                 backgroundColor: shieldBackground,
-                icon: UIImage(systemName: "brain.head.profile"),
+                icon: UIImage(
+                    systemName: "brain.head.profile",
+                    withConfiguration: symbolConfiguration
+                ),
                 title: ShieldConfiguration.Label(text: "Brain Break", color: shieldForeground),
                 subtitle: ShieldConfiguration.Label(
                     text: "One moment…",
@@ -322,7 +331,10 @@ public final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
             return ShieldConfiguration(
                 backgroundBlurStyle: .systemMaterial,
                 backgroundColor: shieldBackground,
-                icon: UIImage(systemName: "checkmark.circle.fill"),
+                icon: UIImage(
+                    systemName: "checkmark.circle.fill",
+                    withConfiguration: symbolConfiguration
+                ),
                 title: ShieldConfiguration.Label(text: "Great job!", color: shieldForeground),
                 subtitle: ShieldConfiguration.Label(
                     text: "Going back to your app…",
@@ -331,15 +343,16 @@ public final class ChildlockShieldConfiguration: ShieldConfigurationDataSource {
             )
         }
 
-        let statusText = brainBreak.phase == .retry ? "Almost! Try again" : "Brain Break"
-        let isIPad = UIDevice.current.userInterfaceIdiom == .pad
-        let titleText = isIPad ? brainBreak.prompt : statusText
-        let subtitleText = isIPad ? statusText : brainBreak.prompt
+        let titleText = isIPad ? brainBreak.prompt : brainBreak.guidanceText
+        let subtitleText = isIPad ? brainBreak.guidanceText : brainBreak.prompt
 
         return ShieldConfiguration(
             backgroundBlurStyle: .systemMaterial,
             backgroundColor: shieldBackground,
-            icon: UIImage(systemName: "brain.head.profile"),
+            icon: UIImage(
+                systemName: "brain.head.profile",
+                withConfiguration: symbolConfiguration
+            ),
             title: ShieldConfiguration.Label(
                 text: titleText,
                 color: shieldForeground

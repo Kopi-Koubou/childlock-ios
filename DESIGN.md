@@ -211,7 +211,11 @@ temporary elevation, sheets, or a genuinely dominant object.
 
 - Enforced brain breaks use the system Screen Time shield so the protected
   content remains directly underneath.
-- Show one age-appropriate math prompt with exactly two answer choices.
+- Show a short two-question checkpoint. Each prompt has exactly two answer
+  choices and progress is stated plainly as `1 of 2` / `2 of 2`.
+- Ages 3–5 rotate through visual counting, comparison, addition, subtraction,
+  missing-number, and simple sequence prompts, calibrated by the child's exact
+  age rather than using one repeated addition template.
 - Use the dark shield palette, concise copy, and the largest controls the system
   shield provides.
 - Wrong answers are gentle and actionable. Never shame, punish, count down, or
@@ -221,8 +225,8 @@ temporary elevation, sheets, or a genuinely dominant object.
 
 ### Automatic return
 
-- A correct answer redraws the shield as a button-free “Great job!” success
-  state with a checkmark.
+- After both checkpoint questions are answered correctly, redraw the shield as
+  a button-free “Great job!” success state with a checkmark.
 - Keep the success state to about one second, then clear the shield and reveal
   the content that is already open underneath.
 - Request that brief delay with an extension-safe expiring activity. If iOS
@@ -238,10 +242,19 @@ temporary elevation, sheets, or a genuinely dominant object.
 
 - The system shield is the complete enforced brain-break surface.
 - Its primary and secondary buttons are the two answer choices.
-- An incorrect answer redraws the same shield with “Almost! Try again”.
-- A correct answer briefly redraws a button-free success state, clears all
-  selected-content shields, and re-arms monitoring for a full new interval.
+- An incorrect answer never leaves the solved-by-elimination question onscreen.
+  It resets checkpoint progress, generates a different question type, and
+  redraws with `Almost! Try this one`.
+- The first correct answer generates a different final question and redraws
+  with `Nice! One more`; it does not clear the shield.
+- The second correct answer briefly redraws a button-free success state, clears
+  all selected-content shields, and re-arms monitoring for a full new interval.
 - The enforced flow must not require a notification or open Childlock.
+- On iPad, put the question in the system title slot, keep progress/supporting
+  copy in the subtitle, and request the larger 72pt brain/checkmark symbol.
+  `ManagedSettingsUI` owns the final label fonts, panel bounds, button sizes,
+  and touch targets; those dimensions must be accepted on physical iPad
+  hardware rather than inferred from source or simulator builds.
 
 ## Voice and Content
 
@@ -260,14 +273,16 @@ Clear, calm, direct, and operational.
 
 Short, warm, and age-neutral.
 
-- Use: “Brain Break”, “Great job!”, “Almost! Try again”.
+- Use: “Brain Break”, “Nice! One more”, “Great job!”, “Almost! Try this one”.
 - Celebrate effort and successful completion.
 - Avoid: “wrong”, “failed”, streaks, rankings, penalties, countdowns, and
   patronizing baby talk.
 
 ## Accessibility and Interaction Invariants
 
-- Parent touch targets are at least 44pt; child targets are at least 60pt.
+- Parent touch targets are at least 44pt; custom child-facing targets are at
+  least 60pt. System Screen Time shield targets are platform-managed and require
+  physical-device accessibility QA.
 - Respect Reduce Motion. Movement must never be required to understand state.
 - Voice prompts support younger children but do not replace visual information.
 - Pair color with text or iconography.

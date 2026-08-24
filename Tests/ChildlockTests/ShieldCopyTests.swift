@@ -62,8 +62,9 @@ final class ShieldCopyTests: XCTestCase {
             XCTAssertTrue(contents.contains("brainBreak.primaryAnswer"))
             XCTAssertTrue(contents.contains("brainBreak.secondaryAnswer"))
             XCTAssertTrue(contents.contains("UIDevice.current.userInterfaceIdiom == .pad"))
-            XCTAssertTrue(contents.contains("let titleText = isIPad ? brainBreak.prompt : statusText"))
-            XCTAssertTrue(contents.contains("let subtitleText = isIPad ? statusText : brainBreak.prompt"))
+            XCTAssertTrue(contents.contains("pointSize: isIPad ? 72 : 48"))
+            XCTAssertTrue(contents.contains("let titleText = isIPad ? brainBreak.prompt : brainBreak.guidanceText"))
+            XCTAssertTrue(contents.contains("let subtitleText = isIPad ? brainBreak.guidanceText : brainBreak.prompt"))
             XCTAssertTrue(contents.contains("Great job!"))
             XCTAssertTrue(contents.contains("Going back to your app…"))
             XCTAssertFalse(contents.contains("text: \"Parent\""))
@@ -94,6 +95,26 @@ final class ShieldCopyTests: XCTestCase {
             XCTAssertFalse(contents.contains("DispatchQueue.main.asyncAfter"))
             XCTAssertFalse(contents.contains("Brain break ready"))
             XCTAssertFalse(contents.contains("Tap to solve."))
+        }
+    }
+
+    func testShieldRequiresTwoFreshQuestionsInsteadOfRevealingTheOtherAnswer() throws {
+        let sharedDefaults = try readRepoFile("Sources/Childlock/Services/SharedDefaults.swift")
+        let actionFiles = try [
+            "Extensions/ShieldActionExtension/ChildlockShieldAction.swift",
+            "Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift",
+        ].map(readRepoFile)
+
+        XCTAssertTrue(sharedDefaults.contains("public static let requiredCorrectAnswers = 2"))
+        XCTAssertTrue(sharedDefaults.contains("correctAnswers = 0"))
+        XCTAssertTrue(sharedDefaults.contains("replaceQuestion(using: &generator)"))
+        XCTAssertTrue(sharedDefaults.contains("excluding: questionKind"))
+        XCTAssertTrue(sharedDefaults.contains("case nextQuestion"))
+
+        for contents in actionFiles {
+            XCTAssertTrue(contents.contains("let outcome = brainBreak.submit(answerIndex: answerIndex)"))
+            XCTAssertTrue(contents.contains("guard outcome == .success else"))
+            XCTAssertTrue(contents.contains("completionHandler(.defer)"))
         }
     }
 
@@ -243,6 +264,7 @@ final class ShieldCopyTests: XCTestCase {
 
         for contents in files {
             XCTAssertTrue(contents.contains("brainBreak.submit(answerIndex: answerIndex)"))
+            XCTAssertTrue(contents.contains("guard outcome == .success else"))
             XCTAssertTrue(contents.contains("ShieldBrainBreakCompletion(state: brainBreak)"))
             XCTAssertTrue(contents.contains("completionHandler(.defer)"))
             XCTAssertTrue(contents.contains("successDisplayDuration"))
@@ -257,6 +279,26 @@ final class ShieldCopyTests: XCTestCase {
             XCTAssertTrue(contents.contains("removeDeliveredNotifications(withIdentifiers: identifiers)"))
             XCTAssertFalse(contents.contains("DispatchQueue.main.asyncAfter"))
             XCTAssertFalse(contents.contains("UNNotificationRequest("))
+        }
+    }
+
+    func testRapidTestingRestartsWhileTimingAndSurvivesEveryRearm() throws {
+        let dashboard = try readRepoFile("Sources/Childlock/Views/Dashboard/ParentDashboardView.swift")
+        let sharedDefaults = try readRepoFile("Sources/Childlock/Services/SharedDefaults.swift")
+        let screenTime = try readRepoFile("Sources/Childlock/Services/ScreenTimeManager.swift")
+        let shieldActions = try [
+            "Extensions/ShieldActionExtension/ChildlockShieldAction.swift",
+            "Sources/Childlock/Extensions/ScreenTimeExtensionEntrypoints.swift",
+        ].map(readRepoFile)
+
+        XCTAssertTrue(dashboard.contains("ChildlockRapidTesting.shouldRestartMonitoring(storedStatus: monitoringStatusText)"))
+        XCTAssertTrue(sharedDefaults.contains("storedStatus == \"running\" || storedStatus == \"interval_started\""))
+        XCTAssertTrue(screenTime.contains("SharedDefaults.Key.activeMonitoringIntervalSeconds"))
+
+        for contents in shieldActions {
+            XCTAssertTrue(contents.contains("SharedDefaults.Key.activeMonitoringIntervalSeconds"))
+            XCTAssertTrue(contents.contains("threshold: ChildlockRapidTesting.threshold("))
+            XCTAssertTrue(contents.contains("rapidTestIntervalSeconds: rapidTestIntervalSeconds"))
         }
     }
 

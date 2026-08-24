@@ -2318,8 +2318,8 @@ public struct ParentDashboardView: View {
                     : nil
                 appState.settings = updated
 
-                if let activeProfile = appState.activeProfile {
-                    refreshMonitoringIfRunning(for: activeProfile)
+                if let monitoringProfile {
+                    refreshMonitoringIfRunning(for: monitoringProfile)
                 }
             }
         )
@@ -2581,7 +2581,7 @@ public struct ParentDashboardView: View {
     }
 
     private func refreshMonitoringIfRunning(for profile: ChildProfile) {
-        guard monitoringStatusText == "running" else {
+        guard ChildlockRapidTesting.shouldRestartMonitoring(storedStatus: monitoringStatusText) else {
             return
         }
 

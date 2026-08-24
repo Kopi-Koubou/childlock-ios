@@ -67,8 +67,8 @@ launch matrix.
 6. Open selected app/category/site content and use it continuously until the
    threshold is reached.
 7. Confirm the Childlock shield appears after the configured interval.
-8. Answer the two-choice question directly on the Brain Break shield.
-9. Confirm a correct answer briefly shows `Great job!`, then clears the shield
+8. Complete both two-choice questions directly on the Brain Break shield.
+9. Confirm the second correct answer briefly shows `Great job!`, then clears the shield
    and reveals the same content without another child action.
 10. Confirm monitoring re-arms for a full new interval.
 11. Confirm opening Childlock still presents the parent PIN gate.

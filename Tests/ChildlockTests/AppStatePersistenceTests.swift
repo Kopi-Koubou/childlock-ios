@@ -102,6 +102,77 @@ final class AppStatePersistenceTests: XCTestCase {
         XCTAssertEqual(saved.currentTab, .home)
     }
 
+    func testNormalBuildClearsPersistedRapidTestingState() {
+        let suiteName = "childlock-rapid-off-tests-\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
+        defaults.set(
+            ChildlockRapidTesting.intervalSeconds,
+            forKey: SharedDefaults.Key.rapidTestIntervalSeconds
+        )
+        defaults.set(
+            ChildlockRapidTesting.intervalSeconds,
+            forKey: SharedDefaults.Key.activeMonitoringIntervalSeconds
+        )
+
+        let settings = AppSettings(rapidTestIntervalSeconds: ChildlockRapidTesting.intervalSeconds)
+        let store = InMemoryAppStateStore(
+            snapshot: AppStateSnapshot(
+                hasCompletedOnboarding: false,
+                currentTab: .home,
+                isPINLocked: true,
+                profiles: [],
+                sessions: [],
+                activeProfileID: nil,
+                settings: settings
+            )
+        )
+
+        let appState = AppState(
+            store: store,
+            sharedDefaults: defaults,
+            rapidTestingBuildEnabled: false
+        )
+
+        XCTAssertNil(appState.settings.rapidTestIntervalSeconds)
+        XCTAssertNil(store.snapshot?.settings.rapidTestIntervalSeconds)
+        XCTAssertNil(defaults.object(forKey: SharedDefaults.Key.rapidTestIntervalSeconds))
+        XCTAssertNil(defaults.object(forKey: SharedDefaults.Key.activeMonitoringIntervalSeconds))
+    }
+
+    func testInternalBuildRetainsOptedInRapidTestingState() {
+        let suiteName = "childlock-rapid-on-tests-\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
+        let settings = AppSettings(rapidTestIntervalSeconds: ChildlockRapidTesting.intervalSeconds)
+        let appState = AppState(
+            store: InMemoryAppStateStore(
+                snapshot: AppStateSnapshot(
+                    hasCompletedOnboarding: false,
+                    currentTab: .home,
+                    isPINLocked: true,
+                    profiles: [],
+                    sessions: [],
+                    activeProfileID: nil,
+                    settings: settings
+                )
+            ),
+            sharedDefaults: defaults,
+            rapidTestingBuildEnabled: true
+        )
+
+        XCTAssertEqual(
+            appState.settings.rapidTestIntervalSeconds,
+            ChildlockRapidTesting.intervalSeconds
+        )
+        XCTAssertEqual(
+            defaults.integer(forKey: SharedDefaults.Key.rapidTestIntervalSeconds),
+            ChildlockRapidTesting.intervalSeconds
+        )
+    }
+
     func testAppGroupFileStoreRoundTrip() {
         let directory = FileManager.default.temporaryDirectory
             .appendingPathComponent("childlock-tests-\(UUID().uuidString)", isDirectory: true)
